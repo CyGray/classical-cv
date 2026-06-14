@@ -20,6 +20,7 @@ __pycache__/
 dist/
 build/
 .Python
+.commandcode
 
 # ===================================
 # IDE & Editor Files
