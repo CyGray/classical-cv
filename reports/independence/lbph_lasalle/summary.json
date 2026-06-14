@@ -1,0 +1,149 @@
+{
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 3rd Year\\Computer Vision\\face-detection-g3\\data\\split_lasalle\\train",
+    "total_identities": 28,
+    "selected_identities": 28
+  },
+  "distance_statistics": {
+    "min_distance": 83.52827174933203,
+    "max_distance": 100.0,
+    "mean_distance": 91.8320457042418,
+    "median_distance": 91.84351712570134,
+    "std_dev": 2.8657850933401585,
+    "percentiles": {
+      "1": 85.95999890373518,
+      "5": 87.26762931748121,
+      "10": 88.03284647354666,
+      "25": 89.85651211338782,
+      "50": 91.84351712570134,
+      "75": 93.66365099075698,
+      "90": 95.43251097076617,
+      "95": 96.7543575661198,
+      "99": 98.60100370768338
+    }
+  },
+  "suggested_thresholds": {
+    "percentile_1": 85.95999890373518,
+    "percentile_5": 87.26762931748121,
+    "percentile_10": 88.03284647354666,
+    "min_distance": 83.52827174933203,
+    "mean_minus_1std": 88.96626061090164
+  },
+  "error_pair_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 21.350522820751713,
+      "normalized_threshold": 85.87947400626449,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Kenlie_John_Maghari",
+      "candidate_identity": "Francis_Cromwell_Tan",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 20.765989694254248,
+        "normalized_threshold": 83.52827174933203,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Andrew_Eroyla",
+        "candidate_identity": "John_Roland_Octavio"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 20.765989694254248,
+        "normalized_threshold": 83.52827174933203,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "John_Roland_Octavio",
+        "candidate_identity": "Andrew_Eroyla"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 20.83520073056298,
+        "normalized_threshold": 83.80666340482094,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Josh_Dane_Labistre",
+        "candidate_identity": "Andrew_Eroyla"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 21.350522820751713,
+        "normalized_threshold": 85.87947400626449,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Francis_Cromwell_Tan"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 21.42518216452733,
+        "normalized_threshold": 86.17978071195655,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Julian_Diego_Mapa"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 21.665702115802457,
+        "normalized_threshold": 87.14723837455972,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Mary_Jade_Jakosalem",
+        "candidate_identity": "Andrew_Eroyla"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 21.829618367226118,
+        "normalized_threshold": 87.80656843272861,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Josh_Dane_Labistre",
+        "candidate_identity": "Anthony_Gallego"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 22.108019165399835,
+        "normalized_threshold": 88.9263964721078,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Kim_Ivan_Arigorat",
+        "candidate_identity": "Josh_Dane_Labistre"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 22.52350673891715,
+        "normalized_threshold": 90.59763677705833,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Michael_Andrei_Jugado",
+        "candidate_identity": "Anthony_Gallego"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 23.143924212955028,
+        "normalized_threshold": 93.09317877300802,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Joseph_Andrew_Ong",
+        "candidate_identity": "Axel_Josh_Lorayna"
+      }
+    ]
+  },
+  "iterations": 10
+}

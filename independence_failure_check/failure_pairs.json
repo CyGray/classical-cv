@@ -1,0 +1,26 @@
+{
+  "eigenfaces": [
+    {
+      "identity1": "Anthony_Charles_Saltat",
+      "identity2": "Daniel_Ramos",
+      "path1": "data/lasalle_db1_processed/Anthony_Charles_Saltat/light_front.jpg",
+      "path2": "data/lasalle_db1_processed/Daniel_Ramos/light_front.jpg"
+    }
+  ],
+  "fisherfaces": [
+    {
+      "identity1": "Daniel_Ramos",
+      "identity2": "Joseph_Andrew_Ong",
+      "path1": "data/lasalle_db1_processed/Daniel_Ramos/light_front.jpg",
+      "path2": "data/lasalle_db1_processed/Joseph_Andrew_Ong/light_front.jpg"
+    }
+  ],
+  "lbph": [
+    {
+      "identity1": "Kenlie_John_Maghari",
+      "identity2": "Yuan_Paulo_Sebastian_Belen",
+      "path1": "data/lasalle_db1_processed/Kenlie_John_Maghari/light_front.jpg",
+      "path2": "data/lasalle_db1_processed/Yuan_Paulo_Sebastian_Belen/light_front.jpg"
+    }
+  ]
+}
