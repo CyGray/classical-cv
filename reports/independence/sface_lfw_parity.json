@@ -1,0 +1,15 @@
+{
+  "db": "LFW",
+  "source": "cv-repo src/sface wrapper",
+  "identities": 5685,
+  "comparisons": 32313540,
+  "false_positives": 24128,
+  "fp_percent": 0.0747,
+  "dl_reference_fp_percent": 0.07,
+  "abs_diff": 0.0047,
+  "tolerance_abs": 0.05,
+  "parity_pass": true,
+  "l2_vs_match_max_abs_err": 7.375486554828115e-08,
+  "cosine_genuine_threshold": 0.363,
+  "l2_genuine_threshold": 1.128
+}

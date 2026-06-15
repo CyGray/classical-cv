@@ -1,5 +1,56 @@
 ﻿# Changelog
 
+## June 14, 2026 — Hybrid CV + DL gated cascade (LBPH + SFace)
+
+One `HybridRecognizer` that runs an **LBPH fast path** and escalates hard frames
+to **SFace** behind a quality/score gate — the gated cascade from
+`docs/ARCHITECTURE_IMPLEMENTATION_PLAN.md` (Phases 1–5). Reachable from the
+launcher like every other family; live detect shows the CV→DL hand-off on screen.
+
+### NEW: `src/sface/` (SFace wrapper, ported from the DL track)
+- `recognizer.py`: `cv.FaceRecognizerSF` over the vendored
+  `models/sface/face_recognition_sface_2021dec.onnx` — `alignCrop`→`feature`
+  (128-D float32 = **512 B**), the exact `cosine ≥ 0.363 ∧ L2 ≤ 1.128` match rule,
+  plus `SFaceGallery` (per-identity mean embedding) and `SFaceFarModel` (empirical
+  FAR from the LFW impostor cosines).
+- `independence_test.py`: reproduces the DL headline from inside the CV repo —
+  **LFW FP = 0.0747%** (24,128 / 32,313,540), DL reference 0.07% → parity PASS.
+
+### NEW: `src/hybrid/` (protocol + gate + fused predict)
+- `recognizer.py`: the `Recognizer` protocol, additive **LBPH adapter** (wraps the
+  clean-split model + `RecognizerSpec`, no `pipeline.py` change) and **SFace
+  adapter**, the shared `FaceSample`/`detect_sample` YuNet front-end, and
+  `HybridRecognizer.predict()` with four modes — `cascade` (default), `parallel`,
+  `cv_only` (no-accelerator fallback), `dl_only`.
+- `quality.py`: blur / low-light / noise / off-pose / small-face probes on the
+  crop LBPH already holds (YuNet landmarks for pose).
+- `gate.py`: escalate on ambiguous band, near-tie **relative** top-1/top-2 margin,
+  or any quality flag (a quality flag overrides a confident LBPH score).
+- `calibrate.py` → `thresholds.json`: SFace operating cosines measured from the
+  LFW impostors; LBPH gate edges carried from `tar_at_far.md`; quality edges from
+  the clean-crop probe distributions — every value measured or provenance-stamped.
+- `enroll.py`: builds the SFace gallery from the same crops LBPH trained on and
+  **asserts the two label sets match** (two-gallery consistency).
+- `evaluate.py` + `src/benchmark/compare_hybrid.py`: fused TAR/FAR/FRR, escalation
+  rate, and per-stage latency; hybrid vs LBPH-only vs SFace-only.
+- `detect.py`: live gated cascade — YuNet detect + optical-flow tracking +
+  temporal voting, deciding-engine/escalated overlay, FPS summary written with
+  `algorithm="hybrid"` so `aggregate_live_fps.py` and the Benchmark overview pick
+  it up automatically.
+
+### Measured (held-out clean split + LFW impostors)
+- **Clean** `reports/benchmark/hybrid_comparison.md`: hybrid rank-1 **100%**, FAR
+  **0%**, escalation **25%**, ~**97 fps** (vs SFace-only ~50 fps, LBPH-only ~174 fps).
+- **Degraded** `reports/benchmark/hybrid_comparison_degraded.md` (41-mod medium):
+  LBPH-only **5.10%** vs hybrid **97.96%** — the gate escalates every degraded
+  frame and recovers LBPH's collapse.
+
+### Vendored / launcher
+- `models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx` (checksum-matched)
+  and `models/sface/` (SFace ONNX + LFW/DB impostor arrays).
+- `main.py`: new **Hybrid** group (enroll / evaluate / live detect / calibrate /
+  compare) + `MODEL_INFO_CONFIG` + Benchmark-overview row + `fps_algorithm="hybrid"`.
+
 ## June 14, 2026
 
 Toggle-able face detector: **YuNet (CNN)** as a drop-in alternative to

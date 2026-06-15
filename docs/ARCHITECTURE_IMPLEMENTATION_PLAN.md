@@ -370,14 +370,22 @@ NPU; on-device numbers recorded.
 
 The system is "ready to be integrated into the Pi 5" when **all** of these hold:
 
-- [ ] YuNet ONNX vendored in-repo; one detector front-end (P1).
-- [ ] SFace wrapper reproduces DL's LFW independence number from the CV repo (P2).
-- [ ] `HybridRecognizer.predict()` routes clean→CV and hard→DL correctly (P3).
-- [ ] All thresholds derived from the independence test + DB2 crossover, persisted to
-      `thresholds.json` (P4).
-- [ ] `reports/benchmark/hybrid_comparison.md` filled from a **real** run; fused
-      accuracy ≥ LBPH-only (P4).
-- [ ] `main.py → Hybrid` menu works for enroll/evaluate/live/calibrate (P5).
+- [x] YuNet ONNX vendored in-repo; one detector front-end (P1).
+- [x] SFace wrapper reproduces DL's LFW independence number from the CV repo (P2).
+      *(Measured: LFW FP = 0.0747% vs DL 0.07% → parity PASS;
+      `reports/independence/sface_lfw_parity.json`.)*
+- [x] `HybridRecognizer.predict()` routes clean→CV and hard→DL correctly (P3).
+- [~] All thresholds derived from the independence test + DB2 crossover, persisted to
+      `thresholds.json` (P4). *SFace cosines + LBPH edges + clean-crop quality edges
+      are measured/provenance-stamped; the full DB2 41-mod LBPH↔SFace per-probe
+      crossover is deferred to on-device tuning (Phase 6.4).*
+- [x] `reports/benchmark/hybrid_comparison.md` filled from a **real** run; fused
+      accuracy ≥ LBPH-only (P4). *Clean: hybrid 100% rank-1 / 25% escalation.
+      Degraded (41-mod medium): hybrid 97.96% vs LBPH-only 5.10% —
+      `hybrid_comparison_degraded.md`.*
+- [x] `main.py → Hybrid` menu works for enroll/evaluate/live/calibrate (P5).
+      *CPU-only `cv_only` fallback implemented + auto-degrades when the SFace gallery
+      is absent; on-device verification with the accelerator unplugged is P6.3.*
 - [ ] SFace re-quantized to INT8 **and** re-calibrated on-device (P6.2).
 - [ ] CPU-only fallback verified with the accelerator absent (P6.3).
 - [ ] On-device budget met: **≥30 fps, <100 ms latency, ≥95% accuracy, <1 KB feature**

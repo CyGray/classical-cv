@@ -78,6 +78,16 @@ GROUPED_CHOICES = [
         ],
     ),
     (
+        "Hybrid",
+        [
+            ("enroll", "src/hybrid/enroll.py"),
+            ("evaluate", "src/hybrid/evaluate.py"),
+            ("live detect", "src/hybrid/detect.py"),
+            ("calibrate", "src/hybrid/calibrate.py"),
+            ("compare (hybrid vs lbph vs sface)", "src/benchmark/compare_hybrid.py"),
+        ],
+    ),
+    (
         "Benchmark",
         [
             ("run clean classical loop", "scripts/run_classical_clean_loop.py"),
@@ -142,6 +152,18 @@ MODEL_INFO_CONFIG = {
         "evaluated_reports": ["reports/evaluation/fisherfaces_eval.json"],
         "size_paths": ["models/fisherfaces/lasalle_clean.yml"],
     },
+    # Hybrid = LBPH fast path + SFace escalation. "Trained" once the SFace gallery
+    # exists (enroll); footprint is the deployed DL stack + the LBPH model.
+    "Hybrid": {
+        "trained_markers": ["models/sface/gallery.npy"],
+        "evaluated_reports": ["reports/evaluation/hybrid_eval.json"],
+        "size_paths": [
+            "models/sface/gallery.npy",
+            "models/sface/face_recognition_sface_2021dec.onnx",
+            "models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx",
+            "models/lbph/lasalle_clean.yml",
+        ],
+    },
     "Benchmark": {
         "trained_markers": [],
         "evaluated_reports": [],
@@ -178,6 +200,10 @@ BENCHMARK_OVERVIEW_CONFIG = {
         "eval_report": "reports/evaluation/fisherfaces_eval.json",
         "fps_algorithm": "fisherfaces",
     },
+    "Hybrid": {
+        "eval_report": "reports/evaluation/hybrid_eval.json",
+        "fps_algorithm": "hybrid",
+    },
 }
 
 MODEL_FAMILY_ALIASES: dict[str, set[str]] = {
@@ -188,6 +214,7 @@ MODEL_FAMILY_ALIASES: dict[str, set[str]] = {
     "LBPH": {"lbph"},
     "Eigenfaces": {"eigenfaces"},
     "Fisherfaces": {"fisherfaces"},
+    "Hybrid": {"hybrid"},
 }
 
 
@@ -1172,6 +1199,37 @@ def prompt_detector_args(model_name: str, *, is_live: bool = False) -> list[str]
     return []
 
 
+HYBRID_MODES = ("cascade", "parallel", "cv_only", "dl_only")
+
+
+def prompt_hybrid_args(action_label: str) -> list[str]:
+    """Interactive presets for the Hybrid group (mode / impostors).
+
+    The hybrid scripts take their own flags (``--mode``, ``--test-dir``,
+    ``--impostor-dir``) instead of the classical dataset machinery, so this is the
+    only prompting they receive. ``enroll`` / ``calibrate`` / ``compare`` need no
+    prompts (they use defaults); ``evaluate`` / ``live detect`` pick a mode.
+    """
+    args: list[str] = []
+    label = action_label.lower()
+    if label in {"evaluate", "live detect"}:
+        print("\nSelect hybrid mode:")
+        print("  1. cascade  (LBPH fast path + SFace escalation) [default]")
+        print("  2. parallel (both engines every frame)")
+        print("  3. cv_only  (LBPH only - no-accelerator fallback)")
+        print("  4. dl_only  (SFace only)")
+        selected = input("Enter choice (default: 1): ").strip()
+        mode = {"1": "cascade", "2": "parallel", "3": "cv_only", "4": "dl_only"}.get(
+            selected, "cascade"
+        )
+        args += ["--mode", mode]
+    if label == "evaluate":
+        answer = input("Include LFW impostors for FAR (open-set)? (y/N): ").strip().lower()
+        if answer in {"y", "yes"}:
+            args += ["--impostor-dir", "data/lfw-dataset"]
+    return args
+
+
 def prompt_core_dataset_args(is_training: bool, model_name: str = "") -> list[str]:
     phase_label = "training" if is_training else "evaluation"
     is_classical = model_name in CLASSICAL_MODEL_NAMES
@@ -1574,9 +1632,12 @@ def main() -> int:
                 continue
 
             action_label, rel_script = actions[action_index]
-            training_action = is_training_action(action_label, rel_script)
-            evaluate_action = is_evaluate_action(action_label, rel_script)
-            live_detect_action = is_live_detect_action(action_label, rel_script)
+            # The Hybrid group's scripts take their own flags, not the classical
+            # dataset/artifact machinery, so keep those branches off for it.
+            is_hybrid = model_name == "Hybrid"
+            training_action = (not is_hybrid) and is_training_action(action_label, rel_script)
+            evaluate_action = (not is_hybrid) and is_evaluate_action(action_label, rel_script)
+            live_detect_action = (not is_hybrid) and is_live_detect_action(action_label, rel_script)
             if (
                 model_name == "ArcFace MobileNet INT8"
                 and action_label in {"train enrollment", "evaluate", "live detect"}
@@ -1587,7 +1648,9 @@ def main() -> int:
                     continue
 
             preset_args: list[str] = []
-            if training_action or evaluate_action:
+            if is_hybrid:
+                preset_args = prompt_hybrid_args(action_label)
+            elif training_action or evaluate_action:
                 core_dataset_args = prompt_core_dataset_args(
                     is_training=training_action, model_name=model_name
                 )
