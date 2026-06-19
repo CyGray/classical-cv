@@ -184,9 +184,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--equalization",
-        choices=["equalize", "clahe"],
-        default="equalize",
-        help="Face contrast normalization.",
+        choices=["equalize", "clahe", "tan-triggs"],
+        default="tan-triggs",
+        help="Face contrast normalization (LBPH default: tan-triggs).",
     )
     parser.add_argument(
         "--downscale-max-side",

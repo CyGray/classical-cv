@@ -201,7 +201,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--equalization",
-        choices=["equalize", "clahe"],
+        choices=["equalize", "clahe", "tan-triggs"],
         default="equalize",
         help="Face contrast normalization.",
     )
