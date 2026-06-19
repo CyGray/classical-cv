@@ -53,8 +53,7 @@ data/
 # ===================================
 # Large Model Files & Binary Artifacts
 # ===================================
-# Model weights and checkpoints
-*.onnx
+# Model weights and checkpoints — ignore binary formats globally
 *.pb
 *.h5
 *.hdf5
@@ -68,15 +67,44 @@ data/
 *.pickle
 *.joblib
 
-# Model directories and local model assets
-models/
-models/**/*.onnx
-models/**/*.pb
-models/**/*.h5
-models/**/*.pth
-models/**/*.pkl
-models/lbph/*.yml
-models/arcface_mobilenet/models/
+# Ignore everything directly inside models/
+models/*
+# Un-ignore subdirectories we want to selectively track from
+!models/lbph/
+!models/eigenfaces/
+!models/fisherfaces/
+!models/sface/
+!models/yunet_mobilefacenet/
+
+# Ignore everything inside lbph/ except the clean paper model
+models/lbph/*
+!models/lbph/lasalle_clean.yml
+!models/lbph/labels_lasalle_clean.json
+
+# Ignore everything inside eigenfaces/ except the clean paper model
+models/eigenfaces/*
+!models/eigenfaces/lasalle_clean.yml
+!models/eigenfaces/labels_lasalle_clean.json
+
+# Ignore everything inside fisherfaces/ except the clean paper model
+models/fisherfaces/*
+!models/fisherfaces/lasalle_clean.yml
+!models/fisherfaces/labels_lasalle_clean.json
+
+# Ignore everything inside sface/ except gallery, labels, and ONNX
+models/sface/*
+!models/sface/gallery.npy
+!models/sface/labels.json
+!models/sface/face_recognition_sface_2021dec.onnx
+
+# Ignore everything inside yunet_mobilefacenet/ except the detector ONNX
+models/yunet_mobilefacenet/*
+!models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx
+
+# Entirely ignored model directories (too large / not paper-essential)
+models/arcface_mobilenet/
+models/arcface_mobilenet_int8/
+models/edgeface/
 
 # Enrollment and cache files
 **/enrollment.json
