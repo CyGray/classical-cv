@@ -1,5 +1,7 @@
 # Independence Test Algorithm Report (Light Front)
 
+For the full mathematical and statistical formalism - including the probability model, order statistics, the k-th error pair rule, extreme-value theory connections, and a comparison with the LFW sampled-pair protocol - see [MATHEMATICAL_FOUNDATION.md](./MATHEMATICAL_FOUNDATION.md).
+
 ## 1. Purpose of the scripts
 
 The `independence_test_light_front.py` scripts for LBPH, Eigenfaces, and Fisherfaces all answer one core question:

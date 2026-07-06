@@ -50,7 +50,7 @@ all impostor pairs by construction. Sort the C distances ascending. To operate a
 
   k = ⌈ FAR* · C ⌉, (2)
 
-and set the threshold θ to the k-th smallest impostor distance: exactly k impostor pairs fall inside θ, so the realized FAR is k/C. On La Salle DB1 (N=28, C=756) the design point is the 8th error pair, i.e. FAR = 8/756 ≈ 1.06%; 756 comparisons cannot resolve finer than ~1,300 ppm, so the spec budget of 100 ppm is certified on LFW DB1 (N=5,749, C=33,045,252; the 331st pair ≈ 10 ppm). The rule reproduces both spec anchors exactly.
+and set the threshold θ to the k-th smallest impostor distance: exactly k impostor pairs fall inside θ, so the realized FAR is k/C. On La Salle DB1 (N=28, C=756) the design point is the 8th error pair, i.e. FAR = 8/756 ≈ 1.06%; 756 comparisons cannot resolve finer than ~1,300 ppm, so the spec budget of 100 ppm is certified on LFW DB1 (N=5,749, C=33,045,252; the 331st pair ≈ 10 ppm). The rule reproduces both spec anchors exactly. For the complete mathematical formalism—including the probability model, extreme-value connections, and comparison with the LFW sampled-pair protocol—see `docs/report_docs/independence_test/MATHEMATICAL_FOUNDATION.md` in the project repository.
 
 ### 3.3 The escalation gate
 
