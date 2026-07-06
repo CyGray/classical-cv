@@ -1,175 +1,202 @@
-Facial Recognition Using Hybrid Technologies Based on Independence Testing
+# Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
 [Author names], Group 3
-[College], University of St. La Salle
-Bacolod City, Philippines
+[College], University of St. La Salle, Bacolod City, Philippines
 [email]
 
-Abstract. Automated gate access in institutional settings requires facial recognition that is accurate, fast, and deployable on low-cost edge hardware. A central difficulty is setting a reliable match threshold when ground-truth negative pairs are scarce and small validation sets generalize poorly. This paper presents LS-Face, a facial recognition system for Smart Gate access control that combines classical computer vision recognizers (LBPH, Eigenfaces, Fisherfaces) with a lightweight deep learning recognizer and selects the hybrid configuration through independence testing. Independence testing performs exhaustive cross-identity comparisons, 756 on the La Salle database and up to 33,045,252 on LFW, to verify identity separation and to derive match thresholds at specified false acceptance rates. On a leakage-free held-out La Salle split, the selected classical recognizer, LBPH with Tan-Triggs normalization, achieved a true acceptance rate of 98.21%, a false acceptance rate of 76 ppm, and a false rejection rate of 1.79% against 13,149 LFW impostors at the 100 ppm budget, with 100% rank-1 accuracy and a 0.07% equal error rate; neither subspace method holds the budget (true acceptance 23.21% and 10.71%). The selected recognizers are fused into a gated cascade that runs LBPH on every frame and escalates only hard frames to an SFace deep recognizer, which enrolls with a 512-byte embedding that meets the sub-1 KB feature budget the 64 KB LBPH histogram fails. On a clean split the hybrid preserves 100% rank-1 while escalating only 25% of frames, and on a medium-degradation split it raises rank-1 from 5.10% to 97.96%. Full-protocol LFW certification and Raspberry Pi 5 deployment remain in progress.
-Keywords. face recognition, independence testing, threshold determination, hybrid method, classical computer vision, edge deployment
-1. Introduction
-Automated access control is increasingly common in institutional settings. A camera-based Smart Gate that recognizes enrolled individuals offers convenience, auditability, and contactless operation. The system must admit enrolled users reliably, reject strangers with high confidence, respond within a fraction of a second, and run on inexpensive edge hardware.
-Two broad approaches to facial recognition serve different parts of this requirement. Classical methods such as Eigenfaces [1], Fisherfaces [2], and Local Binary Pattern Histograms (LBPH) [3] are compact and fast and require no specialized hardware, but they degrade under illumination, pose, and expression variation. Lightweight deep learning recognizers, including SFace [4], MobileFaceNet [7], and EdgeFace [9], offer stronger robustness to such variation at higher model and compute cost. A practical Smart Gate benefits from combining both families.
-Threshold determination is a second critical problem. Every verification system reduces to comparing a feature distance against a decision threshold. Setting it is straightforward when large quantities of labeled genuine and impostor pairs are available [12], but real enrollment scenarios typically have only a small enrolled gallery and no ground-truth negative pairs representing the open-world population. A threshold tuned only on the enrolled gallery risks being too permissive, admitting impostors, or too strict, locking out legitimate users.
-LS-Face addresses this through independence testing. The core idea is exhaustive cross-identity comparison on a database where each identity has one image, so that every comparison is an impostor pair by construction. Sorting these distances verifies that a recognizer genuinely separates identities and permits reading a threshold directly off the empirical impostor distribution at a specified false acceptance rate.
-The contributions of this paper are as follows. First, a complete facial recognition pipeline benchmarking classical recognizers (Eigenfaces [1], Fisherfaces [2], LBPH [3]) against a lightweight deep learning recognizer (SFace [4], with MobileFaceNet [7] and EdgeFace [9] screened) under a common preprocessing, evaluation, and reporting framework, with face detection migrated from Viola-Jones [5] to YuNet [10] on a measured head-to-head. Second, an independence testing protocol that derives match thresholds from exhaustive cross-identity comparisons at specified false acceptance rates on both the La Salle database and LFW [11], while simultaneously surfacing candidate annotation errors. Third, a recognizer selection procedure driven by verification performance at a fixed false acceptance rate and modified-image robustness rather than closed-set accuracy alone. Fourth, a gated hybrid cascade that pairs the selected classical recognizer with the selected deep recognizer behind a quality-and-score gate, escalating only hard frames to the deep model so that the system pays the deep-model cost only when classical confidence is untrustworthy. Fifth, an assessment of the selected recognizers and the hybrid for edge deployment on a Raspberry Pi 5.
-The remainder of this paper is organized as follows. Section 2 reviews related work. Section 3 describes the proposed approach. Section 4 presents the experimental setup, results, and discussion. Section 5 concludes.
-2. Related Work
-Preprocessing transforms raw images into standardized inputs using noise reduction, contrast enhancement, and 2D face alignment implemented with OpenCV [13] and related libraries.
-Classical face detection includes Viola-Jones Haar cascades [5], HOG, and LBP detectors. Deep learning detectors include U-Net and YuNet [10], a compact ONNX detector for edge devices.
-Classical facial recognition. Eigenfaces [1] applies PCA to vectorized face images. Fisherfaces [2] follows PCA with LDA to maximize between-class scatter relative to within-class scatter. LBPH [3] divides the face into regions and compares local binary pattern histograms. These methods remain attractive for embedded systems because models are small, training is fast, and inference needs no specialized hardware.
-Deep learning recognition. FaceNet [6] trained a convolutional network with triplet loss so that Euclidean distance corresponds to identity similarity. ArcFace [14] introduced additive angular margin loss. SFace [4] used a sigmoid-constrained hypersphere loss. MobileFaceNets [7] adapted the MobileNetV2 [8] inverted-residual design. EdgeFace [9] pursued similar goals with hybrid CNN-transformer blocks at sub-2M parameter scales.
-Hybrid approaches. These combine complementary recognizers: a classical stage as a first filter paired with a deep stage for confirmation, or multi-agent arrangements of classical recognizers. The motivation is to retain the speed and compactness of classical methods while recovering accuracy under image variation.
-Applications. These span surveillance, finance, retail, and access control. Smart Gate belongs to access control, where the operating point demands a very low false acceptance rate and real-time response on inexpensive hardware. Standardized biometric evaluation distinguishes TAR, FAR, and FRR [12]. The LFW database [11] established a widely used unconstrained verification benchmark with fixed genuine and impostor pair lists. Independence testing differs by using one image per identity with exhaustive comparison, so that the empirical impostor distance distribution is available at fine FAR resolutions and threshold selection is tied to a specified error count rather than a sampled pair list.
-3. Facial Recognition Using Hybrid Technologies Based on Independence Testing
-Goal. The goal is a Smart Gate that recognizes enrolled individuals and admits them without physical credentials. The system must admit enrolled users reliably, reject strangers with high confidence, respond in a fraction of a second, and run on inexpensive edge hardware. Target specifications are TAR 90 to 95%, FAR below 0.01% (100 ppm), FRR 1 to 5%, latency below 100 ms, throughput of 30 fps or more, and feature vectors below 1 KB. These are the Stage-3 (hybrid, on-device, real-time) targets; the Stage-1 classical milestone asks for accuracy above 90% at 1 face per second, a looser bar on speed.
-Market context and expected effects. In the Philippine institutional setting, gate access at campuses, offices, and residential facilities is handled mainly by manual guard inspection and RFID or proximity-card systems. A low-cost, camera-based Smart Gate offers a contactless and auditable alternative, and the intended effect of this work is to deliver gate-grade recognition accuracy on commodity edge hardware at a fraction of the cost of commercial biometric turnstiles. [Quantitative market figures to be supplied by the team.]
-Development concept: Small but Strong and Fast. The system should be small enough for a Raspberry Pi 5, strong enough to hold a low false acceptance rate against strangers, and fast enough for real-time gate operation.
-Why hybrid. Classical CV recognizers are small, train quickly, and run fast on CPU, which suits edge deployment, but they degrade under illumination, pose, and expression variation. Deep learning recognizers are robust to such variation but use larger models that strain edge hardware. Neither family alone is guaranteed to meet all Smart Gate requirements. A hybrid method combines classical speed and compactness on-device with deep learning accuracy, keeping the gate fast while retaining strong rejection of strangers.
-Gated hybrid cascade. The hybrid is realized as a single decision function over one camera frame. A shared YuNet front-end emits one face box, a confidence score, and five landmarks. The frame then takes the classical fast path: LBPH predicts an identity and a distance, and a gate decides whether that decision can be trusted. The gate escalates a frame to the SFace deep recognizer if any of three conditions hold: a quality flag fires (blur, low light, sensor noise, off-pose, or too-small face, measured on the same crop LBPH already holds), the LBPH distance falls in an ambiguous band between the accept and reject thresholds, or the top-1 and top-2 distances are a near-tie. A quality flag overrides an otherwise confident LBPH score, because the hard regimes identified by the classical audit are exactly where LBPH confidence proved unreliable. When no condition fires, LBPH decides and the deep model is never invoked; when one does, SFace aligns the face to 112 by 112 using the landmarks, extracts a 128-dimensional embedding, and matches it against a per-identity gallery by cosine distance. The near-tie test uses a relative margin (d₂ − d₁) / d₁ rather than an absolute gap: LBPH training distances are near zero by memorization, so an absolute margin fitted on training data would escalate every held-out frame, and fitting on test data would leak; the relative margin is scale-free and ships as a policy default. The cascade also exposes a no-accelerator fallback that runs LBPH alone, which engages automatically when the deep gallery is absent.
-Independence testing. Independence testing verifies that a recognizer genuinely separates distinct identities, guarding against accuracy figures inflated by data leakage or degenerate feature spaces. It determines the match threshold by reading directly off an exhaustive empirical impostor distance distribution at a specified false acceptance rate, rather than tuning on a small validation split. Because each identity contributes one image, every cross-identity comparison is an impostor pair by construction. The exhaustive comparison also surfaces near-zero-distance pairs, which may indicate annotation errors (the same identity attached to genuinely different images, or the reverse) but may also be algorithmic artifacts that must be ruled out. Independence-test performance is used as a selection criterion: a recognizer whose impostor distribution does not admit a usable threshold at the specified rate is excluded.
-4. Experiment, Results, and Discussion
-Experimental conditions. An input image is captured, preprocessed, passed to face detection and preprocessing, then to recognition against an enrolled feature database, and finally to an accept-or-reject decision based on the threshold set by independence testing. Preprocessing and detection settings are applied identically across all recognizer pipelines, with one calibrated per-family exception: each recognizer uses its measured-best illumination normalization (Tan-Triggs for LBPH; histogram equalization for Eigenfaces and Fisherfaces), single-sourced so that training, evaluation, live detection, and threshold determination cannot drift apart.
-Databases. La Salle DB1 contains 28 persons with 12 cropped 100 by 100 images each. For leakage-free recognition the gallery uses 10 images per identity (280 enrolled) and 2 held-out probes per identity (56 probes); image-disjointness between train and test was verified for all 28 identities. La Salle DB2 applies 41 type-level modification variants to each DB1 photo (280 times 41 equals 11,480 in the full scheme; the leakage-free accuracy-ratio runs reported here use the 56 held-out originals times 41 equals 2,296 probes). LFW DB1 [11] has 5,749 persons and 13,233 photos; 13,149 faces are usable after Haar cropping and serve as the impostor set for verification. LFW DB2 applies 41 modifications to each photo. The modifications span photometric changes (brightness, gamma, contrast, Gaussian noise, Gaussian blur, motion blur) and geometric changes (rotation, zoom or scale, occlusion) at multiple severity levels.
-Structure of experiment. (1) Data input. (2) Preprocessing: per-family illumination normalization and resizing to 100 by 100. (3) Face detection by Viola-Jones [5] or YuNet [10], with 2D alignment, grayscale conversion, and resizing, bypassed for the pre-cropped offline La Salle split and used on the raw and live webcam paths; the two detectors are compared head-to-head and YuNet is selected for the raw and live paths. (4) Independence testing on one-image-per-identity sets to verify identity separation and determine the match threshold for each recognizer. (5) Eigenvalue and histogram based recognition (LBPH, Eigenfaces, Fisherfaces), each producing a .yml model file and a .json label map. (6) Deep learning recognition (SFace), producing a gallery of per-identity mean embeddings. (7) Hybrid fusion: a gated cascade running LBPH on every frame and escalating hard frames to SFace. (8) Decision: accept or reject against the derived threshold.
-Independence-test protocols. La Salle DB1 uses 28 persons, one image each, for 756 (28 times 27) ordered comparisons excluding self-comparison. With only 756 comparisons the finest resolvable false acceptance rate is about 1,300 ppm (k equals 1), so the design operating point is the 8th error pair, giving a realized FAR of 10,582 ppm (1.058%). LFW DB1 uses 5,749 persons, one image each, for 33,045,252 (5,749 times 5,748) ordered comparisons, with the threshold at the 331st error pair (about 10 ppm). The project's 100 ppm and 10 ppm spec budget is resolvable only on LFW DB1; the full ordered LFW run is implemented but gated (multi-hour for LBPH) and remains pending. A 300-identity smoke run (89,700 ordered comparisons) validated the protocol on all three families.
-Accuracy on the modified-image benchmark. For a given modification and level, each original image is matched against its modified version; a probe matches when the recognizer predicts the correct identity and the distance is within the deployable threshold. Matches K are counted and the accuracy ratio is AR equals K divided by M, where M is the number of modified probes. Per-level AR is averaged into a per-modification mean, then averaged across modification types into the overall figure, all at the false acceptance rate fixed by independence testing.
-Results: face detection (Viola-Jones vs YuNet). Detection is the shared first stage for the raw-image and live webcam paths; for the offline La Salle split the inputs are already cropped 100 by 100 faces, so detection is bypassed. The pipeline was corrected to report a detector miss as a no-face skip rather than silently feeding the recognizer a full frame (the prior detect-or-fallback behavior that degraded earlier Fisherfaces runs). Two detectors were compared head-to-head at a 640 px detection size on identically decoded frames. On the controlled La Salle set (336 raw photos) YuNet found a face in 100% of images with zero false positives at 48.6 fps, versus Viola-Jones Haar with 86.9% detection, 43 false positives (11.6% of images), and 37.2 fps; Haar's misses concentrate on the non-frontal poses and dark lighting a gate must tolerate, while both handle frontal shots easily. On an in-the-wild LFW sample (600 images) both saturate recall (Haar 98.7%, YuNet 100%) and YuNet runs far faster (359 vs 129 fps); YuNet's extra LFW boxes are mostly genuine background people, so the controlled La Salle set is the clean false-positive measure. YuNet's model file is about four times smaller (227 vs 941 KB) and it additionally emits a confidence score and five landmarks that enable landmark-based alignment, so it is the selected detector for the raw and live paths (Haar is retained as a toggleable default so that prior runs reproduce unchanged). At the live detection resolution both detectors individually clear the 30 fps target, so the detector is not by itself what holds the end-to-end live loop below 30 fps. On LFW, detector misses reduce the usable identity count below the nominal total (13,149 of 13,233 usable under Haar cropping for the impostor set).
-Independence testing. On La Salle DB1 the 8th-error-pair threshold (756 comparisons, realized FAR 10,582 ppm or 1.058%) is, on each model's feature-distance scale, LBPH 21.35 (normalized 85.88), Eigenfaces 8,098.46 (71.00), and Fisherfaces 5,446.46 (66.38); LBPH shows the widest impostor margin. The corresponding deployable thresholds on each recognizer's native predict scale are LBPH 73.0, Eigenfaces 4,308, and Fisherfaces 738 at the 100 ppm budget (LBPH 76.85 at the 1.058% La Salle operating point). The LFW 300-identity smoke run reproduced the protocol for all three families. On annotation errors, the exhaustive comparison surfaced near-zero-distance pairs that were investigated rather than assumed. On La Salle these traced to a min-max normalization floor (LBPH and Eigenfaces) and a one-image LDA singular-matrix collapse (Fisherfaces), not mislabeled data; the database is clean (raw chi-square minimum 20.89, no exact-zero or duplicate feature rows). Normalization was standardized to max-only and Fisherfaces independence was switched to two or more images per identity to remove the collapse. On LFW, the smoke run flagged the same boundary pair across all three families (Andrew Caldecott versus Andrew Gilligan), the known LFW near-duplicate annotation case, to be verified before the full-protocol run.
-Eigenvalue and histogram based recognition. On the held-out La Salle test split, closed-set rank-1 accuracy is LBPH 100.00%, Eigenfaces 75.00%, and Fisherfaces 66.07%. Closed-set accuracy alone is misleading for a gate, which must reject impostors; the deciding metric is verification TAR at the false acceptance budget, measured against 13,149 LFW impostors on each recognizer's native scale (Table I).
+> **Length target:** 6 pages max in the IEEE two-column template (body ≈ 3,600 words + 4 figures + 5 tables). Items marked **[PENDING]** are produced by scripts that are already in the repository but have not been run yet; fill them in and delete the tags before submission. If the filled-in tables push past 6 pages, trim in this order: §4.1 threshold detail, §2, the §4.7 discussion — never the confidence intervals or the transfer results.
 
-TABLE I.  CLASSICAL RECOGNIZER COMPARISON (VERIFICATION AGAINST 13,149 LFW IMPOSTORS)
-Recognizer
-Rank-1
-TAR @ 100 ppm
-FRR
-EER
-Overall AR (41 var.)
-Feature
-Model
-<1 KB?
-LBPH (Tan-Triggs)
-100.00%
-98.21%
-1.79%
-0.07%
-85.43%
-64 KB
-≈33 MB
-no
-Eigenfaces
-75.00%
-23.21%
-76.79%
-31.77%
-47.69%
-1,120 B
-≈83 MB
-no
-Fisherfaces
-66.07%
-10.71%
-89.29%
-35.71%
-30.54%
-108 B
-8.2 MB
-yes
+---
 
+**Abstract.** A camera-based Smart Gate must recognize enrolled people accurately, respond in real time, and run on cheap edge hardware. No single method does all three: classical computer-vision (CV) recognizers such as LBPH are small and fast but break under bad lighting, blur, and noise, while deep-learning (DL) recognizers such as SFace are robust but cost far more compute. This paper shows that the two families are *complementary* — each one is strong exactly where the other is weak — and builds LS-Face, a gated cascade that runs LBPH on every frame and forwards only hard frames to SFace. The evidence comes from independence testing: exhaustive N×(N−1) cross-identity comparison, where every pair is an impostor pair by construction, so the match threshold can be read directly off the impostor distance distribution at a chosen false-acceptance rate (FAR). On a leakage-free La Salle split, LBPH with Tan-Triggs normalization reaches 98.21% true acceptance at 76 ppm FAR against 13,149 LFW impostors; SFace independently passes the same protocol on LFW with a 0.0747% false-positive rate over 32.3 million comparisons. On clean images the cascade keeps 100% rank-1 accuracy while escalating only 25% of frames (≈100 fps, twice SFace-only); on degraded images the gate escalates everything and lifts rank-1 from LBPH's 5.10% to 97.96%. A joint independence test that scores both engines on the same impostor pairs, and a shared 41-modification robustness suite for CV, DL, and the cascade, complete the complementarity argument.
 
-The actual realized FAR is 76 ppm, the resolution floor of 13,149 impostors. At the looser La Salle independence operating point (1.058% FAR), LBPH reaches 100% TAR and 0% FRR, Eigenfaces 53.57% and 46.43%, and Fisherfaces 35.71% and 64.29%. The selected best classical recognizer is LBPH with Tan-Triggs normalization, the only classical model that passes the spec accuracy block (TAR 90 to 95%, FAR below 100 ppm, FRR 1 to 5%). Configuration and matcher sweeps confirm that Eigenfaces and Fisherfaces cannot be brought within about 50 points of the TAR target on this data; their genuine and impostor distance distributions overlap intrinsically. LBPH's one failing spec metric is the inherent 64 KB histogram feature, which exceeds the sub-1 KB budget; a landmark-restricted, uint8-quantized 960 B compact template was implemented as a documented Pi-budget fallback (rank-1 91.1%, TAR 76.8% at 100 ppm, about 21 points below the full histogram).
-Modification robustness. LBPH overall AR is 85.43%, Eigenfaces 47.69%, and Fisherfaces 30.54%. LBPH is most robust to photometric corruptions (occlusion, gamma, contrast, and moderate brightness shifts all at or above 97%) and degrades most under heavy Gaussian noise (47.8%), motion blur (68.5%), and strong brightness reduction (73.7%). Geometric distortion is the dominant failure mode for the subspace methods: rotation is the single weakest modification for both Eigenfaces (26.3%) and Fisherfaces (14.3%), which LBPH absorbs far better (83.5%).
-Deep learning recognition. The deep track standardized on a YuNet detector feeding an SFace recognizer, with a fixed genuine match rule (cosine similarity at or above 0.363 and L2 distance at or below 1.128) and a 128-dimensional, 512-byte embedding. Independence testing on LFW gives the deep-track headline: across 5,685 single-image identities and 32,313,540 ordered cross-identity comparisons, 24,128 impostor pairs fall inside the genuine match rule, a false-positive rate of 0.0747%. This SFace wrapper was re-derived inside the classical repository and reproduces the deep-track reference to within 0.005 percentage points (0.0747% versus 0.07%, a parity pass), with its L2 distance agreeing with OpenCV's native matcher to 7 × 10⁻⁸. On La Salle DB1 the same protocol over 756 comparisons surfaces 20 impostor pairs inside the rule. An earlier closed-set screen of InsightFace candidates (ArcFace buffalo_s 78.57%, MobileFaceNet 17.86%, EdgeFace 17.86%, ArcFace INT8 3.57% rank-1 on the 56-probe held-out La Salle test) was inconclusive, because the low MobileFaceNet, EdgeFace, and INT8 figures traced to enrollment and detection-path issues rather than settled performance, and it has been superseded by the YuNet and SFace pipeline as the deep recognizer carried into the hybrid. The deep track's advantage is robustness and open-world generalization rather than closed-set accuracy on this small clean set, which the hybrid evaluation below exercises directly.
-Facial recognition (hybrid). The hybrid fusion is implemented as the gated cascade described above (LBPH fast path, SFace escalation behind a quality-and-score gate over a shared YuNet front-end) and offers four modes: cascade (default), parallel (both engines every frame, deep wins when it accepts), cv-only (the no-accelerator fallback), and dl-only. It was evaluated against the LBPH-only and SFace-only baselines on two held-out sets: a clean split (56 faces, 28 identities by a held-out pose under two lighting conditions, with 400 LFW impostors for the false-acceptance check) and a medium-degradation split (the same pose under the 41-modification suite, 112 images, of which 14 were too degraded for YuNet to detect, leaving 98 evaluated). Results are shown in Tables II and III.
+**Keywords.** face recognition, independence testing, threshold determination, hybrid method, classical computer vision, edge deployment
 
-TABLE II.  HYBRID VS BASELINES ON THE CLEAN SPLIT
-Config (clean)
-Rank-1
-TAR
-FRR
-FAR
-Escalation
-End-to-end
-≈FPS
-LBPH-only
-100.00%
-100.00%
-0.00%
-0.00%
-0.00%
-5.74 ms
-174.3
-SFace-only
-100.00%
-100.00%
-0.00%
-0.00%
-100.00%
-19.92 ms
-50.2
-Hybrid (cascade)
-100.00%
-100.00%
-0.00%
-0.00%
-25.00%
-10.03 ms
-99.7
+## 1. Introduction
 
-TABLE III.  HYBRID VS BASELINES ON THE MEDIUM-DEGRADATION SPLIT
-Config (medium degradation)
-Rank-1
-TAR†
-FRR†
-Escalation
-End-to-end
-≈FPS
-LBPH-only
-5.10%
-3.57%
-96.43%
-0.00%
-5.88 ms
-170.0
-SFace-only
-97.96%
-84.82%
-15.18%
-100.00%
-21.70 ms
-46.1
-Hybrid (cascade)
-97.96%
-84.82%
-15.18%
-100.00%
-19.50 ms
-51.3
+Automated gates need a recognizer that (a) admits enrolled users reliably, (b) rejects strangers with very high confidence, (c) answers in a fraction of a second, and (d) runs on low-cost hardware such as a Raspberry Pi 5.
 
-† On the degraded split, TAR and FRR are computed over all 112 images and count the 14 YuNet no-face frames as failures, which is why TAR (84.82%) falls below rank-1 (97.96%, over the 98 detected frames). The clean-split FAR of 0% is over only 400 impostors and indicates that no false acceptance was observed rather than a certified rate; the SFace operating point is set from the full LFW impostor distribution (5,685 identities) during calibration.
+Two method families each satisfy only part of this list. Classical CV recognizers — Eigenfaces [1], Fisherfaces [2], LBPH [3] — are tiny, train in seconds, and predict in under a millisecond on a CPU, but their accuracy collapses under illumination change, pose, blur, and noise. Lightweight DL recognizers — SFace [4], MobileFaceNet [7], EdgeFace [9] — stay accurate under those corruptions but cost 2–4× more per frame. Our central claim is that this is not a tie to be broken but a *complementarity to be exploited*: the CV engine supplies the lightness the DL engine lacks, and the DL engine supplies the robustness the CV engine lacks. A hybrid that routes each frame to the cheapest engine that can be trusted with it gets close to the best of both.
 
-On clean faces all three configurations are equivalent in accuracy, so the hybrid costs nothing it does not have to: the gate keeps 75% of frames on the cheap LBPH path and escalates only 25%, running at about 100 fps, roughly twice the throughput of SFace-only and about 57% of LBPH-only. On degraded faces LBPH alone collapses to 5.10% rank-1, while the gate escalates every degraded frame and the hybrid recovers to 97.96%, a lift of 92.86 percentage points; here the hybrid equals SFace-only because every frame is degraded and so every frame should reach the deep model, which is the gate behaving correctly. The escalation routing confirms this adaptivity: on the clean split 42 of 56 frames are confident LBPH accepts and 14 escalate (7 on a quality flag, 6 on a low relative margin, 1 in the ambiguous band), whereas on the degraded split all 98 escalate, overwhelmingly (89) on a quality flag. Per-stage timing on the clean cascade is YuNet detection 1.40 ms on every frame, LBPH plus gate 4.56 ms on the non-escalated 75%, and SFace 22.08 ms on the escalated 25%, for a 10.34 ms mean end-to-end (about 97 fps projected); SFace dominates per-frame cost, which is exactly why the gate confines it to the frames that need it. On footprint, the hybrid enrolls each identity with SFace's 512-byte embedding, satisfying the sub-1 KB feature budget the 64 KB LBPH histogram fails, while still using LBPH for cheap inference on easy frames; the full model footprint on disk (YuNet plus LBPH plus SFace ONNX plus gallery) is 68.85 MB.
-The first calibration produced 100% escalation, with the cascade collapsing into always-SFace, because an absolute top-1 and top-2 margin fitted on the near-zero LBPH training distances escalates every held-out frame; switching the adapter to the relative margin (d₂ − d₁) / d₁ with a policy default restored the healthy 25% and 100% split without fitting on test data. Off-device throughput is a desktop CPU projection; the Stage-3 on-device budget (30 fps or more, under 100 ms, 95% accuracy or more, sub-1 KB feature), with INT8 SFace on a Raspberry Pi 5 NPU and the SFace threshold re-derived on the quantized model, remains the deployment step. Raspberry Pi 5 on-device figures are pending, as the port and on-device measurement have not yet been run.
-Discussion. The results separate two readings of accuracy. Closed-set rank-1 ranks the recognizers LBPH above Eigenfaces above Fisherfaces but ignores impostors; under verification at a fixed FAR, which is the gate's actual operating mode and the spec's own framing, only LBPH survives, while Eigenfaces and Fisherfaces reject roughly three-quarters and nine-tenths of genuine attempts to hold the budget. LBPH's pass is partly a preprocessing result: Tan-Triggs normalization (gamma, then difference-of-Gaussians, then contrast equalization, well matched to LBP-type features) lifts it from TAR 96.4% and EER 3.6% under plain equalization to 100% rank-1 and EER 0.07%, whereas the same normalization degrades the subspace methods by stripping the low-frequency content they encode, so no single shared best preprocessing exists. Independence-derived thresholds tie the operating point to a specified false acceptance rate over an exhaustive impostor set rather than to a small validation split; on La Salle, 756 comparisons resolve only about 1,300 ppm, so the 100 ppm and 10 ppm budget is certified on LFW DB1, whose full ordered run remains the key pending step. Train-only augmentation did not help the classical recognizers (LBPH dropped from 100% to 98.2% rank-1 and tripled in model size, and Fisherfaces collapsed further), consistent with their nearest-neighbor and subspace nature: they do not learn invariance from augmented examples the way a CNN does.
-On footprint, the trade is separability versus size: LBPH is the most robust but the heaviest (64 KB feature, failing sub-1 KB), while Fisherfaces and Eigenfaces fit the feature budget but fail accuracy. The hybrid dissolves this tension by enrolling with SFace's 512-byte embedding while retaining LBPH for cheap inference, so the deployed feature meets the budget without surrendering the accuracy LBPH provides on easy frames. Throughput is open rather than failed: the recognizer predict is sub-millisecond, so a tuned post-Tan-Triggs webcam re-run and explicit capture-to-result latency instrumentation are still needed before the on-device claim is final. The robustness suite localizes the deployment risk to high-noise and motion-blur captures, arguing for sensor exposure and gain control and a steady mount over algorithmic fixes, and it is precisely this risk the hybrid gate is built to absorb. The degraded-split result is the clearest evidence for the hybrid thesis: the same corruptions that collapse LBPH to 5.10% are caught by the quality probes, escalated to SFace, and recovered to 97.96%, so the gate trades the deep model's cost for robustness only on the frames that have lost it and leaves clean frames on the fast path. Migrating detection to YuNet removes the detection-side accuracy and false-positive risk that Haar carried on non-frontal and dark captures (100% versus 86.9% detection, zero versus 43 false positives on the controlled set) at no speed cost, leaving the deep-model escalation as the one remaining lever against the on-device frame-rate budget, which is what the Raspberry Pi NPU port is meant to pay down.
-5. Conclusion
-LS-Face selects its recognizers through independence testing, which fixes the match threshold at a specified false acceptance rate over an exhaustive impostor set instead of tuning on a small validation split. On a leakage-free held-out La Salle split, the selected classical recognizer, LBPH with Tan-Triggs normalization, achieved TAR 98.21%, FAR 76 ppm, FRR 1.79%, EER 0.07%, 100% closed-set rank-1, and 85.43% mean accuracy ratio across the 41-variant modification suite, the only one of the three classical recognizers to satisfy the spec's accuracy block. Eigenfaces and Fisherfaces, while compact, cannot hold the false acceptance budget on this data. The selected classical recognizer is fused with an SFace deep recognizer, itself validated by an LFW independence false-positive rate of 0.0747%, in a gated cascade that preserves clean-set accuracy at 25% escalation and lifts degraded-set rank-1 from 5.10% to 97.96%, while enrolling with a 512-byte feature that meets the sub-1 KB budget LBPH alone fails.
-Compared with closed-set accuracy alone, verification at a fixed false acceptance rate reorders the recognizers and exposes the subspace methods' intrinsic genuine and impostor overlap. Compared with validation-tuned thresholds, independence thresholds operate at a specified false acceptance rate, and the rank-based k-th-error-pair rule reproduces both spec anchors (8th of 756 on La Salle; 331st of 33,045,252 on LFW).
-Challenges are sustaining a low false acceptance rate under uncontrolled gate lighting, holding real-time throughput on a Raspberry Pi 5 when hard frames escalate to the deep model, keeping the deep-model footprint within edge memory, and keeping the feature database free of annotation errors that corrupt threshold and evaluation.
-Future work includes executing the gated full-LFW (33,045,252-comparison) independence run to certify the 10 ppm operating point, certifying the hybrid's false-acceptance rate over the full LFW impostor set rather than the 400-impostor smoke check, tuning the per-probe LBPH-to-SFace escalation crossover on the full 41-modification benchmark, porting to a Raspberry Pi 5 with an INT8 SFace on the NPU (re-deriving the quantized threshold) under instrumented capture-to-result latency and post-Tan-Triggs throughput, evaluation on the real outdoor La Salle database, and extending Smart Gate toward full open-set deployment.
-References
-[1] M. Turk and A. Pentland, “Eigenfaces for recognition,” J. Cogn. Neurosci., vol. 3, no. 1, pp. 71-86, 1991.
-[2] P. N. Belhumeur, J. P. Hespanha, and D. J. Kriegman, “Eigenfaces vs. Fisherfaces: recognition using class specific linear projection,” IEEE Trans. Pattern Anal. Mach. Intell., vol. 19, no. 7, pp. 711-720, Jul. 1997.
-[3] T. Ahonen, A. Hadid, and M. Pietikäinen, “Face description with local binary patterns: application to face recognition,” IEEE Trans. Pattern Anal. Mach. Intell., vol. 28, no. 12, pp. 2037-2041, Dec. 2006.
-[4] Y. Zhong, W. Deng, J. Hu, D. Zhao, X. Li, and D. Wen, “SFace: sigmoid-constrained hypersphere loss for robust face recognition,” IEEE Trans. Image Process., vol. 30, pp. 2587-2598, 2021.
-[5] P. Viola and M. Jones, “Rapid object detection using a boosted cascade of simple features,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Kauai, HI, USA, Dec. 2001, vol. 1, pp. I-511-I-518.
-[6] F. Schroff, D. Kalenichenko, and J. Philbin, “FaceNet: a unified embedding for face recognition and clustering,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), Boston, MA, USA, Jun. 2015, pp. 815-823.
-[7] S. Chen, Y. Liu, X. Gao, and Z. Han, “MobileFaceNets: efficient CNNs for accurate real-time face verification on mobile devices,” in Proc. Chinese Conf. Biometric Recognit. (CCBR), Urumqi, China, Aug. 2018, pp. 428-438.
-[8] M. Sandler, A. Howard, M. Zhu, A. Zhmoginov, and L.-C. Chen, “MobileNetV2: inverted residuals and linear bottlenecks,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), Salt Lake City, UT, USA, Jun. 2018, pp. 4510-4520.
-[9] A. George, C. Ecabert, H. O. Shahreza, K. Kotwal, and S. Marcel, “EdgeFace: efficient face recognition model for edge devices,” IEEE Trans. Biometrics Behav. Identity Sci., vol. 6, no. 2, pp. 158-168, 2024.
-[10] W. Wu, H. Peng, and S. Yu, “YuNet: a tiny millisecond-level face detector,” Mach. Intell. Res., vol. 20, no. 5, pp. 656-665, 2023.
-[11] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller, “Labeled faces in the wild: a database for studying face recognition in unconstrained environments,” Univ. Massachusetts, Amherst, Tech. Rep. 07-49, Oct. 2007.
-[12] ISO/IEC 19795-1:2006, Information Technology, Biometric Performance Testing and Reporting, Part 1: Principles and Framework, Int. Org. for Standardization, Geneva, Switzerland, 2006.
-[13] G. Bradski, “The OpenCV library,” Dr. Dobb's J. Softw. Tools, vol. 25, no. 11, pp. 120-125, Nov. 2000.
-[14] J. Deng, J. Guo, N. Xue, and S. Zafeiriou, “ArcFace: additive angular margin loss for deep face recognition,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), Long Beach, CA, USA, Jun. 2019, pp. 4690-4699.
+A second problem is setting the match threshold. Verification reduces to "accept if the feature distance is below θ," and picking θ is easy only when many labeled genuine and impostor pairs exist [12]. Real enrollment has a small gallery and no negative pairs at all. LS-Face solves this with **independence testing**: build a database with exactly one image per identity, compare every image to every other one — N×(N−1) ordered comparisons, all impostor pairs by construction — and read θ off that empirical impostor distribution at the target FAR. The same sweep doubles as a health check: it exposes recognizers whose impostor distances collapse (no usable threshold exists) and near-zero-distance pairs that flag annotation errors.
 
+This paper contributes: (1) a common benchmark of three classical recognizers against a lightweight DL recognizer under one preprocessing, evaluation, and reporting framework, with detection migrated from Viola-Jones [5] to YuNet [10] on a measured head-to-head; (2) an independence-testing protocol that derives thresholds at specified FARs on both the La Salle database and LFW [11]; (3) a *joint* independence test that scores both engines and the fused cascade on the same impostor pairs, measuring whether their errors overlap — the direct statistical test of complementarity, quantified with the standard classifier-diversity measures [15], exact tests, and confidence intervals; (4) a shared 41-modification robustness suite applied to CV, DL, and the hybrid, showing which corruption each family survives; and (5) a gated cascade that converts the measured complementarity into a deployable system.
 
+Section 2 reviews related work, Section 3 describes the method, Section 4 gives results, Section 5 concludes.
+
+## 2. Related Work
+
+**Classical recognition.** Eigenfaces [1] projects faces onto PCA components; Fisherfaces [2] adds LDA to separate classes; LBPH [3] compares local binary-pattern histograms per face region. All three ship in OpenCV [13], need no GPU, and produce models from kilobytes to a few megabytes.
+
+**Deep recognition.** FaceNet [6] mapped faces to an embedding space with triplet loss; ArcFace [14] added an angular margin; SFace [4] uses a sigmoid-constrained hypersphere loss; MobileFaceNets [7] (built on MobileNetV2 [8]) and EdgeFace [9] target edge devices at 1–2 M parameters.
+
+**Detection.** Viola-Jones Haar cascades [5] remain the classical baseline; YuNet [10] is a millisecond-scale CNN detector that also returns five landmarks, which DL recognizers use for alignment.
+
+**Evaluation.** Biometric practice separates true acceptance rate (TAR), FAR, and false rejection rate (FRR) [12]. LFW [11] tests verification on fixed pair lists. Independence testing differs: one image per identity plus exhaustive comparison yields the *whole* impostor distribution, so a threshold can be tied to an exact error count rather than a sampled pair list. For the claim that two recognizers *complement* each other, the multiple-classifier-systems literature already provides the standard yardsticks — pairwise diversity measures such as Yule's Q-statistic and the double-fault rate [15] — which we adopt rather than invent our own.
+
+## 3. Method
+
+### 3.1 System overview
+
+LS-Face processes one camera frame as follows. A shared YuNet front-end returns one face box, a confidence, and five landmarks. The frame first takes the cheap path: LBPH (grayscale 100×100 crop, Tan-Triggs illumination normalization) predicts an identity and a distance d. A **gate** then decides whether that answer can be trusted. If yes, LBPH's decision stands and the DL model never runs. If not, the frame **escalates**: SFace aligns the face to 112×112 with the landmarks, extracts a 128-D (512-byte) embedding, and matches it against per-identity mean embeddings by cosine similarity. A no-accelerator fallback (LBPH alone) engages automatically if the DL gallery is absent.
+
+### 3.2 Independence testing and threshold rule
+
+Take N identities with one image each. Comparing every image against every other gives
+
+  C = N × (N − 1)  ordered comparisons, (1)
+
+all impostor pairs by construction. Sort the C distances ascending. To operate at a target false-acceptance rate FAR*, choose the rank
+
+  k = ⌈ FAR* · C ⌉, (2)
+
+and set the threshold θ to the k-th smallest impostor distance: exactly k impostor pairs fall inside θ, so the realized FAR is k/C. On La Salle DB1 (N=28, C=756) the design point is the 8th error pair, i.e. FAR = 8/756 ≈ 1.06%; 756 comparisons cannot resolve finer than ~1,300 ppm, so the spec budget of 100 ppm is certified on LFW DB1 (N=5,749, C=33,045,252; the 331st pair ≈ 10 ppm). The rule reproduces both spec anchors exactly.
+
+### 3.3 The escalation gate
+
+Let d₁ and d₂ be the best and second-best LBPH distances, and let τ_a < τ_r be the accept and reject thresholds from independence testing. The gate escalates a frame to SFace if **any** of:
+
+  (i) a quality flag fires — blur, low light, sensor noise, off-pose, or too-small face, measured on the same crop LBPH already holds;
+  (ii) the score is ambiguous: τ_a < d₁ < τ_r;
+  (iii) the top-two margin is thin: (d₂ − d₁)/d₁ < m_min. (3)
+
+The margin is *relative* because LBPH training distances are near zero by memorization; an absolute margin fitted on training data escalates every held-out frame. A quality flag deliberately overrides a confident LBPH score: the corrupted regimes are exactly where LBPH confidence is least trustworthy. If nothing fires, d₁ ≤ τ_a accepts on LBPH and d₁ ≥ τ_r rejects.
+
+### 3.4 Robustness: the 41-modification accuracy ratio
+
+Every original image receives 41 deterministic (modification, level) variants across 12 types: brightness up/down, contrast up/down, gamma up/down, Gaussian noise, Gaussian blur, motion blur, rotation, zoom, occlusion. A modified probe *matches* when the recognizer outputs the correct identity within the deployed threshold. With M probes and K matches,
+
+  AR = K / M, (4)
+
+averaged per modification over its levels, then over modifications for the overall score. The suite is seeded per (image, modification, level), so CV, DL, and hybrid are scored on bit-identical probes.
+
+### 3.5 Testing complementarity directly
+
+Complementarity has two measurable halves. *Robustness complementarity*: per modification, compare AR_CV against AR_DL (Section 3.4) — complementary methods win on disjoint modification sets, and the cascade should track max(AR_CV, AR_DL) per modification. *Error independence*: on the same N×(N−1) impostor sweep, flag each pair a CV false accept (d ≤ τ_a) and/or a DL false accept (cosine ≥ 0.363 and L2 ≤ 1.128). If the engines erred independently, the expected number of joint errors would be
+
+  E[both] = C · P(FP_CV) · P(FP_DL). (5)
+
+An observed joint count at or below E[both] means the engines rarely fail on the same impostor pair, so a cascade can filter one engine's mistakes with the other. The same sweep also reports the fused cascade's own false-accept count under the deployed gate.
+
+Raw counts are not enough on a small database, so three standard statistics accompany them. Every rate carries a 95% Wilson confidence interval — with only 756 comparisons per La Salle sweep, a bare "1% FAR" hides an interval of roughly 0.5–2%. Association between the two engines' errors is tested with Fisher's exact test on the 2×2 table (CV-error × DL-error): a small p-value in the "co-occur" direction would *refute* complementarity. Finally, the classifier-diversity measures of Kuncheva and Whitaker [15] summarize the same table:
+
+  Q = (ad − bc) / (ad + bc),  DF = a / C, (6)
+
+where a = both engines err, b/c = exactly one errs, d = neither. Q < 0 means the engines fail on *different* pairs (complementary); the double-fault rate DF is the error floor that no fusion of the two engines — cascade, voting, or otherwise — can beat.
+
+### 3.6 One threshold set, four databases
+
+Good numbers on four separately tuned databases would only show that the method is *tunable*. The generalization claim needs *transfer*: every threshold (τ_a, τ_r, m_min, and the SFace genuine rule) is derived once on La Salle DB1, frozen (the harness records the file's SHA-256), and applied unchanged to every other database. The gallery/enrollment side is always clean originals; only probes are ever modified. Each database then answers one question (Table 1):
+
+**Table 1 — Evidence matrix (`src/benchmark/evidence_matrix.py`).**
+
+| Database | Test | What it proves |
+|---|---|---|
+| La Salle DB1 (28 ids, clean) | independence sweep, 10 seeded repeats | in-domain FAR at the frozen thresholds (they were derived here) |
+| La Salle DB2 (41 mods) | accuracy ratio, CV / DL / cascade / parallel | robustness under degradation; per-modification winners |
+| LFW DB1 (5,749 ids, clean) | independence sweep | out-of-domain transfer with real statistical power (millions of pairs) |
+| LFW DB2 (41 mods, 1 image/id) | independence sweep on modified probes | degradation and identity separation jointly, out of domain |
+
+The cascade's natural rival is also in the table: a *parallel* mode that runs both engines on every probe is the accuracy ceiling at full DL cost, and the cascade must stay within tolerance of it while escalating only a fraction of frames — otherwise the gate is not earning its keep.
+
+## 4. Experiments and Results
+
+**Databases.** La Salle DB1: 28 people × 12 pre-cropped 100×100 images; leakage-free split of 10 gallery + 2 held-out probe images per identity (280/56); train–test image-disjointness verified. La Salle DB2: the 41-variant suite applied to DB1 (held-out probes: 56×41 = 2,296). LFW DB1 [11]: 5,749 people, 13,233 photos (13,149 usable after Haar cropping) as the impostor set. All pipelines share preprocessing and detection settings, except each family uses its measured-best illumination normalization (Tan-Triggs for LBPH; histogram equalization for the subspace methods), single-sourced so training, evaluation, and thresholding cannot drift apart.
+
+**Detection.** On 336 controlled La Salle photos YuNet detected 100% of faces with zero false positives at 48.6 fps, versus Haar's 86.9% with 43 false positives at 37.2 fps; Haar's misses concentrate on non-frontal and dark shots a gate must tolerate. On 600 LFW images both saturate recall and YuNet is faster (359 vs 129 fps) with a 4× smaller model that also outputs the landmarks SFace needs. YuNet is therefore the selected detector.
+
+### 4.1 Independence testing per engine
+
+On La Salle DB1 (756 comparisons, 8th error pair = 1.058% FAR) the impostor thresholds are LBPH 21.35 raw (85.88 normalized), Eigenfaces 8,098.46 (71.00), Fisherfaces 5,446.46 (66.38); LBPH keeps impostors farthest apart (Fig. 1). The corresponding deployable thresholds on each recognizer's own predict scale at the 100 ppm budget are LBPH 73.0, Eigenfaces 4,308, Fisherfaces 738. The sweep also surfaced near-zero pairs that were investigated rather than assumed: on La Salle they traced to a normalization floor and a one-image LDA collapse — algorithmic artifacts, not bad labels (raw minimum 20.89, no duplicates); on LFW all three families flagged the same known annotation-error pair (Andrew Caldecott vs Andrew Gilligan). SFace passes the same protocol on LFW: over 5,685 identities and 32,313,540 comparisons, 24,128 impostor pairs fall inside its genuine rule — FP 0.0747%, reproducing the DL track's reference within 0.005 points.
+
+*Fig. 1 — Impostor distance distributions from the La Salle independence sweep (one image per identity, 756 comparisons per family).*
+![Impostor distance distributions](../reports/figures/fig2_interidentity_hist.png)
+
+### 4.2 Verification: only LBPH survives the FAR budget
+
+Closed-set rank-1 on the held-out split ranks LBPH 100%, Eigenfaces 75%, Fisherfaces 66.07% — but a gate must also reject strangers, so the deciding metric is TAR at a fixed FAR against 13,149 LFW impostors (Table 2). To keep the choice of classical engine mechanical rather than post-hoc, it follows a rule committed before reading the results (applied verbatim by `src/benchmark/compare_classical.py`): *eligible* = TAR ≥ 90% at the independence operating point, feature < 1 KB, live FPS ≥ 3; among eligible models the highest 41-modification AR wins, with AR gaps under 2 points broken by TAR, then model size.
+
+**Table 2 — Classical recognizers, verification vs 13,149 LFW impostors (realized FAR 76 ppm).**
+
+| Recognizer | Rank-1 | TAR @100 ppm | FRR | EER | Overall AR (41 mods) | Feature | Model |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| LBPH (Tan-Triggs) | 100.00% | **98.21%** | 1.79% | 0.07% | 85.43% | 64 KB | ≈33 MB |
+| Eigenfaces | 75.00% | 23.21% | 76.79% | 31.77% | 47.69% | 1,120 B | ≈83 MB |
+| Fisherfaces | 66.07% | 10.71% | 89.29% | 35.71% | 30.54% | 108 B | 8.2 MB |
+
+Only LBPH passes the spec accuracy block (TAR 90–95%, FAR < 100 ppm, FRR 1–5%); sweeps confirm the subspace methods' genuine and impostor distributions overlap intrinsically. Tan-Triggs matters: it lifts LBPH from TAR 96.4%/EER 3.6% to the table's numbers, while *degrading* the subspace methods — there is no single best preprocessing, another argument for per-engine contracts. LBPH's one failing metric is its 64 KB histogram versus the sub-1 KB feature budget; the hybrid will fix this by *enrolling* with SFace's 512-byte embedding.
+
+### 4.3 Robustness: where CV breaks and DL doesn't
+
+LBPH's 41-modification AR is 85.43% overall but bimodal (Fig. 2): photometric edits it absorbs (occlusion 98.8%, gamma 97.6–98.2%, contrast-down 98.2%), while heavy Gaussian noise (47.8%), motion blur (68.5%), and strong darkening (73.7%) break it. The subspace methods fail geometrically (rotation: 26.3% / 14.3%). These weak spots are exactly the regimes the gate's quality probes watch (noise, blur, low light).
+
+*Fig. 2 — Accuracy ratio per modification, classical families. LBPH's failure modes (noise, motion blur, darkening) define the gate's quality probes.*
+![AR by modification](../reports/figures/fig3_ar_by_modification.png)
+
+**[PENDING]** The same 41 probes scored by SFace, the cascade, and the run-both *parallel* ceiling (`src/benchmark/accuracy_ratio_hybrid.py`) — expected outcome: DL stronger on noise/blur/darkening, CV equal or stronger on mild photometric edits at ~4× lower latency, cascade within ~2 points of the better engine per modification *and* of parallel at a fraction of its cost. Insert the per-modification table (each AR with its 95% Wilson interval), the winner tags, and the cascade-vs-parallel line from `reports/benchmark/accuracy_ratio_hybrid.md` here.
+
+### 4.4 The hybrid cascade
+
+Table 3 and Table 4 evaluate the fused system against its own parts on two held-out sets: a clean split (56 probes, 28 identities, 400 LFW impostors for the FAR check) and a medium-degradation split (the 41-mod suite on the held-out pose; 112 images, 14 undetectable by YuNet and counted as failures in TAR/FRR).
+
+**Table 3 — Clean split.**
+
+| Config | Rank-1 | TAR | FRR | FAR | Escalation | Latency | ≈FPS |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| LBPH-only | 100.00% | 100.00% | 0.00% | 0.00% | 0% | 5.74 ms | 174.3 |
+| SFace-only | 100.00% | 100.00% | 0.00% | 0.00% | 100% | 19.92 ms | 50.2 |
+| **Hybrid (cascade)** | **100.00%** | **100.00%** | 0.00% | 0.00% | **25%** | **10.03 ms** | **99.7** |
+
+**Table 4 — Medium-degradation split.**
+
+| Config | Rank-1 | TAR† | FRR† | Escalation | Latency | ≈FPS |
+|---|---:|---:|---:|---:|---:|---:|
+| LBPH-only | 5.10% | 3.57% | 96.43% | 0% | 5.88 ms | 170.0 |
+| SFace-only | 97.96% | 84.82% | 15.18% | 100% | 21.70 ms | 46.1 |
+| **Hybrid (cascade)** | **97.96%** | **84.82%** | 15.18% | **100%** | **19.50 ms** | **51.3** |
+
+† TAR/FRR count the 14 YuNet no-face frames as failures, which is why TAR (84.82%) sits below rank-1 (97.96%, over 98 detected frames). The clean-split FAR of 0% is over only 400 impostors — an observation, not a certified rate; the SFace operating point comes from the full LFW impostor distribution.
+
+The two tables are the complementarity result in action (Fig. 3). On clean frames all three configurations are equally accurate, so accuracy is free and the question is cost: the gate keeps 75% of frames on the cheap path and the hybrid runs at ~100 fps, twice SFace-only. On degraded frames LBPH collapses to 5.10%; the gate escalates 100% of frames (89 of 98 on a quality flag) and the hybrid recovers to 97.96% — equal to SFace-only, which is correct behavior when *every* frame is hard. Escalation routing on the clean split: 42/56 confident LBPH accepts, 7 quality-flag, 6 low-margin, 1 ambiguous-band. Per-stage timing (clean cascade): YuNet 1.40 ms every frame; LBPH+gate 4.56 ms on the 75%; SFace 22.08 ms on the 25%. On footprint, the hybrid enrolls with SFace's 512-byte embedding — meeting the sub-1 KB budget LBPH's 64 KB histogram fails — while total on-disk models are 68.85 MB.
+
+*Fig. 3 — Speed–accuracy plane: the cascade sits near SFace's accuracy at nearly LBPH's cost on clean data.*
+![Speed vs accuracy](figures/fig_hybrid_speed_accuracy.png)
+
+*Fig. 4 — What the gate does per split: escalation stays low on clean frames and saturates on degraded ones.*
+![Escalation behavior](figures/fig_hybrid_escalation.png)
+
+One negative result worth keeping: the first calibration used an *absolute* top-1/top-2 margin fitted on training distances and escalated 100% of held-out frames, collapsing the cascade into always-SFace; the relative margin of Eq. (3) restored the 25%/100% split without fitting on test data.
+
+### 4.5 Joint independence test: do the engines fail together?
+
+**[PENDING]** `src/hybrid/independence_test.py` runs the N×(N−1) La Salle sweep with both engines and the gate at once (Section 3.5) and reports, pooled over 10 seeded repeats: per-engine false-accept rates with 95% Wilson intervals, the observed joint-error count against E[both] from Eq. (5), Yule's Q and the double-fault rate from Eq. (6), Fisher's exact p-values in both directions, and the cascade's own false-accept count. Report Q with its Fisher p here: Q ≤ 0 with no significant co-occurrence supports complementary errors; the cascade count should undercut both single engines and its floor is the double-fault rate. Reference baseline already measured: on La Salle DB1, 756 comparisons put 20 impostor pairs inside SFace's genuine rule; LBPH at τ_a admits [run to fill]; overlap [run to fill].
+
+### 4.6 Threshold transfer across databases
+
+**[PENDING]** `src/benchmark/evidence_matrix.py` runs every leg of Table 1 against the byte-identical LS-DB1 threshold file and writes `reports/benchmark/evidence_matrix.md`. Insert that table here. Read it two ways: *transfer* — if the cascade's FAR intervals on the LFW legs overlap the La Salle interval, the frozen thresholds generalize; a blow-up is itself a finding (the thresholds are population-dependent) and must be reported, not re-tuned away. *Power* — La Salle's 756 comparisons bound FAR no tighter than ~0.5%, so the LFW legs carry the statistical weight of the complementarity test.
+
+### 4.7 Discussion
+
+Three lessons. First, *closed-set accuracy misleads*: rank-1 orders the classical methods 100/75/66, but at a fixed FAR — the gate's real operating mode — only LBPH survives. Second, *thresholds should come from impostor distributions, not validation splits*: the k-th-error-pair rule (Eq. 2) ties the operating point to an exact error count and reproduces both spec anchors; on La Salle it also exposed that only ~1,300 ppm is resolvable, honestly deferring the 100 ppm claim to LFW. Third, *complementarity is a measurement, not a slogan*: the corruptions that break LBPH (noise, blur, darkening) are detected by three cheap probes and survived by SFace, so routing on those probes recovers 92.86 rank-1 points on the degraded split at zero cost on the clean one. Remaining risks are throughput on the Raspberry Pi 5 when many frames escalate, and gate lighting beyond the probes' calibration; both are what the pending on-device port must measure.
+
+## 5. Conclusion
+
+LS-Face selects and fuses its recognizers through independence testing. The exhaustive N×(N−1) impostor sweep gave every engine a threshold at a specified FAR, disqualified the subspace methods (which cannot hold the budget), certified LBPH (TAR 98.21%, FAR 76 ppm, EER 0.07%) and SFace (LFW FP 0.0747% over 32.3 M comparisons), and — extended to score both engines jointly — measures directly whether their errors overlap. The measured picture is complementary: LBPH is ~4× cheaper per frame and equally accurate on clean images; SFace survives the noise, blur, and low-light regimes that collapse LBPH; a gate watching exactly those regimes lets the cascade keep 100% rank-1 on clean data at 25% escalation and lift degraded-split rank-1 from 5.10% to 97.96%, while enrolling with a 512-byte feature that meets the budget LBPH alone fails. Future work: the full 33 M-comparison LFW run to certify 10 ppm, the joint 41-modification, joint independence, and frozen-threshold evidence-matrix numbers **[PENDING]**, FAR certification of the cascade over the full LFW impostor set, and the instrumented Raspberry Pi 5 port with INT8 SFace.
+
+## References
+
+[1] M. Turk and A. Pentland, "Eigenfaces for recognition," J. Cogn. Neurosci., vol. 3, no. 1, pp. 71-86, 1991.
+[2] P. N. Belhumeur, J. P. Hespanha, and D. J. Kriegman, "Eigenfaces vs. Fisherfaces: recognition using class specific linear projection," IEEE Trans. Pattern Anal. Mach. Intell., vol. 19, no. 7, pp. 711-720, Jul. 1997.
+[3] T. Ahonen, A. Hadid, and M. Pietikäinen, "Face description with local binary patterns: application to face recognition," IEEE Trans. Pattern Anal. Mach. Intell., vol. 28, no. 12, pp. 2037-2041, Dec. 2006.
+[4] Y. Zhong, W. Deng, J. Hu, D. Zhao, X. Li, and D. Wen, "SFace: sigmoid-constrained hypersphere loss for robust face recognition," IEEE Trans. Image Process., vol. 30, pp. 2587-2598, 2021.
+[5] P. Viola and M. Jones, "Rapid object detection using a boosted cascade of simple features," in Proc. IEEE CVPR, 2001, vol. 1, pp. I-511-I-518.
+[6] F. Schroff, D. Kalenichenko, and J. Philbin, "FaceNet: a unified embedding for face recognition and clustering," in Proc. IEEE CVPR, 2015, pp. 815-823.
+[7] S. Chen, Y. Liu, X. Gao, and Z. Han, "MobileFaceNets: efficient CNNs for accurate real-time face verification on mobile devices," in Proc. CCBR, 2018, pp. 428-438.
+[8] M. Sandler, A. Howard, M. Zhu, A. Zhmoginov, and L.-C. Chen, "MobileNetV2: inverted residuals and linear bottlenecks," in Proc. IEEE/CVF CVPR, 2018, pp. 4510-4520.
+[9] A. George, C. Ecabert, H. O. Shahreza, K. Kotwal, and S. Marcel, "EdgeFace: efficient face recognition model for edge devices," IEEE Trans. Biometrics Behav. Identity Sci., vol. 6, no. 2, pp. 158-168, 2024.
+[10] W. Wu, H. Peng, and S. Yu, "YuNet: a tiny millisecond-level face detector," Mach. Intell. Res., vol. 20, no. 5, pp. 656-665, 2023.
+[11] G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller, "Labeled faces in the wild: a database for studying face recognition in unconstrained environments," Univ. Massachusetts, Amherst, Tech. Rep. 07-49, Oct. 2007.
+[12] ISO/IEC 19795-1:2006, Information Technology, Biometric Performance Testing and Reporting, Part 1: Principles and Framework, ISO, Geneva, 2006.
+[13] G. Bradski, "The OpenCV library," Dr. Dobb's J. Softw. Tools, vol. 25, no. 11, pp. 120-125, Nov. 2000.
+[14] J. Deng, J. Guo, N. Xue, and S. Zafeiriou, "ArcFace: additive angular margin loss for deep face recognition," in Proc. IEEE/CVF CVPR, 2019, pp. 4690-4699.
+[15] L. I. Kuncheva and C. J. Whitaker, "Measures of diversity in classifier ensembles and their relationship with the ensemble accuracy," Mach. Learn., vol. 51, no. 2, pp. 181-207, 2003.

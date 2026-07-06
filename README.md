@@ -99,7 +99,22 @@ The launcher's **Benchmark** menu shows a live overview table (hit rate, accurac
 
 Classical models (LBPH, Eigenfaces, Fisherfaces) include independence tests that verify the model's recognition is not inflated by data leakage between train/test identities. Tests run against the La Salle processed set or LFW segments (up to 6 cross-slice segments for Eigenfaces/Fisherfaces).
 
+The **hybrid** has a joint independence test (`src/hybrid/independence_test.py`, Hybrid menu → "independence test"): one N×(N-1) impostor sweep scored by LBPH, SFace, and the gated cascade at once. Besides each engine's false-accept rate and rank-based threshold, it reports the **error overlap** — whether the two engines false-accept the *same* impostor pairs — which is the direct evidence for (or against) CV/DL complementarity. Every rate carries a 95% Wilson confidence interval, and the error 2×2 table gets Fisher's exact test plus the standard classifier-diversity measures (Yule's Q, disagreement, double-fault — Kuncheva & Whitaker 2003) from `src/stats_utils.py` (pure stdlib, no scipy). `src/sface/independence_test.py` separately re-checks parity with the DL track's LFW number.
+
 `independence_failure_check/` contains post-hoc failure analysis scripts: occlusion analysis, regional collapse detection, multi-image verification, and visual report generation.
+
+## 41-Modification Robustness (Accuracy Ratio)
+
+The 41 deterministic (modification, level) variants live in `src/benchmark/modifications.py` and are shared by two benchmarks so their probes are bit-identical:
+
+- `src/benchmark/accuracy_ratio.py` — classical families (LBPH / Eigenfaces / Fisherfaces) at the independence-derived threshold
+- `src/benchmark/accuracy_ratio_hybrid.py` — **CV (LBPH) vs DL (SFace) vs the hybrid cascade vs parallel** (run-both ceiling) side by side, with Wilson CIs, per-modification winner tags, the cascade's escalation rate, and cascade-vs-parallel deltas — the robustness half of the complementarity argument
+
+## Evidence Matrix (frozen-threshold generalization)
+
+`src/benchmark/evidence_matrix.py` (Benchmark menu → "evidence matrix") proves the generalization claim the defensible way: thresholds are derived **once** on La Salle DB1, frozen (SHA-256 recorded in the report), and applied unchanged to every dataset leg — LS-DB1 (independence), LS-DB2/41-mods (accuracy ratio), LFW1 and LFW2/41-mods (independence; `--lfw-max-identities` gives a tractable seeded subset). Legs whose dataset directory is absent are marked SKIPPED, never silently dropped. Output: `reports/benchmark/evidence_matrix.{json,md}`; `--dry-run` previews the exact commands.
+
+`src/benchmark/compare_classical.py` additionally applies a **pre-committed selection rule** (eligibility gates on TAR@FAR, feature size, FPS; winner by 41-mod AR with a TAR tie-break) so the choice of classical engine is mechanical, not post-hoc.
 
 ---
 

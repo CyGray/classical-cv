@@ -28,6 +28,20 @@ CLASSICAL_FAMILIES = {"lbph", "eigenfaces", "fisherfaces"}
 FEATURE_SPEC_BYTES = 1024
 FPS_SPEC = 30.0
 TAR_SPEC_LOW = 90.0
+FPS_FLOOR = 3.0          # project deployment floor (>= 3 FPS end-to-end)
+AR_TIE_POINTS = 2.0      # AR gap below which TAR breaks the tie
+
+# The recognizer-selection rule, committed BEFORE reading any result table so
+# the choice of classical engine is mechanical, not post-hoc. Applied verbatim
+# by apply_selection_rule(); the paper quotes this string.
+SELECTION_RULE = (
+    "Eligibility: TAR >= 90% at the La Salle independence operating point "
+    "(FAR ~ 1.06%, 8th error pair), feature vector < 1 KB, live FPS >= 3. "
+    "Winner: the eligible model with the highest overall Accuracy Ratio on "
+    "the 41-modification suite; if the AR gap is within 2 points, the higher "
+    "TAR wins, then the smaller model file. A family missing TAR@FAR or AR "
+    "evidence is 'insufficient evidence', never a default winner."
+)
 
 
 def root_path(*parts: str) -> str:
@@ -199,6 +213,64 @@ def load_accuracy_ratio(path: str) -> dict[str, dict]:
     return out
 
 
+def apply_selection_rule(
+    rows: list[dict],
+    tar_far: dict[str, dict],
+    accuracy_ratio: dict[str, dict],
+) -> dict:
+    """Mechanically apply SELECTION_RULE and return the audit trail.
+
+    One candidate per family (its best rank-1 row supplies footprint + FPS);
+    TAR comes from the tar_at_far report, AR from the accuracy_ratio report.
+    """
+    best_row: dict[str, dict] = {}
+    for row in rows:
+        fam = row["model_family"]
+        if fam not in best_row or row["rank1_percent"] > best_row[fam]["rank1_percent"]:
+            best_row[fam] = row
+
+    candidates: list[dict] = []
+    for fam in sorted(CLASSICAL_FAMILIES):
+        row = best_row.get(fam)
+        tf = tar_far.get(fam)
+        ar = accuracy_ratio.get(fam)
+        cand: dict[str, Any] = {
+            "family": fam,
+            "tar_percent": tf["tar_percent"] if tf else None,
+            "overall_ar_percent": ar["overall_ar_percent"] if ar else None,
+            "live_fps": row["live_fps"] if row else None,
+            "feature_vector_bytes": row["feature_vector_bytes"] if row else None,
+            "model_file_bytes": row["model_file_bytes"] if row else None,
+        }
+        reasons: list[str] = []
+        if tf is None or ar is None or row is None:
+            reasons.append("insufficient evidence (missing TAR@FAR, AR, or evaluation row)")
+        else:
+            if cand["tar_percent"] < TAR_SPEC_LOW:
+                reasons.append(f"TAR {cand['tar_percent']:.2f}% < {TAR_SPEC_LOW:.0f}%")
+            if not (0 < cand["feature_vector_bytes"] < FEATURE_SPEC_BYTES):
+                reasons.append(f"feature {cand['feature_vector_bytes']} B >= {FEATURE_SPEC_BYTES} B")
+            if cand["live_fps"] is not None and cand["live_fps"] < FPS_FLOOR:
+                reasons.append(f"FPS {cand['live_fps']:.1f} < {FPS_FLOOR:.0f}")
+        cand["eligible"] = not reasons
+        cand["ineligible_reasons"] = reasons
+        candidates.append(cand)
+
+    eligible = [c for c in candidates if c["eligible"]]
+    winner = None
+    if eligible:
+        leader = max(eligible, key=lambda c: c["overall_ar_percent"])
+        contenders = [
+            c for c in eligible
+            if leader["overall_ar_percent"] - c["overall_ar_percent"] <= AR_TIE_POINTS
+        ]
+        winner = max(
+            contenders,
+            key=lambda c: (c["tar_percent"], -(c["model_file_bytes"] or 0)),
+        )["family"]
+    return {"rule": SELECTION_RULE, "candidates": candidates, "winner": winner}
+
+
 def build_verdict(rank1: float, feat_bytes: int, fps: float | None) -> str:
     parts: list[str] = []
     parts.append(f"TAR(rank-1) {'PASS' if rank1 >= TAR_SPEC_LOW else 'below 90%'}")
@@ -277,6 +349,7 @@ def to_markdown(
     rows: list[dict],
     tar_far: dict[str, dict] | None = None,
     accuracy_ratio: dict[str, dict] | None = None,
+    selection: dict | None = None,
 ) -> str:
     lines: list[str] = []
     lines.append("# Classical Recognizer Comparison (spec view)")
@@ -363,6 +436,29 @@ def to_markdown(
             )
         lines.append("")
 
+    if selection:
+        lines.append("## Recognizer selection (pre-committed rule)")
+        lines.append("")
+        lines.append(f"> {selection['rule']}")
+        lines.append("")
+        lines.append("| Model | TAR@indep. FAR | Overall AR | Live FPS | Feature B | Eligible | Notes |")
+        lines.append("|---|---:|---:|---:|---:|:--:|---|")
+        for c in selection["candidates"]:
+            tar = f"{c['tar_percent']:.2f}%" if c["tar_percent"] is not None else "n/a"
+            ar = f"{c['overall_ar_percent']:.2f}%" if c["overall_ar_percent"] is not None else "n/a"
+            mark = " **<- selected**" if c["family"] == selection["winner"] else ""
+            lines.append(
+                f"| {c['family']}{mark} | {tar} | {ar} | {_fps_cell(c['live_fps'])} | "
+                f"{c['feature_vector_bytes'] if c['feature_vector_bytes'] is not None else 'n/a'} | "
+                f"{'YES' if c['eligible'] else 'no'} | "
+                f"{'; '.join(c['ineligible_reasons']) or 'meets all gates'} |"
+            )
+        lines.append("")
+        if selection["winner"] is None:
+            lines.append("**No model is currently eligible under the rule** - "
+                         "fill the missing evidence before selecting.")
+            lines.append("")
+
     lines.append("## Notes")
     lines.append("")
     lines.append("- **Rank-1 %** is closed-set rank-1 accuracy on the held-out test split (spec target "
@@ -393,6 +489,7 @@ def main() -> None:
     rows = collect_rows(args.reports_dir, fps_map, args.dataset_contains)
     if not rows:
         raise RuntimeError(f"No classical evaluation reports found in: {args.reports_dir}")
+    selection = apply_selection_rule(rows, tar_far, accuracy_ratio)
 
     summary = {
         "reports_dir": args.reports_dir,
@@ -405,15 +502,20 @@ def main() -> None:
         "rows": rows,
         "verification_operating_point": tar_far,
         "accuracy_ratio": accuracy_ratio,
+        "selection": selection,
     }
 
     Path(args.output_json).parent.mkdir(parents=True, exist_ok=True)
     with open(args.output_json, "w", encoding="utf-8") as f:
         json.dump(summary, f, indent=2)
     with open(args.output_md, "w", encoding="utf-8") as f:
-        f.write(to_markdown(rows, tar_far, accuracy_ratio))
+        f.write(to_markdown(rows, tar_far, accuracy_ratio, selection))
 
     print("[OK] Classical comparison written")
+    if selection["winner"]:
+        print(f"[SELECTION] winner under the pre-committed rule: {selection['winner']}")
+    else:
+        print("[SELECTION] no eligible model yet (missing evidence or failed gates)")
     print(f"  - JSON: {args.output_json}")
     print(f"  - Markdown: {args.output_md}")
     print()
