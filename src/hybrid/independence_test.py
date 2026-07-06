@@ -195,15 +195,20 @@ def run_sweep(
     sface: SFaceRecognizer,
     gate_thresholds: GateThresholds,
     quality_thresholds: QualityThresholds,
-) -> tuple[list[dict], dict]:
+    csv_path: str | None = None,
+) -> tuple[dict, dict]:
     """Score all ordered pairs with both engines + the cascade gate.
 
-    Returns (pair_records, iteration_summary).
+    Streams per-pair CSV to *csv_path* (if given) and returns
+    ``(record_arrays, iteration_summary)`` where *record_arrays* is
+    a dict of fixed-width numpy arrays keyed by field name, plus a
+    ``"names"`` list.
     """
     n = len(probes)
     if n < 2:
         raise ValueError("Need at least 2 identities with a usable image.")
     names = [p.person for p in probes]
+    image_paths = [p.image_path for p in probes]
 
     # -- LBPH: train once on the N tiles, then predict_collect per probe ------
     recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
@@ -218,14 +223,12 @@ def run_sweep(
             if d < lbph_dist[i, label]:
                 lbph_dist[i, label] = d
 
-    # -- SFace: pairwise cosine / L2 via cv.match (the DL track's exact rule) --
-    cos = np.zeros((n, n), dtype=np.float64)
-    l2 = np.zeros((n, n), dtype=np.float64)
-    for i in range(n):
-        for j in range(i + 1, n):
-            c, d = sface.match(probes[i].sface_feature, probes[j].sface_feature)
-            cos[i, j] = cos[j, i] = c
-            l2[i, j] = l2[j, i] = d
+    # -- SFace: vectorised cosine + L2 (same rule as src/sface/independence_test.py) --
+    feats = np.concatenate([p.sface_feature for p in probes], axis=0).astype(np.float32)
+    norm = feats / (np.linalg.norm(feats, axis=1, keepdims=True) + 1e-9)
+    cos = (norm @ norm.T).astype(np.float32)
+    np.fill_diagonal(cos, -1.0)
+    l2 = np.sqrt(np.clip(2.0 - 2.0 * cos, 0.0, None), dtype=np.float32)
 
     # -- Cascade: one gate decision per probe over the non-self ranking -------
     cascade_fp_pair: dict[int, int] = {}   # probe i -> accepted impostor j
@@ -258,9 +261,34 @@ def run_sweep(
         elif gate.lbph_accept:
             cascade_fp_pair[i] = ranked[0]
 
-    # -- Pair records + engine FP flags ---------------------------------------
-    records: list[dict] = []
+    # -- Per-pair records: stream to CSV, collect as compact numpy arrays -----
+    comparisons = n * (n - 1)
+    rec_lbph = np.empty(comparisons, dtype=np.float32)
+    rec_cos = np.empty(comparisons, dtype=np.float32)
+    rec_l2 = np.empty(comparisons, dtype=np.float32)
+    rec_fp_lbph = np.zeros(comparisons, dtype=np.int8)
+    rec_fp_sface = np.zeros(comparisons, dtype=np.int8)
+    rec_fp_both = np.zeros(comparisons, dtype=np.int8)
+    rec_fp_cascade = np.zeros(comparisons, dtype=np.int8)
+    qi_arr = np.empty(comparisons, dtype=np.int32)
+    cj_arr = np.empty(comparisons, dtype=np.int32)
+
     fp_lbph = fp_sface = fp_both = fp_cascade = 0
+
+    csv_file = None
+    csv_writer = None
+    if csv_path:
+        os.makedirs(os.path.dirname(csv_path) or ".", exist_ok=True)
+        csv_file = open(csv_path, "w", newline="", encoding="utf-8")
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow([
+            "query_identity", "candidate_identity",
+            "query_image_path", "candidate_image_path",
+            "lbph_distance", "sface_cosine", "sface_l2",
+            "lbph_fp", "sface_fp", "both_fp", "cascade_fp",
+        ])
+
+    idx = 0
     for i in range(n):
         for j in range(n):
             if i == j:
@@ -271,25 +299,51 @@ def run_sweep(
             is_lbph_fp = d <= gate_thresholds.tau_accept
             is_sface_fp = c >= COSINE_GENUINE_THRESHOLD and e <= L2_GENUINE_THRESHOLD
             is_cascade_fp = cascade_fp_pair.get(i) == j
+            both = is_lbph_fp and is_sface_fp
+
             fp_lbph += is_lbph_fp
             fp_sface += is_sface_fp
-            fp_both += is_lbph_fp and is_sface_fp
+            fp_both += both
             fp_cascade += is_cascade_fp
-            records.append({
-                "query_identity": names[i],
-                "candidate_identity": names[j],
-                "query_image_path": probes[i].image_path,
-                "candidate_image_path": probes[j].image_path,
-                "lbph_distance": d,
-                "sface_cosine": c,
-                "sface_l2": e,
-                "lbph_fp": int(is_lbph_fp),
-                "sface_fp": int(is_sface_fp),
-                "both_fp": int(is_lbph_fp and is_sface_fp),
-                "cascade_fp": int(is_cascade_fp),
-            })
 
-    comparisons = n * (n - 1)
+            rec_lbph[idx] = d
+            rec_cos[idx] = c
+            rec_l2[idx] = e
+            rec_fp_lbph[idx] = is_lbph_fp
+            rec_fp_sface[idx] = is_sface_fp
+            rec_fp_both[idx] = both
+            rec_fp_cascade[idx] = is_cascade_fp
+            qi_arr[idx] = i
+            cj_arr[idx] = j
+
+            if csv_writer:
+                csv_writer.writerow([
+                    names[i], names[j],
+                    image_paths[i], image_paths[j],
+                    d, c, e,
+                    int(is_lbph_fp), int(is_sface_fp),
+                    int(both), int(is_cascade_fp),
+                ])
+            idx += 1
+
+    if csv_file:
+        csv_file.close()
+        print(f"[SAVE] CSV: {csv_path}")
+
+    record_arrays = {
+        "lbph_distance": rec_lbph,
+        "sface_cosine": rec_cos,
+        "sface_l2": rec_l2,
+        "lbph_fp": rec_fp_lbph,
+        "sface_fp": rec_fp_sface,
+        "both_fp": rec_fp_both,
+        "cascade_fp": rec_fp_cascade,
+        "query_idx": qi_arr,
+        "candidate_idx": cj_arr,
+        "names": names,
+        "image_paths": image_paths,
+        "n": n,
+    }
     p_lbph = fp_lbph / comparisons
     p_sface = fp_sface / comparisons
     expected_both = p_lbph * p_sface * comparisons
@@ -349,55 +403,88 @@ def run_sweep(
             "sface_l2_genuine": L2_GENUINE_THRESHOLD,
         },
     }
-    return records, summary
+    return record_arrays, summary
 
 
 # --------------------------------------------------------------------------- #
 # Aggregation + reporting
 # --------------------------------------------------------------------------- #
-def aggregate_iterations(all_records: list[list[dict]]) -> list[dict]:
-    """Mean LBPH distance / SFace cosine / L2 per ordered pair across runs."""
-    acc: dict[tuple[str, str], dict] = {}
-    for run in all_records:
-        for r in run:
-            key = (r["query_identity"], r["candidate_identity"])
-            slot = acc.setdefault(key, {
-                "lbph": [], "cos": [], "l2": [],
-                "lbph_fp": 0, "sface_fp": 0, "both_fp": 0, "cascade_fp": 0, "runs": 0,
-            })
-            slot["lbph"].append(r["lbph_distance"])
-            slot["cos"].append(r["sface_cosine"])
-            slot["l2"].append(r["sface_l2"])
-            slot["lbph_fp"] += r["lbph_fp"]
-            slot["sface_fp"] += r["sface_fp"]
-            slot["both_fp"] += r["both_fp"]
-            slot["cascade_fp"] += r["cascade_fp"]
-            slot["runs"] += 1
-    out = []
-    for (q, c), slot in acc.items():
-        out.append({
-            "query_identity": q,
-            "candidate_identity": c,
-            "mean_lbph_distance": float(np.mean(slot["lbph"])),
-            "mean_sface_cosine": float(np.mean(slot["cos"])),
-            "mean_sface_l2": float(np.mean(slot["l2"])),
-            "lbph_fp_runs": slot["lbph_fp"],
-            "sface_fp_runs": slot["sface_fp"],
-            "both_fp_runs": slot["both_fp"],
-            "cascade_fp_runs": slot["cascade_fp"],
-            "runs": slot["runs"],
-        })
-    return out
+def aggregate_iterations(all_arrays: list[dict]) -> dict:
+    """Mean LBPH distance / SFace cosine / L2 per ordered pair across runs.
+
+    *all_arrays* is a list of the per-iteration record-array dicts returned
+    by :func:`run_sweep`.  Returns a dict of aggregated numpy arrays.
+    """
+    names = all_arrays[0]["names"]
+    image_paths = all_arrays[0]["image_paths"]
+    n = all_arrays[0]["n"]
+    comparisons = n * (n - 1)
+
+    acc_lbph = np.zeros(comparisons, dtype=np.float64)
+    acc_cos = np.zeros(comparisons, dtype=np.float64)
+    acc_l2 = np.zeros(comparisons, dtype=np.float64)
+    acc_lbph_fp = np.zeros(comparisons, dtype=np.int32)
+    acc_sface_fp = np.zeros(comparisons, dtype=np.int32)
+    acc_both_fp = np.zeros(comparisons, dtype=np.int32)
+    acc_cascade_fp = np.zeros(comparisons, dtype=np.int32)
+    runs = len(all_arrays)
+
+    for arr in all_arrays:
+        acc_lbph += arr["lbph_distance"]
+        acc_cos += arr["sface_cosine"]
+        acc_l2 += arr["sface_l2"]
+        acc_lbph_fp += arr["lbph_fp"]
+        acc_sface_fp += arr["sface_fp"]
+        acc_both_fp += arr["both_fp"]
+        acc_cascade_fp += arr["cascade_fp"]
+
+    return {
+        "mean_lbph_distance": acc_lbph / runs,
+        "mean_sface_cosine": acc_cos / runs,
+        "mean_sface_l2": acc_l2 / runs,
+        "lbph_fp_runs": acc_lbph_fp,
+        "sface_fp_runs": acc_sface_fp,
+        "both_fp_runs": acc_both_fp,
+        "cascade_fp_runs": acc_cascade_fp,
+        "query_idx": all_arrays[0]["query_idx"],
+        "candidate_idx": all_arrays[0]["candidate_idx"],
+        "names": names,
+        "runs": runs,
+    }
 
 
-def save_csv(records: list[dict], path: str) -> None:
+def save_aggregated_csv(aggregated: dict, path: str) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-    if not records:
+    n_comparisons = len(aggregated["mean_lbph_distance"])
+    if n_comparisons == 0:
         return
+    
+    names = aggregated["names"]
+    qi = aggregated["query_idx"]
+    cj = aggregated["candidate_idx"]
+    lbph_d = aggregated["mean_lbph_distance"]
+    cos_d = aggregated["mean_sface_cosine"]
+    l2_d = aggregated["mean_sface_l2"]
+    lbph_fp = aggregated["lbph_fp_runs"]
+    sface_fp = aggregated["sface_fp_runs"]
+    both_fp = aggregated["both_fp_runs"]
+    cas_fp = aggregated["cascade_fp_runs"]
+    runs = aggregated["runs"]
+
     with open(path, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(records[0].keys()))
-        writer.writeheader()
-        writer.writerows(records)
+        writer = csv.writer(f)
+        writer.writerow([
+            "query_identity", "candidate_identity", "mean_lbph_distance",
+            "mean_sface_cosine", "mean_sface_l2", "lbph_fp_runs",
+            "sface_fp_runs", "both_fp_runs", "cascade_fp_runs", "runs"
+        ])
+        for k in range(n_comparisons):
+            writer.writerow([
+                names[int(qi[k])], names[int(cj[k])],
+                f"{lbph_d[k]:.6f}", f"{cos_d[k]:.6f}", f"{l2_d[k]:.6f}",
+                int(lbph_fp[k]), int(sface_fp[k]), int(both_fp[k]),
+                int(cas_fp[k]), runs
+            ])
     print(f"[SAVE] CSV: {path}")
 
 
@@ -425,29 +512,57 @@ def main() -> int:
     detector = create_face_detector("yunet")
     sface = SFaceRecognizer()
 
-    all_records: list[list[dict]] = []
+    all_arrays: list[dict] = []
     iteration_summaries: list[dict] = []
     for it in range(args.iterations):
         print(f"\n[ITERATION {it + 1}/{args.iterations}]")
+        run_dir = os.path.join(args.output_dir, "_raw_runs", f"run_{it + 1}")
+        csv_path = os.path.join(run_dir, "comparisons.csv")
+        npz_path = os.path.join(run_dir, "records.npz")
+        summary_path = os.path.join(run_dir, "summary.json")
+
+        if os.path.exists(npz_path) and os.path.exists(summary_path):
+            print(f"  [INFO] Resuming complete iteration {it + 1} from {run_dir}")
+            with open(summary_path, "r", encoding="utf-8") as f:
+                summary = json.load(f)
+            with np.load(npz_path) as data:
+                rec_arrays = {k: data[k] for k in data.files}
+                rec_arrays["names"] = list(rec_arrays["names"])
+                rec_arrays["image_paths"] = list(rec_arrays["image_paths"])
+                rec_arrays["n"] = summary["identities"]
+            
+            all_arrays.append(rec_arrays)
+            iteration_summaries.append(summary)
+            continue
+
         selected = select_one_image_per_person(person_dirs, args.random_seed + it)
         probes = load_probes(selected, detector, sface, equalization)
         if len(probes) < 2:
             print("[WARN] Not enough usable probes; iteration skipped.")
             continue
-        records, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds)
+        
+        rec_arrays, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds,
+                                        csv_path=csv_path)
         fp = summary["false_accepts"]
         print(f"  N={summary['identities']} comparisons={summary['comparisons']} | "
               f"FP: lbph={fp['lbph']} sface={fp['sface']} both={fp['both']} "
               f"cascade={fp['cascade']} | escalation={summary['gate']['escalation_percent']:.1f}%")
-        save_csv(records, os.path.join(args.output_dir, "_raw_runs", f"run_{it + 1}", "comparisons.csv"))
-        all_records.append(records)
+        
+        # Save npz and summary for resuming
+        os.makedirs(run_dir, exist_ok=True)
+        with open(summary_path, "w", encoding="utf-8") as f:
+            json.dump(summary, f, indent=2)
+        np_args = {k: v for k, v in rec_arrays.items() if k != "n"}
+        np.savez_compressed(npz_path, **np_args)
+
+        all_arrays.append(rec_arrays)
         iteration_summaries.append(summary)
 
-    if not all_records:
+    if not all_arrays:
         print("[ERROR] No successful iterations.")
         return 1
 
-    aggregated = aggregate_iterations(all_records)
+    aggregated = aggregate_iterations(all_arrays)
     comparisons = iteration_summaries[0]["comparisons"]
 
     def _mean(path_a: str, path_b: str) -> float:
@@ -455,20 +570,38 @@ def main() -> int:
 
     # Rank-based threshold reports on each engine's own impostor scale, from the
     # aggregated mean distances (LBPH: predict distance; SFace: 1 - cosine).
-    lbph_pairs = [
-        {"raw_distance": r["mean_lbph_distance"],
-         "query_identity": r["query_identity"], "candidate_identity": r["candidate_identity"]}
-        for r in aggregated
-    ]
-    sface_pairs = [
-        {"raw_distance": 1.0 - r["mean_sface_cosine"],
-         "query_identity": r["query_identity"], "candidate_identity": r["candidate_identity"]}
-        for r in aggregated
-    ]
+    def _top_pairs(dists: np.ndarray, names: list[str], qi: np.ndarray, cj: np.ndarray, k_max: int) -> list[dict]:
+        n_pairs = len(dists)
+        k = min(n_pairs, k_max)
+        if k == 0:
+            return []
+        idx = np.argpartition(dists, k - 1)[:k]
+        idx = idx[np.argsort(dists[idx])]
+        return [
+            {
+                "raw_distance": float(dists[i]),
+                "query_identity": names[int(qi[i])],
+                "candidate_identity": names[int(cj[i])],
+            }
+            for i in idx
+        ]
+
+    # For LFW, 10000 ppm of 33M is ~330k pairs. Taking top 500k is safe.
+    top_k = min(comparisons, 500000)
+    lbph_pairs = _top_pairs(
+        aggregated["mean_lbph_distance"], aggregated["names"],
+        aggregated["query_idx"], aggregated["candidate_idx"], top_k
+    )
+    sface_pairs = _top_pairs(
+        1.0 - aggregated["mean_sface_cosine"], aggregated["names"],
+        aggregated["query_idx"], aggregated["candidate_idx"], top_k
+    )
+
     lbph_rank_report = error_pair_report(
         lbph_pairs, target_far_ppm=args.target_far_ppm, explicit_rank=args.error_pair_rank)
     sface_rank_report = error_pair_report(
         sface_pairs, target_far_ppm=args.target_far_ppm, explicit_rank=args.error_pair_rank)
+
 
     overlap_ratios = [
         s["error_overlap"]["observed_over_expected"]
@@ -526,7 +659,7 @@ def main() -> int:
         "per_iteration": iteration_summaries,
     }
 
-    save_csv(aggregated, os.path.join(args.output_dir, "comparisons.csv"))
+    save_aggregated_csv(aggregated, os.path.join(args.output_dir, "comparisons.csv"))
     json_path = os.path.join(args.output_dir, "summary.json")
     os.makedirs(args.output_dir, exist_ok=True)
     with open(json_path, "w", encoding="utf-8") as f:
