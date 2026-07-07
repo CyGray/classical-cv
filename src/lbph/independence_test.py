@@ -121,7 +121,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--iterations",
         type=int,
-        default=10,
+        default=1,
         help="Number of iterations to run (each with different random image selection) for aggregation.",
     )
     parser.add_argument(

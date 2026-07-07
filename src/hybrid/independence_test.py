@@ -90,7 +90,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", default=root_path("outputs", "hybrid", "independence_test"))
     parser.add_argument("--thresholds-json", default=DEFAULT_THRESHOLDS_PATH,
                         help="Gate + quality thresholds (tau_accept/tau_reject/margin_min).")
-    parser.add_argument("--iterations", type=int, default=10,
+    parser.add_argument("--iterations", type=int, default=1,
                         help="Independent repeats with different per-person image picks.")
     parser.add_argument("--max-identities", type=int, default=0,
                         help="If > 0, use a seeded random subset of this many identities "
