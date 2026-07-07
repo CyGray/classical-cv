@@ -1,3 +1,4 @@
+import platform
 import shlex
 import subprocess
 import json
@@ -8,6 +9,7 @@ from dataclasses import dataclass
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
+HARDWARE_PROFILE_PATH = PROJECT_ROOT / "hw_profile.json"
 
 GROUPED_CHOICES = [
     (
@@ -138,6 +140,164 @@ MODEL_FAMILY_ALIASES: dict[str, set[str]] = {
     "Fisherfaces": {"fisherfaces"},
     "Hybrid": {"hybrid"},
 }
+
+
+def detect_logical_cpu_count() -> int:
+    return os.cpu_count() or 4
+
+
+def detect_total_ram_bytes() -> int | None:
+    system = platform.system()
+    try:
+        if system == "Windows":
+            import ctypes
+
+            class MEMORYSTATUSEX(ctypes.Structure):
+                _fields_ = [
+                    ("dwLength", ctypes.c_ulong),
+                    ("dwMemoryLoad", ctypes.c_ulong),
+                    ("ullTotalPhys", ctypes.c_ulonglong),
+                    ("ullAvailPhys", ctypes.c_ulonglong),
+                    ("ullTotalPageFile", ctypes.c_ulonglong),
+                    ("ullAvailPageFile", ctypes.c_ulonglong),
+                    ("ullTotalVirtual", ctypes.c_ulonglong),
+                    ("ullAvailVirtual", ctypes.c_ulonglong),
+                    ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+                ]
+
+            status = MEMORYSTATUSEX()
+            status.dwLength = ctypes.sizeof(MEMORYSTATUSEX)
+            if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
+                return int(status.ullTotalPhys)
+        elif system == "Linux":
+            with open("/proc/meminfo", "r", encoding="utf-8") as f:
+                for line in f:
+                    if line.startswith("MemTotal:"):
+                        return int(line.split()[1]) * 1024
+        elif system == "Darwin":
+            out = subprocess.run(
+                ["sysctl", "-n", "hw.memsize"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            return int(out.stdout.strip())
+    except Exception:
+        pass
+    return None
+
+
+def prompt_ram_gb_fallback() -> float:
+    print("[WARN] Could not automatically detect total system RAM.")
+    answer = input("Enter approximate total RAM in GB (default: 8): ").strip()
+    if not answer:
+        return 8.0
+    try:
+        return max(1.0, float(answer))
+    except ValueError:
+        print("[INFO] Invalid value; assuming 8 GB.")
+        return 8.0
+
+
+# Tier floors: a machine only reaches tier index i once BOTH its CPU count and
+# RAM clear that tier's floor - whichever resource is weaker pulls the final
+# tier down, so a many-core/low-RAM (or high-RAM/few-core) box still gets a
+# profile sized to its actual bottleneck instead of its best axis.
+TIER_NAMES = ["low", "medium", "high", "very_high", "extreme"]
+CPU_TIER_FLOORS = [0, 3, 7, 17, 33]            # min logical CPUs to reach this tier
+RAM_TIER_FLOORS = [0.0, 4.0, 8.0, 16.0, 32.0]  # min RAM (GB) to reach this tier
+
+TIER_WORKER_CAP = {"low": 2, "medium": 6, "high": 16, "very_high": 32, "extreme": 64}
+TIER_SCALE = {"low": 0.5, "medium": 1.0, "high": 1.75, "very_high": 2.75, "extreme": 4.0}
+TIER_MAX_INFLIGHT_FACTOR = {"low": 8, "medium": 12, "high": 12, "very_high": 14, "extreme": 16}
+TIER_DETECT_EVERY = {"low": 5, "medium": 3, "high": 2, "very_high": 1, "extreme": 1}
+TIER_DOWNSCALE_MAX_SIDE = {"low": 480, "medium": 640, "high": 800, "very_high": 1024, "extreme": 1280}
+TIER_TARGET_WIDTH = {"low": 320, "medium": 384, "high": 480, "very_high": 560, "extreme": 640}
+
+
+def _tier_index(value: float, floors: list[float]) -> int:
+    idx = 0
+    for i, floor in enumerate(floors):
+        if value >= floor:
+            idx = i
+    return idx
+
+
+def compute_hardware_profile(cpu_count: int, ram_gb: float) -> dict:
+    """Tiering favors whichever of CPU/RAM is weaker, so a lopsided machine still gets the cautious profile."""
+    cpu_tier_idx = _tier_index(cpu_count, CPU_TIER_FLOORS)
+    ram_tier_idx = _tier_index(ram_gb, RAM_TIER_FLOORS)
+    tier = TIER_NAMES[min(cpu_tier_idx, ram_tier_idx)]
+
+    ram_worker_cap = max(1, int(ram_gb // 1.5))
+    workers = max(1, min(cpu_count - 1, TIER_WORKER_CAP[tier], ram_worker_cap))
+    blas_threads = 1 if workers > 1 else max(1, min(cpu_count, 4))
+
+    scale = TIER_SCALE[tier]
+    return {
+        "tier": tier,
+        "cpu_count": cpu_count,
+        "ram_gb": round(ram_gb, 1),
+        "workers": workers,
+        "blas_threads": blas_threads,
+        "chunk_rows": max(16, int(64 * scale)),
+        "block_rows": max(128, int(384 * scale)),
+        "lbph_block_rows": max(128, int(256 * scale)),
+        "max_inflight": max(8, workers * TIER_MAX_INFLIGHT_FACTOR[tier]),
+        "sample_cap": max(250_000, int(1_000_000 * scale)),
+        "streaming_threshold": max(1_000_000, int(3_000_000 * scale)),
+        "detect_every": TIER_DETECT_EVERY[tier],
+        "downscale_max_side": TIER_DOWNSCALE_MAX_SIDE[tier],
+        "target_width": TIER_TARGET_WIDTH[tier],
+    }
+
+
+def describe_hardware_profile(profile: dict) -> str:
+    return (
+        f"{profile['cpu_count']} CPU threads, {profile['ram_gb']:.1f} GB RAM -> "
+        f"tier '{profile['tier']}' (workers={profile['workers']}, blas_threads={profile['blas_threads']})"
+    )
+
+
+def load_or_build_hardware_profile(*, force_refresh: bool = False) -> dict:
+    if not force_refresh and HARDWARE_PROFILE_PATH.exists():
+        cached = load_json_if_exists(HARDWARE_PROFILE_PATH)
+        if cached and "workers" in cached:
+            return cached
+
+    print("\n[INFO] Checking CPU and RAM to choose safe performance defaults...")
+    cpu_count = detect_logical_cpu_count()
+    ram_bytes = detect_total_ram_bytes()
+    ram_gb = (ram_bytes / (1024 ** 3)) if ram_bytes is not None else prompt_ram_gb_fallback()
+
+    profile = compute_hardware_profile(cpu_count, ram_gb)
+    print(f"[INFO] Detected {describe_hardware_profile(profile)}")
+    with HARDWARE_PROFILE_PATH.open("w", encoding="utf-8") as f:
+        json.dump(profile, f, indent=2)
+    return profile
+
+
+def show_hardware_profile_menu(hardware_profile: dict) -> dict:
+    print("\n[Hardware Profile]")
+    print(f"  {describe_hardware_profile(hardware_profile)}")
+    print(
+        f"  Chunk/block/LBPH-block rows: {hardware_profile['chunk_rows']} / "
+        f"{hardware_profile['block_rows']} / {hardware_profile['lbph_block_rows']}"
+    )
+    print(
+        f"  Max inflight: {hardware_profile['max_inflight']}  "
+        f"Sample cap: {hardware_profile['sample_cap']:,}  "
+        f"Streaming threshold: {hardware_profile['streaming_threshold']:,}"
+    )
+    print(
+        f"  Live detect: detect-every={hardware_profile['detect_every']}  "
+        f"downscale-max-side={hardware_profile['downscale_max_side']}  "
+        f"target-width={hardware_profile['target_width']}"
+    )
+    answer = input("\nRe-check hardware now? (y/N): ").strip().lower()
+    if answer in {"y", "yes"}:
+        return load_or_build_hardware_profile(force_refresh=True)
+    return hardware_profile
 
 
 def resolve_path(rel_path: str) -> Path:
@@ -591,6 +751,74 @@ def auto_artifact_args_for_action(
             model_path, labels_path = classical_artifact_paths(family_dir, slug)
             return ["--model-path", model_path, "--labels-path", labels_path]
 
+    return []
+
+
+def performance_args_for_independence_light_front(
+    model_name: str, base_args: list[str], profile: dict
+) -> list[str]:
+    args: list[str] = []
+
+    def add(flag: str, value) -> None:
+        if not has_flag(base_args, flag):
+            args.extend([flag, str(value)])
+
+    add("--workers", profile["workers"])
+    add("--chunk-rows", profile["chunk_rows"])
+    add("--max-inflight", profile["max_inflight"])
+    add("--lbph-block-rows", profile["lbph_block_rows"])
+    add("--streaming-threshold", profile["streaming_threshold"])
+    if model_name != "LBPH":
+        add("--blas-threads", profile["blas_threads"])
+    return args
+
+
+def performance_args_for_independence_full(base_args: list[str], profile: dict) -> list[str]:
+    args: list[str] = []
+
+    def add(flag: str, value) -> None:
+        if not has_flag(base_args, flag):
+            args.extend([flag, str(value)])
+
+    add("--workers", profile["workers"])
+    add("--chunk-rows", profile["chunk_rows"])
+    add("--block-rows", profile["block_rows"])
+    add("--sample-cap", profile["sample_cap"])
+    add("--streaming-threshold", profile["streaming_threshold"])
+    return args
+
+
+def performance_args_for_live_detect(
+    model_name: str, base_args: list[str], profile: dict
+) -> list[str]:
+    args: list[str] = []
+
+    def add(flag: str, value) -> None:
+        if not has_flag(base_args, flag):
+            args.extend([flag, str(value)])
+
+    add("--detect-every", profile["detect_every"])
+    if model_name in {"LBPH", "Hybrid"}:
+        add("--downscale-max-side", profile["downscale_max_side"])
+    else:
+        add("--target-width", profile["target_width"])
+    return args
+
+
+def auto_performance_args_for_action(
+    *,
+    model_name: str,
+    action_label: str,
+    rel_script: str,
+    base_args: list[str],
+    hardware_profile: dict,
+) -> list[str]:
+    if action_label == "independence test (light front)":
+        return performance_args_for_independence_light_front(model_name, base_args, hardware_profile)
+    if action_label in {"independence test", "independence test (joint cv+dl+cascade)"}:
+        return performance_args_for_independence_full(base_args, hardware_profile)
+    if is_live_detect_action(action_label, rel_script):
+        return performance_args_for_live_detect(model_name, base_args, hardware_profile)
     return []
 
 
@@ -1344,6 +1572,7 @@ def print_model_menu() -> None:
     print("\nChoose a model/type:")
     for idx, (model_name, _) in enumerate(GROUPED_CHOICES, start=1):
         print(f"{idx:2d}. {model_name}")
+    print(" hw. Hardware profile (CPU/RAM performance defaults)")
     print(" q. Quit")
 
 
@@ -1380,7 +1609,38 @@ def print_model_actions_menu(model_name: str, actions: list[tuple[str, str]]) ->
     print(" q. Quit")
 
 
-def run_choice(model_name: str, action_label: str, rel_script: str, extra_args: list[str]) -> int:
+def build_subprocess_env(hardware_profile: dict) -> dict:
+    env = os.environ.copy()
+    current_pythonpath = env.get("PYTHONPATH", "").strip()
+    project_root_str = str(PROJECT_ROOT)
+    env["PYTHONPATH"] = (
+        f"{project_root_str}{os.pathsep}{current_pythonpath}"
+        if current_pythonpath
+        else project_root_str
+    )
+    # Caps BLAS/OpenMP threads-per-process so worker-process pools (--workers)
+    # can't oversubscribe the CPU (workers x unrestricted BLAS threads has
+    # historically stalled/frozen lower-end machines). setdefault so a user's
+    # own shell env still wins.
+    blas_threads = str(hardware_profile["blas_threads"])
+    for var in (
+        "OMP_NUM_THREADS",
+        "OPENBLAS_NUM_THREADS",
+        "MKL_NUM_THREADS",
+        "NUMEXPR_NUM_THREADS",
+        "VECLIB_MAXIMUM_THREADS",
+    ):
+        env.setdefault(var, blas_threads)
+    return env
+
+
+def run_choice(
+    model_name: str,
+    action_label: str,
+    rel_script: str,
+    extra_args: list[str],
+    hardware_profile: dict,
+) -> int:
     if has_flag(extra_args, "--run-all-segments"):
         base_args = remove_flag_and_value(extra_args, "--run-all-segments")
         rc = 0
@@ -1389,14 +1649,7 @@ def run_choice(model_name: str, action_label: str, rel_script: str, extra_args: 
             seg_args.extend(["--segment-index", str(seg_idx)])
             script_path = resolve_path(rel_script)
             cmd = [*get_python_command(), str(script_path), *seg_args]
-            env = os.environ.copy()
-            current_pythonpath = env.get("PYTHONPATH", "").strip()
-            project_root_str = str(PROJECT_ROOT)
-            env["PYTHONPATH"] = (
-                f"{project_root_str}{os.pathsep}{current_pythonpath}"
-                if current_pythonpath
-                else project_root_str
-            )
+            env = build_subprocess_env(hardware_profile)
             print(f"\n[RUN] {model_name}: {action_label} (segment {seg_idx}/6, complete)")
             print(f"[CMD] {' '.join(shlex.quote(part) for part in cmd)}\n")
             completed = subprocess.run(cmd, cwd=PROJECT_ROOT, env=env)
@@ -1408,14 +1661,7 @@ def run_choice(model_name: str, action_label: str, rel_script: str, extra_args: 
 
     script_path = resolve_path(rel_script)
     cmd = [*get_python_command(), str(script_path), *extra_args]
-    env = os.environ.copy()
-    current_pythonpath = env.get("PYTHONPATH", "").strip()
-    project_root_str = str(PROJECT_ROOT)
-    env["PYTHONPATH"] = (
-        f"{project_root_str}{os.pathsep}{current_pythonpath}"
-        if current_pythonpath
-        else project_root_str
-    )
+    env = build_subprocess_env(hardware_profile)
 
     print(f"\n[RUN] {model_name}: {action_label}")
     print(f"[CMD] {' '.join(shlex.quote(part) for part in cmd)}\n")
@@ -1426,13 +1672,18 @@ def run_choice(model_name: str, action_label: str, rel_script: str, extra_args: 
 
 
 def main() -> int:
+    hardware_profile = load_or_build_hardware_profile()
     while True:
         print_model_menu()
-        selected_model = input("\nEnter model number (or q): ").strip().lower()
+        selected_model = input("\nEnter model number (or hw/q): ").strip().lower()
 
         if selected_model in {"q", "quit", "exit"}:
             print("Exiting.")
             return 0
+
+        if selected_model in {"hw", "hardware"}:
+            hardware_profile = show_hardware_profile_menu(hardware_profile)
+            continue
 
         if not selected_model.isdigit():
             print("Invalid input. Enter a model number or q.")
@@ -1540,7 +1791,14 @@ def main() -> int:
                     model_name=model_name,
                     base_args=base_args,
                 )
-            final_args = [*base_args, *auto_args]
+            performance_args = auto_performance_args_for_action(
+                model_name=model_name,
+                action_label=action_label,
+                rel_script=rel_script,
+                base_args=base_args,
+                hardware_profile=hardware_profile,
+            )
+            final_args = [*base_args, *auto_args, *performance_args]
             missing_eval_artifacts = warn_if_missing_auto_artifacts(
                 final_args, is_evaluation=evaluate_action
             )
@@ -1559,7 +1817,7 @@ def main() -> int:
                 if not should_continue:
                     print("[INFO] Action cancelled. Choose another dataset combination or add custom args.")
                     continue
-            run_choice(model_name, action_label, rel_script, final_args)
+            run_choice(model_name, action_label, rel_script, final_args, hardware_profile)
 
             again = input("\nRun another action for this model? (y/n): ").strip().lower()
             if again not in {"y", "yes"}:

@@ -32,8 +32,15 @@ from src.independence_common import (
     error_pair_report,
     format_error_pair_report,
 )
+from src.independence_report import (
+    add_scaling_args, write_default_plots, run_streaming_and_save,
+)
 from src.classical_faces.pipeline import SPECS
+from src.classical_faces.variants import lbph_histograms_from_tiles
 from src.lbph.preprocess import IMG_SIZE, extract_lbph_face, resolve_eye_cascade_path
+
+# Shared knobs for the fast/streaming/plot behaviour common to the classical mains.
+STREAMING_DISTANCE_LABEL = "LBPH chi-square distance"
 
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".webp"}
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -130,6 +137,7 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Explicit k-th error pair (overrides --target-far-ppm). Spec: 8 for La Salle, 331 for LFW.",
     )
+    add_scaling_args(parser)
     return parser.parse_args()
 
 
@@ -503,7 +511,16 @@ def run_lbph_independence_test() -> int:
     if len(person_dirs) < 2:
         print("[ERROR] Need at least 2 identities.")
         return 1
-    
+
+    if args.max_identities and len(person_dirs) > args.max_identities:
+        subset_rng = random.Random(args.random_seed)
+        person_dirs = sorted(subset_rng.sample(person_dirs, args.max_identities))
+        print(f"[INFO] Seeded identity subset: {len(person_dirs)} of the available folders")
+
+    n_est = len(person_dirs)
+    if (n_est * (n_est - 1) // 2) > args.streaming_threshold:
+        return _run_lbph_streaming(args, person_dirs, face_cascade, eye_cascade)
+
     all_runs_records = []
     
     for i in range(args.iterations):
@@ -600,15 +617,60 @@ def run_lbph_independence_test() -> int:
     if args.threshold is not None:
         summary["false_positive_analysis"] = analyze_false_positives(records, args.threshold)
     
+    # Default paper figures: impostor-distance histogram + FAR-vs-threshold curve.
+    if args.plots:
+        summary["plots"] = write_default_plots(
+            [r.distance for r in records],
+            summary["error_pair_thresholds"],
+            args.output_dir,
+            model_label="LBPH",
+            distance_label=STREAMING_DISTANCE_LABEL,
+            bins=args.histogram_bins,
+            curve_points=args.curve_points,
+            curve_bandwidth=args.curve_bandwidth,
+        )
+
     # Save final results
     csv_path = os.path.join(args.output_dir, "comparisons.csv")
     json_path = os.path.join(args.output_dir, "summary.json")
     save_csv_results(records, csv_path)
     save_json_results(summary, json_path)
-    
+
     # Print report
     print_report(summary, records, model_label="LBPH")
+    if summary.get("plots", {}).get("distance_histogram"):
+        print(f"[PLOT] Histogram: {summary['plots']['distance_histogram']}")
+        print(f"[PLOT] FAR curve: {summary['plots']['far_curve']}")
     return 0
+
+
+def _run_lbph_streaming(args, person_dirs, face_cascade, eye_cascade) -> int:
+    """Memory-safe streaming path for large N (single seeded sweep, parallel)."""
+    print(f"[INFO] Large run detected -> streaming mode "
+          f"({args.workers} workers, chunk_rows={args.chunk_rows}, device={args.device})")
+    selected = select_one_image_per_person(person_dirs, args.random_seed)
+    faces, label_map, pre = preprocess_and_extract_faces(
+        selected, face_cascade, eye_cascade, args.min_face_size,
+        args.align_eyes, args.equalization, args.downscale_max_side,
+    )
+    names = sorted(faces.keys())
+    if len(names) < 2:
+        print("[ERROR] Not enough usable faces for the streaming sweep.")
+        return 1
+
+    tiles = [faces[p] for p in names]
+    print(f"[INFO] Extracting LBPH histograms for {len(tiles)} identities ...")
+    features = lbph_histograms_from_tiles(tiles, 250)
+    pre_stats = {
+        "processed": pre.processed, "successful": pre.successful,
+        "skipped_unreadable": pre.skipped_unreadable,
+        "skipped_no_face": pre.skipped_no_face, "skipped_too_small": pre.skipped_too_small,
+    }
+    return run_streaming_and_save(
+        args, names=names, feature_matrix=features, metric="chi2",
+        model_label="LBPH", distance_label=STREAMING_DISTANCE_LABEL,
+        person_dirs=person_dirs, pre_stats=pre_stats, model_key="lbph",
+    )
 
 
 if __name__ == "__main__":

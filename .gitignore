@@ -166,3 +166,6 @@ Thumbs.db
 secrets/
 credentials/
 config_secrets.json
+
+# Local hardware profile cache
+hw_profile.json

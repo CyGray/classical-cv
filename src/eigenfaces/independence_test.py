@@ -32,8 +32,13 @@ from src.independence_common import (
     error_pair_report,
     format_error_pair_report,
 )
+from src.independence_report import (
+    add_scaling_args, write_default_plots, run_streaming_and_save,
+)
 from src.classical_faces.pipeline import SPECS
 from src.lbph.preprocess import IMG_SIZE, extract_lbph_face, resolve_eye_cascade_path, normalize_face
+
+EIGEN_DISTANCE_LABEL = "Eigenfaces euclidean distance"
 
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".webp"}
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -130,6 +135,7 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Explicit k-th error pair (overrides --target-far-ppm). Spec: 8 for La Salle, 331 for LFW.",
     )
+    add_scaling_args(parser)
     return parser.parse_args()
 
 
@@ -486,7 +492,16 @@ def run_eigenfaces_independence_test() -> int:
     if len(person_dirs) < 2:
         print("[ERROR] Need at least 2 identities.")
         return 1
-    
+
+    if args.max_identities and len(person_dirs) > args.max_identities:
+        subset_rng = random.Random(args.random_seed)
+        person_dirs = sorted(subset_rng.sample(person_dirs, args.max_identities))
+        print(f"[INFO] Seeded identity subset: {len(person_dirs)} of the available folders")
+
+    n_est = len(person_dirs)
+    if (n_est * (n_est - 1) // 2) > args.streaming_threshold:
+        return _run_eigen_streaming(args, person_dirs, face_cascade, eye_cascade)
+
     all_runs_records = []
     
     for i in range(args.iterations):
@@ -582,16 +597,57 @@ def run_eigenfaces_independence_test() -> int:
     
     if args.threshold is not None:
         summary["false_positive_analysis"] = analyze_false_positives(records, args.threshold)
-    
+
+    if args.plots:
+        summary["plots"] = write_default_plots(
+            [r.distance for r in records],
+            summary["error_pair_thresholds"],
+            args.output_dir,
+            model_label="Eigenfaces",
+            distance_label=EIGEN_DISTANCE_LABEL,
+            bins=args.histogram_bins,
+            curve_points=args.curve_points,
+            curve_bandwidth=args.curve_bandwidth,
+        )
+
     # Save final results
     csv_path = os.path.join(args.output_dir, "comparisons.csv")
     json_path = os.path.join(args.output_dir, "summary.json")
     save_csv_results(records, csv_path)
     save_json_results(summary, json_path)
-    
+
     # Print report
     print_report(summary, records)
+    if summary.get("plots", {}).get("distance_histogram"):
+        print(f"[PLOT] Histogram: {summary['plots']['distance_histogram']}")
+        print(f"[PLOT] FAR curve: {summary['plots']['far_curve']}")
     return 0
+
+
+def _run_eigen_streaming(args, person_dirs, face_cascade, eye_cascade) -> int:
+    """Memory-safe streaming path for large N (single seeded sweep, parallel)."""
+    print(f"[INFO] Large run detected -> streaming mode "
+          f"({args.workers} workers, chunk_rows={args.chunk_rows}, device={args.device})")
+    selected_images = select_one_image_per_person(person_dirs, args.random_seed)
+    faces, label_map, pre = preprocess_and_extract_faces(
+        selected_images, face_cascade, eye_cascade, args.min_face_size,
+        args.align_eyes, args.equalization, args.downscale_max_side,
+    )
+    if len(faces) < 2:
+        print("[ERROR] Not enough usable faces for the streaming sweep.")
+        return 1
+    print(f"[INFO] Extracting Eigenfaces projections for {len(faces)} identities ...")
+    feature_matrix, names = train_and_extract_features(faces, label_map, model_type="eigenfaces")
+    pre_stats = {
+        "processed": pre.processed, "successful": pre.successful,
+        "skipped_unreadable": pre.skipped_unreadable,
+        "skipped_no_face": pre.skipped_no_face, "skipped_too_small": pre.skipped_too_small,
+    }
+    return run_streaming_and_save(
+        args, names=list(names), feature_matrix=feature_matrix, metric="l2",
+        model_label="Eigenfaces", distance_label=EIGEN_DISTANCE_LABEL,
+        person_dirs=person_dirs, pre_stats=pre_stats, model_key="eigenfaces",
+    )
 
 
 if __name__ == "__main__":

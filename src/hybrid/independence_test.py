@@ -57,6 +57,8 @@ from src.hybrid.gate import GateThresholds, decide_escalation
 from src.hybrid.quality import QualityThresholds, compute_quality
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
 from src.independence_common import error_pair_report, format_error_pair_report
+from src.independence_report import add_scaling_args
+from src.independence_plots import save_distance_histogram, save_far_curve
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.stats_utils import error_diversity, wilson_interval_percent
 from src.sface.recognizer import (
@@ -99,6 +101,7 @@ def parse_args() -> argparse.Namespace:
                              "(La Salle DB1 spec: 10,000 ppm = 8th error pair of 756).")
     parser.add_argument("--error-pair-rank", type=int, default=None,
                         help="Explicit k-th error pair (overrides --target-far-ppm).")
+    add_scaling_args(parser, include_max_identities=False)
     return parser.parse_args()
 
 
@@ -149,10 +152,19 @@ def load_probes(
     detector,
     sface: SFaceRecognizer,
     equalization: str,
+    cache: dict[str, "ProbeData"] | None = None,
 ) -> list[ProbeData]:
+    """Build one ProbeData per identity.
+
+    YuNet detection + SFace embedding are the per-image cost; *cache* (keyed by
+    image path) lets repeated picks across iterations skip that work entirely.
+    """
     probes: list[ProbeData] = []
     for person in sorted(selected):
         path = selected[person]
+        if cache is not None and path in cache:
+            probes.append(cache[path])
+            continue
         image_bgr = cv.imread(path)
         if image_bgr is None:
             print(f"[WARN] Unreadable image skipped: {path}")
@@ -178,7 +190,7 @@ def load_probes(
         else:
             feature = sface.feature_from_crop(image_bgr)
 
-        probes.append(ProbeData(
+        probe = ProbeData(
             person=person,
             image_path=path,
             lbph_face=normalize_face(gray, img_size=IMG_SIZE, equalization=equalization),
@@ -186,7 +198,10 @@ def load_probes(
             quality_gray=cv.resize(gray, (100, 100), interpolation=cv.INTER_AREA),
             landmarks=landmarks,
             face_px=int(face_px),
-        ))
+        )
+        if cache is not None:
+            cache[path] = probe
+        probes.append(probe)
     return probes
 
 
@@ -409,50 +424,10 @@ def run_sweep(
 # --------------------------------------------------------------------------- #
 # Aggregation + reporting
 # --------------------------------------------------------------------------- #
-def aggregate_iterations(all_arrays: list[dict]) -> dict:
-    """Mean LBPH distance / SFace cosine / L2 per ordered pair across runs.
-
-    *all_arrays* is a list of the per-iteration record-array dicts returned
-    by :func:`run_sweep`.  Returns a dict of aggregated numpy arrays.
-    """
-    names = all_arrays[0]["names"]
-    image_paths = all_arrays[0]["image_paths"]
-    n = all_arrays[0]["n"]
-    comparisons = n * (n - 1)
-
-    acc_lbph = np.zeros(comparisons, dtype=np.float64)
-    acc_cos = np.zeros(comparisons, dtype=np.float64)
-    acc_l2 = np.zeros(comparisons, dtype=np.float64)
-    acc_lbph_fp = np.zeros(comparisons, dtype=np.int32)
-    acc_sface_fp = np.zeros(comparisons, dtype=np.int32)
-    acc_both_fp = np.zeros(comparisons, dtype=np.int32)
-    acc_cascade_fp = np.zeros(comparisons, dtype=np.int32)
-    runs = len(all_arrays)
-
-    for arr in all_arrays:
-        acc_lbph += arr["lbph_distance"]
-        acc_cos += arr["sface_cosine"]
-        acc_l2 += arr["sface_l2"]
-        acc_lbph_fp += arr["lbph_fp"]
-        acc_sface_fp += arr["sface_fp"]
-        acc_both_fp += arr["both_fp"]
-        acc_cascade_fp += arr["cascade_fp"]
-
-    return {
-        "mean_lbph_distance": acc_lbph / runs,
-        "mean_sface_cosine": acc_cos / runs,
-        "mean_sface_l2": acc_l2 / runs,
-        "lbph_fp_runs": acc_lbph_fp,
-        "sface_fp_runs": acc_sface_fp,
-        "both_fp_runs": acc_both_fp,
-        "cascade_fp_runs": acc_cascade_fp,
-        "query_idx": all_arrays[0]["query_idx"],
-        "candidate_idx": all_arrays[0]["candidate_idx"],
-        "names": names,
-        "runs": runs,
-    }
-
-
+# NOTE: per-pair sums are now accumulated incrementally inside main() (running
+# accumulators) so peak RAM stays at O(comparisons) instead of
+# O(iterations x comparisons); there is no longer an aggregate_iterations() that
+# holds every iteration's arrays at once.
 def save_aggregated_csv(aggregated: dict, path: str) -> None:
     os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
     n_comparisons = len(aggregated["mean_lbph_distance"])
@@ -488,6 +463,65 @@ def save_aggregated_csv(aggregated: dict, path: str) -> None:
     print(f"[SAVE] CSV: {path}")
 
 
+def _write_hybrid_plots(args, aggregated: dict, lbph_report: dict, sface_report: dict) -> dict:
+    """Default paper figures for the hybrid test: per-engine impostor-distance
+    histogram + FAR-vs-threshold curve on each engine's own RAW scale (LBPH predict
+    distance; SFace 1 - cosine). Classical (LBPH) side is the priority; SFace is a
+    cheap add. Written under ``<output_dir>/lbph`` and ``<output_dir>/sface``."""
+    if not getattr(args, "plots", True):
+        return {}
+
+    cap = max(1000, int(getattr(args, "sample_cap", 1_000_000)))
+
+    def _sample(values) -> np.ndarray:
+        arr = np.asarray(values, dtype=np.float64)
+        arr = arr[np.isfinite(arr)]
+        step = max(1, arr.size // cap)
+        return arr[::step]
+
+    bins = int(getattr(args, "histogram_bins", 40))
+    pts = int(getattr(args, "curve_points", 500))
+    bw = getattr(args, "curve_bandwidth", None)
+
+    lbph_dir = os.path.join(args.output_dir, "lbph")
+    lbph_thr = (lbph_report.get("spec") or {}).get("raw_threshold")
+    save_distance_histogram(
+        _sample(aggregated["mean_lbph_distance"]),
+        os.path.join(lbph_dir, "distance_histogram.png"),
+        threshold=lbph_thr, bins=bins,
+        title="Hybrid Independence: LBPH impostor-distance histogram",
+        xlabel="LBPH predict distance (mean over runs)", curve_points=pts, curve_bandwidth=bw,
+    )
+    save_far_curve(
+        lbph_report, os.path.join(lbph_dir, "far_curve.png"),
+        model_label="Hybrid / LBPH", engine_label="LBPH predict distance",
+        threshold_field="raw_threshold", xlabel="Match threshold (LBPH predict distance)",
+    )
+
+    sface_dir = os.path.join(args.output_dir, "sface")
+    sface_dist = 1.0 - np.asarray(aggregated["mean_sface_cosine"], dtype=np.float64)
+    sface_thr = (sface_report.get("spec") or {}).get("raw_threshold")
+    save_distance_histogram(
+        _sample(sface_dist),
+        os.path.join(sface_dir, "distance_histogram.png"),
+        threshold=sface_thr, bins=bins,
+        title="Hybrid Independence: SFace impostor-distance histogram (1 - cosine)",
+        xlabel="SFace distance (1 - cosine, mean over runs)", curve_points=pts, curve_bandwidth=bw,
+    )
+    save_far_curve(
+        sface_report, os.path.join(sface_dir, "far_curve.png"),
+        model_label="Hybrid / SFace", engine_label="SFace (1 - cosine)",
+        threshold_field="raw_threshold", xlabel="Match threshold (SFace 1 - cosine)",
+    )
+
+    return {
+        "lbph_histogram": os.path.join(lbph_dir, "distance_histogram.png"),
+        "lbph_far_curve": os.path.join(lbph_dir, "far_curve.png"),
+        "sface_histogram": os.path.join(sface_dir, "distance_histogram.png"),
+        "sface_far_curve": os.path.join(sface_dir, "far_curve.png"),
+    }
+
+
 def main() -> int:
     args = parse_args()
     args.dataset_dir = resolve_path(args.dataset_dir)
@@ -512,8 +546,36 @@ def main() -> int:
     detector = create_face_detector("yunet")
     sface = SFaceRecognizer()
 
-    all_arrays: list[dict] = []
+    # Aggregate per-pair sums INCREMENTALLY (running accumulators) instead of
+    # hoarding every iteration's full arrays - keeps peak RAM at O(comparisons),
+    # not O(iterations x comparisons).
+    probe_cache: dict[str, ProbeData] = {}
+    acc: dict[str, np.ndarray] | None = None
+    acc_meta: dict = {}
+    runs = 0
     iteration_summaries: list[dict] = []
+
+    def _accumulate(rec: dict) -> None:
+        nonlocal acc, acc_meta
+        m = int(np.asarray(rec["lbph_distance"]).shape[0])
+        if acc is None:
+            acc = {
+                "lbph": np.zeros(m, np.float64), "cos": np.zeros(m, np.float64),
+                "l2": np.zeros(m, np.float64), "lbph_fp": np.zeros(m, np.int64),
+                "sface_fp": np.zeros(m, np.int64), "both_fp": np.zeros(m, np.int64),
+                "cascade_fp": np.zeros(m, np.int64),
+            }
+            acc_meta = {"query_idx": np.asarray(rec["query_idx"]),
+                        "candidate_idx": np.asarray(rec["candidate_idx"]),
+                        "names": list(rec["names"])}
+        acc["lbph"] += rec["lbph_distance"]
+        acc["cos"] += rec["sface_cosine"]
+        acc["l2"] += rec["sface_l2"]
+        acc["lbph_fp"] += rec["lbph_fp"]
+        acc["sface_fp"] += rec["sface_fp"]
+        acc["both_fp"] += rec["both_fp"]
+        acc["cascade_fp"] += rec["cascade_fp"]
+
     for it in range(args.iterations):
         print(f"\n[ITERATION {it + 1}/{args.iterations}]")
         run_dir = os.path.join(args.output_dir, "_raw_runs", f"run_{it + 1}")
@@ -528,41 +590,49 @@ def main() -> int:
             with np.load(npz_path) as data:
                 rec_arrays = {k: data[k] for k in data.files}
                 rec_arrays["names"] = list(rec_arrays["names"])
-                rec_arrays["image_paths"] = list(rec_arrays["image_paths"])
-                rec_arrays["n"] = summary["identities"]
-            
-            all_arrays.append(rec_arrays)
-            iteration_summaries.append(summary)
-            continue
+        else:
+            selected = select_one_image_per_person(person_dirs, args.random_seed + it)
+            probes = load_probes(selected, detector, sface, equalization, cache=probe_cache)
+            if len(probes) < 2:
+                print("[WARN] Not enough usable probes; iteration skipped.")
+                continue
 
-        selected = select_one_image_per_person(person_dirs, args.random_seed + it)
-        probes = load_probes(selected, detector, sface, equalization)
-        if len(probes) < 2:
-            print("[WARN] Not enough usable probes; iteration skipped.")
-            continue
-        
-        rec_arrays, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds,
-                                        csv_path=csv_path)
-        fp = summary["false_accepts"]
-        print(f"  N={summary['identities']} comparisons={summary['comparisons']} | "
-              f"FP: lbph={fp['lbph']} sface={fp['sface']} both={fp['both']} "
-              f"cascade={fp['cascade']} | escalation={summary['gate']['escalation_percent']:.1f}%")
-        
-        # Save npz and summary for resuming
-        os.makedirs(run_dir, exist_ok=True)
-        with open(summary_path, "w", encoding="utf-8") as f:
-            json.dump(summary, f, indent=2)
-        np_args = {k: v for k, v in rec_arrays.items() if k != "n"}
-        np.savez_compressed(npz_path, **np_args)
+            rec_arrays, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds,
+                                            csv_path=csv_path)
+            fp = summary["false_accepts"]
+            print(f"  N={summary['identities']} comparisons={summary['comparisons']} | "
+                  f"FP: lbph={fp['lbph']} sface={fp['sface']} both={fp['both']} "
+                  f"cascade={fp['cascade']} | escalation={summary['gate']['escalation_percent']:.1f}%")
 
-        all_arrays.append(rec_arrays)
+            # Save npz and summary for resuming
+            os.makedirs(run_dir, exist_ok=True)
+            with open(summary_path, "w", encoding="utf-8") as f:
+                json.dump(summary, f, indent=2)
+            np_args = {k: v for k, v in rec_arrays.items() if k != "n"}
+            np.savez_compressed(npz_path, **np_args)
+
+        _accumulate(rec_arrays)
+        runs += 1
         iteration_summaries.append(summary)
+        del rec_arrays  # don't hoard across iterations
 
-    if not all_arrays:
+    if runs == 0:
         print("[ERROR] No successful iterations.")
         return 1
 
-    aggregated = aggregate_iterations(all_arrays)
+    aggregated = {
+        "mean_lbph_distance": acc["lbph"] / runs,
+        "mean_sface_cosine": acc["cos"] / runs,
+        "mean_sface_l2": acc["l2"] / runs,
+        "lbph_fp_runs": acc["lbph_fp"],
+        "sface_fp_runs": acc["sface_fp"],
+        "both_fp_runs": acc["both_fp"],
+        "cascade_fp_runs": acc["cascade_fp"],
+        "query_idx": acc_meta["query_idx"],
+        "candidate_idx": acc_meta["candidate_idx"],
+        "names": acc_meta["names"],
+        "runs": runs,
+    }
     comparisons = iteration_summaries[0]["comparisons"]
 
     def _mean(path_a: str, path_b: str) -> float:
@@ -659,6 +729,8 @@ def main() -> int:
         "per_iteration": iteration_summaries,
     }
 
+    summary["plots"] = _write_hybrid_plots(args, aggregated, lbph_rank_report, sface_rank_report)
+
     save_aggregated_csv(aggregated, os.path.join(args.output_dir, "comparisons.csv"))
     json_path = os.path.join(args.output_dir, "summary.json")
     os.makedirs(args.output_dir, exist_ok=True)
@@ -710,6 +782,11 @@ def main() -> int:
     print("\n[SFACE RANK-BASED THRESHOLD (distance = 1 - cosine)]")
     print(format_error_pair_report(sface_rank_report))
     print("=" * 80)
+    plots = summary.get("plots") or {}
+    if plots:
+        print("[PLOTS]")
+        for key, val in plots.items():
+            print(f"  {key}: {val}")
     return 0
 
 
