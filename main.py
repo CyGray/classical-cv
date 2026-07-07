@@ -1465,6 +1465,25 @@ def prompt_augmented_dataset_args(is_evaluation: bool, core_args: list[str]) -> 
     return args
 
 
+def prompt_independence_dataset_args() -> list[str]:
+    print("\nSelect dataset for independence test:")
+    print("  1. la salle db1")
+    print("  2. lsdb 2 (41 augmented lsdb1)")
+    print("  3. lfw1")
+    print("  4. lfw2 (41 augmented lfw)")
+    selected = input("Enter choice (default: 1): ").strip()
+    
+    if selected == "2":
+        return ["--dataset-dir", "data/split_augmented41mods_lasalle/train"]
+    elif selected == "3":
+        return ["--dataset-dir", "data/lfw-dataset"]
+    elif selected == "4":
+        return ["--dataset-dir", "data/split_augmented41mods_lfw/train"]
+    else:
+        # Default is la salle db1
+        return ["--dataset-dir", "data/lasalle_db1"]
+
+
 def prompt_light_front_independence_args(model_name: str) -> list[str]:
     print("\nSelect light-front independence dataset run:")
     print("  1. la salle db (processed)")
@@ -1744,6 +1763,15 @@ def main() -> int:
                 preset_args = prompt_detector_args(model_name, is_live=True)
             elif action_label == "independence test (light front)":
                 preset_args = prompt_light_front_independence_args(model_name)
+            elif action_label.startswith("independence test"):
+                preset_args = prompt_independence_dataset_args()
+                if "--dataset-dir" in preset_args and "lasalle_db1" not in preset_args[1]:
+                    # If they pick something that's already cropped/augmented, we might want to skip the detector,
+                    # but we'll leave detector prompt enabled for classical models if not explicitly skipped.
+                    if (not is_hybrid) and ("--assume-cropped" not in core_dataset_args if 'core_dataset_args' in locals() else True):
+                        preset_args += prompt_detector_args(model_name)
+                elif not is_hybrid:
+                    preset_args += prompt_detector_args(model_name)
 
             extra = input("Optional extra args (or press Enter): ").strip()
             extra_args = shlex.split(extra) if extra else []
