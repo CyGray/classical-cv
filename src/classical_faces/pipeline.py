@@ -949,7 +949,7 @@ def add_preprocess_args(
     parser.add_argument(
         "--yunet-model-path",
         default="",
-        help="YuNet ONNX weights (default: models/yunet_mobilefacenet/"
+        help="YuNet ONNX weights (default: models/yunet/"
         "face_detection_yunet_2023mar.onnx).",
     )
     parser.add_argument(

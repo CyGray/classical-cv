@@ -70,7 +70,7 @@ def regenerate_aug(py: str) -> None:
     run(
         [
             py,
-            "augment_split_light_medium.py",
+            "scripts/augment_split_light_medium.py",
             "--split-root",
             SPLIT_BASE,
             "--output-root",

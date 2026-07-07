@@ -11,40 +11,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 
 GROUPED_CHOICES = [
     (
-        "ArcFace",
-        [
-            ("setup model", "src/arcface/setup_model.py"),
-            ("train enrollment", "src/arcface/trainer.py"),
-            ("evaluate", "src/arcface/evaluate.py"),
-            ("live detect", "src/arcface/detect.py"),
-        ],
-    ),
-    (
-        "ArcFace MobileNet INT8",
-        [
-            ("train enrollment", "src/arcface_mobilenet_int8/trainer.py"),
-            ("evaluate", "src/arcface_mobilenet_int8/evaluate.py"),
-            ("live detect", "src/arcface_mobilenet_int8/face_detect.py"),
-            ("quantize model", "src/arcface_mobilenet_int8/quantize_model.py"),
-        ],
-    ),
-    (
-        "MobileFaceNet",
-        [
-            ("train enrollment", "src/mobilefacenet/trainer.py"),
-            ("evaluate", "src/mobilefacenet/evaluate.py"),
-            ("live detect", "src/mobilefacenet/detect.py"),
-        ],
-    ),
-    (
-        "EdgeFace",
-        [
-            ("train enrollment", "src/edgeface/trainer.py"),
-            ("evaluate", "src/edgeface/evaluate.py"),
-            ("live detect", "src/edgeface/face_detect.py"),
-        ],
-    ),
-    (
         "LBPH",
         [
             ("train", "src/lbph/trainer.py"),
@@ -110,34 +76,6 @@ GROUPED_CHOICES = [
 ]
 
 MODEL_INFO_CONFIG = {
-    "ArcFace": {
-        "trained_markers": ["models/arcface_mobilenet/enrollment.json"],
-        "evaluated_reports": ["reports/evaluation/arcface_eval.json"],
-        "size_paths": ["models/arcface_mobilenet"],
-    },
-    "ArcFace MobileNet INT8": {
-        "trained_markers": ["models/arcface_mobilenet_int8/enrollment.json"],
-        "evaluated_reports": ["reports/evaluation/arcface_mobilenet_int8_eval.json"],
-        "size_paths": ["models/arcface_mobilenet_int8"],
-    },
-    "MobileFaceNet": {
-        "trained_markers": ["models/yunet_mobilefacenet/enrollment.json"],
-        "evaluated_reports": ["reports/evaluation/yunet_mobilefacenet_eval.json"],
-        "size_paths": [
-            "models/yunet_mobilefacenet/mobilefacenet.onnx",
-            "models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx",
-            "models/yunet_mobilefacenet/enrollment.json",
-        ],
-    },
-    "EdgeFace": {
-        "trained_markers": ["models/edgeface/enrollment.json"],
-        "evaluated_reports": ["reports/evaluation/edgeface_eval.json"],
-        "size_paths": [
-            "models/edgeface/edgeface_xs.onnx",
-            "models/edgeface/enrollment.json",
-            "models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx",
-        ],
-    },
     # Classical entries point at the CANONICAL clean-split artifacts (what the
     # benchmarks and live detect use), not the legacy folder totals - the model
     # dirs still hold multi-GB deprecated trainer_*.yml files.
@@ -164,7 +102,7 @@ MODEL_INFO_CONFIG = {
         "size_paths": [
             "models/sface/gallery.npy",
             "models/sface/face_recognition_sface_2021dec.onnx",
-            "models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx",
+            "models/yunet/face_detection_yunet_2023mar.onnx",
             "models/lbph/lasalle_clean.yml",
         ],
     },
@@ -176,22 +114,6 @@ MODEL_INFO_CONFIG = {
 }
 
 BENCHMARK_OVERVIEW_CONFIG = {
-    "ArcFace": {
-        "eval_report": "reports/evaluation/arcface_eval.json",
-        "fps_algorithm": "arcface",
-    },
-    "ArcFace MobileNet INT8": {
-        "eval_report": "reports/evaluation/arcface_mobilenet_int8_eval.json",
-        "fps_algorithm": "arcface_int8",
-    },
-    "MobileFaceNet": {
-        "eval_report": "reports/evaluation/yunet_mobilefacenet_eval.json",
-        "fps_algorithm": "mobilefacenet",
-    },
-    "EdgeFace": {
-        "eval_report": "reports/evaluation/edgeface_eval.json",
-        "fps_algorithm": "edgeface",
-    },
     "LBPH": {
         "eval_report": "reports/evaluation/lbph_eval.json",
         "fps_algorithm": "lbph",
@@ -211,10 +133,6 @@ BENCHMARK_OVERVIEW_CONFIG = {
 }
 
 MODEL_FAMILY_ALIASES: dict[str, set[str]] = {
-    "ArcFace": {"arcface_buffalo_s"},
-    "ArcFace MobileNet INT8": {"arcface_mobilenet_int8", "arcface_buffalo_s_int8"},
-    "MobileFaceNet": {"yunet_mobilefacenet"},
-    "EdgeFace": {"edgeface"},
     "LBPH": {"lbph"},
     "Eigenfaces": {"eigenfaces"},
     "Fisherfaces": {"fisherfaces"},
@@ -224,13 +142,6 @@ MODEL_FAMILY_ALIASES: dict[str, set[str]] = {
 
 def resolve_path(rel_path: str) -> Path:
     return PROJECT_ROOT / rel_path
-
-
-INT8_MODEL_DIR = resolve_path("models/arcface_mobilenet_int8")
-INT8_REQUIRED_MODELS = [
-    resolve_path("models/arcface_mobilenet_int8/w600k_mbf.onnx"),
-    resolve_path("models/arcface_mobilenet_int8/models/buffalo_s/w600k_mbf.onnx"),
-]
 
 
 def path_size_bytes(path: Path) -> int:
@@ -471,12 +382,6 @@ def entity_matches_model_name(model_name: str, row: dict) -> bool:
     aliases = {value.lower() for value in MODEL_FAMILY_ALIASES.get(model_name, set())}
     if model_family not in aliases:
         return False
-
-    # ArcFace and ArcFace INT8 can share family tags in reports; split by variant signal.
-    if model_name == "ArcFace MobileNet INT8":
-        return "int8" in model_variant or model_family.endswith("_int8")
-    if model_name == "ArcFace":
-        return "int8" not in model_variant and not model_family.endswith("_int8")
     return True
 
 
@@ -686,48 +591,6 @@ def auto_artifact_args_for_action(
             model_path, labels_path = classical_artifact_paths(family_dir, slug)
             return ["--model-path", model_path, "--labels-path", labels_path]
 
-    if model_name in {"ArcFace", "ArcFace MobileNet INT8"}:
-        if is_training and not has_flag(base_args, "--enrollment-output"):
-            slug = combo_slug_for_args(base_args, is_training=True, is_evaluation=False)
-            return [
-                "--enrollment-output",
-                f"models/arcface_mobilenet/enrollment_{slug}.json",
-            ]
-        if is_evaluation and not has_flag(base_args, "--enrollment-path"):
-            slug = combo_slug_for_args(base_args, is_training=False, is_evaluation=True)
-            return [
-                "--enrollment-path",
-                f"models/arcface_mobilenet/enrollment_{slug}.json",
-            ]
-
-    if model_name == "MobileFaceNet":
-        if is_training and not has_flag(base_args, "--enrollment-output"):
-            slug = combo_slug_for_args(base_args, is_training=True, is_evaluation=False)
-            return [
-                "--enrollment-output",
-                f"models/yunet_mobilefacenet/enrollment_{slug}.json",
-            ]
-        if is_evaluation and not has_flag(base_args, "--enrollment-path"):
-            slug = combo_slug_for_args(base_args, is_training=False, is_evaluation=True)
-            return [
-                "--enrollment-path",
-                f"models/yunet_mobilefacenet/enrollment_{slug}.json",
-            ]
-
-    if model_name == "EdgeFace":
-        if is_training and not has_flag(base_args, "--enrollment-output"):
-            slug = combo_slug_for_args(base_args, is_training=True, is_evaluation=False)
-            return [
-                "--enrollment-output",
-                f"models/edgeface/enrollment_{slug}.json",
-            ]
-        if is_evaluation and not has_flag(base_args, "--enrollment-path"):
-            slug = combo_slug_for_args(base_args, is_training=False, is_evaluation=True)
-            return [
-                "--enrollment-path",
-                f"models/edgeface/enrollment_{slug}.json",
-            ]
-
     return []
 
 
@@ -919,12 +782,6 @@ def get_model_info(model_name: str) -> dict:
     }
 
 
-def int8_model_pack_ready() -> bool:
-    if not INT8_MODEL_DIR.exists():
-        return False
-    return any(p.exists() for p in INT8_REQUIRED_MODELS)
-
-
 def get_python_command() -> list[str]:
     # Always prefer global interpreter so menu actions are not tied to .venv.
     configured = os.environ.get("FACE_G3_PYTHON", "").strip()
@@ -1080,12 +937,6 @@ def discover_eval_artifact_options(model_name: str) -> list[EvalArtifactOption]:
         return discover_pair_artifacts("models/eigenfaces")
     if model_name == "Fisherfaces":
         return discover_pair_artifacts("models/fisherfaces")
-    if model_name in {"ArcFace", "ArcFace MobileNet INT8"}:
-        return discover_enrollment_artifacts("models/arcface_mobilenet")
-    if model_name == "MobileFaceNet":
-        return discover_enrollment_artifacts("models/yunet_mobilefacenet")
-    if model_name == "EdgeFace":
-        return discover_enrollment_artifacts("models/edgeface")
     return []
 
 
@@ -1489,29 +1340,6 @@ def run_python_script(rel_script: str, extra_args: list[str], label: str) -> int
     return completed.returncode
 
 
-def maybe_prepare_int8_pack() -> bool:
-    if int8_model_pack_ready():
-        return True
-
-    print("\n[INFO] ArcFace INT8 model pack is missing.")
-    print("Required first-time setup:")
-    print("  1) Download FP32 ArcFace model")
-    print("  2) Quantize to INT8 pack")
-    answer = input("Run setup now? (y/n): ").strip().lower()
-    if answer not in {"y", "yes"}:
-        return False
-
-    rc = run_python_script("src/arcface/setup_model.py", [], "ArcFace setup model")
-    if rc != 0:
-        return False
-
-    rc = run_python_script("src/arcface_mobilenet_int8/quantize_model.py", [], "ArcFace INT8 quantize model")
-    if rc != 0:
-        return False
-
-    return int8_model_pack_ready()
-
-
 def print_model_menu() -> None:
     print("\nChoose a model/type:")
     for idx, (model_name, _) in enumerate(GROUPED_CHOICES, start=1):
@@ -1642,14 +1470,6 @@ def main() -> int:
             training_action = (not is_hybrid) and is_training_action(action_label, rel_script)
             evaluate_action = (not is_hybrid) and is_evaluate_action(action_label, rel_script)
             live_detect_action = (not is_hybrid) and is_live_detect_action(action_label, rel_script)
-            if (
-                model_name == "ArcFace MobileNet INT8"
-                and action_label in {"train enrollment", "evaluate", "live detect"}
-                and not int8_model_pack_ready()
-            ):
-                if not maybe_prepare_int8_pack():
-                    print("[INFO] Skipping action because INT8 model pack is not ready.")
-                    continue
 
             preset_args: list[str] = []
             if is_hybrid:
@@ -1728,7 +1548,6 @@ def main() -> int:
                 print("[ERROR] Evaluation cancelled because required artifacts are missing.")
                 print("        Train this model first, or provide existing files via Optional extra args:")
                 print("        - --model-path / --labels-path (LBPH/Eigenfaces/Fisherfaces)")
-                print("        - --enrollment-path (ArcFace/MobileFaceNet/EdgeFace)")
                 continue
             if training_action or evaluate_action:
                 should_continue = maybe_confirm_existing_dataset_combo(

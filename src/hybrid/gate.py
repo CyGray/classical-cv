@@ -1,6 +1,6 @@
 """The escalation gate: decide when LBPH's answer is trustworthy.
 
-Rule (``docs/ARCHITECTURE_PLAN.md`` §4.2) - escalate the frame to SFace if **any**
+Rule (``docs/archive/ARCHITECTURE_PLAN.md`` §4.2) - escalate the frame to SFace if **any**
 of:
 
 1. the LBPH score lands in the ambiguous band ``tau_accept < d_cv < tau_reject``,

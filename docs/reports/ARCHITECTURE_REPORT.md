@@ -1,6 +1,6 @@
 # LS-Face — Hybrid CV + DL Architecture (Report)
 
-*The short, visual version. Full detail lives in [`ARCHITECTURE_PLAN.md`](ARCHITECTURE_PLAN.md).*
+*The short, visual version. Full detail lives in [`ARCHITECTURE_PLAN.md`](../archive/ARCHITECTURE_PLAN.md).*
 
 **Goal:** combine our classical recognizer (LBPH) with the DL recognizer (SFace)
 into one system that is **fast like CV** and **accurate like DL**, running on a

@@ -37,7 +37,7 @@ Two different target sets are in play:
 
 | Source | Accuracy | Speed | FAR/FRR | Feature |
 |---|---|---|---|---|
-| Internal `docs/report_docs/GOAL.md` | "100 % on La Salle" | **≥ 3 FPS** | — | — |
+| Internal `docs/archive/report_docs/GOAL.md` | "100 % on La Salle" | **≥ 3 FPS** | — | — |
 | Project spec (current) | TAR 90–95 % | **≥ 30 FPS**, < 100 ms | FAR < 0.01 % (100 ppm), FRR 1–5 % | **< 1 KB** |
 
 The internal goal ("100 % @ ≥3 fps") is far laxer than the spec (10× the FPS, a feature-size budget, and
@@ -58,7 +58,7 @@ This caused real concern, so here is the complete reconciliation:
   normalization (`100*raw/dmax`; `dmin` is computed but unused) → the minimum maps to ~73.74 instead,
   which is what `independence_test/DOC.md` reports. Same data, different scale.
 - **Why (Fisherfaces):** a genuine **singular-matrix collapse**. LDA with **one image per identity** has
-  zero within-class scatter → non-invertible → 0.0 between distinct identities. `independence_failure_check/`
+  zero within-class scatter → non-invertible → 0.0 between distinct identities. `scripts/independence_failure_check/`
   already diagnosed this correctly (Multi-Image test: 0.0 at 1 image → recovers with ≥3).
 - **Verification on current data:** recomputing the real pipeline gives **raw chi² min = 20.89**
   (Maghari/Belen), **0 exact-zero pairs, 0 identical feature rows**, no decoded-pixel or post-preprocess
@@ -85,7 +85,7 @@ touch data.**
   not La Salle). The launcher's dataset manager swaps these. **Consequence:** committed reports were
   produced against *different* underlying datasets at different times; you cannot tell which split a
   report used without the symlink state at run time. **Pin/record the active target per report.**
-- **Gap:** the base **split-creation script is not in the repo** (only `augment_split_light_medium.py`,
+- **Gap:** the base **split-creation script is not in the repo** (only `scripts/augment_split_light_medium.py`,
   which *consumes* an existing split and correctly augments per-split, so augmented copies of a train
   image cannot leak into test — check 4b passes *given* a clean base split).
 
@@ -105,8 +105,8 @@ touch data.**
 | `src/independence_common.py` | **Works** | shared train→extract→pairwise; `normalize_distances_0_100` is **max-only**. |
 | `src/reporting/identity.py` | **Works** | `attach_entity_identity` / `build_dataset_profile` give the shared `entity_key` schema. |
 | `main.py` launcher | **Works, sophisticated** | dataset prompts, auto artifact slugs, duplicate-combo warnings, LFW segmenting. Only training/eval/light-front get preset args; the *plain* independence action runs bare defaults. |
-| `augment_split_light_medium.py` | **Works, leakage-safe** | augments `train/`→`train/`, `test/`→`test/` separately. |
-| `independence_failure_check/*` | **Works + self-critical** | collapse/multi-image/regional/occlusion suite; reports correctly flag their own apples-to-oranges magnitude comparisons. |
+| `scripts/augment_split_light_medium.py` | **Works, leakage-safe** | augments `train/`→`train/`, `test/`→`test/` separately. |
+| `scripts/independence_failure_check/*` | **Works + self-critical** | collapse/multi-image/regional/occlusion suite; reports correctly flag their own apples-to-oranges magnitude comparisons. |
 
 ---
 
@@ -247,8 +247,8 @@ cleaning is needed.
 - FPS from `reports/benchmark/live_fps/aggregate_summary.json`.
 - Recognition reports: `reports/evaluation/{lbph,lbph_eval_entity_check,eigenfaces,fisherfaces}_eval.json`.
 - Independence: `outputs/lbph/independence_test_light_front/summary.json` (stale min‑max),
-  `docs/report_docs/independence_test/DOC.md` (max-norm), `independence_failure_check/collapse_aggregated.json`.
+  `docs/archive/report_docs/independence_test/DOC.md` (max-norm), `reports/independence_failure_check/collapse_aggregated.json`.
 - Split layout: `data/split_backup_before_lfw_20260423_132556/{train,test}` (28 ids, 10/2, overlap ∅);
   `data/lfw-dataset` = 5749 ids.
-- Related prior docs: `docs/report_docs/GOAL.md`, `independence-algo-report.md`,
-  `independence_failure_check/DOC.md`, root `FULL_TECHNICAL_REPORT.md`, `RESULTS_DISCUSSION_CONCLUSION.md`.
+- Related prior docs: `docs/archive/report_docs/GOAL.md`, `independence-algo-report.md`,
+  `docs/archive/report_docs/independence_failure_check/DOC.md`, root `FULL_TECHNICAL_REPORT.md`, `RESULTS_DISCUSSION_CONCLUSION.md`.

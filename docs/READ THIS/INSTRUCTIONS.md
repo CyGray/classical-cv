@@ -49,9 +49,9 @@
 - Spec compliance: `docs/reports/SPEC_COMPARISON.md`
 - Hybrid report: `docs/reports/HYBRID_CV_DL_REPORT.md`
 - Detector comparison: `docs/reports/DETECTOR_COMPARISON.md`
-- Architecture plan: `docs/ARCHITECTURE_PLAN.md`
-- Implementation plan: `docs/ARCHITECTURE_IMPLEMENTATION_PLAN.md`
-- Dataset analysis: `docs/DATASET_MATRIX.md`
+- Architecture plan: `docs/archive/ARCHITECTURE_PLAN.md`
+- Implementation plan: `docs/archive/ARCHITECTURE_IMPLEMENTATION_PLAN.md`
+- Dataset analysis: `docs/reports/DATASET_MATRIX.md`
 - Changelog: `docs/changelogs/CHANGELOG.md`
 - Figures: `docs/figures/fig_hybrid_*.png`
 - All reports: `reports/benchmark/*`, `reports/evaluation/*`

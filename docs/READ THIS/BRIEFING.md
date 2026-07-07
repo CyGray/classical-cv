@@ -47,7 +47,7 @@ The classical recognizers all use **Haar cascade** for detection feeding the Ope
 
 - **Three classical pipelines** — LBPH, Eigenfaces, Fisherfaces (`src/lbph/`, `src/eigenfaces/`, `src/fisherfaces/`).
 - **Independence tests** for each of the three classical models.
-- **The `independence_failure_check/` post-hoc analysis** — occlusion analysis, regional collapse detection, multi-image verification, and visual report generation.
+- **The `scripts/independence_failure_check/` post-hoc analysis** — occlusion analysis, regional collapse detection, multi-image verification, and visual report generation.
 
 Teammates own the deep-learning recognizers (MobileFaceNet, EdgeFace, ArcFace, ArcFace INT8) and the shared database work.
 
@@ -99,7 +99,7 @@ Each pipeline has the same four scripts: `trainer.py`, `evaluate.py`, `detect.py
 | **La Salle** (`lasalle_db1`) — primary | 28 persons × 10 cases = 280 photos | 280 × 41 modifications ≈ 11,480 photos |
 | **LFW** — supplementary, processed only | 5,749 persons, 13,233 photos | 13,233 × 41 modifications ≈ 542,553 photos |
 
-La Salle has raw (`lasalle_db1`) and cropped/aligned (`lasalle_db1_processed`) variants. **Augmented splits** (`light` / `medium` tiers) are generated via `augment_split_light_medium.py`. Evaluation reports embed a `dataset_profile` so cross-dataset runs are never mixed.
+La Salle has raw (`lasalle_db1`) and cropped/aligned (`lasalle_db1_processed`) variants. **Augmented splits** (`light` / `medium` tiers) are generated via `scripts/augment_split_light_medium.py`. Evaluation reports embed a `dataset_profile` so cross-dataset runs are never mixed.
 
 DB1 sets are used for the **independence test and threshold determination**; DB2 sets (the 41-modification variants) are used for **recognition accuracy testing**.
 
@@ -159,7 +159,7 @@ AR is determined at a **pre-determined false-positive rate** (set by the indepen
 
 ## 12. Model Context Block (paste this into new Opus 4.8 chats)
 
-> I'm Kyle, Group 3, USLS Computer Vision course. Project: **LS-Face / Smart Gate** — a hybrid (CV + DL) face recognizer, selected via independence testing, deployed on a Raspberry Pi 5. I own the **classical CV track**: LBPH, Eigenfaces, Fisherfaces (`src/lbph`, `src/eigenfaces`, `src/fisherfaces`), their independence tests, and `independence_failure_check/`. Teammates own the DL recognizers and shared DB work.
+> I'm Kyle, Group 3, USLS Computer Vision course. Project: **LS-Face / Smart Gate** — a hybrid (CV + DL) face recognizer, selected via independence testing, deployed on a Raspberry Pi 5. I own the **classical CV track**: LBPH, Eigenfaces, Fisherfaces (`src/lbph`, `src/eigenfaces`, `src/fisherfaces`), their independence tests, and `scripts/independence_failure_check/`. Teammates own the DL recognizers and shared DB work.
 >
 > **Target specs:** TAR 90–95%, FAR <0.01% (100 ppm), FRR 1–5%, latency <100 ms, speed ≥30 fps, feature vector <1 KB. (On-device Pi 5 throughput for classical models will be lower.)
 >

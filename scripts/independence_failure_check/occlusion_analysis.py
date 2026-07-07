@@ -7,15 +7,15 @@ import cv2 as cv
 import matplotlib.pyplot as plt
 import numpy as np
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.independence_common import train_and_extract_features, chi_squared_distance, euclidean_distance
 
 IMG_SIZE = (100, 100)
 ITERATIONS = 10
-OUTPUT_DIR = PROJECT_ROOT / "independence_failure_check" / "reports" / "occlusion_analysis"
-RAW_DATA_DIR = PROJECT_ROOT / "independence_failure_check" / "raw_data" / "occlusion_analysis"
+OUTPUT_DIR = PROJECT_ROOT / "reports" / "independence_failure_check" / "occlusion_analysis"
+RAW_DATA_DIR = PROJECT_ROOT / "reports" / "independence_failure_check" / "raw_data" / "occlusion_analysis"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -100,7 +100,7 @@ def plot_occlusions(algo, results):
 
 def main():
     import csv
-    with open(PROJECT_ROOT / "independence_failure_check" / "failure_pairs.json", "r") as f:
+    with open(PROJECT_ROOT / "reports" / "independence_failure_check" / "failure_pairs.json", "r") as f:
         failure_data = json.load(f)
 
     # Use Eigenfaces for occlusion

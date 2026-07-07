@@ -8,14 +8,14 @@ from pathlib import Path
 import cv2 as cv
 import numpy as np
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.independence_common import _read_projections
 
 IMG_SIZE = (100, 100)
 ITERATIONS = 10
-BASE_OUTPUT_DIR = PROJECT_ROOT / "independence_failure_check" / "raw_data" / "multi_image_analysis"
+BASE_OUTPUT_DIR = PROJECT_ROOT / "reports" / "independence_failure_check" / "raw_data" / "multi_image_analysis"
 
 def resolve_path(p):
     if not p: return None
@@ -86,7 +86,7 @@ def main():
         json.dump(aggregated_results, f, indent=2)
 
     # Generate Markdown Report
-    report_dir = PROJECT_ROOT / "independence_failure_check" / "reports" / "multi_image_analysis"
+    report_dir = PROJECT_ROOT / "reports" / "independence_failure_check" / "multi_image_analysis"
     report_dir.mkdir(parents=True, exist_ok=True)
     report_path = report_dir / f"{algo}_multi_image_report.md"
     
@@ -119,7 +119,7 @@ def main():
         f.write(report_content)
     print(f"[{algo}] Report: {report_path}")
 
-    with open(PROJECT_ROOT / "independence_failure_check" / "multi_image_aggregated.json", "w") as f:
+    with open(PROJECT_ROOT / "reports" / "independence_failure_check" / "multi_image_aggregated.json", "w") as f:
         json.dump(aggregated_results, f, indent=2)
 
 if __name__ == "__main__":

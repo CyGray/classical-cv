@@ -7,14 +7,14 @@ from pathlib import Path
 import cv2 as cv
 import numpy as np
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.independence_common import train_and_extract_features, chi_squared_distance, euclidean_distance
 
 IMG_SIZE = (100, 100)
 ITERATIONS = 10
-BASE_OUTPUT_DIR = PROJECT_ROOT / "independence_failure_check" / "raw_data" / "regional_analysis"
+BASE_OUTPUT_DIR = PROJECT_ROOT / "reports" / "independence_failure_check" / "raw_data" / "regional_analysis"
 
 REGIONS = {
     "full_face": (0, 0, 100, 100),
@@ -30,7 +30,7 @@ def resolve_path(p):
     return str(PROJECT_ROOT / candidate)
 
 def main():
-    with open(PROJECT_ROOT / "independence_failure_check" / "failure_pairs.json", "r") as f:
+    with open(PROJECT_ROOT / "reports" / "independence_failure_check" / "failure_pairs.json", "r") as f:
         failure_data = json.load(f)
 
     aggregated_results = {}
@@ -88,7 +88,7 @@ def main():
             json.dump(aggregated_results[algo], f, indent=2)
 
         # Generate Markdown Report
-        report_dir = PROJECT_ROOT / "independence_failure_check" / "reports" / "regional_analysis"
+        report_dir = PROJECT_ROOT / "reports" / "independence_failure_check" / "regional_analysis"
         report_dir.mkdir(parents=True, exist_ok=True)
         report_path = report_dir / f"{algo}_regional_report.md"
         
@@ -114,7 +114,7 @@ def main():
             f.write(report_content)
         print(f"[{algo}] Report: {report_path}")
 
-    with open(PROJECT_ROOT / "independence_failure_check" / "regional_aggregated.json", "w") as f:
+    with open(PROJECT_ROOT / "reports" / "independence_failure_check" / "regional_aggregated.json", "w") as f:
         json.dump(aggregated_results, f, indent=2)
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@
 
 *The build checklist. Architecture rationale lives in
 [`ARCHITECTURE_PLAN.md`](ARCHITECTURE_PLAN.md); the short visual version is
-[`ARCHITECTURE_REPORT.md`](ARCHITECTURE_REPORT.md). This document is the **execution
+[`ARCHITECTURE_REPORT.md`](../reports/ARCHITECTURE_REPORT.md). This document is the **execution
 plan**: every phase is a list of checkboxes pointing at real files, and ends with a
 "done when" gate you can verify.*
 

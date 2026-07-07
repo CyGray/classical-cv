@@ -76,7 +76,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--yunet-model-path",
         default="",
-        help="YuNet ONNX weights (default: models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx).",
+        help="YuNet ONNX weights (default: models/yunet/face_detection_yunet_2023mar.onnx).",
     )
     parser.add_argument("--yunet-score-threshold", type=float, default=0.6)
     parser.add_argument("--yunet-nms-threshold", type=float, default=0.3)

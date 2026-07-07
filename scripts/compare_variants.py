@@ -3,7 +3,7 @@
 For each family this benchmarks the DEPLOYED OpenCV recognizer ("unedited")
 against the opt-in variants in ``src/classical_faces/variants.py``:
 
-* **LBPH feature-size options** (docs/SUGGESTION.md): Fisher-score top-K
+* **LBPH feature-size options** (docs/archive/SUGGESTION.md): Fisher-score top-K
   histogram dimensions - optionally restricted to the eyebrow/eye/nose/mouth
   grid cells - at <1 KB byte budgets (float32 or uint8), matched by chi-square
   against per-identity centroids or all training templates.
@@ -313,7 +313,7 @@ def to_markdown(results: dict[str, list[dict]], cfg: dict) -> str:
         f"impostors `{cfg['impostor_dir']}` ({cfg['n_impostor']} Haar-cropped).",
         "",
         "**Unedited** = the deployed OpenCV recognizer exactly as the clean loop runs it. "
-        "LBPH variants implement docs/SUGGESTION.md: keep only the most discriminative "
+        "LBPH variants implement docs/archive/SUGGESTION.md: keep only the most discriminative "
         "histogram dimensions (optionally restricted to eyebrow/eye/nose/mouth grid cells) "
         "within a byte budget. Eigen/Fisher variants change the matcher only "
         "(drop leading components / whitening / cosine / centroid gallery).",

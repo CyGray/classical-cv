@@ -352,7 +352,7 @@ python scripts/make_hybrid_report_figures.py     # regenerate docs/figures/*.png
 `scripts/make_hybrid_report_figures.py`. **Edited (additive):** `main.py`
 (Hybrid group + overview + FPS), `docs/changelogs/CHANGELOG.md`.
 
-**Vendored:** `models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx`
+**Vendored:** `models/yunet/face_detection_yunet_2023mar.onnx`
 (checksum-matched to the DL copy), `models/sface/` (SFace ONNX + LFW/DB impostor
 arrays + the enrolled gallery).
 

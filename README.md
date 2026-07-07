@@ -8,15 +8,12 @@ A multi-algorithm face recognition research platform comparing classical CV meth
 
 | Algorithm | Type | Detection | Recognition |
 |---|---|---|---|
-| **LBPH** | Classical | Haar cascade | OpenCV LBPHFaceRecognizer |
-| **Eigenfaces** | Classical | Haar cascade | OpenCV EigenFaceRecognizer |
-| **Fisherfaces** | Classical | Haar cascade | OpenCV FisherFaceRecognizer |
-| **MobileFaceNet** | Deep learning | YuNet (ONNX) | MobileFaceNet (ONNX) |
-| **EdgeFace** | Deep learning | YuNet (ONNX) | EdgeFace-XS (ONNX) |
-| **ArcFace** | Deep learning | InsightFace | buffalo_s ArcFace |
-| **ArcFace MobileNet INT8** | Deep learning (quantized) | InsightFace | buffalo_s INT8 |
+| **LBPH** | Classical | Haar cascade / YuNet | OpenCV LBPHFaceRecognizer |
+| **Eigenfaces** | Classical | Haar cascade / YuNet | OpenCV EigenFaceRecognizer |
+| **Fisherfaces** | Classical | Haar cascade / YuNet | OpenCV FisherFaceRecognizer |
+| **Hybrid (LBPH → SFace)** | Classical + DL cascade | YuNet (ONNX) | LBPH fast path, SFace escalation |
 
-Classical models train a `.yml` model file + `.json` label map. Deep learning models build an enrollment JSON of face embeddings (identity centroids).
+Classical models train a `.yml` model file + `.json` label map. The hybrid's SFace half builds an enrollment gallery of face embeddings (identity centroids). SFace exists only as the hybrid's escalation engine, not as a standalone track.
 
 ---
 
@@ -45,28 +42,40 @@ src/
   lbph/                     # LBPH pipeline
   eigenfaces/               # Eigenfaces pipeline
   fisherfaces/              # Fisherfaces pipeline
-  mobilefacenet/            # YuNet + MobileFaceNet pipeline
-  edgeface/                 # YuNet + EdgeFace pipeline
-  arcface/                  # ArcFace pipeline
-  arcface_mobilenet_int8/   # INT8-quantized ArcFace pipeline
+  classical_faces/          # Shared classical pipeline core
+  sface/                    # SFace embeddings (the hybrid's DL half)
+  hybrid/                   # LBPH -> SFace cascade
   benchmark/                # Cross-model comparison & aggregation
   dataset_layout.py         # Shared dataset/augmentation utilities
   reporting/identity.py     # Shared report identity helpers
   independence_common.py    # Shared independence test utilities
+  stats_utils.py            # Wilson CIs, Fisher exact, diversity measures
+scripts/
+  augment_split_light_medium.py   # Light/medium augmented split generator
+  independence_failure_check/     # Post-hoc failure analysis scripts
+  run_*.py, make_*_figures.py, …  # Orchestration & figure scripts
 data/
   lasalle_db1/              # Raw La Salle identity images
   lasalle_db1_processed/    # Cropped/aligned La Salle images
   lfw-dataset/              # LFW dataset (processed)
   split_augmented41mods*/   # Augmented splits (light / medium)
-models/                     # Saved model artifacts (gitignored)
+models/                     # Trained artifacts (paper-essential ones tracked)
+  yunet/                    # Shared YuNet detector ONNX
 reports/
   evaluation/               # Per-model JSON evaluation reports
   benchmark/                # Aggregated comparison reports
-independence_failure_check/ # Post-hoc independence failure analysis
-docs/                       # Design notes and setup guides
+  independence/             # Independence test results (per model x dataset)
+  independence_failure_check/  # Failure-analysis raw data, JSON, plots
+  figures/                  # Paper figures
+docs/
+  PAPER.md                  # The IW-FCV 2026 paper draft
+  READ THIS/                # Briefing, audit, paper instructions, CFP
+  reports/                  # Finished write-ups (architecture, comparisons, …)
+  figures/, changelogs/
+  archive/                  # Superseded plans and prior report drafts
 ```
 
-Each pipeline has the same four scripts: `trainer.py`, `evaluate.py`, `detect.py` (or `face_detect.py`), and optionally `independence_test.py`.
+Each classical pipeline has the same scripts: `trainer.py`, `evaluate.py`, `detect.py`, and `independence_test.py`.
 
 ---
 
@@ -74,7 +83,7 @@ Each pipeline has the same four scripts: `trainer.py`, `evaluate.py`, `detect.py
 
 - **La Salle (`lasalle_db1`)** — primary dataset; raw + processed (cropped/aligned) variants
 - **LFW** — supplementary; processed only
-- **Augmented splits** — generated via `augment_split_light_medium.py`; `light` and `medium` augmentation tiers applied to train/test splits
+- **Augmented splits** — generated via `scripts/augment_split_light_medium.py`; `light` and `medium` augmentation tiers applied to train/test splits
 
 The launcher guides dataset selection interactively. Evaluation reports embed a `dataset_profile` so cross-dataset runs are never mixed.
 
@@ -87,7 +96,7 @@ Each evaluator writes a structured JSON report to `reports/evaluation/` with:
 - `dataset_profile`, `model_variant`, `entity_key`, `run_tag`
 
 Benchmark utilities:
-- `src/benchmark/compare_models.py` — side-by-side model comparison
+- `src/benchmark/compare_classical.py` — spec-table comparison of the three classical families
 - `src/benchmark/aggregate_evaluation_reports.py` — groups reports by entity, writes summary JSON + Markdown
 - `src/benchmark/aggregate_live_fps.py` — aggregates live-detect FPS logs
 
@@ -101,7 +110,7 @@ Classical models (LBPH, Eigenfaces, Fisherfaces) include independence tests that
 
 The **hybrid** has a joint independence test (`src/hybrid/independence_test.py`, Hybrid menu → "independence test"): one N×(N-1) impostor sweep scored by LBPH, SFace, and the gated cascade at once. Besides each engine's false-accept rate and rank-based threshold, it reports the **error overlap** — whether the two engines false-accept the *same* impostor pairs — which is the direct evidence for (or against) CV/DL complementarity. Every rate carries a 95% Wilson confidence interval, and the error 2×2 table gets Fisher's exact test plus the standard classifier-diversity measures (Yule's Q, disagreement, double-fault — Kuncheva & Whitaker 2003) from `src/stats_utils.py` (pure stdlib, no scipy). `src/sface/independence_test.py` separately re-checks parity with the DL track's LFW number.
 
-`independence_failure_check/` contains post-hoc failure analysis scripts: occlusion analysis, regional collapse detection, multi-image verification, and visual report generation.
+`scripts/independence_failure_check/` contains post-hoc failure analysis scripts: occlusion analysis, regional collapse detection, multi-image verification, and visual report generation. Their raw data and generated reports live in `reports/independence_failure_check/`.
 
 ## 41-Modification Robustness (Accuracy Ratio)
 
@@ -118,19 +127,6 @@ The 41 deterministic (modification, level) variants live in `src/benchmark/modif
 
 ---
 
-## ArcFace INT8 Setup
-
-The INT8 pipeline requires a one-time setup (download FP32 weights → quantize):
-
-```bash
-python src/arcface/setup_model.py
-python src/arcface_mobilenet_int8/quantize_model.py
-```
-
-The launcher will offer to run this automatically on first use.
-
----
-
 ## Dependencies
 
-See [requirements.txt](requirements.txt). Key packages: `opencv-contrib-python`, `insightface`, `onnxruntime`, `numpy`, `scikit-learn`, `tqdm`.
+See [requirements.txt](requirements.txt). Key packages: `opencv-contrib-python` (recognizers + YuNet + SFace), `numpy`, `scikit-learn`, `matplotlib`, `tqdm`.

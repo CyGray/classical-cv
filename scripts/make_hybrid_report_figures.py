@@ -1,4 +1,4 @@
-"""Figures for the hybrid CV+DL report (docs/HYBRID_CV_DL_REPORT.md).
+"""Figures for the hybrid CV+DL report (docs/reports/HYBRID_CV_DL_REPORT.md).
 
 Built strictly from committed run artifacts - no invented numbers:
 

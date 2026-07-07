@@ -98,7 +98,7 @@ Their genuine/impostor distance distributions overlap intrinsically on this data
 training images per identity is the only plausible lever left, and the dataset is fixed.
 
 **The feature-size budget is LBPH's real cost.** The 64 KB histogram is inherent to the
-algorithm (8×8 cells × 256 bins × float32). The `docs/SUGGESTION.md` route — keep only the
+algorithm (8×8 cells × 256 bins × float32). The `docs/archive/SUGGESTION.md` route — keep only the
 important parts — was implemented and measured (§4): restricting to eyebrow/eye/nose/mouth grid
 cells *does* beat unrestricted selection at equal budget (TAR 87.5 % vs 73.2 % at 960 B), so
 the suggestion is directionally right; but the best < 1 KB template still gives up ~12 points

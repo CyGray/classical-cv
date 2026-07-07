@@ -3,7 +3,7 @@
 These do NOT replace the deployed OpenCV recognizers - they are opt-in
 alternatives benchmarked side by side (``scripts/compare_variants.py``):
 
-* **CompactLBPH** - implements ``docs/SUGGESTION.md`` ("focus only on the
+* **CompactLBPH** - implements ``docs/archive/SUGGESTION.md`` ("focus only on the
   specific features like eyes, eyebrow, nose, and mouth" / keep only the
   important parts of the feature and discard the rest). The 64 KB LBPH
   histogram (8x8 cells x 256 bins x float32) is reduced to a byte budget by

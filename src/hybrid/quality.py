@@ -1,7 +1,7 @@
 """Cheap quality probes on the crop LBPH already holds.
 
 Each probe targets a regime the classical-track audit measured LBPH failing and
-SFace winning (see ``docs/ARCHITECTURE_PLAN.md`` and the 41-modification
+SFace winning (see ``docs/archive/ARCHITECTURE_PLAN.md`` and the 41-modification
 accuracy-ratio suite):
 
 * **blur**       - variance-of-Laplacian ``< tau_blur``   (LBPH motion_blur ~68.5%)

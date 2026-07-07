@@ -1,6 +1,6 @@
 # Face Detector Comparison — Viola-Jones (Haar) vs YuNet
 
-*Classical CV track, Group 3. Companion to `docs/SPEC_COMPARISON.md`. Detector
+*Classical CV track, Group 3. Companion to `docs/reports/SPEC_COMPARISON.md`. Detector
 stage of the 7-stage pipeline (`docs/READ THIS/BRIEFING.md` §3, milestone
 "face-detection selection ~6/16").*
 
@@ -37,7 +37,7 @@ default, so nothing changes unless you opt in.
 |---|---|---|
 | Type | Hand-crafted Haar features + AdaBoost cascade (2001) | Compact CNN (libfacedetection, 2023) |
 | OpenCV API | `cv.CascadeClassifier` | `cv.FaceDetectorYN` |
-| Weights | `haar/haarcascade_frontalface_default.xml` (~941 KB) | `models/yunet_mobilefacenet/face_detection_yunet_2023mar.onnx` (~227 KB) |
+| Weights | `haar/haarcascade_frontalface_default.xml` (~941 KB) | `models/yunet/face_detection_yunet_2023mar.onnx` (~227 KB) |
 | Output | Bounding boxes only | Boxes **+ confidence + 5 landmarks** |
 | Designed for | Upright frontal faces | Arbitrary pose / scale / lighting |
 | Colour | Grayscale | Colour (BGR) |

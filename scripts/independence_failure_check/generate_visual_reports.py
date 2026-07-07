@@ -4,10 +4,10 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
 def plot_decay(algo, data):
-    output_dir = PROJECT_ROOT / "independence_failure_check" / "reports" / "collapse_analysis"
+    output_dir = PROJECT_ROOT / "reports" / "independence_failure_check" / "collapse_analysis"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     stages = ["Raw Pixels", "Equalized", "Feature Space"]
@@ -33,7 +33,7 @@ def plot_decay(algo, data):
     plt.close()
 
 def plot_regional(algo, data):
-    output_dir = PROJECT_ROOT / "independence_failure_check" / "reports" / "regional_analysis"
+    output_dir = PROJECT_ROOT / "reports" / "independence_failure_check" / "regional_analysis"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     regions = list(data.keys())
@@ -52,7 +52,7 @@ def plot_regional(algo, data):
     plt.close()
 
 def plot_multi_image(data):
-    output_dir = PROJECT_ROOT / "independence_failure_check" / "reports" / "multi_image_analysis"
+    output_dir = PROJECT_ROOT / "reports" / "independence_failure_check" / "multi_image_analysis"
     output_dir.mkdir(parents=True, exist_ok=True)
     
     counts = sorted([int(k) for k in data.keys()])
@@ -78,7 +78,7 @@ def plot_multi_image(data):
 
 def main():
     # 1. Collapse Analysis Plots
-    collapse_path = PROJECT_ROOT / "independence_failure_check" / "collapse_aggregated.json"
+    collapse_path = PROJECT_ROOT / "reports" / "independence_failure_check" / "collapse_aggregated.json"
     if collapse_path.exists():
         with open(collapse_path, "r") as f:
             collapse_data = json.load(f)
@@ -86,7 +86,7 @@ def main():
             plot_decay(algo, data)
             
     # 2. Regional Analysis Plots
-    regional_path = PROJECT_ROOT / "independence_failure_check" / "regional_aggregated.json"
+    regional_path = PROJECT_ROOT / "reports" / "independence_failure_check" / "regional_aggregated.json"
     if regional_path.exists():
         with open(regional_path, "r") as f:
             regional_data = json.load(f)
@@ -94,7 +94,7 @@ def main():
             plot_regional(algo, data)
             
     # 3. Multi-Image Trend Plot
-    multi_path = PROJECT_ROOT / "independence_failure_check" / "multi_image_aggregated.json"
+    multi_path = PROJECT_ROOT / "reports" / "independence_failure_check" / "multi_image_aggregated.json"
     if multi_path.exists():
         with open(multi_path, "r") as f:
             multi_data = json.load(f)

@@ -38,10 +38,10 @@ VALID_BACKENDS: tuple[str, ...] = ("haar", "yunet")
 DEFAULT_BACKEND = "haar"
 
 # Reused across the project: the Haar cascade lives in haar/, the YuNet ONNX is
-# the same weight file the DL track (yunet_mobilefacenet) already ships.
+# the same weight file the DL track (yunet) already ships.
 DEFAULT_HAAR_CASCADE_PATH = root_path("haar", "haarcascade_frontalface_default.xml")
 DEFAULT_YUNET_MODEL_PATH = root_path(
-    "models", "yunet_mobilefacenet", "face_detection_yunet_2023mar.onnx"
+    "models", "yunet", "face_detection_yunet_2023mar.onnx"
 )
 
 # YuNet defaults (match the DL track / OpenCV sample).
@@ -164,7 +164,7 @@ class YuNetFaceDetector(FaceDetector):
         if not Path(model_path).exists():
             raise FileNotFoundError(
                 f"YuNet model not found: {model_path}. Expected the ONNX weights at "
-                f"{DEFAULT_YUNET_MODEL_PATH} (shared with the yunet_mobilefacenet DL track)."
+                f"{DEFAULT_YUNET_MODEL_PATH} (shared with the yunet DL track)."
             )
         self.model_path = model_path
         self.score_threshold = float(score_threshold)

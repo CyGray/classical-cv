@@ -8,9 +8,9 @@
 | LBPH | Maghari vs Belen | 70.5 | 100.0 | 0.3 | COLLAPSED |
 
 ### Visual Decay Curves
-![Eigenfaces Decay](independence_failure_check/reports/collapse_analysis/eigenfaces_decay_plot.png)
-![Fisherfaces Decay](independence_failure_check/reports/collapse_analysis/fisherfaces_decay_plot.png)
-![LBPH Decay](independence_failure_check/reports/collapse_analysis/lbph_decay_plot.png)
+![Eigenfaces Decay](reports/independence_failure_check/collapse_analysis/eigenfaces_decay_plot.png)
+![Fisherfaces Decay](reports/independence_failure_check/collapse_analysis/fisherfaces_decay_plot.png)
+![LBPH Decay](reports/independence_failure_check/collapse_analysis/lbph_decay_plot.png)
 
 ## 2. Multi-Sample Separation Trend (Fisherfaces)
 | Samples/ID | Raw Distance | Normalized (0-100) |
@@ -22,4 +22,4 @@
 | 10 Image(s) | 2079.6227 | 42.6 |
 
 ### Visual Training Trend
-![Fisherfaces Trend](independence_failure_check/reports/multi_image_analysis/fisherfaces_multi_image_plot.png)
+![Fisherfaces Trend](reports/independence_failure_check/multi_image_analysis/fisherfaces_multi_image_plot.png)
