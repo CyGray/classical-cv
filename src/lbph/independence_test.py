@@ -638,8 +638,8 @@ def run_lbph_independence_test() -> int:
 
     # Print report
     print_report(summary, records, model_label="LBPH")
-    if summary.get("plots", {}).get("distance_histogram"):
-        print(f"[PLOT] Histogram: {summary['plots']['distance_histogram']}")
+    if summary.get("plots", {}).get("distance_curve_plot"):
+        print(f"[PLOT] Distance curve: {summary['plots']['distance_curve_plot']}")
         print(f"[PLOT] FAR curve: {summary['plots']['far_curve']}")
     return 0
 

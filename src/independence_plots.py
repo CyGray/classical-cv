@@ -151,6 +151,62 @@ def save_distance_histogram(
     plt.close(fig)
     return used_bandwidth
 
+# --------------------------------------------------------------------------- #
+# Figure 1b: distance curve plot (pure KDE, no histogram)
+# --------------------------------------------------------------------------- #
+def save_distance_curve_plot(
+    distances: Sequence[float],
+    output_path: str,
+    *,
+    threshold: float | None = None,
+    title: str = "Independence Test: Inter-Identity Distance Curve",
+    xlabel: str = "Normalized Distance",
+    curve_points: int = 500,
+    curve_bandwidth: float | None = None,
+    xlim: tuple[float, float] | None = None,
+    dpi: int = 200,
+) -> float:
+    """Save a curve-style distance distribution plot (KDE density only)."""
+    plt = _pyplot()
+    _ensure_parent(output_path)
+
+    values = np.asarray(distances, dtype=np.float64)
+    values = values[np.isfinite(values)]
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    
+    used_bandwidth = 0.0
+    if values.size > 1:
+        x, y, used_bandwidth = compute_kde_curve(
+            values, points=curve_points, bandwidth=curve_bandwidth
+        )
+        if x.size > 0 and y.size > 0:
+            ax.plot(x, y, linewidth=2, color="#4c72b0")
+
+            if threshold is not None:
+                ax.axvline(threshold, color="#c44e52", ls="--", lw=2)
+                ymax = ax.get_ylim()[1]
+                label = f"Threshold = {threshold:.4g}"
+                ax.text(threshold, ymax * 0.95, label, rotation=90,
+                        va="top", ha="right", fontsize=9, color="#c44e52")
+
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel("Estimated Frequency Density")
+    
+    if xlim is not None:
+        ax.set_xlim(*xlim)
+    elif values.size > 0:
+        ax.set_xlim(max(0, np.min(values) - 5), 100)
+    else:
+        ax.set_xlim(0, 100)
+        
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(output_path, dpi=dpi)
+    plt.close(fig)
+    return used_bandwidth
+
 
 # --------------------------------------------------------------------------- #
 # Figure 2: FAR-vs-threshold curve (from an error_pair_report)

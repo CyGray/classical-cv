@@ -58,7 +58,7 @@ from src.hybrid.quality import QualityThresholds, compute_quality
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
 from src.independence_common import error_pair_report, format_error_pair_report
 from src.independence_report import add_scaling_args
-from src.independence_plots import save_distance_histogram, save_far_curve
+from src.independence_plots import save_distance_curve_plot, save_far_curve
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.stats_utils import error_diversity, wilson_interval_percent
 from src.sface.recognizer import (
@@ -463,62 +463,47 @@ def save_aggregated_csv(aggregated: dict, path: str) -> None:
     print(f"[SAVE] CSV: {path}")
 
 
-def _write_hybrid_plots(args, aggregated: dict, lbph_report: dict, sface_report: dict) -> dict:
-    """Default paper figures for the hybrid test: per-engine impostor-distance
-    histogram + FAR-vs-threshold curve on each engine's own RAW scale (LBPH predict
-    distance; SFace 1 - cosine). Classical (LBPH) side is the priority; SFace is a
-    cheap add. Written under ``<output_dir>/lbph`` and ``<output_dir>/sface``."""
-    if not getattr(args, "plots", True):
-        return {}
+def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_rank_report: dict) -> dict:
+    """Write the plots."""
+    lbph_distances = aggregated["mean_lbph_distance"]
+    sface_distances = 1.0 - np.asarray(aggregated["mean_sface_cosine"], dtype=np.float64)
 
-    cap = max(1000, int(getattr(args, "sample_cap", 1_000_000)))
-
-    def _sample(values) -> np.ndarray:
-        arr = np.asarray(values, dtype=np.float64)
-        arr = arr[np.isfinite(arr)]
-        step = max(1, arr.size // cap)
-        return arr[::step]
-
-    bins = int(getattr(args, "histogram_bins", 40))
-    pts = int(getattr(args, "curve_points", 500))
-    bw = getattr(args, "curve_bandwidth", None)
-
+    # 2. Write the plots
     lbph_dir = os.path.join(args.output_dir, "lbph")
-    lbph_thr = (lbph_report.get("spec") or {}).get("raw_threshold")
-    save_distance_histogram(
-        _sample(aggregated["mean_lbph_distance"]),
-        os.path.join(lbph_dir, "distance_histogram.png"),
-        threshold=lbph_thr, bins=bins,
-        title="Hybrid Independence: LBPH impostor-distance histogram",
-        xlabel="LBPH predict distance (mean over runs)", curve_points=pts, curve_bandwidth=bw,
+    os.makedirs(lbph_dir, exist_ok=True)
+    save_distance_curve_plot(
+        lbph_distances,
+        os.path.join(lbph_dir, "distance_curve_plot.png"),
+        threshold=lbph_rank_report["spec"]["raw_threshold"],
+        title="Hybrid Test (LBPH): Inter-Identity Distance Curve",
+        xlabel="Chi-square distance (Raw)",
     )
     save_far_curve(
-        lbph_report, os.path.join(lbph_dir, "far_curve.png"),
-        model_label="Hybrid / LBPH", engine_label="LBPH predict distance",
-        threshold_field="raw_threshold", xlabel="Match threshold (LBPH predict distance)",
+        lbph_rank_report,
+        os.path.join(lbph_dir, "far_curve.png"),
+        model_label="Hybrid", engine_label="LBPH",
     )
 
     sface_dir = os.path.join(args.output_dir, "sface")
-    sface_dist = 1.0 - np.asarray(aggregated["mean_sface_cosine"], dtype=np.float64)
-    sface_thr = (sface_report.get("spec") or {}).get("raw_threshold")
-    save_distance_histogram(
-        _sample(sface_dist),
-        os.path.join(sface_dir, "distance_histogram.png"),
-        threshold=sface_thr, bins=bins,
-        title="Hybrid Independence: SFace impostor-distance histogram (1 - cosine)",
-        xlabel="SFace distance (1 - cosine, mean over runs)", curve_points=pts, curve_bandwidth=bw,
+    os.makedirs(sface_dir, exist_ok=True)
+    save_distance_curve_plot(
+        sface_distances,
+        os.path.join(sface_dir, "distance_curve_plot.png"),
+        threshold=sface_rank_report["spec"]["raw_threshold"],
+        title="Hybrid Test (SFace): Inter-Identity Distance Curve",
+        xlabel="Cosine distance (Raw)",
     )
     save_far_curve(
-        sface_report, os.path.join(sface_dir, "far_curve.png"),
-        model_label="Hybrid / SFace", engine_label="SFace (1 - cosine)",
-        threshold_field="raw_threshold", xlabel="Match threshold (SFace 1 - cosine)",
+        sface_rank_report,
+        os.path.join(sface_dir, "far_curve.png"),
+        model_label="Hybrid", engine_label="SFace",
     )
 
     return {
-        "lbph_histogram": os.path.join(lbph_dir, "distance_histogram.png"),
-        "lbph_far_curve": os.path.join(lbph_dir, "far_curve.png"),
-        "sface_histogram": os.path.join(sface_dir, "distance_histogram.png"),
-        "sface_far_curve": os.path.join(sface_dir, "far_curve.png"),
+        "lbph_curve": os.path.join(lbph_dir, "distance_curve_plot.png"),
+        "lbph_far": os.path.join(lbph_dir, "far_curve.png"),
+        "sface_curve": os.path.join(sface_dir, "distance_curve_plot.png"),
+        "sface_far": os.path.join(sface_dir, "far_curve.png"),
     }
 
 
