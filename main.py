@@ -1466,22 +1466,39 @@ def prompt_augmented_dataset_args(is_evaluation: bool, core_args: list[str]) -> 
 
 
 def prompt_independence_dataset_args() -> list[str]:
+    """Ask which dataset to run the (non-light-front) independence test against.
+
+    "La Salle DB1" resolves to data/lasalle_db1_processed, not the bare
+    data/lasalle_db1 - the latter holds full raw photos (e.g. 6928x6928,
+    mostly background/room), while every independence_test.py in this repo
+    expects pre-cropped face tiles (LBPH/Eigenfaces/Fisherfaces hardcode
+    ASSUME_INPUTS_ARE_CROPPED and just resize+equalize with no detection;
+    Hybrid's own --dataset-dir default is already the _processed folder).
+    Feeding the raw folder would silently compare shrunken room photos, not
+    faces. Options 2/4 point at the augmented split, which only exists
+    pre-baked as light/medium severity folders (no bare "lasalle"/"lfw"
+    augmented dir), so picking either asks a follow-up severity question.
+    """
     print("\nSelect dataset for independence test:")
-    print("  1. la salle db1")
-    print("  2. lsdb 2 (41 augmented lsdb1)")
-    print("  3. lfw1")
-    print("  4. lfw2 (41 augmented lfw)")
+    print("  1. La Salle DB1          -> data/lasalle_db1_processed")
+    print("  2. LSDB2 (DB1 augmented) -> data/split_augmented41mods_lasalle_clean/{light|medium}/train")
+    print("  3. LFW 1                 -> data/lfw-dataset")
+    print("  4. LFW 2 (LFW1 augmented) -> data/split_augmented41mods/{light|medium}/train")
     selected = input("Enter choice (default: 1): ").strip()
-    
+
+    def _prompt_severity() -> str:
+        severity = input("  Severity [1=light, 2=medium] (default: 1): ").strip()
+        return "medium" if severity == "2" else "light"
+
     if selected == "2":
-        return ["--dataset-dir", "data/split_augmented41mods_lasalle/train"]
+        return ["--dataset-dir", f"data/split_augmented41mods_lasalle_clean/{_prompt_severity()}/train"]
     elif selected == "3":
         return ["--dataset-dir", "data/lfw-dataset"]
     elif selected == "4":
-        return ["--dataset-dir", "data/split_augmented41mods_lfw/train"]
+        return ["--dataset-dir", f"data/split_augmented41mods/{_prompt_severity()}/train"]
     else:
-        # Default is la salle db1
-        return ["--dataset-dir", "data/lasalle_db1"]
+        # Default is La Salle DB1 (pre-cropped)
+        return ["--dataset-dir", "data/lasalle_db1_processed"]
 
 
 def prompt_light_front_independence_args(model_name: str) -> list[str]:
@@ -1742,7 +1759,21 @@ def main() -> int:
             live_detect_action = (not is_hybrid) and is_live_detect_action(action_label, rel_script)
 
             preset_args: list[str] = []
-            if is_hybrid:
+            if action_label == "independence test (light front)":
+                preset_args = prompt_light_front_independence_args(model_name)
+            elif action_label.startswith("independence test"):
+                # Checked BEFORE is_hybrid: Hybrid's independence test also
+                # takes --dataset-dir, so it must not fall into
+                # prompt_hybrid_args below, which doesn't recognize this
+                # action label and used to silently return [] (no prompt at
+                # all, silently defaulting to whatever --dataset-dir the
+                # script itself hardcodes).
+                # None of the independence_test.py scripts (LBPH/Eigenfaces/
+                # Fisherfaces/Hybrid) define a --detector flag - they hardcode
+                # ASSUME_INPUTS_ARE_CROPPED - so never append detector args here;
+                # doing so used to make the subprocess crash on an unrecognized arg.
+                preset_args = prompt_independence_dataset_args()
+            elif is_hybrid:
                 preset_args = prompt_hybrid_args(action_label)
             elif training_action or evaluate_action:
                 core_dataset_args = prompt_core_dataset_args(
@@ -1761,17 +1792,6 @@ def main() -> int:
                     preset_args += prompt_detector_args(model_name)
             elif live_detect_action:
                 preset_args = prompt_detector_args(model_name, is_live=True)
-            elif action_label == "independence test (light front)":
-                preset_args = prompt_light_front_independence_args(model_name)
-            elif action_label.startswith("independence test"):
-                preset_args = prompt_independence_dataset_args()
-                if "--dataset-dir" in preset_args and "lasalle_db1" not in preset_args[1]:
-                    # If they pick something that's already cropped/augmented, we might want to skip the detector,
-                    # but we'll leave detector prompt enabled for classical models if not explicitly skipped.
-                    if (not is_hybrid) and ("--assume-cropped" not in core_dataset_args if 'core_dataset_args' in locals() else True):
-                        preset_args += prompt_detector_args(model_name)
-                elif not is_hybrid:
-                    preset_args += prompt_detector_args(model_name)
 
             extra = input("Optional extra args (or press Enter): ").strip()
             extra_args = shlex.split(extra) if extra else []

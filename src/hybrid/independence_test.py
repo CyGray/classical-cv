@@ -524,7 +524,8 @@ def main() -> int:
         person_dirs = sorted(subset_rng.sample(person_dirs, args.max_identities))
         print(f"[INFO] Seeded identity subset: {len(person_dirs)} of the available folders")
 
-    cfg = load_thresholds(resolve_path(args.thresholds_json))
+    thresholds_path = resolve_path(args.thresholds_json)
+    cfg = load_thresholds(thresholds_path)
     gate_thresholds = GateThresholds.from_dict(cfg.get("gate"))
     quality_thresholds = QualityThresholds.from_dict(cfg.get("quality"))
     equalization = SPECS["lbph"].default_equalization
@@ -568,10 +569,32 @@ def main() -> int:
         npz_path = os.path.join(run_dir, "records.npz")
         summary_path = os.path.join(run_dir, "summary.json")
 
+        # A cached run_N/ only means "same inputs" if dataset/config match too -
+        # otherwise switching --dataset-dir (or --max-identities/--thresholds-json)
+        # while reusing the same --output-dir would silently resume a run from a
+        # different dataset instead of recomputing for the current one.
+        run_fingerprint = {
+            "dataset_dir": args.dataset_dir,
+            "max_identities": args.max_identities,
+            "random_seed": args.random_seed + it,
+            "thresholds_json": thresholds_path,
+        }
+
+        cached_summary = None
         if os.path.exists(npz_path) and os.path.exists(summary_path):
-            print(f"  [INFO] Resuming complete iteration {it + 1} from {run_dir}")
             with open(summary_path, "r", encoding="utf-8") as f:
-                summary = json.load(f)
+                candidate_summary = json.load(f)
+            if all(candidate_summary.get(k) == v for k, v in run_fingerprint.items()):
+                cached_summary = candidate_summary
+            else:
+                print(
+                    f"  [INFO] Cached iteration {it + 1} was for a different dataset/config "
+                    f"(dataset={candidate_summary.get('dataset_dir', 'unknown')}) - recomputing."
+                )
+
+        if cached_summary is not None:
+            print(f"  [INFO] Resuming complete iteration {it + 1} from {run_dir}")
+            summary = cached_summary
             with np.load(npz_path) as data:
                 rec_arrays = {k: data[k] for k in data.files}
                 rec_arrays["names"] = list(rec_arrays["names"])
@@ -584,6 +607,7 @@ def main() -> int:
 
             rec_arrays, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds,
                                             csv_path=csv_path)
+            summary.update(run_fingerprint)
             fp = summary["false_accepts"]
             print(f"  N={summary['identities']} comparisons={summary['comparisons']} | "
                   f"FP: lbph={fp['lbph']} sface={fp['sface']} both={fp['both']} "
