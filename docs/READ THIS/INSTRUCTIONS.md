@@ -22,6 +22,7 @@
 
 ## Writing Style
 - **Scan and strictly follow the current paper's writing style.** The existing draft is formal academic with clear, direct technical prose. Match that. Do not shift to passive-voice-heavy traditional academic writing unless the draft itself does that.
+- **No em dashes (—)** anywhere in the paper.
 
 ## Starting Point
 - **Both.** I've read the existing draft at `docs/PAPER.md` AND explored the full codebase (`src/`, `models/`, `reports/`, `data/`, etc.).
@@ -42,6 +43,11 @@
 6. **Ensure all figures and tables are properly referenced.**
 7. **Format references in IEEE style** (already close — verify and standardize).
 8. **Add a keywords list** if missing.
+
+## Key Facts (Do Not Change)
+- The **primary contribution** is the hybrid method (the gated cascade). Independence testing is a major highlight but not the primary contribution — it is the key supporting methodology behind every design decision.
+- The **DL track** refers to the separate `../face-detection-g3-dl` repository (authored by Mr. John). That repo contains the independent SFace analysis: the LFW-scale independence test (32M comparisons, 0.0747% FPR), false positive pair plots (`fp_top3_*.png`), and frequency-distance plots. Only **SFace** is the DL model in this repository. MobileFaceNet, EdgeFace, and ArcFace were screened but not carried forward.
+- For DL track findings and data, reference `../face-detection-g3-dl` (authored by Mr. John), not the DL pipelines in this repo.
 
 ## What's Available
 - Full paper draft: `docs/PAPER.md`
