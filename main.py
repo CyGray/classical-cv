@@ -1317,16 +1317,47 @@ def prompt_core_dataset_args(is_training: bool, model_name: str = "") -> list[st
     phase_label = "training" if is_training else "evaluation"
     is_classical = model_name in CLASSICAL_MODEL_NAMES
 
+    split_dir = PROJECT_ROOT / "data" / "split_lasalle"
+    raw_dir_path = PROJECT_ROOT / "data" / "lasalle_db1"
+    lfw_dir = PROJECT_ROOT / "data" / "lfw-dataset"
+
+    # Check if directories exist and are not empty
+    split_exists = split_dir.is_dir() and any(split_dir.iterdir())
+    raw_exists = raw_dir_path.is_dir() and any(raw_dir_path.iterdir())
+    lfw_exists = lfw_dir.is_dir() and any(lfw_dir.iterdir())
+
     print(f"\nSelect base dataset source for {phase_label}:")
-    print("  1. La Salle CLEAN split (held-out, recommended) -> data/split_lasalle/{train|test} [pre-cropped]")
-    print("  2. La Salle raw  -> data/lasalle_db1")
-    print("  3. LFW only      -> data/lfw-dataset")
-    print("  4. Both          -> data/lasalle_db1 + data/lfw-dataset")
+    status_1 = "" if split_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_2 = "" if raw_exists else " [NOT FOUND - raw dataset is local-only]"
+    status_3 = "" if lfw_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_4 = "" if (raw_exists and lfw_exists) else (" [NOT FOUND - raw local-only]" if not raw_exists else " [NOT FOUND - run scripts/setup_datasets.py]")
+
+    print(f"  1. La Salle CLEAN split (held-out, recommended) -> data/split_lasalle/{{train|test}} [pre-cropped]{status_1}")
+    print(f"  2. La Salle raw  -> data/lasalle_db1{status_2}")
+    print(f"  3. LFW only      -> data/lfw-dataset{status_3}")
+    print(f"  4. Both          -> data/lasalle_db1 + data/lfw-dataset{status_4}")
     selected = input("Enter choice (default: 1): ").strip()
+    if selected == "":
+        selected = "1"
+
+    # Validate choice exists on disk
+    if selected == "1" and not split_exists:
+        print("\n[WARN] The La Salle CLEAN split directory was not found or is empty.")
+        print("Please run 'python scripts/setup_datasets.py' first to pull it via LFS and fix links.")
+    elif selected == "2" and not raw_exists:
+        print("\n[WARN] The raw La Salle DB1 dataset (data/lasalle_db1) was not found.")
+        print("Since raw images are large and local-only, they are not tracked in Git/LFS.")
+        print("Please select Option 1 instead to use the pre-cropped/aligned LFS split.")
+    elif selected == "3" and not lfw_exists:
+        print("\n[WARN] The LFW dataset (data/lfw-dataset) was not found or is empty.")
+        print("Please run 'python scripts/setup_datasets.py' first to download and extract LFW.")
+    elif selected == "4" and (not raw_exists or not lfw_exists):
+        print(f"\n[WARN] One or both datasets are missing (La Salle raw: {raw_exists}, LFW: {lfw_exists}).")
+        print("Please run 'python scripts/setup_datasets.py' to download LFW, or use Option 1.")
 
     # Option 1: the clean leakage-free held-out La Salle split (pre-cropped 100x100
     # faces). Train on /train, evaluate on the held-out /test, no Haar / no fallback.
-    if selected in {"", "1"}:
+    if selected == "1":
         raw_dir = "train" if is_training else "test"
         print(f"[INFO] Clean split selected: {'train' if is_training else 'held-out test'} "
               "(pre-cropped, leakage-free). For baseline+aug side-by-side use the "
@@ -1479,12 +1510,38 @@ def prompt_independence_dataset_args() -> list[str]:
     pre-baked as light/medium severity folders (no bare "lasalle"/"lfw"
     augmented dir), so picking either asks a follow-up severity question.
     """
+    processed_dir = PROJECT_ROOT / "data" / "lasalle_db1_processed"
+    lsdb2_dir = PROJECT_ROOT / "data" / "split_augmented41mods_lasalle_clean"
+    lfw_dir = PROJECT_ROOT / "data" / "lfw-dataset"
+    split_aug_dir = PROJECT_ROOT / "data" / "split_augmented41mods"
+
+    processed_exists = processed_dir.is_dir() and any(processed_dir.iterdir())
+    lsdb2_exists = lsdb2_dir.is_dir() and any(lsdb2_dir.iterdir())
+    lfw_exists = lfw_dir.is_dir() and any(lfw_dir.iterdir())
+    split_aug_exists = split_aug_dir.is_dir() and any(split_aug_dir.iterdir())
+
     print("\nSelect dataset for independence test:")
-    print("  1. La Salle DB1          -> data/lasalle_db1_processed")
-    print("  2. LSDB2 (DB1 augmented) -> data/split_augmented41mods_lasalle_clean/{light|medium}/train")
-    print("  3. LFW 1                 -> data/lfw-dataset")
-    print("  4. LFW 2 (LFW1 augmented) -> data/split_augmented41mods/{light|medium}/train")
+    status_1 = "" if processed_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_2 = "" if lsdb2_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_3 = "" if lfw_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_4 = "" if split_aug_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+
+    print(f"  1. La Salle DB1          -> data/lasalle_db1_processed{status_1}")
+    print(f"  2. LSDB2 (DB1 augmented) -> data/split_augmented41mods_lasalle_clean/{{light|medium}}/train{status_2}")
+    print(f"  3. LFW 1                 -> data/lfw-dataset{status_3}")
+    print(f"  4. LFW 2 (LFW1 augmented) -> data/split_augmented41mods/{{light|medium}}/train{status_4}")
     selected = input("Enter choice (default: 1): ").strip()
+    if selected == "":
+        selected = "1"
+
+    if selected == "1" and not processed_exists:
+        print("\n[WARN] Processed dataset directory was not found or is empty. Please run scripts/setup_datasets.py.")
+    elif selected == "2" and not lsdb2_exists:
+        print("\n[WARN] LSDB2 augmented directory was not found or is empty. Please run scripts/setup_datasets.py.")
+    elif selected == "3" and not lfw_exists:
+        print("\n[WARN] LFW dataset directory was not found or is empty. Please run scripts/setup_datasets.py.")
+    elif selected == "4" and not split_aug_exists:
+        print("\n[WARN] LFW2 augmented directory was not found or is empty. Please run scripts/setup_datasets.py.")
 
     def _prompt_severity() -> str:
         severity = input("  Severity [1=light, 2=medium] (default: 1): ").strip()
