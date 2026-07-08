@@ -1,0 +1,154 @@
+{
+  "dataset": {
+    "path": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\data\\lasalle_db1_processed",
+    "total_identities": 28,
+    "selected_identities": 28
+  },
+  "distance_statistics": {
+    "min_distance": 69.70430862542652,
+    "max_distance": 100.00000000000001,
+    "mean_distance": 86.29056820660848,
+    "median_distance": 87.05682682979116,
+    "std_dev": 6.465336448699097,
+    "percentiles": {
+      "1": 71.74514701892906,
+      "5": 75.14249525066292,
+      "10": 76.9615372483656,
+      "25": 81.66825891072052,
+      "50": 87.05682682979116,
+      "75": 90.81430878063298,
+      "90": 94.71689554986807,
+      "95": 96.19927215930929,
+      "99": 98.77997639004279
+    }
+  },
+  "suggested_thresholds": {
+    "percentile_1": 71.74514701892906,
+    "percentile_5": 75.14249525066292,
+    "percentile_10": 76.9615372483656,
+    "min_distance": 69.70430862542652,
+    "mean_minus_1std": 79.82523175790939
+  },
+  "error_pair_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 18.489166448771186,
+      "normalized_threshold": 70.40387508067509,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Raean_Tamayo",
+      "candidate_identity": "Lorenz_Ciocon",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 18.305449279535168,
+        "normalized_threshold": 69.70430862542652,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Francis_Cromwell_Tan",
+        "candidate_identity": "Julian_Diego_Mapa"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 18.305449279535168,
+        "normalized_threshold": 69.70430862542652,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Julian_Diego_Mapa",
+        "candidate_identity": "Francis_Cromwell_Tan"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 18.311404434088285,
+        "normalized_threshold": 69.72698492932618,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Norbert_Audines",
+        "candidate_identity": "Lorenz_Ciocon"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 18.489166448771186,
+        "normalized_threshold": 70.40387508067509,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Lorenz_Ciocon"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 19.307176910893915,
+        "normalized_threshold": 73.51873191045941,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Norbert_Audines",
+        "candidate_identity": "Mary_Jade_Jakosalem"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 19.697324132828662,
+        "normalized_threshold": 75.00435195462272,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Klein_Rhee_Sioson"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 20.0570381863074,
+        "normalized_threshold": 76.37408721857041,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Klein_Rhee_Sioson",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 20.77490242996342,
+        "normalized_threshold": 79.1076027978301,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Mary_Jade_Jakosalem",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 22.06514721496282,
+        "normalized_threshold": 84.02065460675185,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Diofel_Gwen_Haresco"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 23.62296052363373,
+        "normalized_threshold": 89.95256580926952,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Yuan_Paulo_Sebastian_Belen",
+        "candidate_identity": "Lorenz_Ciocon"
+      }
+    ]
+  },
+  "iterations": 1,
+  "plots": {
+    "distance_curve_plot": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\lbph\\independence_test\\distance_curve_plot.png",
+    "far_curve": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\lbph\\independence_test\\far_curve.png",
+    "kde_bandwidth_used": 1.821713421844099
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "tier": "high",
+  "cpu_count": 16,
+  "ram_gb": 15.9,
+  "workers": 10,
+  "blas_threads": 1,
+  "chunk_rows": 112,
+  "block_rows": 672,
+  "lbph_block_rows": 448,
+  "max_inflight": 120,
+  "sample_cap": 1750000,
+  "streaming_threshold": 5250000,
+  "detect_every": 2,
+  "downscale_max_side": 800,
+  "target_width": 480
+}
