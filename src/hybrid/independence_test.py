@@ -58,7 +58,7 @@ from src.hybrid.quality import QualityThresholds, compute_quality
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
 from src.independence_common import error_pair_report, format_error_pair_report
 from src.independence_report import add_scaling_args
-from src.independence_plots import save_distance_curve_plot, save_far_curve
+from src.independence_plots import save_distance_curve_plot, save_distance_histogram, save_far_curve
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.stats_utils import error_diversity, wilson_interval_percent
 from src.sface.recognizer import (
@@ -471,6 +471,14 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
     # 2. Write the plots
     lbph_dir = os.path.join(args.output_dir, "lbph")
     os.makedirs(lbph_dir, exist_ok=True)
+    save_distance_histogram(
+        lbph_distances,
+        os.path.join(lbph_dir, "distance_histogram.png"),
+        threshold=lbph_rank_report["spec"]["raw_threshold"],
+        title="Hybrid Test (LBPH): Inter-Identity Distance Histogram",
+        xlabel="Chi-square distance (Raw)",
+        far_percent=lbph_rank_report["spec"].get("realized_far_percent"),
+    )
     save_distance_curve_plot(
         lbph_distances,
         os.path.join(lbph_dir, "distance_curve_plot.png"),
@@ -486,6 +494,14 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
 
     sface_dir = os.path.join(args.output_dir, "sface")
     os.makedirs(sface_dir, exist_ok=True)
+    save_distance_histogram(
+        sface_distances,
+        os.path.join(sface_dir, "distance_histogram.png"),
+        threshold=sface_rank_report["spec"]["raw_threshold"],
+        title="Hybrid Test (SFace): Inter-Identity Distance Histogram",
+        xlabel="Cosine distance (Raw)",
+        far_percent=sface_rank_report["spec"].get("realized_far_percent"),
+    )
     save_distance_curve_plot(
         sface_distances,
         os.path.join(sface_dir, "distance_curve_plot.png"),
@@ -500,8 +516,10 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
     )
 
     return {
+        "lbph_histogram": os.path.join(lbph_dir, "distance_histogram.png"),
         "lbph_curve": os.path.join(lbph_dir, "distance_curve_plot.png"),
         "lbph_far": os.path.join(lbph_dir, "far_curve.png"),
+        "sface_histogram": os.path.join(sface_dir, "distance_histogram.png"),
         "sface_curve": os.path.join(sface_dir, "distance_curve_plot.png"),
         "sface_far": os.path.join(sface_dir, "far_curve.png"),
     }

@@ -27,9 +27,10 @@ import tempfile
 import numpy as np
 
 from src.independence_common import error_pair_report_from_topk, format_error_pair_report
-from src.independence_plots import save_distance_curve_plot, save_far_curve
+from src.independence_plots import save_distance_curve_plot, save_distance_histogram, save_far_curve
 from src.independence_streaming import pairwise_topk_stream, expected_unique_pairs
 
+HISTOGRAM_NAME = "distance_histogram.png"
 CURVE_NAME = "distance_curve_plot.png"
 FAR_NAME = "far_curve.png"
 LOWEST_NAME = "lowest_distance_pairs.csv"
@@ -74,6 +75,7 @@ def add_scaling_args(parser: argparse.ArgumentParser, *, include_max_identities:
 
 def default_output_paths(output_dir: str) -> dict[str, str]:
     return {
+        "distance_histogram": os.path.join(output_dir, HISTOGRAM_NAME),
         "distance_curve_plot": os.path.join(output_dir, CURVE_NAME),
         "far_curve": os.path.join(output_dir, FAR_NAME),
         "lowest_distance_pairs": os.path.join(output_dir, LOWEST_NAME),
@@ -92,11 +94,15 @@ def write_default_plots(
     curve_bandwidth: float | None = None,
     plots: bool = True,
 ) -> dict:
-    """Write ``distance_histogram.png`` + ``far_curve.png`` on the normalized 0-100
-    scale (the convention used across the paper's figures). *sample_distances_normalized*
-    must already be normalized; the spec threshold line uses ``normalized_threshold``."""
+    """Write ``distance_histogram.png`` + ``distance_curve_plot.png`` + ``far_curve.png``
+    on the normalized 0-100 scale (the convention used across the paper's figures).
+    *sample_distances_normalized* must already be normalized; the spec threshold line
+    uses ``normalized_threshold``."""
     paths = default_output_paths(output_dir)
-    result = {"distance_curve_plot": None, "far_curve": None, "kde_bandwidth_used": None}
+    result = {
+        "distance_histogram": None, "distance_curve_plot": None,
+        "far_curve": None, "kde_bandwidth_used": None,
+    }
     if not plots:
         return result
     os.makedirs(output_dir, exist_ok=True)
@@ -105,6 +111,14 @@ def write_default_plots(
     threshold = spec.get("normalized_threshold")
     far_percent = spec.get("realized_far_percent")
 
+    save_distance_histogram(
+        sample_distances_normalized, paths["distance_histogram"],
+        threshold=threshold,
+        title=f"{model_label} Independence Test: Inter-Identity Distance Histogram",
+        xlabel="Normalized inter-identity distance (0-100)",
+        bins=bins, curve_points=curve_points, curve_bandwidth=curve_bandwidth,
+        xlim=(0.0, 100.0), far_percent=far_percent,
+    )
     bw = save_distance_curve_plot(
         sample_distances_normalized, paths["distance_curve_plot"],
         threshold=threshold,
@@ -118,6 +132,7 @@ def write_default_plots(
         threshold_field="normalized_threshold",
         xlabel="Match threshold (normalized 0-100)",
     )
+    result["distance_histogram"] = paths["distance_histogram"]
     result["distance_curve_plot"] = paths["distance_curve_plot"]
     result["far_curve"] = paths["far_curve"] if wrote_far else None
     result["kde_bandwidth_used"] = bw
@@ -320,6 +335,9 @@ def run_streaming_and_save(
     print("\n" + format_error_pair_report(res["report"]))
     if res["plots"].get("distance_histogram"):
         print(f"[PLOT] Histogram: {res['plots']['distance_histogram']}")
+    if res["plots"].get("distance_curve_plot"):
+        print(f"[PLOT] Distance curve: {res['plots']['distance_curve_plot']}")
+    if res["plots"].get("far_curve"):
         print(f"[PLOT] FAR curve: {res['plots']['far_curve']}")
     return 0
 
