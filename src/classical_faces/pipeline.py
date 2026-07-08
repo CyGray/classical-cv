@@ -276,8 +276,10 @@ def _rates(stats: Stats) -> dict:
     unknown_reject = (
         (100.0 * stats.unknown_correct / stats.unknown_total) if stats.unknown_total else 0.0
     )
+    # None (not 0.0) when either group is empty - e.g. a closed-set split with no
+    # impostors - so reports show "not applicable" rather than a misleading "0% accuracy".
     balanced = (
-        0.5 * (known_acc + unknown_reject) if (stats.known_total and stats.unknown_total) else 0.0
+        0.5 * (known_acc + unknown_reject) if (stats.known_total and stats.unknown_total) else None
     )
     return {
         "overall_acc": overall_acc,
@@ -289,10 +291,11 @@ def _rates(stats: Stats) -> dict:
 
 def summarize_bucket(name: str, stats: Stats) -> str:
     r = _rates(stats)
+    bal_str = f"{r['balanced']:6.2f}%" if r["balanced"] is not None else "   N/A"
     return (
         f"{name:<20} total={stats.total_images:<6} eval={stats.evaluated_images:<6} "
         f"hit={r['overall_acc']:6.2f}% known={r['known_acc']:6.2f}% "
-        f"unk_rej={r['unknown_reject']:6.2f}% bal={r['balanced']:6.2f}% "
+        f"unk_rej={r['unknown_reject']:6.2f}% bal={bal_str} "
         f"detected={stats.face_detected:<6} aligned={stats.face_aligned:<6}"
     )
 
@@ -349,7 +352,8 @@ def threshold_metrics(records: list[dict], threshold: float) -> dict:
 
     known_acc = (100.0 * known_correct / known_total) if known_total else 0.0
     unknown_reject = (100.0 * unknown_correct / unknown_total) if unknown_total else 0.0
-    balanced = 0.5 * (known_acc + unknown_reject) if (known_total and unknown_total) else 0.0
+    # None (not 0.0) when either group is empty - see _rates() above for the rationale.
+    balanced = 0.5 * (known_acc + unknown_reject) if (known_total and unknown_total) else None
     overall_acc = (100.0 * overall_correct / total) if total else 0.0
 
     return {
@@ -385,6 +389,46 @@ def best_sweep_entry(sweep: list[dict]) -> dict | None:
     if not sweep:
         return None
     return max(sweep, key=lambda e: e.get("overall_hit_rate_percent", 0.0))
+
+
+def equal_error_rate(sweep: list[dict]) -> dict | None:
+    """Interpolated FAR=FRR crossing over a threshold sweep.
+
+    ``sweep`` is a :func:`compute_threshold_sweep` result (ascending threshold
+    order): FAR = 100 - unknown_rejection_rate_percent (impostors wrongly
+    accepted), FRR = 100 - known_accuracy_percent (genuines wrongly rejected).
+    As the threshold rises FAR increases monotonically and FRR decreases, so
+    FAR-FRR crosses zero at most once; this walks consecutive points for that
+    sign change and linearly interpolates both the crossing threshold and the
+    rate. Returns ``None`` if either rate is undefined (no genuine/impostor
+    records - see the balanced-accuracy None convention above) or the curves
+    never cross inside the swept range (do not extrapolate).
+    """
+    points: list[tuple[float, float, float]] = []
+    for entry in sweep:
+        if entry.get("known_total", 0) == 0 or entry.get("unknown_total", 0) == 0:
+            return None
+        far = 100.0 - entry["unknown_rejection_rate_percent"]
+        frr = 100.0 - entry["known_accuracy_percent"]
+        points.append((entry["threshold"], far, frr))
+
+    for (t0, far0, frr0), (t1, far1, frr1) in zip(points, points[1:]):
+        d0, d1 = far0 - frr0, far1 - frr1
+        if d0 == 0:
+            return {"eer_percent": (far0 + frr0) / 2.0, "threshold_at_eer": t0}
+        if d0 < 0 < d1 or d1 < 0 < d0:
+            frac = d0 / (d0 - d1)
+            threshold_at_eer = t0 + frac * (t1 - t0)
+            far_at_eer = far0 + frac * (far1 - far0)
+            frr_at_eer = frr0 + frac * (frr1 - frr0)
+            return {
+                "eer_percent": (far_at_eer + frr_at_eer) / 2.0,
+                "threshold_at_eer": threshold_at_eer,
+            }
+    last = points[-1]
+    if last[1] == last[2]:
+        return {"eer_percent": last[1], "threshold_at_eer": last[0]}
+    return None
 
 
 def rank1_metrics(records: list[dict]) -> dict:
@@ -749,6 +793,10 @@ def run_evaluation(
     sweep = compute_threshold_sweep(eval_records, threshold_sweep)
     best = best_sweep_entry(sweep)
     rank1 = rank1_metrics(eval_records)
+    # Granularity caveat: with few genuine probes (e.g. 56 on La Salle DB1), FRR
+    # moves in coarse steps (1.79 pp per probe), so eer_percent should be read at
+    # that granularity, not as false 2-decimal precision.
+    eer = equal_error_rate(sweep)
 
     detection_total = overall.face_detected + overall.skipped_no_face + overall.skipped_too_small
     detection_rate = (100.0 * overall.face_detected / detection_total) if detection_total else 0.0
@@ -790,6 +838,7 @@ def run_evaluation(
         "rank1": rank1,
         "threshold_sweep": sweep,
         "best_sweep": best,
+        "eer": eer,
         "detection": {
             "detected": overall.face_detected,
             "aligned": overall.face_aligned,

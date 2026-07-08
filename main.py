@@ -4,12 +4,19 @@ import subprocess
 import json
 import os
 import re
+import sys
 from pathlib import Path
 from dataclasses import dataclass
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.dataset_layout import infer_target_split_name
 HARDWARE_PROFILE_PATH = PROJECT_ROOT / "hw_profile.json"
+
+LFW_SEGMENT_COUNT = 6  # number of LFW cross-slices for the segmented independence run
 
 GROUPED_CHOICES = [
     (
@@ -244,7 +251,10 @@ def compute_hardware_profile(cpu_count: int, ram_gb: float) -> dict:
         "block_rows": max(128, int(384 * scale)),
         "lbph_block_rows": max(128, int(256 * scale)),
         "max_inflight": max(8, workers * TIER_MAX_INFLIGHT_FACTOR[tier]),
-        "sample_cap": max(250_000, int(1_000_000 * scale)),
+        # No "sample_cap" here: it controls the *statistical* sample for reported
+        # percentiles/histograms (see src/independence_report.py add_scaling_args),
+        # not just memory/performance, so it must stay a fixed, machine-independent
+        # default rather than hardware-tier-derived (B4 in docs/IMPROVEMENT_SPEC.md).
         "streaming_threshold": max(1_000_000, int(3_000_000 * scale)),
         "detect_every": TIER_DETECT_EVERY[tier],
         "downscale_max_side": TIER_DOWNSCALE_MAX_SIDE[tier],
@@ -272,8 +282,11 @@ def load_or_build_hardware_profile(*, force_refresh: bool = False) -> dict:
 
     profile = compute_hardware_profile(cpu_count, ram_gb)
     print(f"[INFO] Detected {describe_hardware_profile(profile)}")
-    with HARDWARE_PROFILE_PATH.open("w", encoding="utf-8") as f:
-        json.dump(profile, f, indent=2)
+    try:
+        with HARDWARE_PROFILE_PATH.open("w", encoding="utf-8") as f:
+            json.dump(profile, f, indent=2)
+    except OSError as exc:
+        print(f"[WARN] Could not write {HARDWARE_PROFILE_PATH} ({exc}); continuing with in-memory profile.")
     return profile
 
 
@@ -286,7 +299,6 @@ def show_hardware_profile_menu(hardware_profile: dict) -> dict:
     )
     print(
         f"  Max inflight: {hardware_profile['max_inflight']}  "
-        f"Sample cap: {hardware_profile['sample_cap']:,}  "
         f"Streaming threshold: {hardware_profile['streaming_threshold']:,}"
     )
     print(
@@ -571,15 +583,6 @@ def bool_flag(args: list[str], name: str, default: bool) -> bool:
     return default
 
 
-def infer_split_name(raw_dir_name: str, processed_dir_name: str) -> str:
-    raw_base = Path(raw_dir_name).name.lower()
-    processed_base = Path(processed_dir_name).name.lower()
-    for candidate in (processed_base, raw_base):
-        if candidate in {"train", "test"}:
-            return candidate
-    return ""
-
-
 def build_dataset_label_from_args(
     args: list[str],
     *,
@@ -616,7 +619,7 @@ def build_dataset_label_from_args(
     if include_augmented:
         tokens.append(f"aug={augmented_dir_name}[{joined_aug}]")
 
-    split_name = infer_split_name(raw_dir_name=raw_dir_name, processed_dir_name=processed_dir_name)
+    split_name = infer_target_split_name(raw_dir_name, processed_dir_name) or ""
     if split_name:
         tokens.append(f"split={split_name}")
 
@@ -783,7 +786,11 @@ def performance_args_for_independence_full(base_args: list[str], profile: dict) 
     add("--workers", profile["workers"])
     add("--chunk-rows", profile["chunk_rows"])
     add("--block-rows", profile["block_rows"])
-    add("--sample-cap", profile["sample_cap"])
+    # --sample-cap is deliberately NOT derived from the hardware tier: it controls
+    # the *statistical* sample for reported percentiles/histograms, not just memory
+    # use, so it must stay a fixed, machine-independent default (see
+    # add_scaling_args in src/independence_report.py). The hardware profile still
+    # gates chunk/block sizing above, which is a pure performance knob.
     add("--streaming-threshold", profile["streaming_threshold"])
     return args
 
@@ -1563,19 +1570,20 @@ def prompt_light_front_independence_args(model_name: str) -> list[str]:
     print("  1. la salle db (processed)")
 
     if model_name in {"Eigenfaces", "Fisherfaces"}:
-        for idx in range(1, 7):
-            print(f"  {idx + 1}. lfw {idx} (segment {idx}/6)")
-        print("  8. lfw all (complete cross-slice, segments 1..6)")
+        for idx in range(1, LFW_SEGMENT_COUNT + 1):
+            print(f"  {idx + 1}. lfw {idx} (segment {idx}/{LFW_SEGMENT_COUNT})")
+        all_choice = LFW_SEGMENT_COUNT + 2
+        print(f"  {all_choice}. lfw all (complete cross-slice, segments 1..{LFW_SEGMENT_COUNT})")
         print("Mode:")
         print("  - intra fast: within-segment only (faster, partial pair coverage)")
         print("  - complete cross-slice: full pair coverage across segments")
         selected = input("Enter choice (default: 1): ").strip()
-        if selected == "8":
+        if selected == str(all_choice):
             return [
                 "--dataset-source",
                 "lfw-dataset",
                 "--segment-count",
-                "6",
+                str(LFW_SEGMENT_COUNT),
                 "--segment-index",
                 "1",
                 "--segment-mode",
@@ -1583,7 +1591,7 @@ def prompt_light_front_independence_args(model_name: str) -> list[str]:
                 "--run-all-segments",
                 "1",
             ]
-        if selected in {"2", "3", "4", "5", "6", "7"}:
+        if selected in {str(i) for i in range(2, LFW_SEGMENT_COUNT + 2)}:
             seg_idx = int(selected) - 1
             mode = input("Segment mode [1=intra fast, 2=complete cross-slice] (default: 2): ").strip()
             segment_mode = "intra" if mode == "1" else "complete"
@@ -1594,13 +1602,13 @@ def prompt_light_front_independence_args(model_name: str) -> list[str]:
                 total_ids = 0
             if total_ids >= 2:
                 total_pairs = (total_ids * (total_ids - 1)) // 2
-                pair_start = ((seg_idx - 1) * total_pairs) // 6
-                pair_end = (seg_idx * total_pairs) // 6
+                pair_start = ((seg_idx - 1) * total_pairs) // LFW_SEGMENT_COUNT
+                pair_end = (seg_idx * total_pairs) // LFW_SEGMENT_COUNT
                 seg_pairs = max(0, pair_end - pair_start)
                 print(
                     "[INFO] Pre-run estimate: "
                     f"LFW identities={total_ids:,}, total unique pairs={total_pairs:,}, "
-                    f"segment {seg_idx}/6 pairs={seg_pairs:,}, mode={segment_mode}"
+                    f"segment {seg_idx}/{LFW_SEGMENT_COUNT} pairs={seg_pairs:,}, mode={segment_mode}"
                 )
             else:
                 print("[INFO] Pre-run estimate unavailable (LFW identity count not found).")
@@ -1608,7 +1616,7 @@ def prompt_light_front_independence_args(model_name: str) -> list[str]:
                 "--dataset-source",
                 "lfw-dataset",
                 "--segment-count",
-                "6",
+                str(LFW_SEGMENT_COUNT),
                 "--segment-index",
                 str(seg_idx),
                 "--segment-mode",
@@ -1736,14 +1744,15 @@ def run_choice(
 ) -> int:
     if has_flag(extra_args, "--run-all-segments"):
         base_args = remove_flag_and_value(extra_args, "--run-all-segments")
+        segment_count = int(get_arg_value(base_args, "--segment-count", str(LFW_SEGMENT_COUNT)))
         rc = 0
-        for seg_idx in range(1, 7):
+        for seg_idx in range(1, segment_count + 1):
             seg_args = remove_flag_and_value(base_args, "--segment-index")
             seg_args.extend(["--segment-index", str(seg_idx)])
             script_path = resolve_path(rel_script)
             cmd = [*get_python_command(), str(script_path), *seg_args]
             env = build_subprocess_env(hardware_profile)
-            print(f"\n[RUN] {model_name}: {action_label} (segment {seg_idx}/6, complete)")
+            print(f"\n[RUN] {model_name}: {action_label} (segment {seg_idx}/{segment_count}, complete)")
             print(f"[CMD] {' '.join(shlex.quote(part) for part in cmd)}\n")
             completed = subprocess.run(cmd, cwd=PROJECT_ROOT, env=env)
             print(f"\n[EXIT] code={completed.returncode}")

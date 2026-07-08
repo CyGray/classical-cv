@@ -220,6 +220,8 @@ def main() -> int:
         },
         "calibration_stats": {
             "lbph_margin": margin_stats,
+            "_lbph_margin_note": "diagnostic only, raw chi-square scale; NOT used by "
+            "gate.py, which applies the relative margin_min from the gate block",
             "quality": quality_stats,
         },
     }

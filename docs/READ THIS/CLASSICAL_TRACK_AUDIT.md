@@ -246,7 +246,9 @@ cleaning is needed.
 - Feature dim LBPH = 16384 (recomputed); model sizes from `models/{lbph,eigenfaces,fisherfaces}/*.yml`.
 - FPS from `reports/benchmark/live_fps/aggregate_summary.json`.
 - Recognition reports: `reports/evaluation/{lbph,lbph_eval_entity_check,eigenfaces,fisherfaces}_eval.json`.
-- Independence: `outputs/lbph/independence_test_light_front/summary.json` (stale min‑max),
+- Independence: `reports/independence/lbph_lasalle/summary.json` (current committed run; the
+  `outputs/lbph/independence_test_light_front/summary.json` this appendix originally cited (stale min-max)
+  no longer exists — the `outputs/` tree was retired in favor of `reports/independence/`),
   `docs/archive/report_docs/independence_test/DOC.md` (max-norm), `reports/independence_failure_check/collapse_aggregated.json`.
 - Split layout: `data/split_backup_before_lfw_20260423_132556/{train,test}` (28 ids, 10/2, overlap ∅);
   `data/lfw-dataset` = 5749 ids.

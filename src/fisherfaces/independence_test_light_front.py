@@ -145,6 +145,13 @@ def resolve_path(path_value: str) -> str:
     return str(PROJECT_ROOT.joinpath(candidate))
 
 
+def figure_prefix(output_dir: str) -> str:
+    """Filename prefix so exported figures stay unique in a flat folder (e.g.
+    the Android gallery) - the output-dir name already encodes
+    "<model>_<dataset>" by convention (fisherfaces_lasalle, fisherfaces_lfw, ...)."""
+    return os.path.basename(os.path.normpath(output_dir))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Fisherfaces Independence Test using only light_front.jpg."
@@ -1055,11 +1062,12 @@ def run_fisherfaces_independence_test_light_front() -> int:
     os.makedirs(args.output_dir, exist_ok=True)
     save_csv_results(records, os.path.join(args.output_dir, "comparisons.csv"))
     save_threshold_sweep_csv(threshold_sweep, os.path.join(args.output_dir, "threshold_sweep.csv"))
+    _fig_prefix = figure_prefix(args.output_dir)
     save_lowest_pairs_csv(lowest_pairs, os.path.join(args.output_dir, "lowest_distance_pairs.csv"))
 
     plot_threshold = args.threshold if args.threshold is not None else candidate_thresholds.get("p05_threshold")
-    save_distance_histogram(records, os.path.join(args.output_dir, "distance_histogram.png"), threshold=plot_threshold)
-    save_distance_curve_plot(records, os.path.join(args.output_dir, "distance_curve_plot.png"), threshold=plot_threshold)
+    save_distance_histogram(records, os.path.join(args.output_dir, f"{_fig_prefix}_distance_histogram.png"), threshold=plot_threshold)
+    save_distance_curve_plot(records, os.path.join(args.output_dir, f"{_fig_prefix}_distance_curve_plot.png"), threshold=plot_threshold)
 
     summary = {
         "output_dir": args.output_dir,

@@ -31,6 +31,7 @@ from src.independence_common import (
     aggregate_pairwise_results,
     error_pair_report,
     format_error_pair_report,
+    per_run_error_pair_thresholds,
 )
 from src.independence_report import (
     add_scaling_args, write_default_plots, run_streaming_and_save,
@@ -562,6 +563,7 @@ def run_lbph_independence_test() -> int:
                 "candidate_identity": r.candidate_identity,
                 "candidate_image_path": r.candidate_image_path,
                 "raw_distance": r.raw_distance,
+                "normalized_distance": r.distance,
             }
             for r in records
         ])
@@ -612,8 +614,15 @@ def run_lbph_independence_test() -> int:
             explicit_rank=args.error_pair_rank,
         ),
         "iterations": args.iterations,
+        "random_seed_base": args.random_seed,
     }
-    
+
+    spec_entry = summary["error_pair_thresholds"].get("spec")
+    if spec_entry is not None:
+        summary["per_run_thresholds"] = per_run_error_pair_thresholds(
+            all_runs_records, k=spec_entry["error_pair_rank"],
+        )
+
     if args.threshold is not None:
         summary["false_positive_analysis"] = analyze_false_positives(records, args.threshold)
     

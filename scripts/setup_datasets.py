@@ -9,7 +9,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
 
-LFW_URL = "http://vis-www.cs.umass.edu/lfw/lfw.tgz"
+LFW_URL = "https://ndownloader.figshare.com/files/5976018"
 LFW_TAR_PATH = DATA_DIR / "lfw.tgz"
 LFW_EXTRACT_DIR = DATA_DIR / "lfw-dataset"
 
@@ -53,20 +53,36 @@ def fix_junctions():
     for name, target_sub in junctions.items():
         link_path = DATA_DIR / name
         target_path = DATA_DIR / target_sub
-        
-        # Check if junction exists or is broken
+
+        # Check if junction/symlink exists or is broken
         if os.path.lexists(link_path):
             print(f"  - Removing existing directory entry/junction: {name}")
             try:
-                os.rmdir(link_path)
+                if os.path.islink(link_path):
+                    os.unlink(link_path)
+                else:
+                    os.rmdir(link_path)
             except Exception:
-                subprocess.run(["cmd.exe", "/c", "rmdir", "/s", "/q", str(link_path)], check=False)
-        
-        # Create junction
+                if os.name == "nt":
+                    subprocess.run(["cmd.exe", "/c", "rmdir", "/s", "/q", str(link_path)], check=False)
+                else:
+                    shutil.rmtree(link_path, ignore_errors=True)
+
+        # Create junction (Windows) or symlink (POSIX: Linux/Termux/macOS)
         print(f"  - Creating junction: {name} -> {target_sub}")
-        res = subprocess.run(["cmd.exe", "/c", "mklink", "/j", str(link_path), str(target_path)], capture_output=True, text=True)
-        if res.returncode != 0:
-            print(f"    [ERROR] Failed to create junction {name}: {res.stderr.strip()}")
+        if os.name == "nt":
+            res = subprocess.run(["cmd.exe", "/c", "mklink", "/j", str(link_path), str(target_path)], capture_output=True, text=True)
+            ok = res.returncode == 0
+            err = res.stderr.strip()
+        else:
+            try:
+                os.symlink(target_path, link_path, target_is_directory=True)
+                ok, err = True, ""
+            except OSError as e:
+                ok, err = False, str(e)
+
+        if not ok:
+            print(f"    [ERROR] Failed to create junction {name}: {err}")
         else:
             print(f"    [SUCCESS] Junction {name} created")
 

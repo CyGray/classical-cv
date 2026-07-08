@@ -282,6 +282,48 @@ def aggregate_pairwise_results(
     return normalize_distances_0_100(aggregated)
 
 
+def per_run_error_pair_thresholds(all_runs_records: List[List[dict]], k: int) -> dict:
+    """K-th-error-pair threshold computed independently per seeded run.
+
+    ``aggregate_pairwise_results`` averages each pair's distance *across* runs
+    before ranking, so the published threshold is a single point estimate with
+    no uncertainty band even though multiple seeded repeats exist. This
+    computes the k-th-smallest distance within each run separately (reusing
+    :func:`error_pair_threshold`'s ranking) and reports the spread, so
+    threshold stability under reseeding is visible instead of hidden by
+    mean-before-rank. Each run's own ``normalized_distance`` is used as-is
+    (i.e. normalized against that run's own max distance) - the raw-scale
+    spread is the more meaningful stability number for that reason.
+    """
+    per_run = [
+        entry
+        for run_records in all_runs_records
+        if (entry := error_pair_threshold(run_records, k)) is not None
+    ]
+
+    def _stats(values: List[float]) -> dict:
+        if not values:
+            return {"mean": None, "std": None, "min": None, "max": None}
+        arr = np.array(values, dtype=np.float64)
+        return {
+            "mean": float(np.mean(arr)),
+            "std": float(np.std(arr, ddof=0)),
+            "min": float(np.min(arr)),
+            "max": float(np.max(arr)),
+        }
+
+    raw_values = [e["raw_threshold"] for e in per_run]
+    norm_values = [e["normalized_threshold"] for e in per_run]
+    return {
+        "k": k,
+        "num_runs": len(per_run),
+        "per_run_raw_threshold": raw_values,
+        "per_run_normalized_threshold": norm_values,
+        "raw_threshold_stats": _stats(raw_values),
+        "normalized_threshold_stats": _stats(norm_values),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Rank-based threshold determination (spec methodology)
 # ---------------------------------------------------------------------------
@@ -380,10 +422,23 @@ def error_pair_report_from_topk(
     ordered error pair is the ceil(k/2)-th smallest unique pair. This builds the
     same report shape as :func:`error_pair_report` from just the smallest unique
     distances (ascending) and the total ordered comparison count.
+
+    Precondition: the distance metric must be symmetric (d(a, b) == d(b, a)) so
+    that ``total_ordered_comparisons`` always decomposes into unordered pairs
+    counted exactly twice - this is what makes ``unique_idx = ceil(rank/2) - 1``
+    valid. All metrics currently wired through this function (chi-square,
+    Euclidean, cosine) satisfy this. An asymmetric metric would silently halve
+    the reported FAR; see call sites in ``src/independence_report.py`` and
+    ``scripts/run_lfw_independence.py``.
     """
     n = int(total_ordered_comparisons)
     if n == 0 or len(top_unique_distances) == 0:
         return {"comparisons": 0, "spec": None, "curve": []}
+    assert n % 2 == 0, (
+        "total_ordered_comparisons must be even under a symmetric metric "
+        "(each unordered pair appears exactly twice in the ordered stream); "
+        f"got {n}, which would corrupt the ceil(rank/2) unique-pair mapping"
+    )
 
     def entry(ordered_rank: int) -> dict | None:
         unique_idx = math.ceil(ordered_rank / 2) - 1

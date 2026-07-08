@@ -6,9 +6,9 @@
 
 ## 1. Project Identity
 
-**LS-Face (La Salle Facial Recognition Software)** — *Facial recognition software using hybrid technologies based on an independence test.* Built for the USLS Computer Vision course (Group 3). The end goal is a **hybrid CV + DL recognizer**, with the winning combination selected via independence testing, deployed on a **Raspberry Pi 5 as a "Smart Gate."**
+**LS-Face (La Salle Facial Recognition Software)** — *Facial recognition software using hybrid technologies based on an independence test.* Built for the USLS Computer Vision course (Group 3). The end goal is a **hybrid CV + DL recognizer**, with the winning combination selected via independence testing. 
 
-The project compares **classical computer-vision recognizers** against **deep-learning recognizers**, uses **independence testing** to fix match thresholds at a defined false-alarm rate, then fuses the strongest candidates into a hybrid for on-device inference.
+The project compares **classical computer-vision recognizers** against **deep-learning recognizers**, uses **independence testing** to fix match thresholds at a defined false-alarm rate, then fuses the strongest candidates into a software-based hybrid cascade.
 
 ---
 
@@ -21,7 +21,7 @@ The project compares **classical computer-vision recognizers** against **deep-le
 | 3 | 7/1–7/30 | Hybrid (CV + DL) | Client-centered (Pi 5) | Accuracy ≥95%, Speed ≥30 fps (real time) |
 | 4 | 8/1–8/30 | Real-world recognition | Client-centered (Pi 5) | Accuracy ↑90%, Speed real time |
 
-Stage I target overall: **Smart Gate (image-based), ~September 2026.** Two derived papers are planned (both submission ~8/15): Paper 1 on the hybrid/independence-test method, Paper 2 on a real-time edge-computing home-security system.
+This repository and current work are dedicated to **Paper 1**, which focuses strictly on the software side: the hybrid classical + DL gated cascade, with threshold selection grounded in independence testing. The physical deployment, edge-computing optimization, and hardware integration on the Raspberry Pi 5 (originally Step 3/4) are deferred to a subsequent study (**Paper 2**).
 
 ---
 
@@ -159,7 +159,7 @@ AR is determined at a **pre-determined false-positive rate** (set by the indepen
 
 ## 12. Model Context Block (paste this into new Opus 4.8 chats)
 
-> I'm Kyle, Group 3, USLS Computer Vision course. Project: **LS-Face / Smart Gate** — a hybrid (CV + DL) face recognizer, selected via independence testing, deployed on a Raspberry Pi 5. I own the **classical CV track**: LBPH, Eigenfaces, Fisherfaces (`src/lbph`, `src/eigenfaces`, `src/fisherfaces`), their independence tests, and `scripts/independence_failure_check/`. Teammates own the DL recognizers and shared DB work.
+> I'm Kyle, Group 3, USLS Computer Vision course. Project: **LS-Face / Smart Gate** — focusing on **Paper 1** (software side: a hybrid classical + DL gated cascade selected via independence testing). Hardware integration and Raspberry Pi 5 deployment are deferred to Paper 2. I own the **classical CV track**: LBPH, Eigenfaces, Fisherfaces (`src/lbph`, `src/eigenfaces`, `src/fisherfaces`), their independence tests, and `scripts/independence_failure_check/`. Teammates own the DL recognizers and shared DB work.
 >
 > **Target specs:** TAR 90–95%, FAR <0.01% (100 ppm), FRR 1–5%, latency <100 ms, speed ≥30 fps, feature vector <1 KB. (On-device Pi 5 throughput for classical models will be lower.)
 >

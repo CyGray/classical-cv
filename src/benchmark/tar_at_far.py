@@ -164,6 +164,7 @@ def tar_at(genuine: list, threshold: float) -> float:
 
 def operating_point(genuine: list, impostor_sorted: list[float], target_far_pct: float) -> dict:
     n_imp = len(impostor_sorted)
+    n_gen = len(genuine)
     # Largest threshold whose FAR <= target: allow k false accepts, T = k-th smallest impostor distance.
     k = int(math.floor(target_far_pct / 100.0 * n_imp))
     if k < 1:
@@ -175,6 +176,9 @@ def operating_point(genuine: list, impostor_sorted: list[float], target_far_pct:
         resolvable = True
     far = far_at(impostor_sorted, threshold, n_imp)
     tar = tar_at(genuine, threshold)
+    genuine_correct = sum(1 for d, ok in genuine if ok and d <= threshold)
+    import bisect
+    impostor_accepted = bisect.bisect_right(impostor_sorted, threshold) if n_imp else 0
     return {
         "target_far_percent": target_far_pct,
         "threshold_predict_scale": float(threshold),
@@ -182,6 +186,11 @@ def operating_point(genuine: list, impostor_sorted: list[float], target_far_pct:
         "tar_percent": tar,
         "frr_percent": 100.0 - tar,
         "resolvable": resolvable,
+        # Raw counts (not just percentages) so callers can compute Wilson CIs.
+        "n_genuine": n_gen,
+        "genuine_correct": genuine_correct,
+        "n_impostor": n_imp,
+        "impostor_accepted": impostor_accepted,
     }
 
 

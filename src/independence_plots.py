@@ -39,6 +39,25 @@ def _ensure_parent(output_path: str) -> None:
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
 
 
+def tight_xlim(
+    values: Sequence[float],
+    pad_frac: float = 0.1,
+    bounds: tuple[float, float] = (0.0, 100.0),
+) -> tuple[float, float]:
+    """Data-driven x-range: ``[min, max]`` of *values* padded by *pad_frac* of
+    their span on each side, clamped to *bounds* (normalized distances can't
+    fall outside 0-100, so padding past that is meaningless)."""
+    arr = np.asarray(values, dtype=np.float64)
+    arr = arr[np.isfinite(arr)]
+    lo_bound, hi_bound = bounds
+    if arr.size == 0:
+        return bounds
+    lo, hi = float(np.min(arr)), float(np.max(arr))
+    span = hi - lo
+    pad = span * pad_frac if span > 0 else max(hi_bound - lo_bound, 1.0) * pad_frac
+    return (max(lo_bound, lo - pad), min(hi_bound, hi + pad))
+
+
 # --------------------------------------------------------------------------- #
 # NumPy-only Gaussian KDE (no scipy dependency at plot time)
 # --------------------------------------------------------------------------- #
@@ -103,8 +122,14 @@ def save_distance_histogram(
     xlim: tuple[float, float] | None = None,
     far_percent: float | None = None,
     dpi: int = 200,
+    precomputed_kde: tuple[np.ndarray, np.ndarray, float] | None = None,
 ) -> float:
     """Histogram of impostor distances; area left of *threshold* = false accepts.
+
+    *precomputed_kde*, if given, is a ``(x, y, bandwidth)`` triple from a prior
+    :func:`compute_kde_curve` call on the same *distances* - skips recomputing
+    the KDE so callers rendering multiple views (e.g. fixed vs. tight x-range)
+    of the same sample only pay the O(points * n) cost once.
 
     Returns the KDE bandwidth used (0.0 if no overlay was drawn).
     """
@@ -120,9 +145,12 @@ def save_distance_histogram(
 
     used_bandwidth = 0.0
     if kde_overlay and values.size > 1:
-        x, y, used_bandwidth = compute_kde_curve(
-            values, points=curve_points, bandwidth=curve_bandwidth
-        )
+        if precomputed_kde is not None:
+            x, y, used_bandwidth = precomputed_kde
+        else:
+            x, y, used_bandwidth = compute_kde_curve(
+                values, points=curve_points, bandwidth=curve_bandwidth
+            )
         if x.size:
             # Scale the density to the histogram's count axis for a readable overlay.
             counts, edges = np.histogram(values, bins=bins)
@@ -165,8 +193,14 @@ def save_distance_curve_plot(
     curve_bandwidth: float | None = None,
     xlim: tuple[float, float] | None = None,
     dpi: int = 200,
+    precomputed_kde: tuple[np.ndarray, np.ndarray, float] | None = None,
 ) -> float:
-    """Save a curve-style distance distribution plot (KDE density only)."""
+    """Save a curve-style distance distribution plot (KDE density only).
+
+    *precomputed_kde*, if given, is a ``(x, y, bandwidth)`` triple from a prior
+    :func:`compute_kde_curve` call on the same *distances* - see
+    :func:`save_distance_histogram` for why.
+    """
     plt = _pyplot()
     _ensure_parent(output_path)
 
@@ -174,12 +208,15 @@ def save_distance_curve_plot(
     values = values[np.isfinite(values)]
 
     fig, ax = plt.subplots(figsize=(10, 6))
-    
+
     used_bandwidth = 0.0
     if values.size > 1:
-        x, y, used_bandwidth = compute_kde_curve(
-            values, points=curve_points, bandwidth=curve_bandwidth
-        )
+        if precomputed_kde is not None:
+            x, y, used_bandwidth = precomputed_kde
+        else:
+            x, y, used_bandwidth = compute_kde_curve(
+                values, points=curve_points, bandwidth=curve_bandwidth
+            )
         if x.size > 0 and y.size > 0:
             ax.plot(x, y, linewidth=2, color="#4c72b0")
 

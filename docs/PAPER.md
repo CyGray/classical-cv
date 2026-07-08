@@ -50,7 +50,7 @@ all impostor pairs by construction. Sort the C distances ascending. To operate a
 
   k = ⌈ FAR* · C ⌉, (2)
 
-and set the threshold θ to the k-th smallest impostor distance: exactly k impostor pairs fall inside θ, so the realized FAR is k/C. On La Salle DB1 (N=28, C=756) the design point is the 8th error pair, i.e. FAR = 8/756 ≈ 1.06%; 756 comparisons cannot resolve finer than ~1,300 ppm, so the spec budget of 100 ppm is certified on LFW DB1 (N=5,749, C=33,045,252; the 331st pair ≈ 10 ppm). The rule reproduces both spec anchors exactly. For the complete mathematical formalism—including the probability model, extreme-value connections, and comparison with the LFW sampled-pair protocol—see `docs/report_docs/independence_test/MATHEMATICAL_FOUNDATION.md` in the project repository.
+and set the threshold θ to the k-th smallest impostor distance: exactly k impostor pairs fall inside θ, so the realized FAR is k/C. On La Salle DB1 (N=28, C=756) the design point is the 8th error pair, i.e. FAR = 8/756 ≈ 1.06%; 756 comparisons cannot resolve finer than ~1,300 ppm, so the spec budget of 100 ppm is certified on LFW DB1 (N=5,749, C=33,045,252; the 331st pair ≈ 10 ppm). The rule reproduces both spec anchors exactly. For the complete mathematical formalism—including the probability model, extreme-value connections, and comparison with the LFW sampled-pair protocol—see `docs/archive/report_docs/independence_test/MATHEMATICAL_FOUNDATION.md` in the project repository.
 
 ### 3.3 The escalation gate
 
@@ -99,6 +99,8 @@ Good numbers on four separately tuned databases would only show that the method 
 
 The cascade's natural rival is also in the table: a *parallel* mode that runs both engines on every probe is the accuracy ceiling at full DL cost, and the cascade must stay within tolerance of it while escalating only a fraction of frames — otherwise the gate is not earning its keep.
 
+All identification and verification numbers on LS-DB1/LS-DB2 use **closed-set enrollment**: the gallery and probe sets share the same 28 identities and are image-disjoint (10 gallery / 2 probe images per identity). This mirrors the deployment (a gate admits only enrolled subjects). Robustness to identities never seen at enrollment is measured solely as impostor rejection against the LFW legs; open-set identification of novel genuine identities is out of scope.
+
 ## 4. Experiments and Results
 
 **Databases.** La Salle DB1: 28 people × 12 pre-cropped 100×100 images; leakage-free split of 10 gallery + 2 held-out probe images per identity (280/56); train–test image-disjointness verified. La Salle DB2: the 41-variant suite applied to DB1 (held-out probes: 56×41 = 2,296). LFW DB1 [11]: 5,749 people, 13,233 photos (13,149 usable after Haar cropping) as the impostor set. All pipelines share preprocessing and detection settings, except each family uses its measured-best illumination normalization (Tan-Triggs for LBPH; histogram equalization for the subspace methods), single-sourced so training, evaluation, and thresholding cannot drift apart.
@@ -109,6 +111,8 @@ The cascade's natural rival is also in the table: a *parallel* mode that runs bo
 
 On La Salle DB1 (756 comparisons, 8th error pair = 1.058% FAR) the impostor thresholds are LBPH 21.35 raw (85.88 normalized), Eigenfaces 8,098.46 (71.00), Fisherfaces 5,446.46 (66.38); LBPH keeps impostors farthest apart (Fig. 1). The corresponding deployable thresholds on each recognizer's own predict scale at the 100 ppm budget are LBPH 73.0, Eigenfaces 4,308, Fisherfaces 738. The sweep also surfaced near-zero pairs that were investigated rather than assumed: on La Salle they traced to a normalization floor and a one-image LDA collapse — algorithmic artifacts, not bad labels (raw minimum 20.89, no duplicates); on LFW all three families flagged the same known annotation-error pair (Andrew Caldecott vs Andrew Gilligan). SFace passes the same protocol on LFW: over 5,685 identities and 32,313,540 comparisons, 24,128 impostor pairs fall inside its genuine rule — FP 0.0747%, reproducing the DL track's reference within 0.005 points.
 
+The above raw/realized-FAR operating points are the mean-before-rank of the 10 seeded repeats; per-run stability (`scripts/per_run_thresholds.py`, backfilled from the committed raw runs) gives LBPH 68.03% ± 1.83 normalized (range 64.94-71.49), Eigenfaces 48.20% ± 2.51 (43.68-51.97), Fisherfaces 43.15% ± 4.17 (36.49-50.78) — materially lower than the mean-before-rank *normalized* figures above, because averaging raw distances across runs before renormalizing against the pooled max understates the spread any single run would show on its own normalized scale. The raw-distance and realized-FAR operating points are unaffected (they never pass through per-run normalization); only the displayed normalized percentage inflates under mean-before-rank.
+
 *Fig. 1 — Impostor distance distributions from the La Salle independence sweep (one image per identity, 756 comparisons per family).*
 ![Impostor distance distributions](../reports/figures/fig2_interidentity_hist.png)
 
@@ -116,21 +120,24 @@ On La Salle DB1 (756 comparisons, 8th error pair = 1.058% FAR) the impostor thre
 
 Closed-set rank-1 on the held-out split ranks LBPH 100%, Eigenfaces 75%, Fisherfaces 66.07% — but a gate must also reject strangers, so the deciding metric is TAR at a fixed FAR against 13,149 LFW impostors (Table 2). To keep the choice of classical engine mechanical rather than post-hoc, it follows a rule committed before reading the results (applied verbatim by `src/benchmark/compare_classical.py`): *eligible* = TAR ≥ 90% at the independence operating point, feature < 1 KB, live FPS ≥ 3; among eligible models the highest 41-modification AR wins, with AR gaps under 2 points broken by TAR, then model size.
 
+*Fig. 2 — TAR/FAR verification curve, classical recognizers against the LFW impostor set (Table 2's operating point is the marked node).*
+![TAR/FAR verification](../reports/figures/fig1_tar_far_roc.png)
+
 **Table 2 — Classical recognizers, verification vs 13,149 LFW impostors (realized FAR 76 ppm).**
 
-| Recognizer | Rank-1 | TAR @100 ppm | FRR | EER | Overall AR (41 mods) | Feature | Model |
+| Recognizer | Rank-1 | TAR @100 ppm (95% CI) | FRR (95% CI) | EER | Overall AR (41 mods) | Feature | Model |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| LBPH (Tan-Triggs) | 100.00% | **98.21%** | 1.79% | 0.07% | 85.43% | 64 KB | ≈33 MB |
-| Eigenfaces | 75.00% | 23.21% | 76.79% | 31.77% | 47.69% | 1,120 B | ≈83 MB |
-| Fisherfaces | 66.07% | 10.71% | 89.29% | 35.71% | 30.54% | 108 B | 8.2 MB |
+| LBPH (Tan-Triggs) | 100.00% | **98.21%** [90.6–99.7] | 1.79% [0.3–9.4] | 0.07% | 85.43% | 64 KB | ≈33 MB |
+| Eigenfaces | 75.00% | 23.21% [14.1–35.8] | 76.79% [64.2–85.9] | 31.77% | 47.69% | 1,120 B | ≈83 MB |
+| Fisherfaces | 66.07% | 10.71% [5.0–21.5] | 89.29% [78.5–95.0] | 35.71% | 30.54% | 108 B | 8.2 MB |
 
-Only LBPH passes the spec accuracy block (TAR 90–95%, FAR < 100 ppm, FRR 1–5%); sweeps confirm the subspace methods' genuine and impostor distributions overlap intrinsically. Tan-Triggs matters: it lifts LBPH from TAR 96.4%/EER 3.6% to the table's numbers, while *degrading* the subspace methods — there is no single best preprocessing, another argument for per-engine contracts. LBPH's one failing metric is its 64 KB histogram versus the sub-1 KB feature budget; the hybrid will fix this by *enrolling* with SFace's 512-byte embedding.
+n=56 genuine probes for TAR/FRR; CIs are 95% Wilson intervals (`src/stats_utils.py:wilson_interval_percent`) — with n=56 a single probe moves TAR/FRR by 1.79 points, so e.g. LBPH's 98.21% carries a ±8-point interval and should not be read as more precise than that. Only LBPH passes the spec accuracy block (TAR 90–95%, FAR < 100 ppm, FRR 1–5%); sweeps confirm the subspace methods' genuine and impostor distributions overlap intrinsically. Tan-Triggs matters: it lifts LBPH from TAR 96.4%/EER 3.6% to the table's numbers, while *degrading* the subspace methods — there is no single best preprocessing, another argument for per-engine contracts. LBPH's one failing metric is its 64 KB histogram versus the sub-1 KB feature budget; the hybrid will fix this by *enrolling* with SFace's 512-byte embedding.
 
 ### 4.3 Robustness: where CV breaks and DL doesn't
 
-LBPH's 41-modification AR is 85.43% overall but bimodal (Fig. 2): photometric edits it absorbs (occlusion 98.8%, gamma 97.6–98.2%, contrast-down 98.2%), while heavy Gaussian noise (47.8%), motion blur (68.5%), and strong darkening (73.7%) break it. The subspace methods fail geometrically (rotation: 26.3% / 14.3%). These weak spots are exactly the regimes the gate's quality probes watch (noise, blur, low light).
+LBPH's 41-modification AR is 85.43% overall but bimodal (Fig. 3): photometric edits it absorbs (occlusion 98.8%, gamma 97.6–98.2%, contrast-down 98.2%), while heavy Gaussian noise (47.8%), motion blur (68.5%), and strong darkening (73.7%) break it. The subspace methods fail geometrically (rotation: 26.3% / 14.3%). These weak spots are exactly the regimes the gate's quality probes watch (noise, blur, low light).
 
-*Fig. 2 — Accuracy ratio per modification, classical families. LBPH's failure modes (noise, motion blur, darkening) define the gate's quality probes.*
+*Fig. 3 — Accuracy ratio per modification, classical families. LBPH's failure modes (noise, motion blur, darkening) define the gate's quality probes.*
 ![AR by modification](../reports/figures/fig3_ar_by_modification.png)
 
 **[PENDING]** The same 41 probes scored by SFace, the cascade, and the run-both *parallel* ceiling (`src/benchmark/accuracy_ratio_hybrid.py`) — expected outcome: DL stronger on noise/blur/darkening, CV equal or stronger on mild photometric edits at ~4× lower latency, cascade within ~2 points of the better engine per modification *and* of parallel at a fraction of its cost. Insert the per-modification table (each AR with its 95% Wilson interval), the winner tags, and the cascade-vs-parallel line from `reports/benchmark/accuracy_ratio_hybrid.md` here.
@@ -139,31 +146,28 @@ LBPH's 41-modification AR is 85.43% overall but bimodal (Fig. 2): photometric ed
 
 Table 3 and Table 4 evaluate the fused system against its own parts on two held-out sets: a clean split (56 probes, 28 identities, 400 LFW impostors for the FAR check) and a medium-degradation split (the 41-mod suite on the held-out pose; 112 images, 14 undetectable by YuNet and counted as failures in TAR/FRR).
 
-**Table 3 — Clean split.**
+**Table 3 — Clean split** (n=56 genuine, 400 impostors; 95% Wilson CIs).
 
 | Config | Rank-1 | TAR | FRR | FAR | Escalation | Latency | ≈FPS |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| LBPH-only | 100.00% | 100.00% | 0.00% | 0.00% | 0% | 5.74 ms | 174.3 |
-| SFace-only | 100.00% | 100.00% | 0.00% | 0.00% | 100% | 19.92 ms | 50.2 |
-| **Hybrid (cascade)** | **100.00%** | **100.00%** | 0.00% | 0.00% | **25%** | **10.03 ms** | **99.7** |
+| LBPH-only | 100.00% | 100.00% [93.6–100] | 0.00% [0–6.4] | 0.00% [0–0.95] | 0% | 5.74 ms | 174.3 |
+| SFace-only | 100.00% | 100.00% [93.6–100] | 0.00% [0–6.4] | 0.00% [0–0.95] | 100% | 19.92 ms | 50.2 |
+| **Hybrid (cascade)** | **100.00%** | **100.00%** [93.6–100] | 0.00% [0–6.4] | 0.00% [0–0.95] | **25%** | **10.03 ms** | **99.7** |
 
-**Table 4 — Medium-degradation split.**
+**Table 4 — Medium-degradation split** (n=112, 95% Wilson CIs; † below).
 
 | Config | Rank-1 | TAR† | FRR† | Escalation | Latency | ≈FPS |
 |---|---:|---:|---:|---:|---:|---:|
-| LBPH-only | 5.10% | 3.57% | 96.43% | 0% | 5.88 ms | 170.0 |
-| SFace-only | 97.96% | 84.82% | 15.18% | 100% | 21.70 ms | 46.1 |
-| **Hybrid (cascade)** | **97.96%** | **84.82%** | 15.18% | **100%** | **19.50 ms** | **51.3** |
+| LBPH-only | 5.10% | 3.57% [1.4–8.8] | 96.43% [91.2–98.6] | 0% | 5.88 ms | 170.0 |
+| SFace-only | 97.96% | 84.82% [77.0–90.3] | 15.18% [9.7–23.0] | 100% | 21.70 ms | 46.1 |
+| **Hybrid (cascade)** | **97.96%** | **84.82%** [77.0–90.3] | 15.18% [9.7–23.0] | **100%** | **19.50 ms** | **51.3** |
 
-† TAR/FRR count the 14 YuNet no-face frames as failures, which is why TAR (84.82%) sits below rank-1 (97.96%, over 98 detected frames). The clean-split FAR of 0% is over only 400 impostors — an observation, not a certified rate; the SFace operating point comes from the full LFW impostor distribution.
+† TAR/FRR count the 14 YuNet no-face frames as failures, which is why TAR (84.82%) sits below rank-1 (97.96%, over 98 detected frames). The clean-split FAR of 0% is over only 400 impostors — an observation, not a certified rate (95% CI upper bound ≈0.95%, rule-of-three ≈0.75%); the SFace operating point comes from the full LFW impostor distribution.
 
-The two tables are the complementarity result in action (Fig. 3). On clean frames all three configurations are equally accurate, so accuracy is free and the question is cost: the gate keeps 75% of frames on the cheap path and the hybrid runs at ~100 fps, twice SFace-only. On degraded frames LBPH collapses to 5.10%; the gate escalates 100% of frames (89 of 98 on a quality flag) and the hybrid recovers to 97.96% — equal to SFace-only, which is correct behavior when *every* frame is hard. Escalation routing on the clean split: 42/56 confident LBPH accepts, 7 quality-flag, 6 low-margin, 1 ambiguous-band. Per-stage timing (clean cascade): YuNet 1.40 ms every frame; LBPH+gate 4.56 ms on the 75%; SFace 22.08 ms on the 25%. On footprint, the hybrid enrolls with SFace's 512-byte embedding — meeting the sub-1 KB budget LBPH's 64 KB histogram fails — while total on-disk models are 68.85 MB.
+The two tables are the complementarity result in action (Fig. 4). On clean frames all three configurations are equally accurate, so accuracy is free and the question is cost: the gate keeps 75% of frames on the cheap path and the hybrid runs at ~100 fps, twice SFace-only. On degraded frames LBPH collapses to 5.10%; the gate escalates 100% of frames (89 of 98 on a quality flag) and the hybrid recovers to 97.96% — equal to SFace-only, which is correct behavior when *every* frame is hard. Escalation routing on the clean split: 42/56 confident LBPH accepts, 7 quality-flag, 6 low-margin, 1 ambiguous-band (the per-split escalation mix is also plotted in the supplementary `reports/figures/fig_hybrid_escalation.png`, omitted here to hold the paper's 4-figure budget). Per-stage timing (clean cascade): YuNet 1.40 ms every frame; LBPH+gate 4.56 ms on the 75%; SFace 22.08 ms on the 25% (see also the supplementary latency/FPS breakdown, `reports/figures/fig4_latency_fps.png`, same budget note). On footprint, the hybrid enrolls with SFace's 512-byte embedding — meeting the sub-1 KB budget LBPH's 64 KB histogram fails — while total on-disk models are 68.85 MB.
 
-*Fig. 3 — Speed–accuracy plane: the cascade sits near SFace's accuracy at nearly LBPH's cost on clean data.*
+*Fig. 4 — Speed–accuracy plane: the cascade sits near SFace's accuracy at nearly LBPH's cost on clean data.*
 ![Speed vs accuracy](figures/fig_hybrid_speed_accuracy.png)
-
-*Fig. 4 — What the gate does per split: escalation stays low on clean frames and saturates on degraded ones.*
-![Escalation behavior](figures/fig_hybrid_escalation.png)
 
 One negative result worth keeping: the first calibration used an *absolute* top-1/top-2 margin fitted on training distances and escalated 100% of held-out frames, collapsing the cascade into always-SFace; the relative margin of Eq. (3) restored the 25%/100% split without fitting on test data.
 

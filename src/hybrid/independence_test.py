@@ -57,7 +57,7 @@ from src.hybrid.gate import GateThresholds, decide_escalation
 from src.hybrid.quality import QualityThresholds, compute_quality
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
 from src.independence_common import error_pair_report, format_error_pair_report
-from src.independence_report import add_scaling_args
+from src.independence_report import add_scaling_args, figure_prefix
 from src.independence_plots import save_distance_curve_plot, save_distance_histogram, save_far_curve
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.stats_utils import error_diversity, wilson_interval_percent
@@ -469,11 +469,17 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
     sface_distances = 1.0 - np.asarray(aggregated["mean_sface_cosine"], dtype=np.float64)
 
     # 2. Write the plots
+    # Filenames are prefixed with "<output_dir_basename>_<engine>" so they stay
+    # unique when copied into a flat folder (e.g. the Android gallery) - the
+    # basename already encodes "<model>_<dataset>" by convention.
+    prefix = figure_prefix(args.output_dir)
+
     lbph_dir = os.path.join(args.output_dir, "lbph")
     os.makedirs(lbph_dir, exist_ok=True)
+    lbph_prefix = f"{prefix}_lbph"
     save_distance_histogram(
         lbph_distances,
-        os.path.join(lbph_dir, "distance_histogram.png"),
+        os.path.join(lbph_dir, f"{lbph_prefix}_distance_histogram.png"),
         threshold=lbph_rank_report["spec"]["raw_threshold"],
         title="Hybrid Test (LBPH): Inter-Identity Distance Histogram",
         xlabel="Chi-square distance (Raw)",
@@ -481,22 +487,23 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
     )
     save_distance_curve_plot(
         lbph_distances,
-        os.path.join(lbph_dir, "distance_curve_plot.png"),
+        os.path.join(lbph_dir, f"{lbph_prefix}_distance_curve_plot.png"),
         threshold=lbph_rank_report["spec"]["raw_threshold"],
         title="Hybrid Test (LBPH): Inter-Identity Distance Curve",
         xlabel="Chi-square distance (Raw)",
     )
     save_far_curve(
         lbph_rank_report,
-        os.path.join(lbph_dir, "far_curve.png"),
+        os.path.join(lbph_dir, f"{lbph_prefix}_far_curve.png"),
         model_label="Hybrid", engine_label="LBPH",
     )
 
     sface_dir = os.path.join(args.output_dir, "sface")
     os.makedirs(sface_dir, exist_ok=True)
+    sface_prefix = f"{prefix}_sface"
     save_distance_histogram(
         sface_distances,
-        os.path.join(sface_dir, "distance_histogram.png"),
+        os.path.join(sface_dir, f"{sface_prefix}_distance_histogram.png"),
         threshold=sface_rank_report["spec"]["raw_threshold"],
         title="Hybrid Test (SFace): Inter-Identity Distance Histogram",
         xlabel="Cosine distance (Raw)",
@@ -504,24 +511,24 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
     )
     save_distance_curve_plot(
         sface_distances,
-        os.path.join(sface_dir, "distance_curve_plot.png"),
+        os.path.join(sface_dir, f"{sface_prefix}_distance_curve_plot.png"),
         threshold=sface_rank_report["spec"]["raw_threshold"],
         title="Hybrid Test (SFace): Inter-Identity Distance Curve",
         xlabel="Cosine distance (Raw)",
     )
     save_far_curve(
         sface_rank_report,
-        os.path.join(sface_dir, "far_curve.png"),
+        os.path.join(sface_dir, f"{sface_prefix}_far_curve.png"),
         model_label="Hybrid", engine_label="SFace",
     )
 
     return {
-        "lbph_histogram": os.path.join(lbph_dir, "distance_histogram.png"),
-        "lbph_curve": os.path.join(lbph_dir, "distance_curve_plot.png"),
-        "lbph_far": os.path.join(lbph_dir, "far_curve.png"),
-        "sface_histogram": os.path.join(sface_dir, "distance_histogram.png"),
-        "sface_curve": os.path.join(sface_dir, "distance_curve_plot.png"),
-        "sface_far": os.path.join(sface_dir, "far_curve.png"),
+        "lbph_histogram": os.path.join(lbph_dir, f"{lbph_prefix}_distance_histogram.png"),
+        "lbph_curve": os.path.join(lbph_dir, f"{lbph_prefix}_distance_curve_plot.png"),
+        "lbph_far": os.path.join(lbph_dir, f"{lbph_prefix}_far_curve.png"),
+        "sface_histogram": os.path.join(sface_dir, f"{sface_prefix}_distance_histogram.png"),
+        "sface_curve": os.path.join(sface_dir, f"{sface_prefix}_distance_curve_plot.png"),
+        "sface_far": os.path.join(sface_dir, f"{sface_prefix}_far_curve.png"),
     }
 
 

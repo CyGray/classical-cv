@@ -221,7 +221,7 @@ _PCTS = [1, 5, 10, 25, 50, 75, 90, 95, 99]
 
 
 def stats_and_sample_from_memmap(
-    raw: np.memmap, *, sample_cap: int = 1_000_000
+    raw: np.memmap, *, sample_cap: int = 2_000_000
 ) -> tuple[dict, np.ndarray]:
     """Exact min/max/mean/std over the whole memmap; percentiles + plot sample
     from a uniform stride (exact when the data already fits under *sample_cap*)."""
@@ -257,6 +257,12 @@ def stats_and_sample_from_memmap(
         "median_distance": float(pct_vals[_PCTS.index(50)]),
         "percentiles": {p: float(v) for p, v in zip(_PCTS, pct_vals)},
         "percentiles_sampled": step > 1,
+        # Sampling provenance so any figure/percentile block built from a sampled
+        # distribution is labeled as such (sample_cap is a fixed default, not
+        # hardware-tier-derived - see add_scaling_args in independence_report.py).
+        "sample_cap": sample_cap,
+        "stride": step,
+        "sampled_n": int(sample.shape[0]),
     }
     return stats, sample
 

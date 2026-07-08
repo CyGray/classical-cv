@@ -26,16 +26,34 @@ Non-escalated outcomes: ``d_cv <= tau_accept`` -> accept on LBPH;
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+from dataclasses import dataclass, field
+from functools import lru_cache
+from pathlib import Path
 
 from src.hybrid.quality import QualityReport
+
+# Last-resort fallback if thresholds.json is missing/unreadable at import time.
+# The frozen values themselves live in thresholds.json (the file the evidence
+# matrix SHA-256-hashes); these literals must never be the only copy.
+_FALLBACK_GATE_DEFAULTS = {"tau_accept": 73.04, "tau_reject": 76.85, "margin_min": 0.05}
+_THRESHOLDS_JSON = Path(__file__).with_name("thresholds.json")
+
+
+@lru_cache(maxsize=1)
+def _frozen_gate_defaults() -> dict:
+    try:
+        data = json.loads(_THRESHOLDS_JSON.read_text())["gate"]
+        return {k: float(data[k]) for k in _FALLBACK_GATE_DEFAULTS}
+    except (OSError, KeyError, ValueError):
+        return dict(_FALLBACK_GATE_DEFAULTS)
 
 
 @dataclass(frozen=True)
 class GateThresholds:
-    tau_accept: float = 73.04   # <= this LBPH distance => confident accept
-    tau_reject: float = 76.85   # >= this LBPH distance => confident reject
-    margin_min: float = 0.05    # min relative top1<->top2 gap (d2-d1)/d1 to trust LBPH
+    tau_accept: float = field(default_factory=lambda: _frozen_gate_defaults()["tau_accept"])
+    tau_reject: float = field(default_factory=lambda: _frozen_gate_defaults()["tau_reject"])
+    margin_min: float = field(default_factory=lambda: _frozen_gate_defaults()["margin_min"])
 
     @classmethod
     def from_dict(cls, data: dict | None) -> "GateThresholds":

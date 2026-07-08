@@ -49,6 +49,8 @@ import matplotlib  # noqa: E402
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
+from src.stats_utils import wilson_interval_percent  # noqa: E402
+
 FAMILIES = ["lbph", "eigenfaces", "fisherfaces"]
 DISPLAY = {"lbph": "LBPH", "eigenfaces": "Eigenfaces", "fisherfaces": "Fisherfaces"}
 COLORS = {"lbph": "#1f77b4", "eigenfaces": "#ff7f0e", "fisherfaces": "#2ca02c"}
@@ -148,6 +150,14 @@ def fmt(x, nd=2, suffix=""):
     return "n/a" if x is None else f"{x:.{nd}f}{suffix}"
 
 
+def fmt_with_ci(percent: float, successes: int, trials: int, nd: int = 2) -> str:
+    """'98.21% [90.5-99.7]' - value plus its 95% Wilson interval (src/stats_utils.py)."""
+    if trials <= 0:
+        return fmt(percent, nd, "%")
+    ci = wilson_interval_percent(successes, trials)
+    return f"{percent:.{nd}f}% [{ci['ci95_low_percent']:.1f}-{ci['ci95_high_percent']:.1f}]"
+
+
 def build_tables(tar_far, accuracy, live, evals, indep_ls, indep_lfw) -> str:
     fps = fps_map(live)
     L = []
@@ -164,7 +174,7 @@ def build_tables(tar_far, accuracy, live, evals, indep_ls, indep_lfw) -> str:
         "",
         "## Table 1 - Main Performance Summary",
         "",
-        "| Algorithm | TAR % | FAR (ppm) | FRR % | Mean AR % (41 mods) | "
+        "| Algorithm | TAR % (95% Wilson CI) | FAR (ppm) | FRR % (95% Wilson CI) | Mean AR % (41 mods) | "
         "Latency (ms) | Model size (KB) | Feature (bytes) | Pass/Fail vs spec |",
         "|---|---:|---:|---:|---:|---:|---:|---:|:--|",
     ]
@@ -204,8 +214,12 @@ def build_tables(tar_far, accuracy, live, evals, indep_ls, indep_lfw) -> str:
         summary_rows[fam] = dict(tar=tar, frr=frr, far_ppm=far_ppm, ar=ar,
                                  latency=latency, model_kb=model_kb, feat_b=feat_b,
                                  fps=fps_v)
+        n_gen = op.get("n_genuine", 0)
+        genuine_correct = op.get("genuine_correct", 0)
+        tar_cell = fmt_with_ci(tar, genuine_correct, n_gen) if n_gen else fmt(tar, suffix="%")
+        frr_cell = fmt_with_ci(frr, n_gen - genuine_correct, n_gen) if n_gen else fmt(frr, suffix="%")
         L.append(
-            f"| {DISPLAY[fam]} | {fmt(tar)} | {far_ppm:.0f} | {fmt(frr)} | "
+            f"| {DISPLAY[fam]} | {tar_cell} | {far_ppm:.0f} | {frr_cell} | "
             f"{fmt(ar)} | {fmt(latency,1)} | {model_kb:,.0f} | {feat_b:,} | {verdict} |"
         )
     L += [
