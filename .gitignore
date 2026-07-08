@@ -45,7 +45,9 @@ archive/
 # ===================================
 # Large Datasets (Local & Machine-Specific)
 # ===================================
-data/
+data/*
+!data/lasalle_db1_processed/
+!data/split_backup_before_lfw_20260423_132556/
 *.tar.gz
 *.zip
 *.rar
