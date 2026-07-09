@@ -201,9 +201,11 @@ def to_markdown(summary: dict) -> str:
     lines.append(f"# Detector Comparison - Haar (Viola-Jones) vs YuNet ({summary['dataset']})")
     lines.append("")
     lines.append(
-        f"Sample: **{summary['images']} images** from `data/{summary['dataset']}` "
+        f"Sample: **{summary['images']} images** from `{summary['dataset_dir']}` "
         f"({summary['image_note']}), detector input downscaled to a "
-        f"**{summary['downscale_max_side']} px** longest side. Detection time excludes image decode."
+        f"**{summary['downscale_max_side']} px** longest side, "
+        f"YuNet score threshold **{summary['config']['yunet_score_threshold']:g}**. "
+        f"Detection time excludes image decode."
     )
     lines.append("")
     lines.append("| Metric | Viola-Jones (Haar) | YuNet (CNN) | Better |")
@@ -309,11 +311,17 @@ def main() -> None:
         "rows": rows,
     }
 
+    # Keep the canonical name at the validated default threshold (0.6) so existing
+    # reports reproduce unchanged; stamp the threshold into the filename otherwise, so
+    # a 0.9-vs-0.6 sweep on the same dataset cannot silently clobber its own output.
+    default_stem = f"detector_comparison_{dataset_key}"
+    if args.yunet_score_threshold != DEFAULT_YUNET_SCORE_THRESHOLD:
+        default_stem += f"_yunet{args.yunet_score_threshold:g}"
     out_json = resolve_path(args.output_json) if args.output_json else root_path(
-        "reports", "benchmark", f"detector_comparison_{dataset_key}.json"
+        "reports", "benchmark", f"{default_stem}.json"
     )
     out_md = resolve_path(args.output_md) if args.output_md else root_path(
-        "reports", "benchmark", f"detector_comparison_{dataset_key}.md"
+        "reports", "benchmark", f"{default_stem}.md"
     )
     Path(out_json).parent.mkdir(parents=True, exist_ok=True)
     with open(out_json, "w", encoding="utf-8") as f:
