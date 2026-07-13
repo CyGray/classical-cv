@@ -46,7 +46,7 @@ export default function RootLayout({
               LS-Face Study · classical-CV track. Read-only mirror of the repository.
             </span>
             <span>
-              Data updated {manifest.study_status.updated ?? "—"} · manifest{" "}
+              Data updated {manifest.study_status.updated ?? "unknown"} · manifest{" "}
               {manifest.generated_at.slice(0, 10)}
             </span>
           </div>

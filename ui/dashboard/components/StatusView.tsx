@@ -133,8 +133,8 @@ function ChecklistView() {
   return (
     <div className="grid gap-4 md:grid-cols-2">
       <ChecklistColumn title="Done" items={c.done} tone="bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300" />
-      <ChecklistColumn title="To do — paper (writing only)" items={c.todo_paper} tone="bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300" />
-      <ChecklistColumn title="To do — open (needs a run)" items={c.todo_open} tone="bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" />
+      <ChecklistColumn title="Paper to-do (writing only)" items={c.todo_paper} tone="bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300" />
+      <ChecklistColumn title="Open to-do (needs a run)" items={c.todo_open} tone="bg-rose-100 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300" />
       <ChecklistColumn title="Out of scope (Paper 2)" items={c.out_of_scope} tone="bg-slate-100 text-slate-500 dark:bg-slate-500/15 dark:text-slate-400" strike />
     </div>
   );

@@ -29,12 +29,12 @@ export default function Home() {
           Research status dashboard
         </p>
         <h1 className="mt-2 max-w-3xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-          Where the LS-Face study actually stands — runs, results, and paper coverage
+          Where the LS-Face study actually stands: runs, results, and paper coverage
           in one place.
         </h1>
         <p className="mt-3 max-w-2xl text-muted">
           A read-only mirror of the repository, so anyone on the team or an advisor can
-          see what has been run and what the paper still needs — without opening a
+          see what has been run and what the paper still needs, without opening a
           terminal or reading raw <code className="rounded bg-elevated px-1 py-0.5 text-sm">reports/</code> output.
         </p>
       </section>

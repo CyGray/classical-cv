@@ -25,7 +25,7 @@ export default function PaperPage() {
         )}
       </article>
 
-      {/* Coverage sidebar — how each section tracks the data. */}
+      {/* Coverage sidebar: how each section tracks the data. */}
       <aside className="mt-10 lg:mt-0">
         <div className="lg:sticky lg:top-20">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-faint">
@@ -46,7 +46,7 @@ export default function PaperPage() {
             ))}
           </div>
           <p className="mt-4 text-xs text-faint">
-            Coverage is hand-maintained alongside the runs it describes — the whole point
+            Coverage is hand-maintained alongside the runs it describes. The whole point
             is to keep the paper from silently lagging the data.
           </p>
         </div>

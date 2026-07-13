@@ -1,5 +1,5 @@
 // Docs loader. The slug map is authoritative and mirrors DOC_SOURCES in
-// scripts/build_study_manifest.py — the disk path's "READ THIS" space is normalized
+// scripts/build_study_manifest.py. The disk path's "READ THIS" space is normalized
 // to "read-this/" during the Phase-0 copy, so here we only ever touch clean slugs
 // under content/docs/<slug>.md. URL segments never derive from a raw filename
 // (DESIGN.md §6.2 hazard).
@@ -34,8 +34,8 @@ export const DOC_ENTRIES: DocEntry[] = [
   { slug: "changelogs/changelog", title: "Changelog", group: "Changelogs" },
   { slug: "changelogs/0407", title: "Changelog 04-07", group: "Changelogs" },
   { slug: "changelogs/0421", title: "Changelog 04-21", group: "Changelogs" },
-  { slug: "presentation/complementarity-battery", title: "Complementarity Battery — Why & How", group: "Presentation" },
-  { slug: "presentation/independence-expansion", title: "Independence Test Expansion — Why & How", group: "Presentation" },
+  { slug: "presentation/complementarity-battery", title: "Complementarity Battery: Why & How", group: "Presentation" },
+  { slug: "presentation/independence-expansion", title: "Independence Test Expansion: Why & How", group: "Presentation" },
 ];
 
 const CONTENT_ROOT = path.join(process.cwd(), "content", "docs");

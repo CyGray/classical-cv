@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 // Design tokens live as CSS variables in app/globals.css so light/dark switch with a
 // single class on <html>. Tailwind consumes them here. Palette goal (DESIGN.md §6.5):
-// legibility over novelty — a calm, neutral academic surface that reads in any locale.
+// legibility over novelty: a calm, neutral academic surface that reads in any locale.
 const config: Config = {
   darkMode: "class",
   content: [

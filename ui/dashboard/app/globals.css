@@ -42,7 +42,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Focus ring — visible for keyboard users everywhere (accessibility baseline). */
+/* Focus ring: visible for keyboard users everywhere (accessibility baseline). */
 :focus-visible {
   outline: 2px solid rgb(var(--brand));
   outline-offset: 2px;

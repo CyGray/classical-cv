@@ -86,7 +86,7 @@ export default function LegDetail({ params }: { params: { slug: string } }) {
         )}
       </Card>
 
-      {/* Artifact inventory — mechanical facts, clearly separate from interpretation. */}
+      {/* Artifact inventory: mechanical facts, clearly separate from interpretation. */}
       <Card className="mt-5 p-6">
         <h2 className="mb-4 text-sm font-semibold text-ink">Artifact inventory</h2>
         <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
@@ -115,7 +115,7 @@ export default function LegDetail({ params }: { params: { slug: string } }) {
         )}
         <p className="mt-4 text-xs text-faint">
           Inventory is derived mechanically from the filesystem at build time. Status,
-          protocol, and result above are hand-stated — never inferred from timestamps.
+          protocol, and result above are hand-stated, never inferred from timestamps.
         </p>
       </Card>
     </div>

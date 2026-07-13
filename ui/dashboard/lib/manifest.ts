@@ -1,6 +1,6 @@
 // Typed access to the generated manifest (ui/dashboard/data/manifest.json). Imported
-// directly — it lives inside the Root Directory, so no fs call is needed and it is
-// resolved at build time (DESIGN.md §6.5 monorepo fix).
+// directly because it lives inside the Root Directory, so no fs call is needed and it
+// is resolved at build time (DESIGN.md §6.5 monorepo fix).
 import manifestJson from "@/data/manifest.json";
 
 export type LegStatus = "done" | "in_progress" | "open" | "superseded";
