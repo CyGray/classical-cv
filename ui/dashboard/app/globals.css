@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Design tokens ---------------------------------------------------------
+   Light and dark are the SAME hues at different lightness so the dashboard reads
+   identically in either theme. RGB triplets (space-separated) so Tailwind's
+   <alpha-value> works. */
+:root {
+  --canvas: 249 250 251; /* app background */
+  --surface: 255 255 255; /* cards */
+  --elevated: 255 255 255;
+  --border: 226 232 240;
+  --ink: 15 23 42; /* primary text (slate-900) */
+  --muted: 71 85 105; /* secondary text (slate-600) */
+  --faint: 148 163 184; /* tertiary (slate-400) */
+  --brand: 37 99 235; /* blue-600 */
+  --brand-soft: 219 234 254; /* blue-100 */
+}
+
+.dark {
+  --canvas: 15 23 42; /* slate-900 */
+  --surface: 30 41 59; /* slate-800 */
+  --elevated: 51 65 85; /* slate-700 */
+  --border: 51 65 85;
+  --ink: 241 245 249; /* slate-100 */
+  --muted: 148 163 184; /* slate-400 */
+  --faint: 100 116 139; /* slate-500 */
+  --brand: 96 165 250; /* blue-400 */
+  --brand-soft: 30 58 138; /* blue-900 */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: rgb(var(--canvas));
+  color: rgb(var(--ink));
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus ring — visible for keyboard users everywhere (accessibility baseline). */
+:focus-visible {
+  outline: 2px solid rgb(var(--brand));
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ---- Rendered-markdown prose (docs & paper viewer) ------------------------- */
+.prose-doc {
+  color: rgb(var(--ink));
+  line-height: 1.7;
+  font-size: 1rem;
+}
+.prose-doc > * + * {
+  margin-top: 1rem;
+}
+.prose-doc h1 { font-size: 1.9rem; font-weight: 700; line-height: 1.25; margin-top: 2rem; }
+.prose-doc h2 { font-size: 1.45rem; font-weight: 650; line-height: 1.3; margin-top: 2rem; padding-bottom: .3rem; border-bottom: 1px solid rgb(var(--border)); }
+.prose-doc h3 { font-size: 1.18rem; font-weight: 600; margin-top: 1.6rem; }
+.prose-doc h4 { font-size: 1.02rem; font-weight: 600; margin-top: 1.3rem; }
+.prose-doc h1:first-child, .prose-doc h2:first-child { margin-top: 0; }
+.prose-doc p { color: rgb(var(--ink)); }
+.prose-doc a { color: rgb(var(--brand)); text-decoration: underline; text-underline-offset: 2px; }
+.prose-doc strong { font-weight: 650; color: rgb(var(--ink)); }
+.prose-doc ul { list-style: disc; padding-left: 1.4rem; }
+.prose-doc ol { list-style: decimal; padding-left: 1.4rem; }
+.prose-doc li { margin-top: .35rem; }
+.prose-doc li > ul, .prose-doc li > ol { margin-top: .35rem; }
+.prose-doc blockquote {
+  border-left: 3px solid rgb(var(--brand));
+  padding: .3rem 0 .3rem 1rem;
+  color: rgb(var(--muted));
+  background: rgb(var(--brand-soft) / .35);
+  border-radius: 0 6px 6px 0;
+}
+.prose-doc code {
+  font-family: theme("fontFamily.mono");
+  font-size: .86em;
+  background: rgb(var(--elevated));
+  padding: .12em .38em;
+  border-radius: 4px;
+  border: 1px solid rgb(var(--border));
+}
+.prose-doc pre {
+  background: rgb(var(--ink) / .04);
+  border: 1px solid rgb(var(--border));
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+.dark .prose-doc pre { background: rgb(0 0 0 / .25); }
+.prose-doc pre code { background: transparent; border: 0; padding: 0; font-size: .82rem; }
+.prose-doc hr { border: 0; border-top: 1px solid rgb(var(--border)); margin: 2rem 0; }
+
+/* Tables inside markdown scroll horizontally on small screens, never the page. */
+.prose-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose-doc th, .prose-doc td {
+  border: 1px solid rgb(var(--border));
+  padding: .5rem .7rem;
+  text-align: left;
+  vertical-align: top;
+}
+.prose-doc thead th {
+  background: rgb(var(--elevated));
+  font-weight: 600;
+  white-space: nowrap;
+}
+.prose-doc tbody tr:nth-child(even) { background: rgb(var(--canvas) / .5); }
+
+/* Reduced-motion honour. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

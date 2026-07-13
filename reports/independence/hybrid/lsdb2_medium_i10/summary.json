@@ -1,0 +1,1264 @@
+{
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+    "identities": 28
+  },
+  "iterations": 10,
+  "comparisons_per_iteration": 756,
+  "mean_fp_percent": {
+    "lbph": 15.740740740740739,
+    "sface": 1.9841269841269837,
+    "both": 0.6878306878306879,
+    "cascade": 1.2698412698412698
+  },
+  "mean_escalation_percent": 100.0,
+  "error_overlap_observed_over_expected_mean": 2.1993491090665613,
+  "pooled": {
+    "comparisons": 7560,
+    "note": "pairs pooled over iterations reuse identities; see per_iteration for the conservative per-sweep view",
+    "fp_rates_ci95": {
+      "lbph": {
+        "count": 1190,
+        "trials": 7560,
+        "percent": 15.74074074074074,
+        "ci95_low_percent": 14.937229454395561,
+        "ci95_high_percent": 16.579050623642548
+      },
+      "sface": {
+        "count": 150,
+        "trials": 7560,
+        "percent": 1.9841269841269842,
+        "ci95_low_percent": 1.6932932029241714,
+        "ci95_high_percent": 2.3237325435153515
+      },
+      "both": {
+        "count": 52,
+        "trials": 7560,
+        "percent": 0.6878306878306878,
+        "ci95_low_percent": 0.5249390660276907,
+        "ci95_high_percent": 0.9008107914727344
+      },
+      "cascade": {
+        "count": 96,
+        "trials": 7560,
+        "percent": 1.2698412698412698,
+        "ci95_low_percent": 1.0410447362141952,
+        "ci95_high_percent": 1.548135112238478
+      }
+    },
+    "diversity": {
+      "table": {
+        "both": 52,
+        "only_a": 1138,
+        "only_b": 98,
+        "neither": 6272,
+        "n": 7560
+      },
+      "q_statistic": 0.490371697268249,
+      "phi": 0.07393877655641695,
+      "disagreement": 0.1634920634920635,
+      "double_fault": 0.0068783068783068784,
+      "expected_both_if_independent": 23.61111111111111,
+      "observed_over_expected": 2.202352941176471,
+      "fisher": {
+        "p_positive": 6.847996081921411e-09,
+        "p_negative": 0.999999997733434,
+        "p_two_sided": 9.15273150854009e-09,
+        "degenerate": false
+      }
+    }
+  },
+  "thresholds": {
+    "lbph_tau_accept": 73.04,
+    "lbph_tau_reject": 76.85,
+    "margin_min": 0.05,
+    "sface_cosine_genuine": 0.363,
+    "sface_l2_genuine": 1.128
+  },
+  "lbph_rank_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 73.84383392333984,
+      "normalized_threshold": 0.0,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Francis_Miles_Ang",
+      "candidate_identity": "Jul_Leo_Javellana",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 72.76079483032227,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Francis_Miles_Ang"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 72.76079483032227,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Francis_Miles_Ang",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 73.48472747802734,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Daniel_Ramos"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 73.84383392333984,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Francis_Miles_Ang",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 74.23742141723633,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Francis_Cromwell_Tan",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 74.47142181396484,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "John_Andrei_Gayona",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 74.78285064697266,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Michael_Andrei_Jugado",
+        "candidate_identity": "Daniel_Ramos"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 75.21990432739258,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Joseph_Andrew_Ong",
+        "candidate_identity": "Diofel_Gwen_Haresco"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 75.94914169311524,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Kim_Ivan_Arigorat"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 77.4106315612793,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Anthony_Gallego",
+        "candidate_identity": "Lorenz_Ciocon"
+      }
+    ]
+  },
+  "sface_rank_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 0.7272376176901162,
+      "normalized_threshold": 0.0,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "John_Andrei_Gayona",
+      "candidate_identity": "John_Roland_Octavio",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 0.7042824268341065,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Joseph_Andrew_Ong",
+        "candidate_identity": "John_Andrei_Gayona"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 0.7042824268341065,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "John_Andrei_Gayona",
+        "candidate_identity": "Joseph_Andrew_Ong"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 0.7221667565405369,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Daniel_Ramos",
+        "candidate_identity": "John_Andrei_Gayona"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 0.7272376176901162,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "John_Andrei_Gayona",
+        "candidate_identity": "John_Roland_Octavio"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 0.7491254523396492,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Francis_Cromwell_Tan"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 0.7892208535224199,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Norbert_Audines",
+        "candidate_identity": "Wilbert_Mijares"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 0.8142062641680241,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Norbert_Audines"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 0.8321135479956865,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Joseph_Andrew_Ong",
+        "candidate_identity": "Anthony_Charles_Saltat"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 0.870501920953393,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Francis_Miles_Ang",
+        "candidate_identity": "John_Roland_Octavio"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 0.915988290309906,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Anthony_Gallego",
+        "candidate_identity": "Jul_Leo_Javellana"
+      }
+    ]
+  },
+  "per_iteration": [
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 140,
+        "sface": 12,
+        "both": 6,
+        "union": 146,
+        "cascade": 11
+      },
+      "fp_percent": {
+        "lbph": 18.51851851851852,
+        "sface": 1.5873015873015872,
+        "both": 0.7936507936507936,
+        "cascade": 1.4550264550264551
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 140,
+          "trials": 756,
+          "percent": 18.51851851851852,
+          "ci95_low_percent": 15.911123161451911,
+          "ci95_high_percent": 21.444229790890013
+        },
+        "sface": {
+          "count": 12,
+          "trials": 756,
+          "percent": 1.5873015873015872,
+          "ci95_low_percent": 0.9102954041284429,
+          "ci95_high_percent": 2.7538187998931747
+        },
+        "both": {
+          "count": 6,
+          "trials": 756,
+          "percent": 0.7936507936507936,
+          "ci95_low_percent": 0.36423023630337015,
+          "ci95_high_percent": 1.7206071513907333
+        },
+        "cascade": {
+          "count": 11,
+          "trials": 756,
+          "percent": 1.4550264550264551,
+          "ci95_low_percent": 0.8143729199752867,
+          "ci95_high_percent": 2.586528481325078
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 6,
+        "expected_joint_fp_if_independent": 2.222222222222222,
+        "observed_over_expected": 2.7000000000000006,
+        "p_sface_fp_given_lbph_fp": 0.04285714285714286,
+        "p_lbph_fp_given_sface_fp": 0.5
+      },
+      "diversity": {
+        "table": {
+          "both": 6,
+          "only_a": 134,
+          "only_b": 6,
+          "neither": 610,
+          "n": 756
+        },
+        "q_statistic": 0.6397849462365591,
+        "phi": 0.10292638943550259,
+        "disagreement": 0.18518518518518517,
+        "double_fault": 0.007936507936507936,
+        "expected_both_if_independent": 2.2222222222222223,
+        "observed_over_expected": 2.6999999999999997,
+        "fisher": {
+          "p_positive": 0.012676169103615843,
+          "p_negative": 0.997747274374693,
+          "p_two_sided": 0.012676169103615843,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "low_margin": 2,
+          "quality": 26
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 42,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 102,
+        "sface": 12,
+        "both": 4,
+        "union": 110,
+        "cascade": 9
+      },
+      "fp_percent": {
+        "lbph": 13.492063492063492,
+        "sface": 1.5873015873015872,
+        "both": 0.5291005291005291,
+        "cascade": 1.1904761904761905
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 102,
+          "trials": 756,
+          "percent": 13.492063492063492,
+          "ci95_low_percent": 11.24048458400943,
+          "ci95_high_percent": 16.1127818649249
+        },
+        "sface": {
+          "count": 12,
+          "trials": 756,
+          "percent": 1.5873015873015872,
+          "ci95_low_percent": 0.9102954041284429,
+          "ci95_high_percent": 2.7538187998931747
+        },
+        "both": {
+          "count": 4,
+          "trials": 756,
+          "percent": 0.5291005291005291,
+          "ci95_low_percent": 0.20594351280898063,
+          "ci95_high_percent": 1.3524682694426178
+        },
+        "cascade": {
+          "count": 9,
+          "trials": 756,
+          "percent": 1.1904761904761905,
+          "ci95_low_percent": 0.6275563622394589,
+          "ci95_high_percent": 2.2469194336184017
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 4,
+        "expected_joint_fp_if_independent": 1.6190476190476188,
+        "observed_over_expected": 2.4705882352941178,
+        "p_sface_fp_given_lbph_fp": 0.0392156862745098,
+        "p_lbph_fp_given_sface_fp": 0.3333333333333333
+      },
+      "diversity": {
+        "table": {
+          "both": 4,
+          "only_a": 98,
+          "only_b": 8,
+          "neither": 646,
+          "n": 756
+        },
+        "q_statistic": 0.5344418052256532,
+        "phi": 0.07375754522962534,
+        "disagreement": 0.1402116402116402,
+        "double_fault": 0.005291005291005291,
+        "expected_both_if_independent": 1.619047619047619,
+        "observed_over_expected": 2.4705882352941178,
+        "fisher": {
+          "p_positive": 0.06542512491721583,
+          "p_negative": 0.9852699261842266,
+          "p_two_sided": 0.06542512491721583,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 25,
+          "low_margin": 2,
+          "ambiguous_band": 1
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 43,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 130,
+        "sface": 10,
+        "both": 2,
+        "union": 138,
+        "cascade": 7
+      },
+      "fp_percent": {
+        "lbph": 17.195767195767196,
+        "sface": 1.3227513227513228,
+        "both": 0.26455026455026454,
+        "cascade": 0.9259259259259259
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 130,
+          "trials": 756,
+          "percent": 17.195767195767196,
+          "ci95_low_percent": 14.673473292957146,
+          "ci95_high_percent": 20.049751632172253
+        },
+        "sface": {
+          "count": 10,
+          "trials": 756,
+          "percent": 1.3227513227513228,
+          "ci95_low_percent": 0.7200527933293229,
+          "ci95_high_percent": 2.41763580524979
+        },
+        "both": {
+          "count": 2,
+          "trials": 756,
+          "percent": 0.26455026455026454,
+          "ci95_low_percent": 0.07257922902672073,
+          "ci95_high_percent": 0.9594069477823729
+        },
+        "cascade": {
+          "count": 7,
+          "trials": 756,
+          "percent": 0.9259259259259259,
+          "ci95_low_percent": 0.4492282471777771,
+          "ci95_high_percent": 1.8988219432375786
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 2,
+        "expected_joint_fp_if_independent": 1.7195767195767195,
+        "observed_over_expected": 1.1630769230769231,
+        "p_sface_fp_given_lbph_fp": 0.015384615384615385,
+        "p_lbph_fp_given_sface_fp": 0.2
+      },
+      "diversity": {
+        "table": {
+          "both": 2,
+          "only_a": 128,
+          "only_b": 8,
+          "neither": 618,
+          "n": 756
+        },
+        "q_statistic": 0.09380530973451327,
+        "phi": 0.008604142697421324,
+        "disagreement": 0.17989417989417988,
+        "double_fault": 0.0026455026455026454,
+        "expected_both_if_independent": 1.7195767195767195,
+        "observed_over_expected": 1.1630769230769231,
+        "fisher": {
+          "p_positive": 0.5350098313058889,
+          "p_negative": 0.7611858753115002,
+          "p_two_sided": 0.684670203806587,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 26,
+          "low_margin": 2
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 44,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 108,
+        "sface": 20,
+        "both": 6,
+        "union": 122,
+        "cascade": 11
+      },
+      "fp_percent": {
+        "lbph": 14.285714285714285,
+        "sface": 2.6455026455026456,
+        "both": 0.7936507936507936,
+        "cascade": 1.4550264550264551
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 108,
+          "trials": 756,
+          "percent": 14.285714285714286,
+          "ci95_low_percent": 11.97164970454321,
+          "ci95_high_percent": 16.960893560718635
+        },
+        "sface": {
+          "count": 20,
+          "trials": 756,
+          "percent": 2.6455026455026456,
+          "ci95_low_percent": 1.7189776483522503,
+          "ci95_high_percent": 4.050838977439387
+        },
+        "both": {
+          "count": 6,
+          "trials": 756,
+          "percent": 0.7936507936507936,
+          "ci95_low_percent": 0.36423023630337015,
+          "ci95_high_percent": 1.7206071513907333
+        },
+        "cascade": {
+          "count": 11,
+          "trials": 756,
+          "percent": 1.4550264550264551,
+          "ci95_low_percent": 0.8143729199752867,
+          "ci95_high_percent": 2.586528481325078
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 6,
+        "expected_joint_fp_if_independent": 2.8571428571428568,
+        "observed_over_expected": 2.1,
+        "p_sface_fp_given_lbph_fp": 0.05555555555555555,
+        "p_lbph_fp_given_sface_fp": 0.3
+      },
+      "diversity": {
+        "table": {
+          "both": 6,
+          "only_a": 102,
+          "only_b": 14,
+          "neither": 634,
+          "n": 756
+        },
+        "q_statistic": 0.4541284403669725,
+        "phi": 0.07402751153299775,
+        "disagreement": 0.15343915343915343,
+        "double_fault": 0.007936507936507936,
+        "expected_both_if_independent": 2.8571428571428568,
+        "observed_over_expected": 2.1,
+        "fisher": {
+          "p_positive": 0.05268059184220152,
+          "p_negative": 0.9842897216226681,
+          "p_two_sided": 0.05268059184220152,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "ambiguous_band": 2,
+          "quality": 22,
+          "low_margin": 4
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 45,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 96,
+        "sface": 6,
+        "both": 2,
+        "union": 100,
+        "cascade": 6
+      },
+      "fp_percent": {
+        "lbph": 12.698412698412698,
+        "sface": 0.7936507936507936,
+        "both": 0.26455026455026454,
+        "cascade": 0.7936507936507936
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 96,
+          "trials": 756,
+          "percent": 12.698412698412698,
+          "ci95_low_percent": 10.512091625574522,
+          "ci95_high_percent": 15.261898007032299
+        },
+        "sface": {
+          "count": 6,
+          "trials": 756,
+          "percent": 0.7936507936507936,
+          "ci95_low_percent": 0.36423023630337015,
+          "ci95_high_percent": 1.7206071513907333
+        },
+        "both": {
+          "count": 2,
+          "trials": 756,
+          "percent": 0.26455026455026454,
+          "ci95_low_percent": 0.07257922902672073,
+          "ci95_high_percent": 0.9594069477823729
+        },
+        "cascade": {
+          "count": 6,
+          "trials": 756,
+          "percent": 0.7936507936507936,
+          "ci95_low_percent": 0.36423023630337015,
+          "ci95_high_percent": 1.7206071513907333
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 2,
+        "expected_joint_fp_if_independent": 0.7619047619047619,
+        "observed_over_expected": 2.625,
+        "p_sface_fp_given_lbph_fp": 0.020833333333333332,
+        "p_lbph_fp_given_sface_fp": 0.3333333333333333
+      },
+      "diversity": {
+        "table": {
+          "both": 2,
+          "only_a": 94,
+          "only_b": 4,
+          "neither": 656,
+          "n": 756
+        },
+        "q_statistic": 0.5545023696682464,
+        "phi": 0.05543218625245871,
+        "disagreement": 0.12962962962962962,
+        "double_fault": 0.0026455026455026454,
+        "expected_both_if_independent": 0.7619047619047619,
+        "observed_over_expected": 2.625,
+        "fisher": {
+          "p_positive": 0.1703600458520377,
+          "p_negative": 0.9701844570888513,
+          "p_two_sided": 0.1703600458520377,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 26,
+          "low_margin": 1,
+          "ambiguous_band": 1
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 46,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 62,
+        "sface": 10,
+        "both": 2,
+        "union": 70,
+        "cascade": 8
+      },
+      "fp_percent": {
+        "lbph": 8.201058201058201,
+        "sface": 1.3227513227513228,
+        "both": 0.26455026455026454,
+        "cascade": 1.0582010582010581
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 62,
+          "trials": 756,
+          "percent": 8.201058201058201,
+          "ci95_low_percent": 6.45004164693554,
+          "ci95_high_percent": 10.374712693148698
+        },
+        "sface": {
+          "count": 10,
+          "trials": 756,
+          "percent": 1.3227513227513228,
+          "ci95_low_percent": 0.7200527933293229,
+          "ci95_high_percent": 2.41763580524979
+        },
+        "both": {
+          "count": 2,
+          "trials": 756,
+          "percent": 0.26455026455026454,
+          "ci95_low_percent": 0.07257922902672073,
+          "ci95_high_percent": 0.9594069477823729
+        },
+        "cascade": {
+          "count": 8,
+          "trials": 756,
+          "percent": 1.0582010582010581,
+          "ci95_low_percent": 0.5371620180954068,
+          "ci95_high_percent": 2.074100975041201
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 2,
+        "expected_joint_fp_if_independent": 0.82010582010582,
+        "observed_over_expected": 2.438709677419355,
+        "p_sface_fp_given_lbph_fp": 0.03225806451612903,
+        "p_lbph_fp_given_sface_fp": 0.2
+      },
+      "diversity": {
+        "table": {
+          "both": 2,
+          "only_a": 60,
+          "only_b": 8,
+          "neither": 686,
+          "n": 756
+        },
+        "q_statistic": 0.4816414686825054,
+        "phi": 0.049787447408472504,
+        "disagreement": 0.08994708994708994,
+        "double_fault": 0.0026455026455026454,
+        "expected_both_if_independent": 0.82010582010582,
+        "observed_over_expected": 2.438709677419355,
+        "fisher": {
+          "p_positive": 0.1946830600134665,
+          "p_negative": 0.9584137866242286,
+          "p_two_sided": 0.1946830600134665,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 23,
+          "ambiguous_band": 3,
+          "low_margin": 2
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 47,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 166,
+        "sface": 26,
+        "both": 8,
+        "union": 184,
+        "cascade": 11
+      },
+      "fp_percent": {
+        "lbph": 21.957671957671955,
+        "sface": 3.439153439153439,
+        "both": 1.0582010582010581,
+        "cascade": 1.4550264550264551
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 166,
+          "trials": 756,
+          "percent": 21.95767195767196,
+          "ci95_low_percent": 19.15266065082914,
+          "ci95_high_percent": 25.046225172265345
+        },
+        "sface": {
+          "count": 26,
+          "trials": 756,
+          "percent": 3.439153439153439,
+          "ci95_low_percent": 2.357613237148738,
+          "ci95_high_percent": 4.991480204970414
+        },
+        "both": {
+          "count": 8,
+          "trials": 756,
+          "percent": 1.0582010582010581,
+          "ci95_low_percent": 0.5371620180954068,
+          "ci95_high_percent": 2.074100975041201
+        },
+        "cascade": {
+          "count": 11,
+          "trials": 756,
+          "percent": 1.4550264550264551,
+          "ci95_low_percent": 0.8143729199752867,
+          "ci95_high_percent": 2.586528481325078
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 8,
+        "expected_joint_fp_if_independent": 5.708994708994709,
+        "observed_over_expected": 1.40129749768304,
+        "p_sface_fp_given_lbph_fp": 0.04819277108433735,
+        "p_lbph_fp_given_sface_fp": 0.3076923076923077
+      },
+      "diversity": {
+        "table": {
+          "both": 8,
+          "only_a": 158,
+          "only_b": 18,
+          "neither": 572,
+          "n": 756
+        },
+        "q_statistic": 0.2334231805929919,
+        "phi": 0.04017165588263082,
+        "disagreement": 0.2328042328042328,
+        "double_fault": 0.010582010582010581,
+        "expected_both_if_independent": 5.708994708994709,
+        "observed_over_expected": 1.40129749768304,
+        "fisher": {
+          "p_positive": 0.19074306709731773,
+          "p_negative": 0.9067765544734785,
+          "p_two_sided": 0.33215987352466114,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 25,
+          "low_margin": 3
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 48,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 158,
+        "sface": 18,
+        "both": 10,
+        "union": 166,
+        "cascade": 10
+      },
+      "fp_percent": {
+        "lbph": 20.8994708994709,
+        "sface": 2.380952380952381,
+        "both": 1.3227513227513228,
+        "cascade": 1.3227513227513228
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 158,
+          "trials": 756,
+          "percent": 20.8994708994709,
+          "ci95_low_percent": 18.151878302422904,
+          "ci95_high_percent": 23.941305098901562
+        },
+        "sface": {
+          "count": 18,
+          "trials": 756,
+          "percent": 2.380952380952381,
+          "ci95_low_percent": 1.5112843232520634,
+          "ci95_high_percent": 3.7321066970970684
+        },
+        "both": {
+          "count": 10,
+          "trials": 756,
+          "percent": 1.3227513227513228,
+          "ci95_low_percent": 0.7200527933293229,
+          "ci95_high_percent": 2.41763580524979
+        },
+        "cascade": {
+          "count": 10,
+          "trials": 756,
+          "percent": 1.3227513227513228,
+          "ci95_low_percent": 0.7200527933293229,
+          "ci95_high_percent": 2.41763580524979
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 10,
+        "expected_joint_fp_if_independent": 3.7619047619047614,
+        "observed_over_expected": 2.658227848101266,
+        "p_sface_fp_given_lbph_fp": 0.06329113924050633,
+        "p_lbph_fp_given_sface_fp": 0.5555555555555556
+      },
+      "diversity": {
+        "table": {
+          "both": 10,
+          "only_a": 148,
+          "only_b": 8,
+          "neither": 590,
+          "n": 756
+        },
+        "q_statistic": 0.665725578769057,
+        "phi": 0.13311599033015567,
+        "disagreement": 0.20634920634920634,
+        "double_fault": 0.013227513227513227,
+        "expected_both_if_independent": 3.761904761904762,
+        "observed_over_expected": 2.6582278481012658,
+        "fisher": {
+          "p_positive": 0.0011302679666881999,
+          "p_negative": 0.9998024632935959,
+          "p_two_sided": 0.0011302679666881999,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 28
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 49,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 100,
+        "sface": 22,
+        "both": 8,
+        "union": 114,
+        "cascade": 14
+      },
+      "fp_percent": {
+        "lbph": 13.227513227513226,
+        "sface": 2.91005291005291,
+        "both": 1.0582010582010581,
+        "cascade": 1.8518518518518519
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 100,
+          "trials": 756,
+          "percent": 13.227513227513228,
+          "ci95_low_percent": 10.99736869874813,
+          "ci95_high_percent": 15.829472144743697
+        },
+        "sface": {
+          "count": 22,
+          "trials": 756,
+          "percent": 2.9100529100529102,
+          "ci95_low_percent": 1.9294859976058276,
+          "ci95_high_percent": 4.3667562336283146
+        },
+        "both": {
+          "count": 8,
+          "trials": 756,
+          "percent": 1.0582010582010581,
+          "ci95_low_percent": 0.5371620180954068,
+          "ci95_high_percent": 2.074100975041201
+        },
+        "cascade": {
+          "count": 14,
+          "trials": 756,
+          "percent": 1.8518518518518519,
+          "ci95_low_percent": 1.1062612290256095,
+          "ci95_high_percent": 3.0842785804385127
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 8,
+        "expected_joint_fp_if_independent": 2.91005291005291,
+        "observed_over_expected": 2.7490909090909095,
+        "p_sface_fp_given_lbph_fp": 0.08,
+        "p_lbph_fp_given_sface_fp": 0.36363636363636365
+      },
+      "diversity": {
+        "table": {
+          "both": 8,
+          "only_a": 92,
+          "only_b": 14,
+          "neither": 642,
+          "n": 756
+        },
+        "q_statistic": 0.5990037359900373,
+        "phi": 0.11822893385871258,
+        "disagreement": 0.1402116402116402,
+        "double_fault": 0.010582010582010581,
+        "expected_both_if_independent": 2.91005291005291,
+        "observed_over_expected": 2.7490909090909095,
+        "fisher": {
+          "p_positive": 0.004640423017498945,
+          "p_negative": 0.9990118663298639,
+          "p_two_sided": 0.004640423017498945,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 25,
+          "low_margin": 2,
+          "ambiguous_band": 1
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 50,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    },
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 128,
+        "sface": 14,
+        "both": 4,
+        "union": 138,
+        "cascade": 9
+      },
+      "fp_percent": {
+        "lbph": 16.93121693121693,
+        "sface": 1.8518518518518516,
+        "both": 0.5291005291005291,
+        "cascade": 1.1904761904761905
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 128,
+          "trials": 756,
+          "percent": 16.93121693121693,
+          "ci95_low_percent": 14.426614682881755,
+          "ci95_high_percent": 19.770184636805137
+        },
+        "sface": {
+          "count": 14,
+          "trials": 756,
+          "percent": 1.8518518518518519,
+          "ci95_low_percent": 1.1062612290256095,
+          "ci95_high_percent": 3.0842785804385127
+        },
+        "both": {
+          "count": 4,
+          "trials": 756,
+          "percent": 0.5291005291005291,
+          "ci95_low_percent": 0.20594351280898063,
+          "ci95_high_percent": 1.3524682694426178
+        },
+        "cascade": {
+          "count": 9,
+          "trials": 756,
+          "percent": 1.1904761904761905,
+          "ci95_low_percent": 0.6275563622394589,
+          "ci95_high_percent": 2.2469194336184017
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 4,
+        "expected_joint_fp_if_independent": 2.3703703703703702,
+        "observed_over_expected": 1.6875,
+        "p_sface_fp_given_lbph_fp": 0.03125,
+        "p_lbph_fp_given_sface_fp": 0.2857142857142857
+      },
+      "diversity": {
+        "table": {
+          "both": 4,
+          "only_a": 124,
+          "only_b": 10,
+          "neither": 618,
+          "n": 756
+        },
+        "q_statistic": 0.33189655172413796,
+        "phi": 0.04263437792988862,
+        "disagreement": 0.17724867724867724,
+        "double_fault": 0.005291005291005291,
+        "expected_both_if_independent": 2.3703703703703702,
+        "observed_over_expected": 1.6875,
+        "fisher": {
+          "p_positive": 0.20006862944380652,
+          "p_negative": 0.9288547983557376,
+          "p_two_sided": 0.27273491895799457,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "quality": 27,
+          "ambiguous_band": 1
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 51,
+      "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+    }
+  ],
+  "plots": {
+    "lbph_histogram": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\hybrid\\lsdb2_medium_i10\\lbph\\lsdb2_medium_i10_lbph_distance_histogram.png",
+    "lbph_curve": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\hybrid\\lsdb2_medium_i10\\lbph\\lsdb2_medium_i10_lbph_distance_curve_plot.png",
+    "lbph_far": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\hybrid\\lsdb2_medium_i10\\lbph\\lsdb2_medium_i10_lbph_far_curve.png",
+    "sface_histogram": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\hybrid\\lsdb2_medium_i10\\sface\\lsdb2_medium_i10_sface_distance_histogram.png",
+    "sface_curve": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\hybrid\\lsdb2_medium_i10\\sface\\lsdb2_medium_i10_sface_distance_curve_plot.png",
+    "sface_far": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\hybrid\\lsdb2_medium_i10\\sface\\lsdb2_medium_i10_sface_far_curve.png"
+  }
+}

@@ -1,0 +1,623 @@
+{
+  "generated_at": "2026-07-12T19:26:41Z",
+  "source_yml_hash": "sha256:3edec6a174824b9130c112c1a38a12c3baaafcc5528c9581c1fb864db781fcf6",
+  "study_status": {
+    "updated": "2026-07-13",
+    "updated_by": "Kyle",
+    "headline_finding": {
+      "active": true,
+      "title": "Error-independence complementarity: refuted at scale",
+      "summary": "Joint sweeps show LBPH and SFace false-accepts are positively associated (Yule's Q > 0 on every leg where estimable) — they fail on the same hard impostor pairs. The cascade still wins on FAR (98 ppm on LFW1, undercutting both engines), but via the gate + AND-composition, not via error independence. The paper's §4.5 must be rewritten to report this honestly.\n",
+      "source_doc": "docs/audits/STATE-07-10.md"
+    }
+  },
+  "legs": [
+    {
+      "model": "LBPH",
+      "dataset": "La Salle DB1",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/lbph_lasalle/",
+      "run_date": "2026-06-10",
+      "status": "done",
+      "protocol_note": "10 seeded repeats, aggregated. Canonical (restored in the 07-08 audit).",
+      "result_note": "Threshold 21.35 raw / 85.88 norm at the 8th pair (10,582 ppm realized). Per-run normalized stability 68.03 ± 1.83.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-06-10T02:13:40Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 2555588,
+      "slug": "lbph-la-salle-db1-independence"
+    },
+    {
+      "model": "LBPH",
+      "dataset": "LS-DB2 light",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/lbph_lsdb2/",
+      "run_date": "2026-07-08",
+      "status": "done",
+      "protocol_note": "10 seeded repeats (light tier).",
+      "result_note": "Done. Named without a tier suffix — dir rename is Part-C item 10 of the improvement spec.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "lbph_lsdb2_distance_curve_plot.png",
+        "lbph_lsdb2_distance_histogram.png",
+        "lbph_lsdb2_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 2712091,
+      "slug": "lbph-ls-db2-light-independence"
+    },
+    {
+      "model": "LBPH",
+      "dataset": "LFW smoke (300 ids, 89,700 pairs)",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/lbph_lfw/",
+      "run_date": "2026-06-10",
+      "status": "done",
+      "protocol_note": "Streaming, 1 iteration.",
+      "result_note": "Boundary pair = the known annotation error (Caldecott/Gilligan).",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-06-10T05:13:21Z",
+      "artifact_files": [
+        "summary.json"
+      ],
+      "artifact_size_bytes": 6263,
+      "slug": "lbph-lfw-smoke-300-ids-89-700-pairs-independence"
+    },
+    {
+      "model": "LBPH",
+      "dataset": "LFW full (5,749 ids, 33,045,252 pairs)",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/lbph_lfw1/",
+      "run_date": "2026-07-08",
+      "status": "done",
+      "protocol_note": "Streaming, 1 iteration (no run-to-run stability estimate).",
+      "result_note": "This is the sweep METRICS.md / PAPER.md still call \"pending\". Spec point is rank 330,453 = 10,000 ppm (θ = 19.18 raw / 55.86 norm, boundary Johnny_Hallyday vs Larry_Coker). The 10-ppm / 331st-pair anchor is bracketed (raw θ ∈ (17.02 @ 7.7 ppm, 17.20 @ 15.5 ppm)) but not yet extracted — an LFW-scale re-rank (open, P2).\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "summary.json"
+      ],
+      "artifact_size_bytes": 11369,
+      "slug": "lbph-lfw-full-5-749-ids-33-045-252-pairs-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LFW parity (5,685 ids, 32,313,540 pairs)",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/sface_lfw_parity.json",
+      "run_date": "2026-06-14",
+      "status": "done",
+      "protocol_note": "SFace-only parity certification vs DL-track reference.",
+      "result_note": "FP 0.0747% vs DL-track reference 0.07% — parity PASS (tolerance 0.05 abs). This is the §4.1 SFace certification.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-06-14T10:06:11Z",
+      "artifact_files": [
+        "sface_lfw_parity.json"
+      ],
+      "artifact_size_bytes": 400,
+      "slug": "hybrid-lfw-parity-5-685-ids-32-313-540-pairs-independence"
+    },
+    {
+      "model": "Eigenfaces",
+      "dataset": "La Salle DB1",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/eigenfaces_lasalle/",
+      "run_date": "2026-06-10",
+      "status": "done",
+      "protocol_note": "10 seeded repeats, aggregated.",
+      "result_note": "Classical baseline leg for the independence comparison.",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-06-10T02:13:43Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 2555611,
+      "slug": "eigenfaces-la-salle-db1-independence"
+    },
+    {
+      "model": "Fisherfaces",
+      "dataset": "La Salle DB1",
+      "test_type": "independence",
+      "artifact_path": "reports/independence/fisherfaces_lasalle/",
+      "run_date": "2026-06-10",
+      "status": "done",
+      "protocol_note": "10 seeded repeats, aggregated.",
+      "result_note": "Classical baseline leg for the independence comparison.",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-06-10T02:13:47Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 2555205,
+      "slug": "fisherfaces-la-salle-db1-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "La Salle DB1",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lsdb1/",
+      "run_date": "2026-07-08",
+      "status": "superseded",
+      "protocol_note": "iterations=1 (default changed to 1 on 07-08, commit 56ab21f).",
+      "result_note": "LBPH FP 0.000% (single seed-42 pick), SFace 2.646%, cascade 1.190%. Fisher degenerate (LBPH 0 FP) — an artifact of the single pick.\n",
+      "superseded_by": "reports/independence/hybrid/lsdb1_i10/",
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "lbph_distance_curve_plot.png",
+        "lbph_distance_histogram.png",
+        "lbph_far_curve.png",
+        "sface_distance_curve_plot.png",
+        "sface_distance_histogram.png",
+        "sface_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 591274,
+      "slug": "hybrid-la-salle-db1-joint-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LS-DB2 light",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lsdb2_light/",
+      "run_date": "2026-07-08",
+      "status": "superseded",
+      "protocol_note": "iterations=1.",
+      "result_note": "LBPH FP 1.323%, SFace 2.646%, cascade 1.455%, Q −1.0 (saturated).",
+      "superseded_by": "reports/independence/hybrid/lsdb2_light_i10/",
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "lbph_distance_curve_plot.png",
+        "lbph_distance_histogram.png",
+        "lbph_far_curve.png",
+        "sface_distance_curve_plot.png",
+        "sface_distance_histogram.png",
+        "sface_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 599659,
+      "slug": "hybrid-ls-db2-light-joint-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LS-DB2 medium",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lsdb2_medium/",
+      "run_date": "2026-07-08",
+      "status": "superseded",
+      "protocol_note": "iterations=1.",
+      "result_note": "LBPH FP 18.519%, SFace 1.587%, cascade 1.455%, Q +0.64, Fisher p_pos 0.013.",
+      "superseded_by": "reports/independence/hybrid/lsdb2_medium_i10/",
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "lbph_distance_curve_plot.png",
+        "lbph_distance_histogram.png",
+        "lbph_far_curve.png",
+        "sface_distance_curve_plot.png",
+        "sface_distance_histogram.png",
+        "sface_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 588351,
+      "slug": "hybrid-ls-db2-medium-joint-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "La Salle DB1",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lsdb1_i10/",
+      "run_date": "2026-07-10",
+      "status": "done",
+      "protocol_note": "10 iterations, paper protocol (pooled over 7,560 comparisons).",
+      "result_note": "LBPH FP 0.661% [0.50–0.87], SFace 1.799% [1.52–2.12], cascade 1.389% [1.15–1.68], Q +0.66, obs/exp 4.45, Fisher p_pos 0.012 (co-occurrence significant), esc 85.4%. At 10 picks LBPH admits 50/7,560 — the Jul-8 \"0 FP / degenerate\" was a single-pick artifact.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-10T15:32:16Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 3553500,
+      "slug": "hybrid-la-salle-db1-joint-independence-2"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LS-DB2 light",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lsdb2_light_i10/",
+      "run_date": "2026-07-10",
+      "status": "done",
+      "protocol_note": "10 iterations, paper protocol (7,560 comparisons).",
+      "result_note": "LBPH FP 1.667%, SFace 1.561%, cascade 1.217% (undercuts BOTH engines), Q +0.80, obs/exp 7.12, Fisher p_pos 7.4e-09, esc 94.6%.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-10T15:32:21Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 4105193,
+      "slug": "hybrid-ls-db2-light-joint-independence-2"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LS-DB2 medium",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lsdb2_medium_i10/",
+      "run_date": "2026-07-10",
+      "status": "done",
+      "protocol_note": "10 iterations, paper protocol (7,560 comparisons).",
+      "result_note": "LBPH FP 15.741%, SFace 1.984%, cascade 1.270% (undercuts BOTH engines), Q +0.49, obs/exp 2.20, Fisher p_pos 6.9e-09, esc 100.0%.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-10T15:32:27Z",
+      "artifact_files": [
+        "comparisons.csv",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 4122496,
+      "slug": "hybrid-ls-db2-medium-joint-independence-2"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LFW1 (33,045,252 pairs)",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lfw1/",
+      "run_date": "2026-07-08",
+      "status": "done",
+      "protocol_note": "Streaming, 1 iteration (33 M pairs; stability gap is a stated limitation).",
+      "result_note": "LBPH FP 0.0867%, SFace 0.0190%, cascade 0.0098% (98 ppm — undercuts both LBPH-only 867 ppm and SFace-only 190 ppm), Q +0.857, obs/exp 12.85, Fisher p_pos 8.8e-52. Double-fault floor 2.1 ppm.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "lbph_distance_curve_plot.png",
+        "lbph_distance_histogram.png",
+        "lbph_far_curve.png",
+        "sface_distance_curve_plot.png",
+        "sface_distance_histogram.png",
+        "sface_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 568373,
+      "slug": "hybrid-lfw1-33-045-252-pairs-joint-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LFW2 light (33 M pairs)",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lfw2_light/",
+      "run_date": "2026-07-08",
+      "status": "done",
+      "protocol_note": "Streaming, 1 iteration.",
+      "result_note": "LBPH FP 0.114%, SFace 0.210%, cascade 0.0099%, Q +0.339, Fisher p_pos 9.5e-16.",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "lbph_distance_curve_plot.png",
+        "lbph_distance_histogram.png",
+        "lbph_far_curve.png",
+        "sface_distance_curve_plot.png",
+        "sface_distance_histogram.png",
+        "sface_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 566545,
+      "slug": "hybrid-lfw2-light-33-m-pairs-joint-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "LFW2 medium (33 M pairs)",
+      "test_type": "joint_independence",
+      "artifact_path": "reports/independence/hybrid/lfw2_medium/",
+      "run_date": "2026-07-08",
+      "status": "done",
+      "protocol_note": "Streaming, 1 iteration.",
+      "result_note": "LBPH FP 0.409%, SFace 0.249%, cascade 0.0101%, Q +0.125, Fisher p_pos 3.0e-07.",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-08T13:44:08Z",
+      "artifact_files": [
+        "lbph_distance_curve_plot.png",
+        "lbph_distance_histogram.png",
+        "lbph_far_curve.png",
+        "sface_distance_curve_plot.png",
+        "sface_distance_histogram.png",
+        "sface_far_curve.png",
+        "summary.json"
+      ],
+      "artifact_size_bytes": 574717,
+      "slug": "hybrid-lfw2-medium-33-m-pairs-joint-independence"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "La Salle 41-mod (2,296 probes/mode)",
+      "test_type": "41mod_ar",
+      "artifact_path": "reports/benchmark/accuracy_ratio_hybrid_probes.csv",
+      "run_date": "2026-07-09",
+      "status": "done",
+      "protocol_note": "4-mode cv/dl/cascade/parallel. Raw JSON/MD gitignored (summarize-only, §7).",
+      "result_note": "Overall AR: cv 85.43 / dl 96.50 / cascade 96.11 / parallel 96.50%. DL stronger on 9/12 mods, 0 CV-stronger, 3 ties; cascade within 2 pts of the better engine 12/12 at 16.0 vs 22.8 ms. This is the §4.3 [PENDING] table — data ready, needs writing only.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-10T15:36:49Z",
+      "artifact_files": [
+        "accuracy_ratio_hybrid_probes.csv"
+      ],
+      "artifact_size_bytes": 291661,
+      "slug": "hybrid-la-salle-41-mod-2-296-probes-mode-41mod-ar"
+    },
+    {
+      "model": "Hybrid",
+      "dataset": "La Salle legs (ls_db1, ls_db2_41mods)",
+      "test_type": "evidence_matrix",
+      "artifact_path": "reports/benchmark/evidence/",
+      "run_date": "2026-07-10",
+      "status": "done",
+      "protocol_note": "Frozen thresholds sha256 0b51dfdc… (never re-tuned). LFW legs excluded (open).",
+      "result_note": "Both La Salle legs OK. ls_db1: LBPH FAR 0.661% / SFace 1.799% / cascade 1.389%, obs/exp 4.45, Q +0.66. ls_db2_41mods: cv 84.54 / dl 95.91 / cascade 95.51 / parallel 95.91%. LFW rows are the open P2 legs.\n",
+      "superseded_by": null,
+      "artifact_exists": true,
+      "artifact_mtime": "2026-07-10T15:36:49Z",
+      "artifact_files": [
+        "ls_db2_41mods.json",
+        "ls_db2_41mods.md"
+      ],
+      "artifact_size_bytes": 58052,
+      "slug": "hybrid-la-salle-legs-ls-db1-ls-db2-41mods-evidence-matrix"
+    }
+  ],
+  "checklist": {
+    "done": [
+      "LBPH independence — La Salle DB1 canonical 10-run (Jun 10)",
+      "LBPH independence — LS-DB2 light 10-run (Jul 8)",
+      "LBPH independence — LFW 300-id smoke (Jun 10)",
+      "LBPH independence — LFW full 33 M sweep (Jul 8)",
+      "SFace — LFW parity certification 32.3 M (Jun 14)",
+      "Joint LBPH×SFace×cascade sweep — 6 legs (Jul 8)",
+      "Joint sweep rerun at 10 iterations — lsdb1 / lsdb2_light / lsdb2_medium (Jul 10)",
+      "41-mod AR — hybrid 4-mode (Jul 9)",
+      "Security-axis statistics (Wilson / Fisher / Q / φ / DF / obs-exp) run on 6 legs",
+      "Complementarity battery (recovery / McNemar / gate-AUC) on LS-DB2 41-mod (Jul 10)",
+      "Gate speed–accuracy operating-curve sweep (Jul 10)",
+      "Evidence matrix — La Salle legs (Jul 10)"
+    ],
+    "todo_paper": [
+      "§4.3: insert hybrid AR table + Wilson CIs + winner tags + cascade-vs-parallel + recovery column",
+      "§4.5: REWRITE with the 6-leg reframed panel (lead cascade-FP vs DF floor; report positive association honestly; Q/φ captioned)",
+      "§3.5: reword per RECOMMENDATION §7",
+      "§4.4: gate-AUC line + swept operating curve (replace 3-point Fig. 4 claim)",
+      "§4.6: evidence-matrix La Salle rows; LFW rows marked open",
+      "§4.1 + abstract + §5: un-stale the full-LFW claims; fold in the co-occurrence lesson; delete [PENDING] tags",
+      "METRICS.md Table 3: replace 'pending' LFW rows with Jul-8 full-run numbers",
+      "Extract the 331st-pair / 10-ppm threshold from lbph_lfw1 before quoting 10 ppm anywhere"
+    ],
+    "todo_open": [
+      "Evidence-matrix LFW legs (lfw1 reuse; lfw2_41mods AR leg)",
+      "LFW-DB2 41-mod AR leg (LFW-scale)",
+      "Battery (recovery/McNemar/AUC) on an LFW-derived probe set — or scope Paper 1 to LS battery + LFW security panel",
+      "Streaming-path multi-iteration support (or a stated single-pass limitation) for LFW stability"
+    ],
+    "out_of_scope": [
+      "Pi-5 port, INT8 SFace, on-device FPS"
+    ]
+  },
+  "paper_sections": [
+    {
+      "section": "Abstract",
+      "state": "stale",
+      "needed": "Says the joint test + 41-mod suite \"complete the argument\" as if pending; still implies full-LFW is future. Update after §4.5 rewrite; add the co-occurrence finding + cascade-FAR win in one clause.\n"
+    },
+    {
+      "section": "§3.5 Eq. (6) framing",
+      "state": "rewrite_needed",
+      "needed": "Rewrite per RECOMMENDATION §7: diversity measures reported for comparability; the claim rests on cascade-FP vs double-fault floor + obs/exp + Fisher; note Q's −1 saturation at La Salle base rates AND the measured positive sign at scale.\n"
+    },
+    {
+      "section": "§4.1 SFace certification",
+      "state": "stale",
+      "needed": "\"Full 33 M run pending\" → ran Jul 8 (θ@10,000 ppm = 19.18; extract the 331st-pair/10-ppm anchor before quoting it).\n"
+    },
+    {
+      "section": "§4.3 Hybrid AR [PENDING]",
+      "state": "data_ready",
+      "needed": "Insert the Jul 9 hybrid AR table + winner tags + cascade-vs-parallel line; add the recovery-rate column from the battery.\n"
+    },
+    {
+      "section": "§4.4 Resource / speed–accuracy",
+      "state": "partial",
+      "needed": "Tables 3–4 fine. Add gate-AUC line (battery) and replace the 3-point claim with the swept operating curve (Fig. 4 upgrade).\n"
+    },
+    {
+      "section": "§4.5 Joint independence [PENDING]",
+      "state": "rewrite_needed",
+      "needed": "Fill with the 6-leg reframed panel: lead cascade-FP vs DF floor, then obs/exp + Fisher (positive association!), then Q/φ demoted with the saturation caption. Quote the 10-iteration La Salle numbers.\n"
+    },
+    {
+      "section": "§4.6 Evidence matrix [PENDING]",
+      "state": "partial",
+      "needed": "Evidence-matrix La Salle rows from the Jul-10 run; LFW rows marked open."
+    },
+    {
+      "section": "§4.7 / §5 Conclusion",
+      "state": "stale",
+      "needed": "Remove [PENDING] from the conclusion; fold in the co-occurrence finding as a lesson (the cascade's FAR win comes from the gate, not error independence).\n"
+    }
+  ],
+  "benchmark_summary": [
+    {
+      "artifact": "reports/benchmark/accuracy_ratio_hybrid.json",
+      "tracked_in_git": false,
+      "headline": {
+        "overall_ar_percent": {
+          "cv_only": 85.43,
+          "dl_only": 96.5,
+          "cascade": 96.11,
+          "parallel": 96.5
+        },
+        "mean_latency_ms": {
+          "cv_only": 5.62,
+          "dl_only": 22.44,
+          "cascade": 15.99,
+          "parallel": 22.77
+        }
+      },
+      "run_date": null
+    },
+    {
+      "artifact": "reports/benchmark/gate_operating_curve.json",
+      "tracked_in_git": false,
+      "headline": {
+        "deployed_gate": {
+          "tau_accept": 73.04,
+          "tau_reject": 76.85,
+          "margin_min": 0.05,
+          "overall_ar_percent": 96.11,
+          "clean_acceptance_percent": 100.0,
+          "mean_latency_ms": 10.96,
+          "escalation_percent": 63.55
+        }
+      },
+      "run_date": null
+    },
+    {
+      "artifact": "reports/benchmark/evidence_matrix.json",
+      "tracked_in_git": false,
+      "headline": {
+        "thresholds_sha256": "0b51dfdc61be25f7d7e8fc69ff0ead1a5a8d30eb26a5c6b23926be307d0c2b72",
+        "legs": [
+          "ls_db1",
+          "ls_db2_41mods"
+        ]
+      },
+      "run_date": null
+    }
+  ],
+  "figures": [
+    {
+      "src": "docs/figures/fig_hybrid_accuracy.png",
+      "file": "docs__fig_hybrid_accuracy.png",
+      "label": "fig_hybrid_accuracy",
+      "group": "docs"
+    },
+    {
+      "src": "docs/figures/fig_hybrid_escalation.png",
+      "file": "docs__fig_hybrid_escalation.png",
+      "label": "fig_hybrid_escalation",
+      "group": "docs"
+    },
+    {
+      "src": "docs/figures/fig_hybrid_latency.png",
+      "file": "docs__fig_hybrid_latency.png",
+      "label": "fig_hybrid_latency",
+      "group": "docs"
+    },
+    {
+      "src": "docs/figures/fig_hybrid_quality_probes.png",
+      "file": "docs__fig_hybrid_quality_probes.png",
+      "label": "fig_hybrid_quality_probes",
+      "group": "docs"
+    },
+    {
+      "src": "docs/figures/fig_hybrid_speed_accuracy.png",
+      "file": "docs__fig_hybrid_speed_accuracy.png",
+      "label": "fig_hybrid_speed_accuracy",
+      "group": "docs"
+    },
+    {
+      "src": "reports/figures/fig1_tar_far_roc.png",
+      "file": "reports__fig1_tar_far_roc.png",
+      "label": "fig1_tar_far_roc",
+      "group": "reports"
+    },
+    {
+      "src": "reports/figures/fig2_interidentity_hist.png",
+      "file": "reports__fig2_interidentity_hist.png",
+      "label": "fig2_interidentity_hist",
+      "group": "reports"
+    },
+    {
+      "src": "reports/figures/fig3_ar_by_modification.png",
+      "file": "reports__fig3_ar_by_modification.png",
+      "label": "fig3_ar_by_modification",
+      "group": "reports"
+    },
+    {
+      "src": "reports/figures/fig4_latency_fps.png",
+      "file": "reports__fig4_latency_fps.png",
+      "label": "fig4_latency_fps",
+      "group": "reports"
+    },
+    {
+      "src": "docs/presentation/complementarity_battery/fig1_recovery_rate.png",
+      "file": "battery__fig1_recovery_rate.png",
+      "label": "fig1_recovery_rate",
+      "group": "battery"
+    },
+    {
+      "src": "docs/presentation/complementarity_battery/fig2_speed_accuracy_curve.png",
+      "file": "battery__fig2_speed_accuracy_curve.png",
+      "label": "fig2_speed_accuracy_curve",
+      "group": "battery"
+    },
+    {
+      "src": "docs/presentation/complementarity_battery/fig3_gate_auc.png",
+      "file": "battery__fig3_gate_auc.png",
+      "label": "fig3_gate_auc",
+      "group": "battery"
+    },
+    {
+      "src": "docs/presentation/complementarity_battery/fig4_mcnemar_rescue_direction.png",
+      "file": "battery__fig4_mcnemar_rescue_direction.png",
+      "label": "fig4_mcnemar_rescue_direction",
+      "group": "battery"
+    },
+    {
+      "src": "docs/presentation/independence_test_expansion/fig1_wilson_vs_wald.png",
+      "file": "independence__fig1_wilson_vs_wald.png",
+      "label": "fig1_wilson_vs_wald",
+      "group": "independence"
+    },
+    {
+      "src": "docs/presentation/independence_test_expansion/fig2_contingency_table.png",
+      "file": "independence__fig2_contingency_table.png",
+      "label": "fig2_contingency_table",
+      "group": "independence"
+    },
+    {
+      "src": "docs/presentation/independence_test_expansion/fig3_yules_q_scale.png",
+      "file": "independence__fig3_yules_q_scale.png",
+      "label": "fig3_yules_q_scale",
+      "group": "independence"
+    },
+    {
+      "src": "docs/presentation/independence_test_expansion/fig4_same_vs_different_mistakes.png",
+      "file": "independence__fig4_same_vs_different_mistakes.png",
+      "label": "fig4_same_vs_different_mistakes",
+      "group": "independence"
+    },
+    {
+      "src": "docs/presentation/independence_test_expansion/fig6_luck_range.png",
+      "file": "independence__fig6_luck_range.png",
+      "label": "fig6_luck_range",
+      "group": "independence"
+    }
+  ]
+}

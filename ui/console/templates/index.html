@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}LS-Face Run Console{% endblock %}
+{% block content %}
+<p class="eyebrow">Local run console · localhost only</p>
+<h1 class="page">Run the study without the terminal menu.</h1>
+<p class="lede">
+  This console runs on <code>127.0.0.1</code> on whichever machine is doing the work. It
+  wraps <code>main.py</code>'s actions two ways: a live terminal that <em>is</em> the
+  menu, and guided forms for the actions you run most. One job runs at a time.
+</p>
+
+<div class="grid2" style="margin-bottom:1.5rem">
+  <a class="card link" href="/terminal">
+    <h3>▸ Terminal</h3>
+    <p>The full <code>main.py</code> menu, streamed live in the browser with a Cancel button. Complete coverage of every action — it is the menu, unmodified.</p>
+  </a>
+  <a class="card link" href="/forms">
+    <h3>▤ Forms</h3>
+    <p>Guided forms for train, evaluate, and independence tests across LBPH, Eigenfaces, Fisherfaces, and Hybrid. Builds the same command the menu would.</p>
+  </a>
+</div>
+
+<h3 style="margin:1.5rem 0 .6rem; font-size:1rem">Available actions ({{ groups|length }} groups)</h3>
+<div class="grid2">
+  {% for g in groups %}
+  <div class="card">
+    <h3 style="font-size:.95rem">{{ g.model }}</h3>
+    <div style="margin-top:.5rem; display:flex; flex-wrap:wrap; gap:.35rem">
+      {% for a in g.actions %}<span class="pill">{{ a.label }}</span>{% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<p class="muted" style="margin-top:1.5rem; font-size:.82rem">
+  Live-detect actions launch headlessly; on a machine with no display the camera window
+  can't open and the console surfaces that as an error rather than hiding it.
+</p>
+{% endblock %}

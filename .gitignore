@@ -171,3 +171,11 @@ config_secrets.json
 
 # Local hardware profile cache
 hw_profile.json
+
+# Local run-console history (never travels to Vercel)
+ui/console/run_history.jsonl
+
+# Tool & nested workspace artifacts
+.codegraph/
+face-detection-g3/
+

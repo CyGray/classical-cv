@@ -1,0 +1,414 @@
+{
+  "dataset": {
+    "path": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+    "identities": 28
+  },
+  "iterations": 1,
+  "comparisons_per_iteration": 756,
+  "mean_fp_percent": {
+    "lbph": 18.51851851851852,
+    "sface": 1.5873015873015872,
+    "both": 0.7936507936507936,
+    "cascade": 1.4550264550264551
+  },
+  "mean_escalation_percent": 100.0,
+  "error_overlap_observed_over_expected_mean": 2.7000000000000006,
+  "pooled": {
+    "comparisons": 756,
+    "note": "pairs pooled over iterations reuse identities; see per_iteration for the conservative per-sweep view",
+    "fp_rates_ci95": {
+      "lbph": {
+        "count": 140,
+        "trials": 756,
+        "percent": 18.51851851851852,
+        "ci95_low_percent": 15.911123161451911,
+        "ci95_high_percent": 21.444229790890013
+      },
+      "sface": {
+        "count": 12,
+        "trials": 756,
+        "percent": 1.5873015873015872,
+        "ci95_low_percent": 0.9102954041284429,
+        "ci95_high_percent": 2.7538187998931747
+      },
+      "both": {
+        "count": 6,
+        "trials": 756,
+        "percent": 0.7936507936507936,
+        "ci95_low_percent": 0.36423023630337015,
+        "ci95_high_percent": 1.7206071513907333
+      },
+      "cascade": {
+        "count": 11,
+        "trials": 756,
+        "percent": 1.4550264550264551,
+        "ci95_low_percent": 0.8143729199752867,
+        "ci95_high_percent": 2.586528481325078
+      }
+    },
+    "diversity": {
+      "table": {
+        "both": 6,
+        "only_a": 134,
+        "only_b": 6,
+        "neither": 610,
+        "n": 756
+      },
+      "q_statistic": 0.6397849462365591,
+      "phi": 0.10292638943550259,
+      "disagreement": 0.18518518518518517,
+      "double_fault": 0.007936507936507936,
+      "expected_both_if_independent": 2.2222222222222223,
+      "observed_over_expected": 2.6999999999999997,
+      "fisher": {
+        "p_positive": 0.012676169103615843,
+        "p_negative": 0.997747274374693,
+        "p_two_sided": 0.012676169103615843,
+        "degenerate": false
+      }
+    }
+  },
+  "thresholds": {
+    "lbph_tau_accept": 73.04,
+    "lbph_tau_reject": 76.85,
+    "margin_min": 0.05,
+    "sface_cosine_genuine": 0.363,
+    "sface_l2_genuine": 1.128
+  },
+  "lbph_rank_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 69.77032470703125,
+      "normalized_threshold": 0.0,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Kenlie_John_Maghari",
+      "candidate_identity": "Francis_Miles_Ang",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 68.06767272949219,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Jul_Leo_Javellana",
+        "candidate_identity": "Norbert_Audines"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 68.06767272949219,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Norbert_Audines",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 68.40121459960938,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Mary_Jade_Jakosalem",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 69.77032470703125,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Francis_Miles_Ang"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 70.50189971923828,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Julian_Diego_Mapa",
+        "candidate_identity": "Lorenz_Ciocon"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 71.36124420166016,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 71.93302917480469,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Lorenz_Ciocon",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 72.78079223632812,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Thea_Ganza",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 74.66807556152344,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Jul_Leo_Javellana",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 78.372314453125,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Lorenz_Ciocon",
+        "candidate_identity": "Joseph_Andrew_Ong"
+      }
+    ]
+  },
+  "sface_rank_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 0.5972437560558319,
+      "normalized_threshold": 0.0,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Julian_Diego_Mapa",
+      "candidate_identity": "Kenlie_John_Maghari",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 0.4791030287742615,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Josh_Dane_Labistre",
+        "candidate_identity": "Kyle_Yuan_Uy"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 0.4791030287742615,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Kyle_Yuan_Uy",
+        "candidate_identity": "Josh_Dane_Labistre"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 0.5489290654659271,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Diofel_Gwen_Haresco",
+        "candidate_identity": "Kyle_Yuan_Uy"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 0.5972437560558319,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Julian_Diego_Mapa",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 0.6532008647918701,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Jul_Leo_Javellana",
+        "candidate_identity": "Kyle_Yuan_Uy"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 0.6788242757320404,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Kim_Ivan_Arigorat",
+        "candidate_identity": "John_Roland_Octavio"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 0.7212638854980469,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Axel_Josh_Lorayna",
+        "candidate_identity": "Joseph_Andrew_Ong"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 0.7733324021100998,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Josh_Dane_Labistre",
+        "candidate_identity": "Joseph_Andrew_Ong"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 0.838186964392662,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Josh_Dane_Labistre",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 0.9332351237535477,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Raean_Tamayo",
+        "candidate_identity": "Lorenz_Ciocon"
+      }
+    ]
+  },
+  "per_iteration": [
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 140,
+        "sface": 12,
+        "both": 6,
+        "union": 146,
+        "cascade": 11
+      },
+      "fp_percent": {
+        "lbph": 18.51851851851852,
+        "sface": 1.5873015873015872,
+        "both": 0.7936507936507936,
+        "cascade": 1.4550264550264551
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 140,
+          "trials": 756,
+          "percent": 18.51851851851852,
+          "ci95_low_percent": 15.911123161451911,
+          "ci95_high_percent": 21.444229790890013
+        },
+        "sface": {
+          "count": 12,
+          "trials": 756,
+          "percent": 1.5873015873015872,
+          "ci95_low_percent": 0.9102954041284429,
+          "ci95_high_percent": 2.7538187998931747
+        },
+        "both": {
+          "count": 6,
+          "trials": 756,
+          "percent": 0.7936507936507936,
+          "ci95_low_percent": 0.36423023630337015,
+          "ci95_high_percent": 1.7206071513907333
+        },
+        "cascade": {
+          "count": 11,
+          "trials": 756,
+          "percent": 1.4550264550264551,
+          "ci95_low_percent": 0.8143729199752867,
+          "ci95_high_percent": 2.586528481325078
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 6,
+        "expected_joint_fp_if_independent": 2.222222222222222,
+        "observed_over_expected": 2.7000000000000006,
+        "p_sface_fp_given_lbph_fp": 0.04285714285714286,
+        "p_lbph_fp_given_sface_fp": 0.5
+      },
+      "diversity": {
+        "table": {
+          "both": 6,
+          "only_a": 134,
+          "only_b": 6,
+          "neither": 610,
+          "n": 756
+        },
+        "q_statistic": 0.6397849462365591,
+        "phi": 0.10292638943550259,
+        "disagreement": 0.18518518518518517,
+        "double_fault": 0.007936507936507936,
+        "expected_both_if_independent": 2.2222222222222223,
+        "observed_over_expected": 2.6999999999999997,
+        "fisher": {
+          "p_positive": 0.012676169103615843,
+          "p_negative": 0.997747274374693,
+          "p_two_sided": 0.012676169103615843,
+          "degenerate": false
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "low_margin": 2,
+          "quality": 26
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 73.04,
+        "lbph_tau_reject": 76.85,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.128
+      },
+      "dataset_dir": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\data\\split_augmented41mods_lasalle_clean\\medium\\train",
+      "max_identities": 0,
+      "random_seed": 42,
+      "thresholds_json": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\src\\hybrid\\thresholds.json"
+    }
+  ],
+  "plots": {
+    "lbph_histogram": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\hybrid\\independence_test\\hybrid\\lbph_distance_histogram.png",
+    "lbph_curve": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\hybrid\\independence_test\\hybrid\\lbph_distance_curve_plot.png",
+    "lbph_far": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\hybrid\\independence_test\\hybrid\\lbph_far_curve.png",
+    "sface_histogram": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\hybrid\\independence_test\\hybrid\\sface_distance_histogram.png",
+    "sface_curve": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\hybrid\\independence_test\\hybrid\\sface_distance_curve_plot.png",
+    "sface_far": "D:\\Online Classes 7 - The College Experience\\Shared Githubs\\classical-cv\\outputs\\hybrid\\independence_test\\hybrid\\sface_far_curve.png"
+  }
+}

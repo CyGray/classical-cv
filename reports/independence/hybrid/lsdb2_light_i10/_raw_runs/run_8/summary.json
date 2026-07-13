@@ -1,0 +1,95 @@
+{
+  "identities": 28,
+  "comparisons": 756,
+  "false_accepts": {
+    "lbph": 6,
+    "sface": 4,
+    "both": 0,
+    "union": 10,
+    "cascade": 4
+  },
+  "fp_percent": {
+    "lbph": 0.7936507936507936,
+    "sface": 0.5291005291005291,
+    "both": 0.0,
+    "cascade": 0.5291005291005291
+  },
+  "fp_rates_ci95": {
+    "lbph": {
+      "count": 6,
+      "trials": 756,
+      "percent": 0.7936507936507936,
+      "ci95_low_percent": 0.36423023630337015,
+      "ci95_high_percent": 1.7206071513907333
+    },
+    "sface": {
+      "count": 4,
+      "trials": 756,
+      "percent": 0.5291005291005291,
+      "ci95_low_percent": 0.20594351280898063,
+      "ci95_high_percent": 1.3524682694426178
+    },
+    "both": {
+      "count": 0,
+      "trials": 756,
+      "percent": 0.0,
+      "ci95_low_percent": 0.0,
+      "ci95_high_percent": 0.5055605713665889
+    },
+    "cascade": {
+      "count": 4,
+      "trials": 756,
+      "percent": 0.5291005291005291,
+      "ci95_low_percent": 0.20594351280898063,
+      "ci95_high_percent": 1.3524682694426178
+    }
+  },
+  "error_overlap": {
+    "observed_joint_fp": 0,
+    "expected_joint_fp_if_independent": 0.031746031746031744,
+    "observed_over_expected": 0.0,
+    "p_sface_fp_given_lbph_fp": 0.0,
+    "p_lbph_fp_given_sface_fp": 0.0
+  },
+  "diversity": {
+    "table": {
+      "both": 0,
+      "only_a": 6,
+      "only_b": 4,
+      "neither": 746,
+      "n": 756
+    },
+    "q_statistic": -1.0,
+    "phi": -0.006523280730534422,
+    "disagreement": 0.013227513227513227,
+    "double_fault": 0.0,
+    "expected_both_if_independent": 0.031746031746031744,
+    "observed_over_expected": 0.0,
+    "fisher": {
+      "p_positive": 1.0,
+      "p_negative": 0.9685682119723673,
+      "p_two_sided": 1.0,
+      "degenerate": false
+    }
+  },
+  "gate": {
+    "escalated_probes": 28,
+    "escalation_percent": 100.0,
+    "reasons": {
+      "ambiguous_band": 8,
+      "quality": 10,
+      "low_margin": 10
+    }
+  },
+  "thresholds": {
+    "lbph_tau_accept": 73.04,
+    "lbph_tau_reject": 76.85,
+    "margin_min": 0.05,
+    "sface_cosine_genuine": 0.363,
+    "sface_l2_genuine": 1.128
+  },
+  "dataset_dir": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\split_augmented41mods_lasalle_clean\\light\\train",
+  "max_identities": 0,
+  "random_seed": 49,
+  "thresholds_json": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\src\\hybrid\\thresholds.json"
+}

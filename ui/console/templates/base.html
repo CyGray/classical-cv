@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}LS-Face Run Console{% endblock %}</title>
+  <link rel="stylesheet" href="/static/app.css" />
+  <script>
+    // No-flash theme init.
+    (function(){try{
+      var t = localStorage.getItem('console-theme');
+      if(!t){t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark':'light';}
+      if(t === 'dark'){document.documentElement.classList.add('dark');}
+    }catch(e){}})();
+  </script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="/"><span class="logo">LS</span> Run Console</a>
+    <nav class="nav-links">
+      <a href="/" class="{% if active == 'home' %}active{% endif %}">Home</a>
+      <a href="/terminal" class="{% if active == 'terminal' %}active{% endif %}">Terminal</a>
+      <a href="/forms" class="{% if active == 'forms' %}active{% endif %}">Forms</a>
+    </nav>
+    <div class="nav-right">
+      <span id="run-status" class="status-dot"><span class="d"></span><span class="t">idle</span></span>
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme" title="Toggle theme">◐</button>
+    </div>
+  </header>
+  <main class="wrap">
+    {% block content %}{% endblock %}
+  </main>
+  <script>
+    document.getElementById('theme-toggle').addEventListener('click', function(){
+      var dark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('console-theme', dark ? 'dark' : 'light'); } catch(e){}
+    });
+    // Poll current run status for the header dot.
+    async function pollStatus(){
+      try {
+        const r = await fetch('/api/health'); if(!r.ok) throw 0;
+        const el = document.getElementById('run-status');
+        el.classList.add('live'); el.querySelector('.t').textContent = 'console up';
+      } catch(e){
+        const el = document.getElementById('run-status');
+        el.classList.remove('live'); el.querySelector('.t').textContent = 'offline';
+      }
+    }
+    pollStatus(); setInterval(pollStatus, 5000);
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

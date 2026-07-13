@@ -3,7 +3,7 @@
 Everything here is exact or closed-form and needs only ``math``, so the same
 functions run inside every benchmark script (and on machines without scipy).
 
-Three tools, matched to three claims the paper makes:
+Five tools, matched to claims the paper makes:
 
 * :func:`wilson_interval` - a 95% confidence interval on any binomial rate
   (FAR, AR, escalation). La Salle DB1 has only 756 impostor comparisons per
@@ -18,6 +18,12 @@ Three tools, matched to three claims the paper makes:
   Q-statistic, the phi correlation, the disagreement measure, and the
   double-fault measure. Q < 0 means complementary errors; the double-fault
   rate is the floor no fusion of the two engines can beat.
+* :func:`mcnemar_test` - paired significance test on the discordant cells of
+  the identification table (McNemar 1947): is "SFace right where LBPH is
+  wrong" lopsided enough to be real, or sampling noise?
+* :func:`rank_auc` - ROC AUC by the Mann-Whitney rank formula (midrank ties),
+  for the gate-competence question: does LBPH's own distance/margin predict
+  when LBPH is about to be wrong?
 
 2x2 convention used throughout (counts over the same N comparisons):
 
@@ -164,3 +170,73 @@ def error_diversity(a: int, b: int, c: int, d: int) -> dict:
         "observed_over_expected": (a / expected_both) if expected_both > 0 else None,
         "fisher": fisher_exact(a, b, c, d),
     }
+
+
+# --------------------------------------------------------------------------- #
+# McNemar's test on the discordant pairs (McNemar 1947)
+# --------------------------------------------------------------------------- #
+def mcnemar_test(b: int, c: int) -> dict:
+    """Paired test of marginal homogeneity from the two discordant cells.
+
+    Convention follows the module's 2x2 table: ``b`` = only engine A errs
+    (A wrong / B right), ``c`` = only engine B errs. Concordant cells drop
+    out of the test entirely, so they are not parameters.
+
+    Returns both standard forms:
+
+    * ``p_exact`` - exact binomial: under H0 the b-vs-c split is
+      Binom(b + c, 1/2); two-sided p = 2 * P(X <= min(b, c)), clamped to 1.
+      Preferred whenever b + c is small (the La Salle regime).
+    * ``statistic`` / ``p_chi2`` - the continuity-corrected chi-square form
+      (|b - c| - 1)^2 / (b + c) against chi2(1 df), whose survival function is
+      erfc(sqrt(x / 2)) - no scipy needed.
+
+    ``b + c == 0`` (the engines never disagree) is degenerate: no evidence
+    either way.
+    """
+    if b < 0 or c < 0:
+        raise ValueError("discordant counts must be non-negative")
+    m = b + c
+    if m == 0:
+        return {"b": 0, "c": 0, "statistic": None, "p_chi2": None,
+                "p_exact": None, "degenerate": True}
+    stat = (abs(b - c) - 1.0) ** 2 / m if m > 0 else 0.0
+    p_chi2 = math.erfc(math.sqrt(stat / 2.0))
+    k = min(b, c)
+    # log-sum-exp over the lower binomial tail, reusing _log_binom.
+    log_half_m = m * math.log(0.5)
+    tail = sum(math.exp(_log_binom(m, x) + log_half_m) for x in range(k + 1))
+    p_exact = min(1.0, 2.0 * tail)
+    return {"b": int(b), "c": int(c), "statistic": stat, "p_chi2": p_chi2,
+            "p_exact": p_exact, "degenerate": False}
+
+
+# --------------------------------------------------------------------------- #
+# ROC AUC by ranks (Mann-Whitney U with midrank ties)
+# --------------------------------------------------------------------------- #
+def rank_auc(labels, scores) -> float | None:
+    """AUC of ``scores`` for predicting ``labels`` (1 = positive class).
+
+    Equivalent to P(score_pos > score_neg) + 0.5 * P(tie), computed via the
+    Mann-Whitney U statistic on midranks. Higher score must mean "more likely
+    positive" (negate a score to flip its direction). Returns ``None`` when
+    either class is empty - AUC is undefined there, and callers (per-
+    modification breakdowns) hit that case routinely.
+    """
+    pairs = [(float(s), int(bool(l))) for s, l in zip(scores, labels)]
+    n_pos = sum(l for _, l in pairs)
+    n_neg = len(pairs) - n_pos
+    if n_pos == 0 or n_neg == 0:
+        return None
+    pairs.sort(key=lambda p: p[0])
+    rank_sum_pos = 0.0
+    i = 0
+    while i < len(pairs):
+        j = i
+        while j < len(pairs) and pairs[j][0] == pairs[i][0]:
+            j += 1
+        midrank = (i + 1 + j) / 2.0  # average of ranks i+1 .. j (1-based)
+        rank_sum_pos += midrank * sum(l for _, l in pairs[i:j])
+        i = j
+    u = rank_sum_pos - n_pos * (n_pos + 1) / 2.0
+    return u / (n_pos * n_neg)

@@ -44,7 +44,7 @@ import cv2 as cv
 import numpy as np
 
 from src.benchmark.modifications import MODIFICATIONS, VARIANT_COUNT, stable_rng
-from src.stats_utils import wilson_interval_percent
+from src.stats_utils import mcnemar_test, rank_auc, wilson_interval_percent
 from src.classical_faces.datasets import list_image_files
 from src.classical_faces.detection import create_face_detector
 from src.hybrid.recognizer import (
@@ -94,6 +94,9 @@ def parse_args() -> argparse.Namespace:
                         help="Keep at 42 to reproduce the classical accuracy_ratio.py probes.")
     parser.add_argument("--output-json", default="reports/benchmark/accuracy_ratio_hybrid.json")
     parser.add_argument("--output-md", default="reports/benchmark/accuracy_ratio_hybrid.md")
+    parser.add_argument("--battery-csv", default="reports/benchmark/accuracy_ratio_hybrid_probes.csv",
+                        help="Per-probe pairing rows (cv/dl correctness + gate signal) for the "
+                             "complementarity battery; empty string disables.")
     return parser.parse_args()
 
 
@@ -172,12 +175,141 @@ def score_probe(
         t0 = time.perf_counter()
         decision = hybrid.predict(sample)
         latency_ms = (time.perf_counter() - t0) * 1000.0
-        out[mode] = {
+        rec = {
             "matched": decision.name == person,
             "escalated": bool(decision.escalated),
             "latency_ms": latency_ms,
         }
+        if mode in ("cv_only", "cascade"):
+            # The pre-escalation LBPH signal (identical across modes for the
+            # same sample) - the raw material of the gate-competence AUC.
+            rec["lbph_distance"] = float(decision.lbph_distance)
+            rec["lbph_margin"] = float(decision.lbph_margin)
+            rec["reason"] = decision.reason
+        out[mode] = rec
     return out
+
+
+# --------------------------------------------------------------------------- #
+# Complementarity battery: recovery rate, McNemar, gate competence
+# (identification axis - a different 2x2 from the false-accept table the
+#  joint independence sweep reports; see docs/presentation/
+#  complementarity_battery/WHY_AND_HOW.md for the design)
+# --------------------------------------------------------------------------- #
+def battery_row(mod_name: str, level, person: str, fname: str,
+                scores: dict[str, dict], no_face: bool) -> dict:
+    sig = scores.get("cv_only") or scores.get("cascade") or {}
+    cas = scores.get("cascade")
+    return {
+        "modification": mod_name,
+        "level": level,
+        "person": person,
+        "file": fname,
+        "no_face": bool(no_face),
+        "cv_correct": bool(scores["cv_only"]["matched"]),
+        "dl_correct": bool(scores["dl_only"]["matched"]),
+        "escalated": (bool(cas["escalated"]) if cas else None),
+        "gate_reason": (cas.get("reason") if cas else None),
+        "lbph_distance": sig.get("lbph_distance"),
+        "lbph_margin": sig.get("lbph_margin"),
+    }
+
+
+def _pairing_stats(rows: list[dict]) -> dict:
+    """w/x/y/z identification table + recovery, both-fail, McNemar."""
+    n = len(rows)
+    w = sum(1 for r in rows if r["cv_correct"] and r["dl_correct"])
+    x = sum(1 for r in rows if r["cv_correct"] and not r["dl_correct"])
+    y = sum(1 for r in rows if not r["cv_correct"] and r["dl_correct"])
+    z = n - w - x - y
+    lbph_wrong = y + z
+    return {
+        "probes": n,
+        "table": {"both_right": w, "cv_only_right": x, "dl_only_right": y, "both_wrong": z},
+        "recovery_rate_ci95": wilson_interval_percent(y, lbph_wrong) if lbph_wrong else None,
+        "both_fail_ci95": wilson_interval_percent(z, n) if n else None,
+        "mcnemar": mcnemar_test(x, y),
+    }
+
+
+def _gate_stats(rows: list[dict]) -> dict | None:
+    """Does the gate signal predict LBPH failure? AUC + deployed-rule confusion.
+
+    Probes with no LBPH signal (strict-policy no-face rows) never reached the
+    gate, so they are excluded and counted separately.
+    """
+    scored = [r for r in rows if r.get("escalated") is not None
+              and r.get("lbph_distance") is not None]
+    if not scored:
+        return None
+    labels = [0 if r["cv_correct"] else 1 for r in scored]  # 1 = LBPH wrong
+    tp = sum(1 for r in scored if r["escalated"] and not r["cv_correct"])
+    fp = sum(1 for r in scored if r["escalated"] and r["cv_correct"])
+    fn = sum(1 for r in scored if not r["escalated"] and not r["cv_correct"])
+    tn = sum(1 for r in scored if not r["escalated"] and r["cv_correct"])
+    wrong, right, esc = tp + fn, fp + tn, tp + fp
+    reasons: dict[str, int] = {}
+    for r in scored:
+        if r["escalated"] and not r["cv_correct"]:
+            key = (r.get("gate_reason") or "?").split(":")[0]
+            reasons[key] = reasons.get(key, 0) + 1
+    return {
+        "probes": len(scored),
+        "excluded_no_signal": len(rows) - len(scored),
+        "auc_lbph_distance": rank_auc(labels, [r["lbph_distance"] for r in scored]),
+        "auc_lbph_margin": rank_auc(labels, [-r["lbph_margin"] for r in scored]),
+        "escalate_vs_lbph_wrong": {
+            "tpr_recall_of_wrong": (tp / wrong) if wrong else None,
+            "fpr_on_right": (fp / right) if right else None,
+            "precision": (tp / esc) if esc else None,
+            "escalated": esc,
+            "lbph_wrong": wrong,
+        },
+        "escalation_reasons_on_wrong": reasons,
+    }
+
+
+def compute_battery(rows: list[dict], modes: list[str]) -> dict:
+    modified = [r for r in rows if r["modification"] != "clean"]
+    clean = [r for r in rows if r["modification"] == "clean"]
+    per_mod = []
+    for mod_name in dict.fromkeys(r["modification"] for r in modified):
+        mod_rows = [r for r in modified if r["modification"] == mod_name]
+        stats = _pairing_stats(mod_rows)
+        scored = [r for r in mod_rows if r.get("lbph_distance") is not None]
+        stats["auc_lbph_distance"] = rank_auc(
+            [0 if r["cv_correct"] else 1 for r in scored],
+            [r["lbph_distance"] for r in scored],
+        ) if scored else None
+        per_mod.append({"modification": mod_name, **stats})
+    battery = {
+        "note": "Identification-axis pairing (correct identity within threshold), "
+                "NOT the false-accept table of the joint independence sweep. "
+                "cv_correct = cv_only accept; dl_correct = dl_only accept. "
+                "recovery = P(SFace right | LBPH wrong); both_fail = the ceiling "
+                "no fusion of these engines can beat; McNemar tests the "
+                "discordant cells (x = cv-only-right vs y = dl-only-right).",
+        "clean": _pairing_stats(clean) if clean else None,
+        "overall_modified": _pairing_stats(modified),
+        "per_modification": per_mod,
+    }
+    if "cascade" in modes:
+        battery["gate"] = {
+            "modified_only": _gate_stats(modified),
+            "all_probes": _gate_stats(rows),
+        }
+    return battery
+
+
+def write_battery_csv(rows: list[dict], path: Path) -> None:
+    import csv
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = ["modification", "level", "person", "file", "no_face", "cv_correct",
+              "dl_correct", "escalated", "gate_reason", "lbph_distance", "lbph_margin"]
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows({k: r.get(k) for k in fields} for r in rows)
 
 
 def main() -> int:
@@ -209,14 +341,21 @@ def main() -> int:
             sample = tile_sample(image_bgr, image_gray)
         return score_probe(recognizers, sample, person), no_face
 
+    battery_enabled = "cv_only" in modes and "dl_only" in modes
+    battery_rows: list[dict] = []
+    if not battery_enabled:
+        print("[INFO] Complementarity battery skipped (needs cv_only AND dl_only in --modes).")
+
     # Clean (unmodified) acceptance per mode, for the robustness-loss baseline.
     clean_matched = {m: 0 for m in modes}
     clean_no_face = 0
-    for person, _, gray in originals:
+    for person, fname, gray in originals:
         scores, no_face = probe(gray, person)
         clean_no_face += no_face
         for m in modes:
             clean_matched[m] += scores[m]["matched"]
+        if battery_enabled:
+            battery_rows.append(battery_row("clean", None, person, fname, scores, no_face))
 
     per_mod: list[dict] = []
     latencies: dict[str, list[float]] = {m: [] for m in modes}
@@ -236,6 +375,9 @@ def main() -> int:
                     latencies[m].append(scores[m]["latency_ms"])
                 if "cascade" in scores:
                     escalated += scores["cascade"]["escalated"]
+                if battery_enabled:
+                    battery_rows.append(
+                        battery_row(mod_name, level, person, fname, scores, no_face))
             level_rows.append({
                 "level": level,
                 "modified_total": len(originals),
@@ -348,6 +490,12 @@ def main() -> int:
             ),
             "total_mods": len(per_mod),
         }
+    if battery_enabled:
+        payload["complementarity_battery"] = compute_battery(battery_rows, modes)
+        if args.battery_csv:
+            csv_path = Path(_abs(args.battery_csv))
+            write_battery_csv(battery_rows, csv_path)
+            print(f"[OK] Wrote {csv_path}")
 
     out_json = Path(_abs(args.output_json))
     out_md = Path(_abs(args.output_md))
@@ -364,6 +512,27 @@ def main() -> int:
         cvp = comp["cascade_vs_parallel"]
         print(f"[CASCADE vs PARALLEL] overall {cvp['overall_points']:+.2f} pts; "
               f"within tolerance on {cvp['within_tolerance_mods']}/{cvp['total_mods']} mods")
+    bat = payload.get("complementarity_battery")
+    if bat:
+        om = bat["overall_modified"]
+        rec = om["recovery_rate_ci95"]
+        bf = om["both_fail_ci95"]
+        mc = om["mcnemar"]
+        print(f"[BATTERY] modified probes={om['probes']} table w/x/y/z="
+              f"{om['table']['both_right']}/{om['table']['cv_only_right']}/"
+              f"{om['table']['dl_only_right']}/{om['table']['both_wrong']}")
+        if rec:
+            print(f"[BATTERY] recovery P(SFace ok | LBPH wrong) = {rec['percent']:.2f}% "
+                  f"[{rec['ci95_low_percent']:.2f}-{rec['ci95_high_percent']:.2f}] "
+                  f"({rec['count']}/{rec['trials']}); both-fail = {bf['percent']:.2f}%")
+        if not mc["degenerate"]:
+            print(f"[BATTERY] McNemar x={mc['b']} y={mc['c']} p_exact={mc['p_exact']:.3g}")
+        gate = (bat.get("gate") or {}).get("modified_only")
+        if gate:
+            evw = gate["escalate_vs_lbph_wrong"]
+            print(f"[BATTERY] gate AUC(d1)={gate['auc_lbph_distance']:.3f} "
+                  f"AUC(margin)={gate['auc_lbph_margin']:.3f} | escalate-on-wrong "
+                  f"TPR={evw['tpr_recall_of_wrong']:.3f} FPR={evw['fpr_on_right']:.3f}")
     print(f"[OK] Wrote {out_json}")
     print(f"[OK] Wrote {out_md}")
     return 0
@@ -445,7 +614,101 @@ def to_markdown(payload: dict, modes: list[str]) -> str:
                 f"{cvp['within_tolerance_mods']} / {cvp['total_mods']} modifications"
             )
         lines.append("")
+
+    battery = payload.get("complementarity_battery")
+    if battery:
+        lines += battery_markdown(battery)
     return "\n".join(lines)
+
+
+def _fmt_pct_ci(entry: dict | None) -> str:
+    if not entry:
+        return "n/a"
+    return (f"{entry['percent']:.1f}% [{entry['ci95_low_percent']:.1f}"
+            f"-{entry['ci95_high_percent']:.1f}]")
+
+
+def _fmt_p(p: float | None) -> str:
+    if p is None:
+        return "n/a"
+    return f"{p:.2g}" if p >= 1e-4 else f"{p:.1e}"
+
+
+def battery_markdown(battery: dict) -> list[str]:
+    om = battery["overall_modified"]
+    t = om["table"]
+    mc = om["mcnemar"]
+    lines = [
+        "## Complementarity battery (identification axis)",
+        "",
+        "Per-probe pairing of cv_only vs dl_only correctness on the SAME probes "
+        "(w = both right, x = only LBPH right, y = only SFace right, z = both wrong). "
+        "recovery = y/(y+z) - the share of LBPH's misses SFace rescues; "
+        "both-fail = z/N - the ceiling no fusion beats; McNemar tests x vs y.",
+        "",
+        f"- Modified probes: {om['probes']} | w/x/y/z = "
+        f"{t['both_right']}/{t['cv_only_right']}/{t['dl_only_right']}/{t['both_wrong']}",
+        f"- **Recovery rate** = {_fmt_pct_ci(om['recovery_rate_ci95'])} "
+        f"({om['recovery_rate_ci95']['count']}/{om['recovery_rate_ci95']['trials']})"
+        if om["recovery_rate_ci95"] else "- Recovery rate: n/a (LBPH never wrong)",
+        f"- **Both-fail ceiling** = {_fmt_pct_ci(om['both_fail_ci95'])}",
+        f"- **McNemar** (x={mc['b']} vs y={mc['c']}): p_exact = {_fmt_p(mc['p_exact'])}, "
+        f"chi2_cc = {mc['statistic']:.1f}" if not mc["degenerate"]
+        else "- McNemar: degenerate (no discordant probes)",
+    ]
+    clean = battery.get("clean")
+    if clean:
+        ct = clean["table"]
+        lines.append(
+            f"- Clean probes ({clean['probes']}): w/x/y/z = "
+            f"{ct['both_right']}/{ct['cv_only_right']}/{ct['dl_only_right']}/{ct['both_wrong']}")
+    lines += [
+        "",
+        "| Modification | LBPH wrong | SFace rescues | Recovery | Both-fail | McNemar p | AUC(d1) |",
+        "|---|---:|---:|---:|---:|---:|---:|",
+    ]
+    for row in battery["per_modification"]:
+        rt = row["table"]
+        wrong = rt["dl_only_right"] + rt["both_wrong"]
+        rec = row["recovery_rate_ci95"]
+        auc = row.get("auc_lbph_distance")
+        lines.append(
+            f"| {row['modification']} | {wrong} | {rt['dl_only_right']} | "
+            f"{(rec['percent'] if rec else float('nan')):.0f}% | "
+            f"{row['both_fail_ci95']['percent']:.1f}% | "
+            f"{_fmt_p(row['mcnemar']['p_exact'])} | "
+            + (f"{auc:.2f} |" if auc is not None else "n/a |")
+        )
+    gate = battery.get("gate") or {}
+    gm = gate.get("modified_only")
+    if gm:
+        evw = gm["escalate_vs_lbph_wrong"]
+        lines += [
+            "",
+            "### Gate competence (does LBPH know when it's wrong?)",
+            "",
+            f"- ROC AUC, LBPH distance -> 'LBPH wrong' (modified probes): "
+            f"**{gm['auc_lbph_distance']:.3f}**; margin signal: {gm['auc_lbph_margin']:.3f}",
+            f"- Deployed gate vs 'LBPH wrong': escalates {evw['escalated']} probes; "
+            f"TPR (wrong probes escalated) = {evw['tpr_recall_of_wrong']:.3f}, "
+            f"FPR (right probes escalated) = {evw['fpr_on_right']:.3f}, "
+            f"precision = {evw['precision']:.3f}",
+            f"- Escalation reasons on rescued-eligible (LBPH-wrong) probes: "
+            + ", ".join(f"{k}={v}" for k, v in
+                        sorted(gm["escalation_reasons_on_wrong"].items(),
+                               key=lambda kv: -kv[1])),
+        ]
+        ga = gate.get("all_probes")
+        if ga:
+            lines.append(
+                f"- Including clean probes: AUC(d1) = {ga['auc_lbph_distance']:.3f}, "
+                f"gate TPR = {ga['escalate_vs_lbph_wrong']['tpr_recall_of_wrong']:.3f}, "
+                f"FPR = {ga['escalate_vs_lbph_wrong']['fpr_on_right']:.3f}")
+        if gm.get("excluded_no_signal"):
+            lines.append(f"- Probes excluded (no gate signal, strict no-face): "
+                         f"{gm['excluded_no_signal']}")
+    lines.append("")
+    return lines
 
 
 if __name__ == "__main__":

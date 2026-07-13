@@ -1,0 +1,326 @@
+# docs/ui/study_status.yml
+# Hand-maintained. Re-edit this whenever a run finishes or a paper section changes —
+# it is the ONLY source for the dashboard's Study Status page (manifest.json is
+# generated FROM this + a scan of reports/, never edited by hand).
+#
+# Schema: docs/ui/DESIGN.md §7.1. Every artifact_path must be a real repo-relative
+# path — scripts/build_study_manifest.py hard-fails (non-zero exit) if one is missing,
+# by design, so a typo is caught immediately rather than rendering "done" for nothing.
+
+updated: "2026-07-13"
+updated_by: "Kyle"
+
+# --- Sub-view 1: per-leg status table (§6.1.1) ---------------------------------
+# model ∈ LBPH | Eigenfaces | Fisherfaces | Hybrid
+# test_type ∈ independence | independence_light_front | joint_independence |
+#             41mod_ar | evidence_matrix | tar_far | other
+# status ∈ done | in_progress | open | superseded
+legs:
+  # ---- LBPH independence -------------------------------------------------------
+  - model: LBPH
+    dataset: "La Salle DB1"
+    test_type: independence
+    artifact_path: "reports/independence/lbph_lasalle/"
+    run_date: "2026-06-10"
+    status: done
+    protocol_note: "10 seeded repeats, aggregated. Canonical (restored in the 07-08 audit)."
+    result_note: >
+      Threshold 21.35 raw / 85.88 norm at the 8th pair (10,582 ppm realized).
+      Per-run normalized stability 68.03 ± 1.83.
+    superseded_by: null
+
+  - model: LBPH
+    dataset: "LS-DB2 light"
+    test_type: independence
+    artifact_path: "reports/independence/lbph_lsdb2/"
+    run_date: "2026-07-08"
+    status: done
+    protocol_note: "10 seeded repeats (light tier)."
+    result_note: >
+      Done. Named without a tier suffix — dir rename is Part-C item 10 of the
+      improvement spec.
+    superseded_by: null
+
+  - model: LBPH
+    dataset: "LFW smoke (300 ids, 89,700 pairs)"
+    test_type: independence
+    artifact_path: "reports/independence/lbph_lfw/"
+    run_date: "2026-06-10"
+    status: done
+    protocol_note: "Streaming, 1 iteration."
+    result_note: "Boundary pair = the known annotation error (Caldecott/Gilligan)."
+    superseded_by: null
+
+  - model: LBPH
+    dataset: "LFW full (5,749 ids, 33,045,252 pairs)"
+    test_type: independence
+    artifact_path: "reports/independence/lbph_lfw1/"
+    run_date: "2026-07-08"
+    status: done
+    protocol_note: "Streaming, 1 iteration (no run-to-run stability estimate)."
+    result_note: >
+      This is the sweep METRICS.md / PAPER.md still call "pending". Spec point is
+      rank 330,453 = 10,000 ppm (θ = 19.18 raw / 55.86 norm, boundary
+      Johnny_Hallyday vs Larry_Coker). The 10-ppm / 331st-pair anchor is bracketed
+      (raw θ ∈ (17.02 @ 7.7 ppm, 17.20 @ 15.5 ppm)) but not yet extracted — an
+      LFW-scale re-rank (open, P2).
+    superseded_by: null
+
+  # ---- SFace independence ------------------------------------------------------
+  - model: Hybrid
+    dataset: "LFW parity (5,685 ids, 32,313,540 pairs)"
+    test_type: independence
+    artifact_path: "reports/independence/sface_lfw_parity.json"
+    run_date: "2026-06-14"
+    status: done
+    protocol_note: "SFace-only parity certification vs DL-track reference."
+    result_note: >
+      FP 0.0747% vs DL-track reference 0.07% — parity PASS (tolerance 0.05 abs).
+      This is the §4.1 SFace certification.
+    superseded_by: null
+
+  # ---- Eigenfaces / Fisherfaces independence (classical baselines) -------------
+  - model: Eigenfaces
+    dataset: "La Salle DB1"
+    test_type: independence
+    artifact_path: "reports/independence/eigenfaces_lasalle/"
+    run_date: "2026-06-10"
+    status: done
+    protocol_note: "10 seeded repeats, aggregated."
+    result_note: "Classical baseline leg for the independence comparison."
+    superseded_by: null
+
+  - model: Fisherfaces
+    dataset: "La Salle DB1"
+    test_type: independence
+    artifact_path: "reports/independence/fisherfaces_lasalle/"
+    run_date: "2026-06-10"
+    status: done
+    protocol_note: "10 seeded repeats, aggregated."
+    result_note: "Classical baseline leg for the independence comparison."
+    superseded_by: null
+
+  # ---- Joint (LBPH × SFace × cascade) independence — the §4.5 instrument --------
+  # Jul-8 iterations=1 La Salle legs, each superseded by its 10-iteration rerun.
+  - model: Hybrid
+    dataset: "La Salle DB1"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lsdb1/"
+    run_date: "2026-07-08"
+    status: superseded
+    protocol_note: "iterations=1 (default changed to 1 on 07-08, commit 56ab21f)."
+    result_note: >
+      LBPH FP 0.000% (single seed-42 pick), SFace 2.646%, cascade 1.190%.
+      Fisher degenerate (LBPH 0 FP) — an artifact of the single pick.
+    superseded_by: "reports/independence/hybrid/lsdb1_i10/"
+
+  - model: Hybrid
+    dataset: "LS-DB2 light"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lsdb2_light/"
+    run_date: "2026-07-08"
+    status: superseded
+    protocol_note: "iterations=1."
+    result_note: "LBPH FP 1.323%, SFace 2.646%, cascade 1.455%, Q −1.0 (saturated)."
+    superseded_by: "reports/independence/hybrid/lsdb2_light_i10/"
+
+  - model: Hybrid
+    dataset: "LS-DB2 medium"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lsdb2_medium/"
+    run_date: "2026-07-08"
+    status: superseded
+    protocol_note: "iterations=1."
+    result_note: "LBPH FP 18.519%, SFace 1.587%, cascade 1.455%, Q +0.64, Fisher p_pos 0.013."
+    superseded_by: "reports/independence/hybrid/lsdb2_medium_i10/"
+
+  # Jul-10 10-iteration reruns — paper protocol, canonical for §4.5 La Salle rows.
+  - model: Hybrid
+    dataset: "La Salle DB1"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lsdb1_i10/"
+    run_date: "2026-07-10"
+    status: done
+    protocol_note: "10 iterations, paper protocol (pooled over 7,560 comparisons)."
+    result_note: >
+      LBPH FP 0.661% [0.50–0.87], SFace 1.799% [1.52–2.12], cascade 1.389% [1.15–1.68],
+      Q +0.66, obs/exp 4.45, Fisher p_pos 0.012 (co-occurrence significant), esc 85.4%.
+      At 10 picks LBPH admits 50/7,560 — the Jul-8 "0 FP / degenerate" was a single-pick
+      artifact.
+    superseded_by: null
+
+  - model: Hybrid
+    dataset: "LS-DB2 light"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lsdb2_light_i10/"
+    run_date: "2026-07-10"
+    status: done
+    protocol_note: "10 iterations, paper protocol (7,560 comparisons)."
+    result_note: >
+      LBPH FP 1.667%, SFace 1.561%, cascade 1.217% (undercuts BOTH engines),
+      Q +0.80, obs/exp 7.12, Fisher p_pos 7.4e-09, esc 94.6%.
+    superseded_by: null
+
+  - model: Hybrid
+    dataset: "LS-DB2 medium"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lsdb2_medium_i10/"
+    run_date: "2026-07-10"
+    status: done
+    protocol_note: "10 iterations, paper protocol (7,560 comparisons)."
+    result_note: >
+      LBPH FP 15.741%, SFace 1.984%, cascade 1.270% (undercuts BOTH engines),
+      Q +0.49, obs/exp 2.20, Fisher p_pos 6.9e-09, esc 100.0%.
+    superseded_by: null
+
+  # LFW-scale joint legs (Jul-8, iterations=1 by design at 33 M pairs).
+  - model: Hybrid
+    dataset: "LFW1 (33,045,252 pairs)"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lfw1/"
+    run_date: "2026-07-08"
+    status: done
+    protocol_note: "Streaming, 1 iteration (33 M pairs; stability gap is a stated limitation)."
+    result_note: >
+      LBPH FP 0.0867%, SFace 0.0190%, cascade 0.0098% (98 ppm — undercuts both
+      LBPH-only 867 ppm and SFace-only 190 ppm), Q +0.857, obs/exp 12.85,
+      Fisher p_pos 8.8e-52. Double-fault floor 2.1 ppm.
+    superseded_by: null
+
+  - model: Hybrid
+    dataset: "LFW2 light (33 M pairs)"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lfw2_light/"
+    run_date: "2026-07-08"
+    status: done
+    protocol_note: "Streaming, 1 iteration."
+    result_note: "LBPH FP 0.114%, SFace 0.210%, cascade 0.0099%, Q +0.339, Fisher p_pos 9.5e-16."
+    superseded_by: null
+
+  - model: Hybrid
+    dataset: "LFW2 medium (33 M pairs)"
+    test_type: joint_independence
+    artifact_path: "reports/independence/hybrid/lfw2_medium/"
+    run_date: "2026-07-08"
+    status: done
+    protocol_note: "Streaming, 1 iteration."
+    result_note: "LBPH FP 0.409%, SFace 0.249%, cascade 0.0101%, Q +0.125, Fisher p_pos 3.0e-07."
+    superseded_by: null
+
+  # ---- 41-modification robustness (accuracy ratio) -----------------------------
+  - model: Hybrid
+    dataset: "La Salle 41-mod (2,296 probes/mode)"
+    test_type: 41mod_ar
+    artifact_path: "reports/benchmark/accuracy_ratio_hybrid_probes.csv"
+    run_date: "2026-07-09"
+    status: done
+    protocol_note: "4-mode cv/dl/cascade/parallel. Raw JSON/MD gitignored (summarize-only, §7)."
+    result_note: >
+      Overall AR: cv 85.43 / dl 96.50 / cascade 96.11 / parallel 96.50%. DL stronger
+      on 9/12 mods, 0 CV-stronger, 3 ties; cascade within 2 pts of the better engine
+      12/12 at 16.0 vs 22.8 ms. This is the §4.3 [PENDING] table — data ready, needs
+      writing only.
+    superseded_by: null
+
+  # ---- Evidence matrix (threshold transfer, §4.6) ------------------------------
+  - model: Hybrid
+    dataset: "La Salle legs (ls_db1, ls_db2_41mods)"
+    test_type: evidence_matrix
+    artifact_path: "reports/benchmark/evidence/"
+    run_date: "2026-07-10"
+    status: done
+    protocol_note: "Frozen thresholds sha256 0b51dfdc… (never re-tuned). LFW legs excluded (open)."
+    result_note: >
+      Both La Salle legs OK. ls_db1: LBPH FAR 0.661% / SFace 1.799% / cascade 1.389%,
+      obs/exp 4.45, Q +0.66. ls_db2_41mods: cv 84.54 / dl 95.91 / cascade 95.51 /
+      parallel 95.91%. LFW rows are the open P2 legs.
+    superseded_by: null
+
+# --- Sub-view 2: master checklist (§6.1.2) --------------------------------------
+checklist:
+  done:
+    - "LBPH independence — La Salle DB1 canonical 10-run (Jun 10)"
+    - "LBPH independence — LS-DB2 light 10-run (Jul 8)"
+    - "LBPH independence — LFW 300-id smoke (Jun 10)"
+    - "LBPH independence — LFW full 33 M sweep (Jul 8)"
+    - "SFace — LFW parity certification 32.3 M (Jun 14)"
+    - "Joint LBPH×SFace×cascade sweep — 6 legs (Jul 8)"
+    - "Joint sweep rerun at 10 iterations — lsdb1 / lsdb2_light / lsdb2_medium (Jul 10)"
+    - "41-mod AR — hybrid 4-mode (Jul 9)"
+    - "Security-axis statistics (Wilson / Fisher / Q / φ / DF / obs-exp) run on 6 legs"
+    - "Complementarity battery (recovery / McNemar / gate-AUC) on LS-DB2 41-mod (Jul 10)"
+    - "Gate speed–accuracy operating-curve sweep (Jul 10)"
+    - "Evidence matrix — La Salle legs (Jul 10)"
+  todo_paper:              # writing only — data already in hand
+    - "§4.3: insert hybrid AR table + Wilson CIs + winner tags + cascade-vs-parallel + recovery column"
+    - "§4.5: REWRITE with the 6-leg reframed panel (lead cascade-FP vs DF floor; report positive association honestly; Q/φ captioned)"
+    - "§3.5: reword per RECOMMENDATION §7"
+    - "§4.4: gate-AUC line + swept operating curve (replace 3-point Fig. 4 claim)"
+    - "§4.6: evidence-matrix La Salle rows; LFW rows marked open"
+    - "§4.1 + abstract + §5: un-stale the full-LFW claims; fold in the co-occurrence lesson; delete [PENDING] tags"
+    - "METRICS.md Table 3: replace 'pending' LFW rows with Jul-8 full-run numbers"
+    - "Extract the 331st-pair / 10-ppm threshold from lbph_lfw1 before quoting 10 ppm anywhere"
+  todo_open:               # needs a new run before it can be written (LFW-scale, D: machine)
+    - "Evidence-matrix LFW legs (lfw1 reuse; lfw2_41mods AR leg)"
+    - "LFW-DB2 41-mod AR leg (LFW-scale)"
+    - "Battery (recovery/McNemar/AUC) on an LFW-derived probe set — or scope Paper 1 to LS battery + LFW security panel"
+    - "Streaming-path multi-iteration support (or a stated single-pass limitation) for LFW stability"
+  out_of_scope:            # Paper 2
+    - "Pi-5 port, INT8 SFace, on-device FPS"
+
+# --- Sub-view 3: paper coverage table (§6.1.3) -----------------------------------
+# state ∈ stale | partial | rewrite_needed | data_ready | current
+paper_sections:
+  - section: "Abstract"
+    state: stale
+    needed: >
+      Says the joint test + 41-mod suite "complete the argument" as if pending; still
+      implies full-LFW is future. Update after §4.5 rewrite; add the co-occurrence
+      finding + cascade-FAR win in one clause.
+  - section: "§3.5 Eq. (6) framing"
+    state: rewrite_needed
+    needed: >
+      Rewrite per RECOMMENDATION §7: diversity measures reported for comparability; the
+      claim rests on cascade-FP vs double-fault floor + obs/exp + Fisher; note Q's −1
+      saturation at La Salle base rates AND the measured positive sign at scale.
+  - section: "§4.1 SFace certification"
+    state: stale
+    needed: >
+      "Full 33 M run pending" → ran Jul 8 (θ@10,000 ppm = 19.18; extract the
+      331st-pair/10-ppm anchor before quoting it).
+  - section: "§4.3 Hybrid AR [PENDING]"
+    state: data_ready
+    needed: >
+      Insert the Jul 9 hybrid AR table + winner tags + cascade-vs-parallel line; add the
+      recovery-rate column from the battery.
+  - section: "§4.4 Resource / speed–accuracy"
+    state: partial
+    needed: >
+      Tables 3–4 fine. Add gate-AUC line (battery) and replace the 3-point claim with
+      the swept operating curve (Fig. 4 upgrade).
+  - section: "§4.5 Joint independence [PENDING]"
+    state: rewrite_needed
+    needed: >
+      Fill with the 6-leg reframed panel: lead cascade-FP vs DF floor, then obs/exp +
+      Fisher (positive association!), then Q/φ demoted with the saturation caption. Quote
+      the 10-iteration La Salle numbers.
+  - section: "§4.6 Evidence matrix [PENDING]"
+    state: partial
+    needed: "Evidence-matrix La Salle rows from the Jul-10 run; LFW rows marked open."
+  - section: "§4.7 / §5 Conclusion"
+    state: stale
+    needed: >
+      Remove [PENDING] from the conclusion; fold in the co-occurrence finding as a lesson
+      (the cascade's FAR win comes from the gate, not error independence).
+
+# --- Cross-cutting: the finding banner (§2, "a real finding sitting in reports/") --
+headline_finding:
+  active: true
+  title: "Error-independence complementarity: refuted at scale"
+  summary: >
+    Joint sweeps show LBPH and SFace false-accepts are positively associated
+    (Yule's Q > 0 on every leg where estimable) — they fail on the same hard impostor
+    pairs. The cascade still wins on FAR (98 ppm on LFW1, undercutting both engines),
+    but via the gate + AND-composition, not via error independence. The paper's §4.5
+    must be rewritten to report this honestly.
+  source_doc: "docs/audits/STATE-07-10.md"
