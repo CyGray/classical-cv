@@ -35,7 +35,7 @@ export default function LegDetail({ params }: { params: { slug: string } }) {
     <div className="mx-auto max-w-3xl">
       <Link
         href="/status"
-        className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline"
+        className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
           <path d="M19 12H5M11 18l-6-6 6-6" />
@@ -76,9 +76,10 @@ export default function LegDetail({ params }: { params: { slug: string } }) {
         )}
 
         {supersededBy && (
-          <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm dark:border-amber-500/30 dark:bg-amber-500/10">
+          <div className="mt-5 flex items-start gap-2 rounded-lg border border-border p-3 text-sm">
+            <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
             Superseded by{" "}
-            <Link href={`/status/legs/${supersededBy.slug}`} className="font-medium text-brand hover:underline">
+            <Link href={`/status/legs/${supersededBy.slug}`} className="font-medium text-accent hover:underline">
               {supersededBy.model} · {supersededBy.dataset}
             </Link>
             .

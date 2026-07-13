@@ -7,6 +7,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const LINKS = [
   { href: "/", label: "Overview" },
+  { href: "/results", label: "Results" },
   { href: "/status", label: "Study status" },
   { href: "/paper", label: "Paper" },
   { href: "/docs", label: "Docs" },
@@ -25,8 +26,8 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-surface/85 backdrop-blur supports-[backdrop-filter]:bg-surface/70">
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight text-ink">
-          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-brand text-sm font-bold text-white">
+        <Link href="/" className="flex items-center gap-2 font-serif font-semibold tracking-tight text-ink">
+          <span className="flex h-7 w-7 items-center justify-center rounded-md border border-border text-sm font-semibold">
             LS
           </span>
           <span className="hidden sm:inline">Face Study</span>
@@ -40,10 +41,10 @@ export function Nav() {
                 key={l.href}
                 href={l.href}
                 aria-current={active ? "page" : undefined}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                className={`border-b-2 px-3 py-1.5 text-sm font-medium transition-colors ${
                   active
-                    ? "bg-brand-soft text-brand"
-                    : "text-muted hover:bg-elevated hover:text-ink"
+                    ? "border-accent text-ink"
+                    : "border-transparent text-muted hover:border-border hover:text-ink"
                 }`}
               >
                 {l.label}
@@ -78,7 +79,7 @@ export function Nav() {
                 href={l.href}
                 onClick={() => setOpen(false)}
                 className={`block rounded-lg px-3 py-2 text-sm font-medium ${
-                  active ? "bg-brand-soft text-brand" : "text-muted hover:bg-elevated"
+                  active ? "bg-elevated text-ink" : "text-muted hover:bg-elevated"
                 }`}
               >
                 {l.label}

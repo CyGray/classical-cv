@@ -4,8 +4,8 @@ import { CardLink } from "@/components/ui";
 
 function Stat({ value, label, tone }: { value: number | string; label: string; tone: string }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-4 text-center shadow-card">
-      <div className={`text-2xl font-bold ${tone}`}>{value}</div>
+    <div className="rounded-lg border border-border bg-surface p-4 text-center">
+      <div className={`font-mono text-2xl font-semibold tabular-nums ${tone}`}>{value}</div>
       <div className="mt-0.5 text-xs font-medium text-muted">{label}</div>
     </div>
   );
@@ -25,10 +25,10 @@ export default function Home() {
     <div className="space-y-10">
       {/* Hero */}
       <section>
-        <p className="text-xs font-semibold uppercase tracking-wider text-brand">
+        <p className="font-mono text-xs font-medium uppercase tracking-wider text-muted">
           Research status dashboard
         </p>
-        <h1 className="mt-2 max-w-3xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+        <h1 className="mt-2 max-w-3xl font-serif text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
           Where the LS-Face study actually stands: runs, results, and paper coverage
           in one place.
         </h1>
@@ -43,29 +43,24 @@ export default function Home() {
       {hf?.active && (
         <section
           aria-labelledby="headline-finding"
-          className="relative overflow-hidden rounded-2xl border border-amber-300/60 bg-gradient-to-br from-amber-50 to-orange-50 p-6 dark:border-amber-500/30 dark:from-amber-500/10 dark:to-orange-500/5"
+          className="rounded-lg border border-amber-300/60 bg-amber-500/5 p-6 dark:border-amber-500/30"
         >
           <div className="flex items-start gap-3">
-            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-600 dark:text-amber-300">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M12 9v4M12 17h.01" />
-                <path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" />
-              </svg>
-            </span>
+            <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" aria-hidden />
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">
+              <p className="font-mono text-xs font-medium uppercase tracking-wider text-amber-700 dark:text-amber-300">
                 Headline finding
               </p>
-              <h2 id="headline-finding" className="mt-1 text-lg font-bold text-ink">
+              <h2 id="headline-finding" className="mt-1 font-serif text-lg font-semibold text-ink">
                 {hf.title}
               </h2>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-ink/80 dark:text-ink/70">
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">
                 {hf.summary}
               </p>
               {hf.source_doc && (
                 <Link
                   href="/docs/audits/state-07-10"
-                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline"
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
                 >
                   Read the source audit
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
@@ -83,7 +78,7 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Stat value={done} label="Legs done" tone="text-emerald-600 dark:text-emerald-400" />
           <Stat value={open} label="Legs open" tone="text-rose-600 dark:text-rose-400" />
-          <Stat value={superseded} label="Superseded" tone="text-slate-500" />
+          <Stat value={superseded} label="Superseded" tone="text-faint" />
           <Stat value={paperTodo} label="Paper sections to fix" tone="text-amber-600 dark:text-amber-400" />
         </div>
       </section>
@@ -93,7 +88,13 @@ export default function Home() {
         <h2 className="mb-4 text-lg font-semibold tracking-tight text-ink">
           Explore
         </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <CardLink
+            href="/results"
+            title="Results"
+            description="Every statistical test — independence, Yule's Q, Wilson intervals, McNemar — with the comparison, delta, and what it means."
+            icon={<IconFlask />}
+          />
           <CardLink
             href="/status"
             title="Study status"
@@ -124,6 +125,14 @@ export default function Home() {
   );
 }
 
+function IconFlask() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M9 2v6.5L4.5 18a1.5 1.5 0 0 0 1.34 2.17h12.32A1.5 1.5 0 0 0 19.5 18L15 8.5V2" />
+      <path d="M9 2h6M7.5 14.5h9" />
+    </svg>
+  );
+}
 function IconChart() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>

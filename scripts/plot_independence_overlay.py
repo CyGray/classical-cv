@@ -90,9 +90,11 @@ PRESETS: dict[str, dict] = {
         "mode": "far",
         "series": {
             "LSDB1": "reports/independence/hybrid/lsdb1/summary.json",
-            "LSDB2 (light)": "outputs/hybrid/independence_test/comparisons.csv",
+            "LSDB2 (light)": "reports/independence/hybrid/lsdb2_light/summary.json",
+            "LSDB2 (medium)": "reports/independence/hybrid/lsdb2_medium/summary.json",
             "LFW1": "reports/independence/hybrid/lfw1/summary.json",
             "LFW2 (light)": "reports/independence/hybrid/lfw2_light/summary.json",
+            "LFW2 (medium)": "reports/independence/hybrid/lfw2_medium/summary.json",
         },
         "output": "reports/independence/overlay/sface_cross_dataset_curve.png",
     },

@@ -9,9 +9,7 @@ export function Card({
   className?: string;
 }) {
   return (
-    <div
-      className={`rounded-xl border border-border bg-surface shadow-card ${className}`}
-    >
+    <div className={`rounded-lg border border-border bg-surface ${className}`}>
       {children}
     </div>
   );
@@ -29,11 +27,11 @@ export function PageHeader({
   return (
     <div className="mb-8">
       {eyebrow && (
-        <p className="mb-1 text-xs font-semibold uppercase tracking-wider text-brand">
+        <p className="mb-1.5 font-mono text-xs font-medium uppercase tracking-wider text-muted">
           {eyebrow}
         </p>
       )}
-      <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
+      <h1 className="font-serif text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
         {title}
       </h1>
       {description && (
@@ -79,15 +77,15 @@ export function CardLink({
   return (
     <Link
       href={href}
-      className="group block rounded-xl border border-border bg-surface p-5 shadow-card transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md"
+      className="group block rounded-lg border border-border bg-surface p-5 transition-colors hover:border-accent/50 hover:bg-elevated"
     >
       <div className="flex items-center gap-3">
         {icon && (
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-soft text-brand">
+          <span className="flex h-8 w-8 items-center justify-center rounded-md border border-border text-ink">
             {icon}
           </span>
         )}
-        <h3 className="font-semibold text-ink group-hover:text-brand">{title}</h3>
+        <h3 className="font-semibold text-ink group-hover:text-accent">{title}</h3>
       </div>
       <p className="mt-2 text-sm text-muted">{description}</p>
     </Link>

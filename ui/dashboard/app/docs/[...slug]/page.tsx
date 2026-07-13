@@ -26,14 +26,14 @@ export default function DocPage({ params }: { params: { slug: string[] } }) {
     <article className="mx-auto max-w-prose">
       <Link
         href="/docs"
-        className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline"
+        className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
           <path d="M19 12H5M11 18l-6-6 6-6" />
         </svg>
         All docs
       </Link>
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand">
+      <p className="mb-2 font-mono text-xs font-medium uppercase tracking-wide text-muted">
         {doc.entry.group}
       </p>
       <Markdown>{doc.content}</Markdown>

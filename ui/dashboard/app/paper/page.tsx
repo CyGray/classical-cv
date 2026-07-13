@@ -15,7 +15,7 @@ export default function PaperPage() {
   return (
     <div className="lg:grid lg:grid-cols-[1fr_18rem] lg:gap-10">
       <article className="max-w-prose">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-brand">
+        <p className="mb-2 font-mono text-xs font-medium uppercase tracking-wide text-muted">
           Draft manuscript
         </p>
         {doc ? (
@@ -35,7 +35,7 @@ export default function PaperPage() {
             {sections.map((s, i) => (
               <div
                 key={i}
-                className="rounded-lg border border-border bg-surface p-3 shadow-card"
+                className="rounded-lg border border-border bg-surface p-3"
               >
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-sm font-medium text-ink">{s.section}</span>

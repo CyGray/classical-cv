@@ -1,8 +1,9 @@
 import type { Config } from "tailwindcss";
 
 // Design tokens live as CSS variables in app/globals.css so light/dark switch with a
-// single class on <html>. Tailwind consumes them here. Palette goal (DESIGN.md §6.5):
-// legibility over novelty: a calm, neutral academic surface that reads in any locale.
+// single class on <html>. Tailwind consumes them here. Dense information-tool surface
+// model: hairline borders carry the structure, not shadow-card (reserved for true
+// overlays like the figures lightbox). One accent color, used sparingly.
 const config: Config = {
   darkMode: "class",
   content: [
@@ -20,13 +21,16 @@ const config: Config = {
         ink: "rgb(var(--ink) / <alpha-value>)",
         muted: "rgb(var(--muted) / <alpha-value>)",
         faint: "rgb(var(--faint) / <alpha-value>)",
-        brand: "rgb(var(--brand) / <alpha-value>)",
-        "brand-soft": "rgb(var(--brand-soft) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
       },
       fontFamily: {
         sans: [
-          "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto",
-          "Helvetica Neue", "Arial", "Noto Sans", "sans-serif",
+          "var(--font-sans)", "ui-sans-serif", "system-ui", "-apple-system",
+          "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif",
+        ],
+        serif: [
+          "var(--font-serif)", "ui-serif", "Georgia", "Cambria",
+          "Times New Roman", "Times", "serif",
         ],
         mono: [
           "ui-monospace", "SFMono-Regular", "Menlo", "Consolas",

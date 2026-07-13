@@ -3,31 +3,32 @@
 @tailwind utilities;
 
 /* ---- Design tokens ---------------------------------------------------------
-   Light and dark are the SAME hues at different lightness so the dashboard reads
-   identically in either theme. RGB triplets (space-separated) so Tailwind's
-   <alpha-value> works. */
+   Near-monochrome, hairline-border surface model (dense info tool, not a SaaS
+   template): canvas sits a shade below white, surface is white/near-black, cards
+   are separated by a 1px border rather than a shadow. One disciplined accent
+   (deep indigo) instead of a stock blue-600. RGB triplets (space-separated) so
+   Tailwind's <alpha-value> works; opacity modifiers (e.g. accent/10) cover tint
+   use, so no separate "-soft" token is needed. */
 :root {
-  --canvas: 249 250 251; /* app background */
+  --canvas: 250 250 250; /* app background (zinc-50) */
   --surface: 255 255 255; /* cards */
   --elevated: 255 255 255;
-  --border: 226 232 240;
-  --ink: 15 23 42; /* primary text (slate-900) */
-  --muted: 71 85 105; /* secondary text (slate-600) */
-  --faint: 148 163 184; /* tertiary (slate-400) */
-  --brand: 37 99 235; /* blue-600 */
-  --brand-soft: 219 234 254; /* blue-100 */
+  --border: 228 228 231; /* zinc-200 */
+  --ink: 24 24 27; /* primary text (zinc-900) */
+  --muted: 82 82 91; /* secondary text (zinc-600) */
+  --faint: 161 161 170; /* tertiary (zinc-400) */
+  --accent: 49 46 129; /* indigo-900 */
 }
 
 .dark {
-  --canvas: 15 23 42; /* slate-900 */
-  --surface: 30 41 59; /* slate-800 */
-  --elevated: 51 65 85; /* slate-700 */
-  --border: 51 65 85;
-  --ink: 241 245 249; /* slate-100 */
-  --muted: 148 163 184; /* slate-400 */
-  --faint: 100 116 139; /* slate-500 */
-  --brand: 96 165 250; /* blue-400 */
-  --brand-soft: 30 58 138; /* blue-900 */
+  --canvas: 18 18 20;
+  --surface: 24 24 27; /* zinc-900 */
+  --elevated: 39 39 42; /* zinc-800 */
+  --border: 63 63 70; /* zinc-700, more contrast needed to read on dark */
+  --ink: 244 244 245; /* zinc-100 */
+  --muted: 161 161 170; /* zinc-400 */
+  --faint: 113 113 122; /* zinc-500 */
+  --accent: 165 180 252; /* indigo-300, needs to pop on dark */
 }
 
 html {
@@ -44,7 +45,7 @@ body {
 
 /* Focus ring: visible for keyboard users everywhere (accessibility baseline). */
 :focus-visible {
-  outline: 2px solid rgb(var(--brand));
+  outline: 2px solid rgb(var(--accent));
   outline-offset: 2px;
   border-radius: 3px;
 }
@@ -58,23 +59,23 @@ body {
 .prose-doc > * + * {
   margin-top: 1rem;
 }
-.prose-doc h1 { font-size: 1.9rem; font-weight: 700; line-height: 1.25; margin-top: 2rem; }
-.prose-doc h2 { font-size: 1.45rem; font-weight: 650; line-height: 1.3; margin-top: 2rem; padding-bottom: .3rem; border-bottom: 1px solid rgb(var(--border)); }
-.prose-doc h3 { font-size: 1.18rem; font-weight: 600; margin-top: 1.6rem; }
+.prose-doc h1 { font-family: theme("fontFamily.serif"); font-size: 1.9rem; font-weight: 600; line-height: 1.25; margin-top: 2rem; }
+.prose-doc h2 { font-family: theme("fontFamily.serif"); font-size: 1.45rem; font-weight: 600; line-height: 1.3; margin-top: 2rem; padding-bottom: .3rem; border-bottom: 1px solid rgb(var(--border)); }
+.prose-doc h3 { font-family: theme("fontFamily.serif"); font-size: 1.18rem; font-weight: 600; margin-top: 1.6rem; }
 .prose-doc h4 { font-size: 1.02rem; font-weight: 600; margin-top: 1.3rem; }
 .prose-doc h1:first-child, .prose-doc h2:first-child { margin-top: 0; }
 .prose-doc p { color: rgb(var(--ink)); }
-.prose-doc a { color: rgb(var(--brand)); text-decoration: underline; text-underline-offset: 2px; }
+.prose-doc a { color: rgb(var(--accent)); text-decoration: underline; text-underline-offset: 2px; }
 .prose-doc strong { font-weight: 650; color: rgb(var(--ink)); }
 .prose-doc ul { list-style: disc; padding-left: 1.4rem; }
 .prose-doc ol { list-style: decimal; padding-left: 1.4rem; }
 .prose-doc li { margin-top: .35rem; }
 .prose-doc li > ul, .prose-doc li > ol { margin-top: .35rem; }
 .prose-doc blockquote {
-  border-left: 3px solid rgb(var(--brand));
+  border-left: 3px solid rgb(var(--border));
   padding: .3rem 0 .3rem 1rem;
   color: rgb(var(--muted));
-  background: rgb(var(--brand-soft) / .35);
+  background: rgb(var(--ink) / .03);
   border-radius: 0 6px 6px 0;
 }
 .prose-doc code {

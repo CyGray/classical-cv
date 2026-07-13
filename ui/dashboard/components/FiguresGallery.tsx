@@ -44,7 +44,7 @@ export function FiguresGallery({ figures }: { figures: Figure[] }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Filter by name (e.g. fig_hybrid, mcnemar, roc)…"
             aria-label="Filter figures"
-            className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-ink placeholder:text-faint focus:border-brand focus:outline-none"
+            className="w-full rounded-lg border border-border bg-surface py-2 pl-9 pr-3 text-sm text-ink placeholder:text-faint focus:border-accent focus:outline-none"
           />
         </div>
         <div className="flex flex-wrap gap-1">
@@ -64,7 +64,7 @@ export function FiguresGallery({ figures }: { figures: Figure[] }) {
       </p>
 
       {filtered.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-border py-12 text-center text-sm text-faint">
+        <p className="rounded-lg border border-dashed border-border py-12 text-center text-sm text-faint">
           No figures match that filter.
         </p>
       ) : (
@@ -73,7 +73,7 @@ export function FiguresGallery({ figures }: { figures: Figure[] }) {
             <button
               key={f.file}
               onClick={() => setActive(f)}
-              className="group overflow-hidden rounded-xl border border-border bg-surface text-left shadow-card transition-all hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md"
+              className="group overflow-hidden rounded-lg border border-border bg-surface text-left transition-colors hover:border-accent/40"
             >
               <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-white p-2">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -107,23 +107,23 @@ export function FiguresGallery({ figures }: { figures: Figure[] }) {
           aria-label={active.label}
         >
           <div
-            className="max-h-[90vh] max-w-4xl overflow-hidden rounded-xl bg-white shadow-2xl"
+            className="max-h-[90vh] max-w-4xl overflow-hidden rounded-lg border border-border bg-surface shadow-card"
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`/figures/${active.file}`}
               alt={active.label}
-              className="max-h-[80vh] w-full object-contain"
+              className="max-h-[80vh] w-full bg-white object-contain"
             />
-            <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-white px-4 py-3">
+            <div className="flex items-center justify-between gap-3 border-t border-border bg-surface px-4 py-3">
               <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-slate-900">{active.label}</p>
-                <p className="truncate text-xs text-slate-500">{active.src}</p>
+                <p className="truncate text-sm font-medium text-ink">{active.label}</p>
+                <p className="truncate text-xs text-muted">{active.src}</p>
               </div>
               <button
                 onClick={() => setActive(null)}
-                className="shrink-0 rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100"
+                className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-sm font-medium text-muted hover:bg-elevated hover:text-ink"
               >
                 Close
               </button>
@@ -149,7 +149,7 @@ function FilterChip({
       onClick={onClick}
       className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
         active
-          ? "border-brand bg-brand text-white"
+          ? "border-accent bg-accent text-white"
           : "border-border bg-surface text-muted hover:bg-elevated hover:text-ink"
       }`}
     >

@@ -27,12 +27,12 @@ export default function DocsIndex() {
                 <Link
                   key={d.slug}
                   href={`/docs/${d.slug}`}
-                  className="group flex items-center justify-between rounded-lg border border-border bg-surface px-4 py-3 shadow-card transition-colors hover:border-brand/40 hover:bg-elevated/40"
+                  className="group flex items-center justify-between rounded-lg border border-border bg-surface px-4 py-3 transition-colors hover:border-accent/40 hover:bg-elevated/40"
                 >
-                  <span className="font-medium text-ink group-hover:text-brand">
+                  <span className="font-medium text-ink group-hover:text-accent">
                     {d.title}
                   </span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-faint group-hover:text-brand" aria-hidden>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-faint group-hover:text-accent" aria-hidden>
                     <path d="M9 6l6 6-6 6" />
                   </svg>
                 </Link>
