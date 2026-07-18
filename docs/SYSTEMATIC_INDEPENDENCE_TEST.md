@@ -94,6 +94,15 @@ The suite covers 12 modification families across 41 parameter levels (defined in
 
 ---
 
+### 4.4 Trade-off Comparison: Tiered Pooled vs. Systematic Per-Variant Suite
+
+| Evaluation Mode | Number of Sweeps | Unique Pairs ($N(N-1)/2$) | Directional Pairs ($N(N-1)$) | Estimated Runtime (i5-12450H) | Primary Analytical Purpose |
+|---|---:|---:|---:|---:|---|
+| **Tiered Pooled (3 Tiers)** | 3 sweeps (`light`, `medium`, `heavy`) | **49,567,878** | **99,135,756** | **~15 minutes** | High-level transfer degradation overview |
+| **Systematic Per-Variant Suite** | **41 sweeps** (all parameter levels) | **677,427,666** | **1,354,855,332** | **~3.0 to 3.2 hours** | ⭐ Pinpoint single-variable corruption breakdown & 41-point Yule's $Q$ spectrum |
+
+---
+
 ## 5. Statistical Output & Deliverables
 
 For each of the 41 modification sweeps, the execution engine writes structured artifacts to `reports/independence/systematic_lfw2/<mod_name>/`:
