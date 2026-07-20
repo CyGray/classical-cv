@@ -1,70 +1,69 @@
 # Accuracy Ratio - 41-modification suite: CV (LBPH) vs DL (SFace) vs hybrid cascade
 
-Originals: `C:\Users\acer\Downloads\USLS 4th Year\Computer Vision\face-detection-g3\data\lfw-dataset` (349 tiles) | 41 variants/original | seed=42 | no-face policy: `fallback`.
+Originals: `D:\Online Classes 7 - The College Experience\Shared Githubs\classical-cv\data\lfw-dataset` (349 tiles) | 41 variants/original | seed=42 | no-face policy: `fallback`.
 
 Same probes as `accuracy_ratio.py` (identical per-image seeds). AR per modification = mean over its levels; overall = mean over modifications.
 
-| Metric | cv_only | dl_only | cascade | parallel |
-|---|---:|---:|---:|---:|
-| Clean acceptance | 100.00% | 100.00% | 100.00% | 100.00% |
-| **Overall AR** | **87.20%** | **98.51%** | **94.84%** | **98.52%** |
-| Pooled AR [95% CI] | 85.55% [84.97-86.12] | 98.27% [98.04-98.47] | 94.11% [93.71-94.48] | 98.28% [98.05-98.48] |
-| Mean latency | 94.94 ms | 20.17 ms | 3.63 ms | 7.28 ms |
-| Latency median / p95 | 93.47 / 112.35 ms | 19.80 / 25.38 ms | 0.51 / 9.19 ms | 7.16 / 9.84 ms |
+| Metric | cv_only | dl_only | cascade |
+|---|---:|---:|---:|
+| Clean acceptance | 100.00% | 99.71% | 99.71% |
+| **Overall AR** | **98.26%** | **97.16%** | **97.15%** |
+| Pooled AR [95% CI] | 97.97% [97.73-98.19] | 96.72% [96.42-97.00] | 96.71% [96.40-96.99] |
+| Mean latency | 95.65 ms | 16.12 ms | 0.40 ms |
+| Latency median / p95 | 95.24 / 113.71 ms | 15.14 / 22.64 ms | 0.36 / 0.64 ms |
 
 ## Per modification
 
-| Modification | cv_only | dl_only | cascade | parallel | winner | escalation |
-|---|---:|---:|---:|---:|---|---:|
-| brightness_up | 97.3% | 100.0% | 100.0% | 100.0% | dl_stronger | 53% |
-| brightness_down | 74.9% | 99.5% | 97.1% | 99.5% | dl_stronger | 47% |
-| contrast_up | 81.8% | 100.0% | 94.5% | 100.0% | dl_stronger | 28% |
-| contrast_down | 100.0% | 99.9% | 100.0% | 99.9% | tie | 64% |
-| gamma_up | 100.0% | 99.8% | 100.0% | 99.8% | tie | 36% |
-| gamma_down | 97.8% | 100.0% | 100.0% | 100.0% | dl_stronger | 42% |
-| gaussian_noise | 27.7% | 83.5% | 66.1% | 83.5% | dl_stronger | 63% |
-| gaussian_blur | 100.0% | 100.0% | 100.0% | 100.0% | tie | 61% |
-| motion_blur | 98.5% | 99.9% | 99.6% | 99.9% | tie | 54% |
-| rotation | 68.6% | 99.9% | 80.9% | 99.9% | dl_stronger | 44% |
-| zoom | 99.9% | 99.8% | 99.9% | 99.9% | tie | 33% |
-| occlusion | 100.0% | 99.8% | 100.0% | 99.8% | tie | 25% |
+| Modification | cv_only | dl_only | cascade | winner | escalation |
+|---|---:|---:|---:|---|---:|
+| brightness_up | 99.9% | 99.7% | 99.7% | tie | 100% |
+| brightness_down | 97.8% | 99.2% | 99.2% | tie | 99% |
+| contrast_up | 99.4% | 100.0% | 99.8% | tie | 89% |
+| contrast_down | 100.0% | 99.7% | 99.7% | tie | 100% |
+| gamma_up | 100.0% | 99.7% | 99.7% | tie | 99% |
+| gamma_down | 100.0% | 99.7% | 99.7% | tie | 98% |
+| gaussian_noise | 82.0% | 69.5% | 69.5% | cv_stronger | 80% |
+| gaussian_blur | 100.0% | 99.7% | 99.7% | tie | 100% |
+| motion_blur | 100.0% | 99.6% | 99.6% | tie | 99% |
+| rotation | 99.9% | 99.6% | 99.6% | tie | 99% |
+| zoom | 100.0% | 99.7% | 99.7% | tie | 99% |
+| occlusion | 100.0% | 99.7% | 99.7% | tie | 98% |
 
 ## Complementarity summary
 
-- CV stronger (> 2 pts): none
-- DL stronger (> 2 pts): brightness_up, brightness_down, contrast_up, gamma_down, gaussian_noise, rotation
-- Ties: 6 modifications
-- Cascade within 2 pts of the better engine on 8 / 12 modifications
-- Cascade vs parallel (run-both ceiling): -3.68 pts overall, within tolerance on 8 / 12 modifications
+- CV stronger (> 2 pts): gaussian_noise
+- DL stronger (> 2 pts): none
+- Ties: 11 modifications
+- Cascade within 2 pts of the better engine on 11 / 12 modifications
 
 ## Complementarity battery (identification axis)
 
 Per-probe pairing of cv_only vs dl_only correctness on the SAME probes (w = both right, x = only LBPH right, y = only SFace right, z = both wrong). recovery = y/(y+z) - the share of LBPH's misses SFace rescues; both-fail = z/N - the ceiling no fusion beats; McNemar tests x vs y.
 
-- Modified probes: 14309 | w/x/y/z = 12226/16/1835/232
-- **Recovery rate** = 88.8% [87.3-90.1] (1835/2067)
-- **Both-fail ceiling** = 1.6% [1.4-1.8]
-- **McNemar** (x=16 vs y=1835): p_exact = 0.0e+00, chi2_cc = 1785.6
-- Clean probes (349): w/x/y/z = 349/0/0/0
+- Modified probes: 14309 | w/x/y/z = 13731/288/109/181
+- **Recovery rate** = 37.6% [32.2-43.3] (109/290)
+- **Both-fail ceiling** = 1.3% [1.1-1.5]
+- **McNemar** (x=288 vs y=109): p_exact = 9.6e-20, chi2_cc = 79.8
+- Clean probes (349): w/x/y/z = 348/1/0/0
 
 | Modification | LBPH wrong | SFace rescues | Recovery | Both-fail | McNemar p | AUC(d1) |
 |---|---:|---:|---:|---:|---:|---:|
-| brightness_up | 37 | 37 | 100% | 0.0% | 1.5e-11 | 1.00 |
-| brightness_down | 350 | 345 | 99% | 0.4% | 4.2e-100 | 0.99 |
-| contrast_up | 191 | 191 | 100% | 0.0% | 6.4e-58 | 0.99 |
-| contrast_down | 0 | 0 | nan% | 0.0% | 1 | n/a |
-| gamma_up | 0 | 0 | nan% | 0.0% | 0.5 | n/a |
-| gamma_down | 23 | 23 | 100% | 0.0% | 2.4e-07 | 1.00 |
-| gaussian_noise | 1010 | 784 | 78% | 16.2% | 1.6e-225 | 1.00 |
-| gaussian_blur | 0 | 0 | nan% | 0.0% | n/a | n/a |
-| motion_blur | 16 | 16 | 100% | 0.0% | 0.00027 | 1.00 |
-| rotation | 439 | 438 | 100% | 0.1% | 2.8e-132 | 1.00 |
-| zoom | 1 | 1 | 100% | 0.0% | 0.62 | 1.00 |
-| occlusion | 0 | 0 | nan% | 0.0% | 0.5 | n/a |
+| brightness_up | 1 | 1 | 100% | 0.0% | 0.38 | 1.00 |
+| brightness_down | 31 | 28 | 90% | 0.2% | 0.0012 | 1.00 |
+| contrast_up | 6 | 6 | 100% | 0.0% | 0.031 | 1.00 |
+| contrast_down | 0 | 0 | nan% | 0.0% | 0.25 | n/a |
+| gamma_up | 0 | 0 | nan% | 0.0% | 0.25 | n/a |
+| gamma_down | 0 | 0 | nan% | 0.0% | 0.25 | n/a |
+| gaussian_noise | 251 | 74 | 29% | 12.7% | 2.7e-23 | 0.96 |
+| gaussian_blur | 0 | 0 | nan% | 0.0% | 0.25 | n/a |
+| motion_blur | 0 | 0 | nan% | 0.0% | 0.12 | n/a |
+| rotation | 1 | 0 | 0% | 0.1% | 0.12 | 0.50 |
+| zoom | 0 | 0 | nan% | 0.0% | 0.12 | n/a |
+| occlusion | 0 | 0 | nan% | 0.0% | 0.25 | n/a |
 
 ### Gate competence (does LBPH know when it's wrong?)
 
-- ROC AUC, LBPH distance -> 'LBPH wrong' (modified probes): **0.995**; margin signal: 0.988
-- Deployed gate vs 'LBPH wrong': escalates 6596 probes; TPR (wrong probes escalated) = 0.692, FPR (right probes escalated) = 0.422, precision = 0.217
-- Escalation reasons on rescued-eligible (LBPH-wrong) probes: low_margin=720, quality=706, ambiguous_band=4
-- Including clean probes: AUC(d1) = 0.995, gate TPR = 0.692, FPR = 0.416
+- ROC AUC, LBPH distance -> 'LBPH wrong' (modified probes): **0.996**; margin signal: 0.988
+- Deployed gate vs 'LBPH wrong': escalates 13809 probes; TPR (wrong probes escalated) = 0.993, FPR (right probes escalated) = 0.964, precision = 0.021
+- Escalation reasons on rescued-eligible (LBPH-wrong) probes: quality=288
+- Including clean probes: AUC(d1) = 0.997, gate TPR = 0.993, FPR = 0.965
