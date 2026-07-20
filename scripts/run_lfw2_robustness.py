@@ -13,13 +13,32 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import datetime
+import importlib.util
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ENROLL_DIR = PROJECT_ROOT / "models" / "lfw2"
+DEFAULT_LFW_ROOT = PROJECT_ROOT / "data" / "lfw-dataset"
+
+sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from main import build_subprocess_env, describe_hardware_profile, load_or_build_hardware_profile  # noqa: E402
+from setup_datasets import setup_lfw  # noqa: E402
+
+
+def ensure_dependencies() -> None:
+    """Standalone entrypoint: pip-install requirements.txt if numpy/cv2 aren't
+    importable yet, instead of dying halfway through enrollment with ModuleNotFoundError."""
+    if importlib.util.find_spec("numpy") and importlib.util.find_spec("cv2"):
+        return
+    req_file = PROJECT_ROOT / "requirements.txt"
+    print(f"[INFO] numpy/cv2 not found; installing dependencies from {req_file}...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "-r", str(req_file)], check=True)
+    importlib.invalidate_caches()
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,9 +53,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--num-workers",
         type=int,
-        default=4,
+        default=None,
         help="Max parallel worker processes. Each worker loads the full LBPH model "
-             "(~1 GB .yml for all-LFW enrollment), so cap this by RAM, not cores.",
+             "(~1 GB .yml for all-LFW enrollment), so cap this by RAM, not cores. "
+             "Default: auto from the detected hardware profile (see main.py hw menu).",
     )
     parser.add_argument(
         "--num-segments",
@@ -190,6 +210,7 @@ def run_segment(
     output_dir: Path,
     seed: int,
     passthrough: list[str],
+    env: dict[str, str],
 ) -> tuple[int, Path, Path]:
     seg_json = output_dir / f"accuracy_ratio_hybrid_seg{segment_index}of{num_segments}.json"
     seg_md = output_dir / f"accuracy_ratio_hybrid_seg{segment_index}of{num_segments}.md"
@@ -227,7 +248,7 @@ def run_segment(
     ]
 
     print(f"[WORKER {segment_index}/{num_segments}] Launching segment {segment_index}...")
-    res = subprocess.run(cmd, cwd=str(PROJECT_ROOT), capture_output=True, text=True)
+    res = subprocess.run(cmd, cwd=str(PROJECT_ROOT), capture_output=True, text=True, env=env)
     if res.returncode != 0:
         print(f"[ERROR Worker {segment_index}] Standard Error:\n{res.stderr}")
         raise RuntimeError(f"Worker {segment_index} failed with code {res.returncode}")
@@ -237,16 +258,29 @@ def run_segment(
 
 
 def main() -> int:
+    ensure_dependencies()
     args = parse_args()
     lfw_path = PROJECT_ROOT / args.lfw_root if not Path(args.lfw_root).is_absolute() else Path(args.lfw_root)
+    if lfw_path.resolve() == DEFAULT_LFW_ROOT.resolve():
+        # Downloads + extracts data/lfw-dataset (5,749 identities) if missing or incomplete.
+        setup_lfw()
     if not lfw_path.exists():
         raise RuntimeError(f"LFW root dataset path does not exist: {lfw_path}")
 
     out_dir = PROJECT_ROOT / args.output_dir if not Path(args.output_dir).is_absolute() else Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    num_segments = args.num_segments or max(16, args.num_workers)
-    num_workers = min(args.num_workers, num_segments)
+    # Same CPU/RAM-tiered profile main.py uses for every other run: caps BLAS/OpenMP
+    # threads per process so num_workers x unrestricted BLAS threads can't oversubscribe
+    # the machine, and sizes num_workers itself when not explicitly overridden.
+    hardware_profile = load_or_build_hardware_profile()
+    print(f"[INFO] Detected {describe_hardware_profile(hardware_profile)}")
+    env = build_subprocess_env(hardware_profile)
+    os.environ.update({k: v for k, v in env.items() if k not in os.environ})
+
+    requested_workers = args.num_workers if args.num_workers is not None else hardware_profile["workers"]
+    num_segments = args.num_segments or max(16, requested_workers)
+    num_workers = min(requested_workers, num_segments)
 
     print(f"=== LFW2 41-Modification Hybrid Robustness Harness ===")
     print(f"Dataset Root: {lfw_path}")
@@ -291,6 +325,7 @@ def main() -> int:
                 out_dir,
                 args.seed,
                 passthrough,
+                env,
             )
             for seg_idx in range(1, num_segments + 1)
         ]
@@ -319,7 +354,7 @@ def main() -> int:
         str(out_dir / "accuracy_ratio_hybrid_probes.csv"),
     ]
 
-    res = subprocess.run(merge_cmd, cwd=str(PROJECT_ROOT), capture_output=True, text=True)
+    res = subprocess.run(merge_cmd, cwd=str(PROJECT_ROOT), capture_output=True, text=True, env=env)
     if res.returncode != 0:
         print(f"[ERROR Merge] Standard Error:\n{res.stderr}")
         raise RuntimeError(f"Merge step failed with code {res.returncode}")
