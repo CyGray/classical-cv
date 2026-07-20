@@ -36,7 +36,8 @@ from src.hybrid.quality import QualityReport
 # Last-resort fallback if thresholds.json is missing/unreadable at import time.
 # The frozen values themselves live in thresholds.json (the file the evidence
 # matrix SHA-256-hashes); these literals must never be the only copy.
-_FALLBACK_GATE_DEFAULTS = {"tau_accept": 73.04, "tau_reject": 76.85, "margin_min": 0.05}
+# tau_accept is FROZEN — see docs/READ_THIS.md before touching.
+_FALLBACK_GATE_DEFAULTS = {"tau_accept": 70.6089, "tau_reject": 76.85, "margin_min": 0.05}
 _THRESHOLDS_JSON = Path(__file__).with_name("thresholds.json")
 
 

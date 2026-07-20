@@ -121,7 +121,6 @@ def _hybrid_mode_field() -> dict:
         "help": "cascade = LBPH fast path + SFace escalation (deployed default).",
         "options": [
             {"value": "cascade", "label": "cascade (deployed)", "args": ["--mode", "cascade"]},
-            {"value": "parallel", "label": "parallel (both engines)", "args": ["--mode", "parallel"]},
             {"value": "cv_only", "label": "cv_only (LBPH only)", "args": ["--mode", "cv_only"]},
             {"value": "dl_only", "label": "dl_only (SFace only)", "args": ["--mode", "dl_only"]},
         ],

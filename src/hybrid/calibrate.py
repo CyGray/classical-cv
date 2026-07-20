@@ -37,15 +37,18 @@ from src.hybrid.recognizer import (
     LBPHAdapter,
     detect_sample,
 )
-from src.sface.recognizer import COSINE_GENUINE_THRESHOLD, SFaceFarModel
+from src.sface.recognizer import COSINE_GENUINE_THRESHOLD, L2_GENUINE_THRESHOLD, SFaceFarModel
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp"}
 
-# Carried LBPH gate edges (measured, reports/benchmark/tar_at_far.md).
-LBPH_TAU_ACCEPT = 73.04   # 100 ppm FAR vs 13,149 LFW impostors (TAR 98.21%)
+# FROZEN — see docs/READ_THIS.md before touching. LBPH_TAU_ACCEPT is the LS-DB1
+# rank-8/1% FAR raw distance (reports/independence/hybrid/lsdb1_fixed); no longer
+# the LFW-carried tar_at_far.md value.
+LBPH_TAU_ACCEPT = 70.6089  # LS-DB1 rank-8 impostor distance (1% FAR, 756 ordered pairs)
 LBPH_TAU_REJECT = 76.85   # ~1% FAR band edge (TAR 100.00%)
 TAR_AT_FAR_PROVENANCE = "reports/benchmark/tar_at_far.md (LBPH vs 13,149 LFW impostors)"
+LBPH_TAU_ACCEPT_PROVENANCE = "frozen: LS-DB1 rank-8 impostor distance, reports/independence/hybrid/lsdb1_fixed (see docs/READ_THIS.md)"
 
 # Relative top1<->top2 gap below which LBPH is treated as a near-tie and escalated.
 # A POLICY default, deliberately not dataset-fitted: train distances are inflated
@@ -204,12 +207,12 @@ def main() -> int:
         "lbph_far_anchors": [[0.0, 0.0], [LBPH_TAU_ACCEPT, 1e-4], [LBPH_TAU_REJECT, 1e-2], [200.0, 1.0]],
         "sface": {
             "cosine_genuine": COSINE_GENUINE_THRESHOLD,
-            "l2_genuine": 1.128,
+            "l2_genuine": L2_GENUINE_THRESHOLD,
             "cosine_operating": cos_accept,
             "cosine_operating_1pct": cos_reject,
         },
         "provenance": {
-            "gate.tau_accept": f"carried: {TAR_AT_FAR_PROVENANCE}, 100 ppm FAR",
+            "gate.tau_accept": LBPH_TAU_ACCEPT_PROVENANCE,
             "gate.tau_reject": f"carried: {TAR_AT_FAR_PROVENANCE}, ~1% FAR",
             "gate.margin_min": "policy: relative top1-top2 gap 0.05 (not dataset-fitted; "
             "train margins are inflated by memorisation, test-fitting would leak)",
@@ -217,6 +220,7 @@ def main() -> int:
             "DB2 41-mod LBPH<->SFace crossover refinement deferred to Phase 6.4",
             "sface.cosine_operating": f"measured: SFaceFarModel.cosine_at_far({args.far_accept:.0e}) "
             f"over {Path(args.impostors_npy).name}",
+            "sface.l2_genuine": "frozen: hardcoded 1.106796 (see docs/READ_THIS.md)",
         },
         "calibration_stats": {
             "lbph_margin": margin_stats,

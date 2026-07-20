@@ -172,19 +172,27 @@ def select_images_per_person(
     images_per_identity: int = 2,
 ) -> Dict[str, List[str]]:
     """
-    Select up to ``images_per_identity`` images per person randomly. The FIRST
-    selected image is the probe used for the N x (N-1) comparison; the rest only
-    stabilize the LDA (within-class scatter needs >= 2 images per class).
+    Select up to ``images_per_identity`` images per person, deterministically.
+    The FIRST selected image is always light_front.jpg - the fixed probe used
+    for the N x (N-1) comparison, so the same comparisons are produced on
+    every run/iteration (fixes the prior rng.sample-based selection, which
+    could silently vary the probe image per person across seeds/iterations).
+    Any remaining slots (LDA within-class scatter needs >= 2 images per
+    class) are filled with the next sorted image files for that identity,
+    also deterministic - no RNG is used.
     """
     selected: Dict[str, List[str]] = {}
-    rng = random.Random(random_seed)
 
     for person, person_path in person_dirs:
+        target_path = os.path.join(person_path, "light_front.jpg")
+        if not os.path.exists(target_path):
+            found_files = os.listdir(person_path)
+            raise FileNotFoundError(f"Missing light_front.jpg for {person}. Found: {found_files}")
+
         image_files = [f for f in sorted(os.listdir(person_path)) if is_image_file(f)]
-        if not image_files:
-            continue
-        k = min(max(1, images_per_identity), len(image_files))
-        chosen = rng.sample(image_files, k)
+        extras = [f for f in image_files if f != "light_front.jpg"]
+        k_extra = min(max(0, images_per_identity - 1), len(extras))
+        chosen = ["light_front.jpg"] + extras[:k_extra]
         selected[person] = [os.path.join(person_path, f) for f in chosen]
 
     return selected

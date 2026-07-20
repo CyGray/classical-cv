@@ -1,0 +1,181 @@
+{
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\data\\lasalle_db1_processed",
+    "total_identities": 28,
+    "selected_identities": 28,
+    "images_per_identity": 2
+  },
+  "distance_statistics": {
+    "min_distance": 29.61256279809381,
+    "max_distance": 100.0,
+    "mean_distance": 67.14439449051368,
+    "median_distance": 67.61854849392968,
+    "std_dev": 11.604334166708707,
+    "percentiles": {
+      "1": 39.785312850999375,
+      "5": 45.05834771693002,
+      "10": 51.769738322234375,
+      "25": 61.0598717527536,
+      "50": 67.61854849392968,
+      "75": 74.82638279457512,
+      "90": 80.37613246101338,
+      "95": 85.27045627214171,
+      "99": 94.19011439135578
+    }
+  },
+  "suggested_thresholds": {
+    "percentile_1": 39.785312850999375,
+    "percentile_5": 45.05834771693002,
+    "percentile_10": 51.769738322234375,
+    "min_distance": 29.61256279809381,
+    "mean_minus_1std": 55.540060323804965
+  },
+  "error_pair_thresholds": {
+    "comparisons": 756,
+    "spec": {
+      "error_pair_rank": 8,
+      "comparisons": 756,
+      "raw_threshold": 3994.4118894483117,
+      "normalized_threshold": 39.613866890976965,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Kenlie_John_Maghari",
+      "candidate_identity": "Joseph_Andrew_Ong",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 756,
+        "raw_threshold": 2985.9436152314374,
+        "normalized_threshold": 29.61256279809381,
+        "realized_far_ppm": 1322.7513227513227,
+        "realized_far_percent": 0.13227513227513227,
+        "query_identity": "Daniel_Ramos",
+        "candidate_identity": "Joseph_Andrew_Ong"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 756,
+        "raw_threshold": 2985.9436152314374,
+        "normalized_threshold": 29.61256279809381,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Joseph_Andrew_Ong",
+        "candidate_identity": "Daniel_Ramos"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 756,
+        "raw_threshold": 3032.914880857494,
+        "normalized_threshold": 30.078391940332903,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Daniel_Ramos",
+        "candidate_identity": "Anthony_Charles_Saltat"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 756,
+        "raw_threshold": 3994.4118894483117,
+        "normalized_threshold": 39.613866890976965,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Joseph_Andrew_Ong"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 756,
+        "raw_threshold": 4063.5270208773463,
+        "normalized_threshold": 40.29930386952559,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Daniel_Ramos"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 756,
+        "raw_threshold": 4450.927457520978,
+        "normalized_threshold": 44.14127854701103,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Wilbert_Mijares",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 756,
+        "raw_threshold": 5056.272329430952,
+        "normalized_threshold": 50.14467825707177,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Thea_Ganza",
+        "candidate_identity": "Anthony_Charles_Saltat"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 756,
+        "raw_threshold": 5739.146977398076,
+        "normalized_threshold": 56.91696568172407,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Michael_Andrei_Jugado",
+        "candidate_identity": "Kyle_Yuan_Uy"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 756,
+        "raw_threshold": 6400.255145400461,
+        "normalized_threshold": 63.47338792675228,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Anthony_Charles_Saltat",
+        "candidate_identity": "Andrew_Eroyla"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 756,
+        "raw_threshold": 7290.949538638842,
+        "normalized_threshold": 72.30669057826175,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Trixia_Marie_Garcio",
+        "candidate_identity": "Diofel_Gwen_Haresco"
+      }
+    ]
+  },
+  "iterations": 1,
+  "random_seed_base": 42,
+  "per_run_thresholds": {
+    "k": 8,
+    "num_runs": 1,
+    "per_run_raw_threshold": [
+      3994.4118894483117
+    ],
+    "per_run_normalized_threshold": [
+      39.613866890976965
+    ],
+    "raw_threshold_stats": {
+      "mean": 3994.4118894483117,
+      "std": 0.0,
+      "min": 3994.4118894483117,
+      "max": 3994.4118894483117
+    },
+    "normalized_threshold_stats": {
+      "mean": 39.613866890976965,
+      "std": 0.0,
+      "min": 39.613866890976965,
+      "max": 39.613866890976965
+    }
+  },
+  "plots": {
+    "distance_histogram": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\fisherfaces_lasalle_fixed\\fisherfaces_lasalle_fixed_distance_histogram.png",
+    "distance_curve_plot": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\fisherfaces_lasalle_fixed\\fisherfaces_lasalle_fixed_distance_curve_plot.png",
+    "distance_histogram_tight": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\fisherfaces_lasalle_fixed\\fisherfaces_lasalle_fixed_distance_histogram_tight.png",
+    "distance_curve_plot_tight": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\fisherfaces_lasalle_fixed\\fisherfaces_lasalle_fixed_distance_curve_plot_tight.png",
+    "far_curve": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\face-detection-g3\\reports\\independence\\fisherfaces_lasalle_fixed\\fisherfaces_lasalle_fixed_far_curve.png",
+    "kde_bandwidth_used": 3.269709391119295
+  }
+}

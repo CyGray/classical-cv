@@ -7,12 +7,8 @@ by three configurations of the one hybrid system:
 
 * ``cv_only``  - LBPH alone (accept = correct identity AND distance <= tau_reject),
 * ``dl_only``  - SFace alone (accept = correct identity AND the genuine rule
-                 cosine >= 0.363 AND l2 <= 1.128),
-* ``cascade``  - the gated hybrid (LBPH fast path, SFace escalation),
-* ``parallel`` - both engines on every probe (the cascade's obvious rival: the
-                 accuracy ceiling of running everything, at full DL cost).
-                 The cascade earns its keep only if it stays within tolerance
-                 of parallel while escalating a fraction of the probes.
+                 cosine >= 0.363 AND l2 <= 1.106796),
+* ``cascade``  - the gated hybrid (LBPH fast path, SFace escalation).
 
 For each modification the report gives AR side by side plus the cascade's
 escalation rate, so the output directly answers: where does CV hold up, where
@@ -64,7 +60,7 @@ from src.hybrid.gate import GateThresholds
 from src.hybrid.quality import QualityThresholds
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-MODES = ("cv_only", "dl_only", "cascade", "parallel")
+MODES = ("cv_only", "dl_only", "cascade")
 AR_TIE_TOLERANCE = 2.0  # percentage points before a modification counts as won
 
 
@@ -80,7 +76,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--originals-dir", default="data/split_lasalle/test",
                         help="Identity folders of ORIGINAL images (default: held-out test).")
     parser.add_argument("--modes", default=",".join(MODES),
-                        help="Comma list from: cv_only, dl_only, cascade, parallel.")
+                        help="Comma list from: cv_only, dl_only, cascade.")
     parser.add_argument("--lbph-model", default=DEFAULT_LBPH_MODEL)
     parser.add_argument("--lbph-labels", default=DEFAULT_LBPH_LABELS)
     parser.add_argument("--sface-gallery", default=DEFAULT_SFACE_GALLERY)
@@ -92,6 +88,17 @@ def parse_args() -> argparse.Namespace:
                              "strict: count them as failures (deployed-system view).")
     parser.add_argument("--seed", type=int, default=42,
                         help="Keep at 42 to reproduce the classical accuracy_ratio.py probes.")
+    parser.add_argument("--segment-count", type=int, default=1,
+                        help="Number of query identity segments for parallel sharded execution.")
+    parser.add_argument("--segment-index", type=int, default=1,
+                        help="1-based index of this query segment (1 <= index <= segment-count).")
+    parser.add_argument("--select-one-per-person", action="store_true",
+                        help="Randomly pick 1 image per identity folder (deterministic via --seed).")
+    parser.add_argument("--reuse-engine-scores", action="store_true",
+                        help="Cache each engine's score per probe so cv_only/cascade "
+                             "don't re-run identical LBPH/SFace work (up to ~3x faster on large "
+                             "galleries). Reported per-mode latencies become meaningless - keep "
+                             "OFF for latency-bearing runs.")
     parser.add_argument("--output-json", default="reports/benchmark/accuracy_ratio_hybrid.json")
     parser.add_argument("--output-md", default="reports/benchmark/accuracy_ratio_hybrid.md")
     parser.add_argument("--battery-csv", default="reports/benchmark/accuracy_ratio_hybrid_probes.csv",
@@ -100,18 +107,35 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def load_originals(base_dir: str) -> list[tuple[str, str, np.ndarray]]:
-    """(person, filename, gray_tile) for every original image."""
-    out: list[tuple[str, str, np.ndarray]] = []
+def select_originals(base_dir: str, select_one_per_person: bool = False, seed: int = 42) -> list[tuple[str, str]]:
+    """(person, image_path) selection only — the RNG sequence is the probe-set
+    contract, so enrollment (scripts/run_lfw2_robustness.py) reuses this exact
+    function to enroll the same clean images the benchmark will modify."""
+    import random
+    out: list[tuple[str, str]] = []
+    rng = random.Random(seed)
     for person in sorted(os.listdir(base_dir)):
         pdir = os.path.join(base_dir, person)
         if not os.path.isdir(pdir):
             continue
-        for fn in list_image_files(pdir):
-            img = cv.imread(os.path.join(pdir, fn))
-            if img is None:
-                continue
-            out.append((person, fn, cv.cvtColor(img, cv.COLOR_BGR2GRAY)))
+        files = list_image_files(pdir)
+        if not files:
+            continue
+        if select_one_per_person:
+            files = [rng.choice(files)]
+        for fn in files:
+            out.append((person, os.path.join(pdir, fn)))
+    return out
+
+
+def load_originals(base_dir: str, select_one_per_person: bool = False, seed: int = 42) -> list[tuple[str, str, np.ndarray]]:
+    """(person, filename, gray_tile) for every original image."""
+    out: list[tuple[str, str, np.ndarray]] = []
+    for person, path in select_originals(base_dir, select_one_per_person, seed):
+        img = cv.imread(path)
+        if img is None:
+            continue
+        out.append((person, os.path.basename(path), cv.cvtColor(img, cv.COLOR_BGR2GRAY)))
     return out
 
 
@@ -129,6 +153,27 @@ def tile_sample(image_bgr: np.ndarray, image_gray: np.ndarray) -> FaceSample:
         face_px=int(min(h, w)),
         score=0.0,
     )
+
+
+class _ScoreMemo:
+    """Cache an engine's last score: modes score the SAME sample back to back, so
+    holding one (sample, match) pair collapses duplicate LBPH/SFace work across
+    cv_only/cascade. Keyed by object identity; the held reference keeps
+    id() stable. Everything else proxies to the wrapped adapter."""
+
+    def __init__(self, inner):
+        self._inner = inner
+        self._sample = None
+        self._match = None
+
+    def score(self, sample):
+        if sample is not self._sample:
+            self._sample = sample
+            self._match = self._inner.score(sample)
+        return self._match
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
 
 
 def build_recognizers(args: argparse.Namespace, modes: list[str]) -> dict[str, HybridRecognizer]:
@@ -149,6 +194,10 @@ def build_recognizers(args: argparse.Namespace, modes: list[str]) -> dict[str, H
             gallery_path=_abs(args.sface_gallery),
             impostors_path=impostors,
         )
+    if getattr(args, "reuse_engine_scores", False):
+        lbph = _ScoreMemo(lbph)
+        if sface is not None:
+            sface = _ScoreMemo(sface)
     return {
         mode: HybridRecognizer(
             lbph=lbph,
@@ -319,13 +368,19 @@ def main() -> int:
         if m not in MODES:
             raise ValueError(f"Unknown mode {m!r}. Valid: {MODES}")
 
-    originals = load_originals(_abs(args.originals_dir))
+    originals = load_originals(_abs(args.originals_dir), select_one_per_person=args.select_one_per_person, seed=args.seed)
     if not originals:
         raise RuntimeError(
             f"No original images found under {args.originals_dir}. "
             "Expected identity folders of pre-cropped tiles (data/split_lasalle/test)."
         )
-    print(f"[INFO] originals={len(originals)} -> modified probes per mode = "
+    total_unsegmented_originals = len(originals)
+    if args.segment_count > 1:
+        from src.independence_report import segment_bounds
+        start, end = segment_bounds(total_unsegmented_originals, args.segment_count, args.segment_index)
+        originals = originals[start:end]
+        print(f"[INFO] Segment {args.segment_index}/{args.segment_count}: processing originals [{start}:{end}] out of {total_unsegmented_originals}")
+    print(f"[INFO] originals={len(originals)} (unsegmented total={total_unsegmented_originals}) -> modified probes per mode = "
           f"{len(originals)} x {VARIANT_COUNT} = {len(originals) * VARIANT_COUNT}")
 
     recognizers = build_recognizers(args, modes)
@@ -383,6 +438,7 @@ def main() -> int:
                 "modified_total": len(originals),
                 "no_face": no_face_count,
                 "matched": matched,
+                "escalated": escalated if "cascade" in modes else None,
                 "ar_percent": {m: 100.0 * matched[m] / len(originals) for m in modes},
                 "cascade_escalation_percent": (
                     100.0 * escalated / len(originals) if "cascade" in modes else None
@@ -421,8 +477,6 @@ def main() -> int:
                 row["cascade_vs_best_points"] = (
                     mod_ar["cascade"] - max(mod_ar["cv_only"], mod_ar["dl_only"])
                 )
-        if "cascade" in modes and "parallel" in modes:
-            row["cascade_vs_parallel_points"] = mod_ar["cascade"] - mod_ar["parallel"]
         per_mod.append(row)
         summary = "  ".join(f"{m}={mod_ar[m]:6.2f}%" for m in modes)
         print(f"  {mod_name:<16} {summary}")
@@ -442,11 +496,15 @@ def main() -> int:
     payload = {
         "originals_dir": args.originals_dir,
         "originals": len(originals),
+        "total_unsegmented_originals": total_unsegmented_originals,
+        "segment_count": args.segment_count,
+        "segment_index": args.segment_index,
         "variant_count": VARIANT_COUNT,
         "modified_probes_per_mode": total_probes,
         "seed": args.seed,
         "no_face_policy": args.no_face_policy,
         "clean_no_face": clean_no_face,
+        "clean_matched": clean_matched,
         "clean_acceptance_percent": {
             m: 100.0 * clean_matched[m] / len(originals) for m in modes
         },
@@ -481,15 +539,6 @@ def main() -> int:
             payload["complementarity"]["cascade_within_2pts_of_best"] = sum(
                 1 for r in per_mod if r["cascade_vs_best_points"] >= -AR_TIE_TOLERANCE
             )
-    if "cascade" in modes and "parallel" in modes:
-        payload.setdefault("complementarity", {})["cascade_vs_parallel"] = {
-            "overall_points": overall["cascade"] - overall["parallel"],
-            "within_tolerance_mods": sum(
-                1 for r in per_mod
-                if r["cascade_vs_parallel_points"] >= -AR_TIE_TOLERANCE
-            ),
-            "total_mods": len(per_mod),
-        }
     if battery_enabled:
         payload["complementarity_battery"] = compute_battery(battery_rows, modes)
         if args.battery_csv:
@@ -508,10 +557,6 @@ def main() -> int:
     if "cv_stronger" in comp:
         print(f"[COMPLEMENTARITY] cv_stronger={comp['cv_stronger']} "
               f"dl_stronger={comp['dl_stronger']} tie={len(comp['tie'])} mods")
-    if "cascade_vs_parallel" in comp:
-        cvp = comp["cascade_vs_parallel"]
-        print(f"[CASCADE vs PARALLEL] overall {cvp['overall_points']:+.2f} pts; "
-              f"within tolerance on {cvp['within_tolerance_mods']}/{cvp['total_mods']} mods")
     bat = payload.get("complementarity_battery")
     if bat:
         om = bat["overall_modified"]
@@ -606,13 +651,6 @@ def to_markdown(payload: dict, modes: list[str]) -> str:
                     f"engine on {comp['cascade_within_2pts_of_best']} / "
                     f"{len(payload['modifications'])} modifications"
                 )
-        if "cascade_vs_parallel" in comp:
-            cvp = comp["cascade_vs_parallel"]
-            lines.append(
-                f"- Cascade vs parallel (run-both ceiling): "
-                f"{cvp['overall_points']:+.2f} pts overall, within tolerance on "
-                f"{cvp['within_tolerance_mods']} / {cvp['total_mods']} modifications"
-            )
         lines.append("")
 
     battery = payload.get("complementarity_battery")
@@ -683,12 +721,14 @@ def battery_markdown(battery: dict) -> list[str]:
     gm = gate.get("modified_only")
     if gm:
         evw = gm["escalate_vs_lbph_wrong"]
+        auc_d_str = f"**{gm['auc_lbph_distance']:.3f}**" if gm.get("auc_lbph_distance") is not None else "**n/a**"
+        auc_m_str = f"{gm['auc_lbph_margin']:.3f}" if gm.get("auc_lbph_margin") is not None else "n/a"
         lines += [
             "",
             "### Gate competence (does LBPH know when it's wrong?)",
             "",
             f"- ROC AUC, LBPH distance -> 'LBPH wrong' (modified probes): "
-            f"**{gm['auc_lbph_distance']:.3f}**; margin signal: {gm['auc_lbph_margin']:.3f}",
+            f"{auc_d_str}; margin signal: {auc_m_str}",
             f"- Deployed gate vs 'LBPH wrong': escalates {evw['escalated']} probes; "
             f"TPR (wrong probes escalated) = {evw['tpr_recall_of_wrong']:.3f}, "
             f"FPR (right probes escalated) = {evw['fpr_on_right']:.3f}, "
@@ -700,8 +740,9 @@ def battery_markdown(battery: dict) -> list[str]:
         ]
         ga = gate.get("all_probes")
         if ga:
+            ga_auc_str = f"{ga['auc_lbph_distance']:.3f}" if ga.get("auc_lbph_distance") is not None else "n/a"
             lines.append(
-                f"- Including clean probes: AUC(d1) = {ga['auc_lbph_distance']:.3f}, "
+                f"- Including clean probes: AUC(d1) = {ga_auc_str}, "
                 f"gate TPR = {ga['escalate_vs_lbph_wrong']['tpr_recall_of_wrong']:.3f}, "
                 f"FPR = {ga['escalate_vs_lbph_wrong']['fpr_on_right']:.3f}")
         if gm.get("excluded_no_signal"):

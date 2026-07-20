@@ -26,11 +26,12 @@ import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-# --- Ported constants (do NOT change; these define the DL track's match rule) --
+# --- Ported constants (these define the DL track's match rule) ---
 FR_COSINE = int(getattr(cv, "FaceRecognizerSF_FR_COSINE", 0))
 FR_NORM_L2 = int(getattr(cv, "FaceRecognizerSF_FR_NORM_L2", 1))
 COSINE_GENUINE_THRESHOLD = 0.363
-L2_GENUINE_THRESHOLD = 1.128
+# FROZEN — see docs/READ_THIS.md before touching.
+L2_GENUINE_THRESHOLD = 1.106796
 SFACE_FEATURE_DIM = 128
 SFACE_FEATURE_BYTES = SFACE_FEATURE_DIM * 4  # float32 => 512 bytes
 
@@ -126,6 +127,7 @@ class SFaceGallery:
             name: np.asarray(vec, dtype=np.float32).reshape(1, -1)
             for name, vec in (embeddings or {}).items()
         }
+        self._stack_cache: tuple[list[str], np.ndarray, np.ndarray] | None = None
 
     @property
     def labels(self) -> list[str]:
@@ -142,19 +144,29 @@ class SFaceGallery:
             embeddings[name] = stacked.mean(axis=0, keepdims=True).astype(np.float32)
         return cls(embeddings)
 
+    def _stacked(self) -> tuple[list[str], np.ndarray, np.ndarray]:
+        """(names, (N,128) matrix, (N,) row norms), rebuilt when identities change."""
+        names = self.labels
+        if self._stack_cache is None or self._stack_cache[0] != names:
+            matrix = np.vstack([self.embeddings[n].reshape(1, -1) for n in names])
+            self._stack_cache = (names, matrix, np.linalg.norm(matrix, axis=1))
+        return self._stack_cache
+
     def score(self, recognizer: SFaceRecognizer, feature: np.ndarray) -> SFaceMatch:
         if not self.embeddings:
             return SFaceMatch(name="Unknown", cosine=-1.0, l2=99.0, accepted=False, margin=0.0)
-        cosines: dict[str, float] = {}
-        l2s: dict[str, float] = {}
-        for name, gallery_feat in self.embeddings.items():
-            cosine, l2 = recognizer.match(gallery_feat, feature)
-            cosines[name] = cosine
-            l2s[name] = l2
-        ranked = sorted(cosines.items(), key=lambda kv: kv[1], reverse=True)
-        best_name, best_cos = ranked[0]
-        second_cos = ranked[1][1] if len(ranked) > 1 else -1.0
-        best_l2 = l2s[best_name]
+        # Vectorized equivalent of per-identity recognizer.match(): FR_COSINE is
+        # cosine similarity and FR_NORM_L2 is the L2 distance of the unit-normalized
+        # features, so l2 = sqrt(2 - 2*cos). One matmul instead of 2N OpenCV calls.
+        names, matrix, norms = self._stacked()
+        f = np.asarray(feature, dtype=np.float32).reshape(-1)
+        cos = (matrix @ f) / (norms * float(np.linalg.norm(f)))
+        cosines = {name: float(c) for name, c in zip(names, cos)}
+        order = np.argsort(-cos)
+        best_name = names[int(order[0])]
+        best_cos = float(cos[order[0]])
+        second_cos = float(cos[order[1]]) if len(names) > 1 else -1.0
+        best_l2 = float(np.sqrt(max(2.0 - 2.0 * best_cos, 0.0)))
         accepted = SFaceRecognizer.is_genuine(best_cos, best_l2)
         return SFaceMatch(
             name=best_name if accepted else "Unknown",

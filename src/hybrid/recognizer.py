@@ -46,7 +46,7 @@ DEFAULT_SFACE_GALLERY = str(PROJECT_ROOT / "models" / "sface" / "gallery.npy")
 DEFAULT_SFACE_LABELS = str(PROJECT_ROOT / "models" / "sface" / "labels.json")
 DEFAULT_SFACE_IMPOSTORS = str(PROJECT_ROOT / "models" / "sface" / "impostors-lfw.npy")
 
-HYBRID_MODES = ("cascade", "parallel", "cv_only", "dl_only")
+HYBRID_MODES = ("cascade", "cv_only", "dl_only")
 
 
 # --------------------------------------------------------------------------- #
@@ -344,7 +344,7 @@ class HybridRecognizer:
     ) -> None:
         if mode not in HYBRID_MODES:
             raise ValueError(f"Unknown hybrid mode {mode!r}. Valid: {HYBRID_MODES}")
-        if mode in {"cascade", "parallel", "dl_only"} and sface is None:
+        if mode in {"cascade", "dl_only"} and sface is None:
             raise ValueError(f"mode={mode!r} needs an SFace adapter, but none was provided.")
         self.lbph = lbph
         self.sface = sface
@@ -408,26 +408,6 @@ class HybridRecognizer:
             quality=quality,
             thresholds=self.gate_thresholds,
         )
-
-        if self.mode == "parallel":
-            # Both engines run every frame; SFace wins when it accepts, else a
-            # confident LBPH accept stands, else Unknown.
-            sface_match = self.sface.score(sample)
-            far = self.sface.far_of(sface_match.cosine)
-            if sface_match.accepted:
-                final, engine, raw = sface_match.name, "sface", sface_match.name
-            elif gate.lbph_accept:
-                final, engine, raw = lbph_match.name, "lbph", lbph_match.name
-            else:
-                final, engine, raw = "Unknown", "sface", sface_match.name
-            return HybridDecision(
-                name=final, name_raw=raw, engine=engine, escalated=True,
-                reason="parallel:" + gate.reason, mode=self.mode,
-                lbph_name=lbph_match.name, lbph_distance=lbph_match.distance,
-                lbph_margin=lbph_match.margin, sface_name=sface_match.name,
-                sface_cosine=sface_match.cosine, sface_l2=sface_match.l2,
-                sface_far=None if far != far else far, quality=quality.to_dict(),
-            )
 
         # cascade (default)
         if gate.escalate:
@@ -495,7 +475,7 @@ def build_hybrid(
     )
 
     sface: SFaceAdapter | None = None
-    needs_sface = mode in {"cascade", "parallel", "dl_only"}
+    needs_sface = mode in {"cascade", "dl_only"}
     if needs_sface or require_sface:
         try:
             sface = SFaceAdapter(

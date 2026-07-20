@@ -1289,7 +1289,7 @@ def prompt_detector_args(model_name: str, *, is_live: bool = False) -> list[str]
     return []
 
 
-HYBRID_MODES = ("cascade", "parallel", "cv_only", "dl_only")
+HYBRID_MODES = ("cascade", "cv_only", "dl_only")
 
 
 def prompt_hybrid_args(action_label: str) -> list[str]:
@@ -1305,11 +1305,10 @@ def prompt_hybrid_args(action_label: str) -> list[str]:
     if label in {"evaluate", "live detect"}:
         print("\nSelect hybrid mode:")
         print("  1. cascade  (LBPH fast path + SFace escalation) [default]")
-        print("  2. parallel (both engines every frame)")
-        print("  3. cv_only  (LBPH only - no-accelerator fallback)")
-        print("  4. dl_only  (SFace only)")
+        print("  2. cv_only  (LBPH only - no-accelerator fallback)")
+        print("  3. dl_only  (SFace only)")
         selected = input("Enter choice (default: 1): ").strip()
-        mode = {"1": "cascade", "2": "parallel", "3": "cv_only", "4": "dl_only"}.get(
+        mode = {"1": "cascade", "2": "cv_only", "3": "dl_only"}.get(
             selected, "cascade"
         )
         args += ["--mode", mode]

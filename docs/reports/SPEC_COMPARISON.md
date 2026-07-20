@@ -44,12 +44,16 @@ at the spec FAR budget against 13,149 LFW impostors.
 | Speed (Stage-1: 1 face/s) | ≥ 1 fps | **PASS** | **PASS** | **PASS** |
 | Latency | < 100 ms | not instrumented² | not instrumented² | not instrumented² |
 | Deployable threshold (predict scale) | — | **73.0** | 4,308 | 738 |
-| Independence threshold (La Salle DB1, 8th pair, raw) | — | 21.35 (chi², TT scale) | 8,098.5 | 5,446.5 |
+| Independence threshold (La Salle DB1, 8th pair, native predict-scale)³ | — | 70.6089 | 3,698.57 | 1,956.00 |
 
 ¹ FPS predates the Tan-Triggs switch (logged 2026-04/05 runs) and the bottleneck is the shared
 Haar detector, not the recognizer; re-measure with a webcam run before quoting.
 ² Best available estimate: ≈ 1000/FPS ≈ 50 ms per processed frame on desktop, which suggests
 < 100 ms is reachable, but capture→result latency was never separately instrumented.
+³ Deterministic `light_front.jpg` probe, real `cv.face.*Recognizer.predict_collect()` distance
+(not the earlier hand-rolled chi²/Euclidean reimplementation, which understated LBPH's raw
+threshold ~4x at 21.35). Each model's own native scale — not cross-model comparable. See
+`docs/reports/INDEPENDENCE_RERUN_CV/independence_rerun_comparison.md`.
 
 ---
 

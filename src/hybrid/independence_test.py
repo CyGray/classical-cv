@@ -42,6 +42,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import os
 import random
@@ -51,13 +52,14 @@ from pathlib import Path
 import cv2 as cv
 import numpy as np
 
+from src.benchmark.modifications import apply_variant, parse_variant, stable_rng, variant_tier
 from src.classical_faces.detection import create_face_detector
 from src.classical_faces.pipeline import SPECS
 from src.hybrid.gate import GateThresholds, decide_escalation
 from src.hybrid.quality import QualityThresholds, compute_quality
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
 from src.independence_common import error_pair_report, format_error_pair_report
-from src.independence_report import add_scaling_args, figure_prefix
+from src.independence_report import add_scaling_args, figure_prefix, segment_bounds
 from src.independence_plots import save_distance_curve_plot, save_distance_histogram, save_far_curve
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.stats_utils import error_diversity, wilson_interval_percent
@@ -101,6 +103,19 @@ def parse_args() -> argparse.Namespace:
                              "(La Salle DB1 spec: 10,000 ppm = 8th error pair of 756).")
     parser.add_argument("--error-pair-rank", type=int, default=None,
                         help="Explicit k-th error pair (overrides --target-far-ppm).")
+    parser.add_argument("--modification", default=None,
+                        help="Apply one of the 41-suite variants in-memory to every probe tile "
+                             "before scoring, e.g. 'motion_blur:5' or 'contrast_down:0.55' "
+                             "(parsed via src.benchmark.modifications.parse_variant; seeded via "
+                             "stable_rng per (image, mod, level), same scheme as "
+                             "accuracy_ratio_hybrid.py, so probes are bit-identical for the same "
+                             "inputs). Default: no modification (clean probes).")
+    parser.add_argument("--selection-manifest", default=None,
+                        help="Path to a lsface-selection-manifest-v1 JSON (see "
+                             "docs/BATCH_WORK/DESIGN.md sec 6.2). When given, skips "
+                             "select_one_image_per_person entirely and loads the manifest's "
+                             "per-iteration identity->relpath selections, verifying every "
+                             "referenced file's SHA-256 before the sweep.")
     add_scaling_args(parser, include_max_identities=False)
     return parser.parse_args()
 
@@ -121,16 +136,89 @@ def get_person_dirs(dataset_root: str) -> list[tuple[str, str]]:
 def select_one_image_per_person(
     person_dirs: list[tuple[str, str]], random_seed: int
 ) -> dict[str, str]:
-    rng = random.Random(random_seed)
     selected: dict[str, str] = {}
     for person, person_path in person_dirs:
-        image_files = [
-            f for f in sorted(os.listdir(person_path))
-            if os.path.splitext(f)[1].lower() in ALLOWED_EXTENSIONS
-        ]
-        if image_files:
-            selected[person] = os.path.join(person_path, rng.choice(image_files))
+        target_path = os.path.join(person_path, "light_front.jpg")
+        if not os.path.exists(target_path):
+            found_files = os.listdir(person_path)
+            raise FileNotFoundError(f"Missing light_front.jpg for {person}. Found: {found_files}")
+        selected[person] = target_path
     return selected
+
+
+def _sha256_file(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def load_selection_manifest(manifest_path: str, dataset_dir: str, iterations: int) -> dict:
+    """Load + verify a ``lsface-selection-manifest-v1`` JSON (Approach B seam,
+    docs/BATCH_WORK/DESIGN.md sec 6.2 / sec 7.1 change 3). Raises ValueError
+    (naming every offending relpath) on any SHA-256 mismatch, a missing
+    identity dir/file, or too few iterations - the caller aborts the run."""
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    schema = manifest.get("schema")
+    if schema != "lsface-selection-manifest-v1":
+        raise ValueError(f"Unsupported selection manifest schema: {schema!r}")
+    manifest_iterations = int(manifest.get("iterations", 0))
+    if manifest_iterations < iterations:
+        raise ValueError(
+            f"Selection manifest only has {manifest_iterations} iteration(s), "
+            f"but --iterations {iterations} was requested."
+        )
+    selections = manifest.get("selections", {})
+    sha256_map = manifest.get("sha256", {})
+    missing: list[str] = []
+    mismatched: list[str] = []
+    for it in range(iterations):
+        it_key = str(it)
+        it_selection = selections.get(it_key)
+        if it_selection is None:
+            missing.append(f"iteration {it_key}: no 'selections' entry in manifest")
+            continue
+        for identity, relpath in it_selection.items():
+            identity_dir = os.path.join(dataset_dir, identity)
+            if not os.path.isdir(identity_dir):
+                missing.append(
+                    f"iteration {it_key}: identity dir not found for {identity!r} ({identity_dir})"
+                )
+                continue
+            abs_path = os.path.join(dataset_dir, *relpath.split("/"))
+            if not os.path.isfile(abs_path):
+                missing.append(
+                    f"iteration {it_key}: file not found for {identity!r} -> {relpath!r} ({abs_path})"
+                )
+                continue
+            expected_sha = sha256_map.get(relpath)
+            if expected_sha is None:
+                missing.append(f"iteration {it_key}: no sha256 entry for {relpath!r}")
+                continue
+            if _sha256_file(abs_path).lower() != str(expected_sha).lower():
+                mismatched.append(f"iteration {it_key}: {identity!r} -> {relpath!r}")
+    if missing:
+        raise ValueError(
+            "Selection manifest verification failed (missing entries):\n  " + "\n  ".join(missing)
+        )
+    if mismatched:
+        raise ValueError(
+            "Selection manifest SHA-256 mismatch for:\n  " + "\n  ".join(mismatched)
+        )
+    return manifest
+
+
+def selection_from_manifest(manifest: dict, dataset_dir: str, iteration_0based: int) -> dict[str, str]:
+    """iteration k (0-based, matching the seed offset ``random_seed + it`` and
+    the make_selection_manifest.py key convention) -> {identity: absolute_path},
+    sorted identity order."""
+    it_selection = manifest["selections"][str(iteration_0based)]
+    return {
+        identity: os.path.join(dataset_dir, *relpath.split("/"))
+        for identity, relpath in sorted(it_selection.items())
+    }
 
 
 # --------------------------------------------------------------------------- #
@@ -153,11 +241,23 @@ def load_probes(
     sface: SFaceRecognizer,
     equalization: str,
     cache: dict[str, "ProbeData"] | None = None,
+    modification: tuple[str, float] | None = None,
+    mod_seed: int = 0,
 ) -> list[ProbeData]:
     """Build one ProbeData per identity.
 
     YuNet detection + SFace embedding are the per-image cost; *cache* (keyed by
-    image path) lets repeated picks across iterations skip that work entirely.
+    image path) lets repeated picks across iterations skip that work entirely
+    (safe because *modification* is fixed for the whole process run).
+
+    When *modification* is given (name, level), it is applied to the grayscale
+    tile right after load and BEFORE any downstream processing - the modified
+    gray is what both LBPH normalization and SFace embedding see, mirroring
+    accuracy_ratio_hybrid.py's own "modify gray, then rebuild a 3-channel BGR
+    view for detection" order so probes are bit-identical for the same
+    (image, mod, level, seed) across both scripts. RNG is seeded via
+    ``stable_rng(mod_seed, person, basename, mod_name, mod_level)`` - the exact
+    token scheme accuracy_ratio_hybrid.py uses per (image, mod, level).
     """
     probes: list[ProbeData] = []
     for person in sorted(selected):
@@ -170,6 +270,11 @@ def load_probes(
             print(f"[WARN] Unreadable image skipped: {path}")
             continue
         gray = cv.cvtColor(image_bgr, cv.COLOR_BGR2GRAY)
+        if modification is not None:
+            mod_name, mod_level = modification
+            rng = stable_rng(mod_seed, person, os.path.basename(path), mod_name, mod_level)
+            gray = apply_variant(gray, mod_name, mod_level, rng)
+            image_bgr = cv.cvtColor(gray, cv.COLOR_GRAY2BGR)
         h, w = gray.shape[:2]
 
         # YuNet for landmarks (SFace alignment + pose probe), tolerant of misses
@@ -211,6 +316,8 @@ def run_sweep(
     gate_thresholds: GateThresholds,
     quality_thresholds: QualityThresholds,
     csv_path: str | None = None,
+    seg_start: int = 0,
+    seg_end: int | None = None,
 ) -> tuple[dict, dict]:
     """Score all ordered pairs with both engines + the cascade gate.
 
@@ -218,42 +325,59 @@ def run_sweep(
     ``(record_arrays, iteration_summary)`` where *record_arrays* is
     a dict of fixed-width numpy arrays keyed by field name, plus a
     ``"names"`` list.
+
+    ``seg_start``/``seg_end`` restrict the sweep to query rows
+    ``[seg_start, seg_end)`` for distributed sharding. Candidates always stay
+    global: LBPH still trains on all N tiles and every query is gated against
+    the full non-self ranking, so per-row results are identical to a full run.
     """
     n = len(probes)
     if n < 2:
         raise ValueError("Need at least 2 identities with a usable image.")
+    if seg_end is None:
+        seg_end = n
+    seg_len = seg_end - seg_start
+    if not (0 <= seg_start < seg_end <= n):
+        raise ValueError(f"Bad segment bounds [{seg_start}, {seg_end}) for n={n}.")
     names = [p.person for p in probes]
     image_paths = [p.image_path for p in probes]
 
-    # -- LBPH: train once on the N tiles, then predict_collect per probe ------
+    # -- LBPH: train once on ALL N tiles, then predict_collect per query row --
     recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
     recognizer.train([p.lbph_face for p in probes], np.arange(n, dtype=np.int32))
-    lbph_dist = np.full((n, n), np.inf, dtype=np.float64)
-    for i, probe in enumerate(probes):
+    lbph_dist = np.full((seg_len, n), np.inf, dtype=np.float64)
+    for row, i in enumerate(range(seg_start, seg_end)):
         collector = cv.face.StandardCollector_create()
-        recognizer.predict_collect(probe.lbph_face, collector)
+        recognizer.predict_collect(probes[i].lbph_face, collector)
         for label, dist in collector.getResults(True):
             label = int(label)
             d = float(dist)
-            if d < lbph_dist[i, label]:
-                lbph_dist[i, label] = d
+            if d < lbph_dist[row, label]:
+                lbph_dist[row, label] = d
 
     # -- SFace: vectorised cosine + L2 (same rule as src/sface/independence_test.py) --
     feats = np.concatenate([p.sface_feature for p in probes], axis=0).astype(np.float32)
     norm = feats / (np.linalg.norm(feats, axis=1, keepdims=True) + 1e-9)
-    cos = (norm @ norm.T).astype(np.float32)
-    np.fill_diagonal(cos, -1.0)
+    # Per-row matvec, NOT one big matmul: BLAS picks different blocked kernels
+    # for different operand shapes, so a sliced matmul disagrees with the full
+    # one at the last float32 ulp. One matvec per query row gives bit-identical
+    # cosines no matter how the rows are segmented.
+    cos = np.empty((seg_len, n), dtype=np.float32)
+    for row, i in enumerate(range(seg_start, seg_end)):
+        cos[row] = norm @ norm[i]
+        cos[row, i] = -1.0
     l2 = np.sqrt(np.clip(2.0 - 2.0 * cos, 0.0, None), dtype=np.float32)
 
     # -- Cascade: one gate decision per probe over the non-self ranking -------
     cascade_fp_pair: dict[int, int] = {}   # probe i -> accepted impostor j
     gate_reasons: dict[str, int] = {}
     escalated_probes = 0
-    for i, probe in enumerate(probes):
+    for row, i in enumerate(range(seg_start, seg_end)):
+        probe = probes[i]
         others = [j for j in range(n) if j != i]
-        ranked = sorted(others, key=lambda j: lbph_dist[i, j])
-        d1 = lbph_dist[i, ranked[0]]
-        d2 = lbph_dist[i, ranked[1]] if len(ranked) > 1 else d1 + 999.0
+        ranked = sorted(others, key=lambda j: lbph_dist[row, j])
+        d1 = lbph_dist[row, ranked[0]]
+        d2 = lbph_dist[row, ranked[1]] if len(ranked) > 1 else d1 + 999.0
         margin = float((d2 - d1) / max(d1, 1e-6))
         quality = compute_quality(
             gray_roi=probe.quality_gray,
@@ -270,14 +394,14 @@ def run_sweep(
         )
         if gate.escalate:
             escalated_probes += 1
-            j_dl = max(others, key=lambda j: cos[i, j])
-            if cos[i, j_dl] >= COSINE_GENUINE_THRESHOLD and l2[i, j_dl] <= L2_GENUINE_THRESHOLD:
+            j_dl = max(others, key=lambda j: cos[row, j])
+            if cos[row, j_dl] >= COSINE_GENUINE_THRESHOLD and l2[row, j_dl] <= L2_GENUINE_THRESHOLD:
                 cascade_fp_pair[i] = j_dl
         elif gate.lbph_accept:
             cascade_fp_pair[i] = ranked[0]
 
     # -- Per-pair records: stream to CSV, collect as compact numpy arrays -----
-    comparisons = n * (n - 1)
+    comparisons = seg_len * (n - 1)
     rec_lbph = np.empty(comparisons, dtype=np.float32)
     rec_cos = np.empty(comparisons, dtype=np.float32)
     rec_l2 = np.empty(comparisons, dtype=np.float32)
@@ -304,13 +428,13 @@ def run_sweep(
         ])
 
     idx = 0
-    for i in range(n):
+    for row, i in enumerate(range(seg_start, seg_end)):
         for j in range(n):
             if i == j:
                 continue
-            d = float(lbph_dist[i, j])
-            c = float(cos[i, j])
-            e = float(l2[i, j])
+            d = float(lbph_dist[row, j])
+            c = float(cos[row, j])
+            e = float(l2[row, j])
             is_lbph_fp = d <= gate_thresholds.tau_accept
             is_sface_fp = c >= COSINE_GENUINE_THRESHOLD and e <= L2_GENUINE_THRESHOLD
             is_cascade_fp = cascade_fp_pair.get(i) == j
@@ -407,7 +531,8 @@ def run_sweep(
         ),
         "gate": {
             "escalated_probes": escalated_probes,
-            "escalation_percent": 100.0 * escalated_probes / n,
+            # Denominator = query rows actually gated (== n on an unsegmented run).
+            "escalation_percent": 100.0 * escalated_probes / seg_len,
             "reasons": gate_reasons,
         },
         "thresholds": {
@@ -537,14 +662,45 @@ def main() -> int:
     args.dataset_dir = resolve_path(args.dataset_dir)
     args.output_dir = resolve_path(args.output_dir)
 
+    args.segment_count = max(1, int(args.segment_count))
+    args.segment_index = max(1, int(args.segment_index))
+    if args.segment_index > args.segment_count:
+        print("[ERROR] --segment-index cannot be greater than --segment-count.")
+        return 1
+    segmented = args.segment_count > 1
+    if segmented:
+        seg_suffix = f"_seg{args.segment_index}of{args.segment_count}"
+        if not args.output_dir.endswith(seg_suffix):
+            args.output_dir = args.output_dir + seg_suffix
+
     print(f"[INFO] Hybrid Independence Test (aggregated {args.iterations}x)")
     print(f"[INFO] Dataset: {args.dataset_dir}")
+    if segmented:
+        print(f"[INFO] Segment {args.segment_index} of {args.segment_count} "
+              f"(query rows only; candidates stay global)")
+
+    mod_name = mod_level = mod_tier = None
+    if args.modification:
+        mod_name, mod_level = parse_variant(args.modification)
+        mod_tier = variant_tier(mod_name, mod_level)
+        print(f"[INFO] Modification: {mod_name}:{mod_level} (tier={mod_tier})")
 
     person_dirs = get_person_dirs(args.dataset_dir)
     if len(person_dirs) < 2:
         print(f"[ERROR] Need >= 2 identity folders under {args.dataset_dir}.")
         return 1
-    if args.max_identities and len(person_dirs) > args.max_identities:
+
+    selection_manifest = None
+    selection_manifest_path = None
+    selection_manifest_sha256 = None
+    if args.selection_manifest:
+        selection_manifest_path = resolve_path(args.selection_manifest)
+        selection_manifest_sha256 = _sha256_file(selection_manifest_path)
+        selection_manifest = load_selection_manifest(
+            selection_manifest_path, args.dataset_dir, args.iterations)
+        print(f"[INFO] Selection manifest verified: {selection_manifest_path} "
+              f"(sha256={selection_manifest_sha256[:12]}...)")
+    elif args.max_identities and len(person_dirs) > args.max_identities:
         subset_rng = random.Random(args.random_seed)
         person_dirs = sorted(subset_rng.sample(person_dirs, args.max_identities))
         print(f"[INFO] Seeded identity subset: {len(person_dirs)} of the available folders")
@@ -604,6 +760,19 @@ def main() -> int:
             "random_seed": args.random_seed + it,
             "thresholds_json": thresholds_path,
         }
+        # Segmented runs fingerprint their bounds so a cache from a different
+        # segment (or an unsegmented run) is never silently resumed.
+        if segmented:
+            run_fingerprint["segment_count"] = args.segment_count
+            run_fingerprint["segment_index"] = args.segment_index
+        # Modification/selection-manifest fingerprint keys are only added when
+        # the respective flag is set, so unsegmented/unmodified caches from
+        # before these flags existed stay valid (never silently reused for a
+        # different modification or selection, though).
+        if mod_name is not None:
+            run_fingerprint["modification"] = {"name": mod_name, "level": mod_level}
+        if selection_manifest is not None:
+            run_fingerprint["selection_manifest_sha256"] = selection_manifest_sha256
 
         cached_summary = None
         if os.path.exists(npz_path) and os.path.exists(summary_path):
@@ -624,15 +793,38 @@ def main() -> int:
                 rec_arrays = {k: data[k] for k in data.files}
                 rec_arrays["names"] = list(rec_arrays["names"])
         else:
-            selected = select_one_image_per_person(person_dirs, args.random_seed + it)
-            probes = load_probes(selected, detector, sface, equalization, cache=probe_cache)
+            if selection_manifest is not None:
+                selected = selection_from_manifest(selection_manifest, args.dataset_dir, it)
+            else:
+                selected = select_one_image_per_person(person_dirs, args.random_seed + it)
+            modification = (mod_name, mod_level) if mod_name is not None else None
+            probes = load_probes(selected, detector, sface, equalization, cache=probe_cache,
+                                  modification=modification, mod_seed=args.random_seed)
             if len(probes) < 2:
                 print("[WARN] Not enough usable probes; iteration skipped.")
                 continue
 
+            seg_start, seg_end = segment_bounds(
+                len(probes), args.segment_count, args.segment_index)
+            if seg_end <= seg_start:
+                print(f"[ERROR] Segment {args.segment_index}/{args.segment_count} is empty "
+                      f"for {len(probes)} probes.")
+                return 1
+
             rec_arrays, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds,
-                                            csv_path=csv_path)
+                                            csv_path=csv_path,
+                                            seg_start=seg_start, seg_end=seg_end)
             summary.update(run_fingerprint)
+            if segmented:
+                summary["segment"] = {
+                    "count": args.segment_count,
+                    "index": args.segment_index,
+                    "seg_start": seg_start,
+                    "seg_end": seg_end,
+                    "n_total": len(probes),
+                    "query_rows": seg_end - seg_start,
+                    "comparisons": summary["comparisons"],
+                }
             fp = summary["false_accepts"]
             print(f"  N={summary['identities']} comparisons={summary['comparisons']} | "
                   f"FP: lbph={fp['lbph']} sface={fp['sface']} both={fp['both']} "
@@ -762,6 +954,14 @@ def main() -> int:
         "sface_rank_thresholds": sface_rank_report,
         "per_iteration": iteration_summaries,
     }
+    if segmented:
+        summary["segment"] = iteration_summaries[0].get("segment")
+    if mod_name is not None:
+        summary["modification"] = {"name": mod_name, "level": mod_level, "tier": mod_tier}
+    if selection_manifest is not None:
+        summary["selection_manifest"] = {
+            "path": selection_manifest_path, "sha256": selection_manifest_sha256,
+        }
 
     summary["plots"] = _write_hybrid_plots(args, aggregated, lbph_rank_report, sface_rank_report)
 

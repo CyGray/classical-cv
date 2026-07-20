@@ -1,0 +1,26 @@
+# Minimal exact-pinned deps for a batch-campaign member machine to run
+# src.hybrid.independence_test and the LFW2 worker pipeline
+# (docs/BATCH_WORK/DESIGN.md section 7.3 / 10.1).
+#
+# Derived from the actual imports of:
+#   src/hybrid/independence_test.py
+#   src/benchmark/modifications.py
+#   src/independence_report.py
+#   scripts/setup_datasets.py
+# (plus their internal dependencies: src/independence_plots.py,
+# src/independence_streaming.py, src/hybrid/{gate,quality,recognizer}.py,
+# src/sface/recognizer.py, src/classical_faces/{detection,pipeline,
+# preprocess,datasets}.py). Everything else those files use is Python
+# stdlib (argparse, csv, json, os, random, hashlib, math, tarfile,
+# urllib.request, subprocess, pathlib, dataclasses, typing, concurrent.futures,
+# heapq, tempfile) and needs no pin.
+#
+# opencv-contrib-python is REQUIRED, not opencv-python: the LBPH engine uses
+# cv2.face (LBPHFaceRecognizer_create, StandardCollector_create), which only
+# ships in the contrib build. Do not substitute opencv-python.
+#
+# Versions pinned to what is actually installed and verified in the
+# reference dev environment (python 3.11.9) via importlib.metadata:
+numpy==2.4.3
+opencv-contrib-python==4.13.0.92
+matplotlib==3.10.8

@@ -108,9 +108,119 @@ MODIFICATIONS: list[tuple[str, object, list[float]]] = [
 
 VARIANT_COUNT = sum(len(levels) for _, _, levels in MODIFICATIONS)
 
+_TRANSFORM_BY_NAME: dict[str, object] = {name: fn for name, fn, _levels in MODIFICATIONS}
+_LEVELS_BY_NAME: dict[str, list] = {name: levels for name, _fn, levels in MODIFICATIONS}
+
 
 def stable_rng(seed: int, *tokens: object) -> np.random.Generator:
     """Deterministic per-(image, modification, level) generator - identical
     tokens always give the identical modified probe, across scripts."""
     token = "/".join(str(t) for t in tokens)
     return np.random.default_rng(seed + zlib.crc32(token.encode("utf-8")))
+
+
+def apply_variant(image: np.ndarray, name: str, level, rng: np.random.Generator) -> np.ndarray:
+    """Apply the (name, level) transform - reuses the exact function objects in
+    ``MODIFICATIONS``, so output is bit-identical to any other caller (e.g.
+    ``accuracy_ratio_hybrid.py``) for the same (image, name, level, rng)."""
+    fn = _TRANSFORM_BY_NAME.get(name)
+    if fn is None:
+        raise ValueError(f"Unknown modification {name!r}. Valid: {sorted(_TRANSFORM_BY_NAME)}")
+    return fn(image, level, rng)
+
+
+# --------------------------------------------------------------------------- #
+# Severity tiers (light/medium/heavy) per variant - for the systematic single-
+# modification suite (docs/SYSTEMATIC_INDEPENDENCE_TEST.md sec 3.1). Kyle can
+# adjust the exact cut points later; this is a severity-ranked first pass.
+# --------------------------------------------------------------------------- #
+TIERS = ("light", "medium", "heavy")
+
+TIER_MAP: dict[str, dict[float, str]] = {
+    "brightness_up": {15: "light", 30: "medium", 45: "medium", 60: "heavy"},
+    "brightness_down": {-15: "light", -30: "medium", -45: "medium", -60: "heavy"},
+    "contrast_up": {1.15: "light", 1.30: "medium", 1.45: "heavy"},
+    "contrast_down": {0.85: "light", 0.70: "medium", 0.55: "heavy"},
+    "gamma_up": {1.2: "light", 1.4: "medium", 1.6: "heavy"},
+    "gamma_down": {0.8: "light", 0.65: "medium", 0.5: "heavy"},
+    "gaussian_noise": {5: "light", 10: "medium", 15: "medium", 20: "heavy"},
+    "gaussian_blur": {3: "light", 5: "medium", 7: "heavy"},
+    "motion_blur": {3: "light", 5: "medium", 7: "heavy"},
+    "rotation": {-10: "heavy", -5: "light", 5: "light", 10: "heavy"},
+    "zoom": {0.90: "heavy", 0.95: "light", 1.05: "light", 1.10: "heavy"},
+    "occlusion": {0.075: "light", 0.125: "medium", 0.175: "heavy"},
+}
+
+
+def _check_tier_map() -> None:
+    expected = {(name, level) for name, _fn, levels in MODIFICATIONS for level in levels}
+    covered = {
+        (name, level) for name, level_map in TIER_MAP.items() for level in level_map
+    }
+    missing = expected - covered
+    extra = covered - expected
+    if missing or extra:
+        raise AssertionError(
+            f"TIER_MAP / MODIFICATIONS mismatch: missing={sorted(missing)} extra={sorted(extra)}"
+        )
+    counts = {tier: 0 for tier in TIERS}
+    for level_map in TIER_MAP.values():
+        for tier in level_map.values():
+            counts[tier] += 1
+    expected_counts = {"light": 14, "medium": 13, "heavy": 14}
+    if counts != expected_counts:
+        raise AssertionError(f"TIER_MAP tier counts {counts} != expected {expected_counts}")
+
+
+_check_tier_map()
+
+
+def variant_tier(name: str, level) -> str:
+    """Tier ('light'/'medium'/'heavy') for one (name, level) variant."""
+    level_map = TIER_MAP.get(name)
+    if level_map is None:
+        raise ValueError(f"Unknown modification {name!r}. Valid: {sorted(TIER_MAP)}")
+    if level not in level_map:
+        raise ValueError(
+            f"Unknown level {level!r} for modification {name!r}. "
+            f"Valid levels: {sorted(level_map)}"
+        )
+    return level_map[level]
+
+
+_ALL_VARIANT_SPECS = sorted(
+    f"{name}:{level}" for name, levels in _LEVELS_BY_NAME.items() for level in levels
+)
+
+
+def parse_variant(spec: str) -> tuple[str, float]:
+    """Parse "name:level" (e.g. "motion_blur:5", "contrast_down:0.55",
+    "rotation:-10") into the exact (name, level) pair from ``MODIFICATIONS`` -
+    the returned level is the SAME object (int stays int, float stays float),
+    not a freshly-parsed value, so it hashes/compares identically to the
+    MODIFICATIONS entry. Raises ValueError listing valid variants on any
+    mismatch."""
+    name, sep, level_str = spec.partition(":")
+    if not sep:
+        raise ValueError(
+            f"Invalid variant spec {spec!r} (expected 'name:level'). "
+            f"Valid variants: {_ALL_VARIANT_SPECS}"
+        )
+    levels = _LEVELS_BY_NAME.get(name)
+    if levels is None:
+        raise ValueError(
+            f"Unknown modification {name!r} in {spec!r}. Valid variants: {_ALL_VARIANT_SPECS}"
+        )
+    try:
+        parsed = float(level_str)
+    except ValueError:
+        raise ValueError(
+            f"Non-numeric level in {spec!r}. Valid variants: {_ALL_VARIANT_SPECS}"
+        ) from None
+    for level in levels:
+        if float(level) == parsed:
+            return name, level
+    raise ValueError(
+        f"Unknown level {level_str!r} for modification {name!r} in {spec!r}. "
+        f"Valid variants: {_ALL_VARIANT_SPECS}"
+    )

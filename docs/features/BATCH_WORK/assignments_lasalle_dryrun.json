@@ -1,0 +1,13 @@
+{
+  "campaign": "dryrun_lasalle",
+  "commit": "TBD_AT_CAMPAIGN_START",
+  "dataset_dir": "data/lasalle_db1_processed",
+  "selection_manifest": "docs/BATCH_WORK/selection_manifest_lasalle_test.json",
+  "iterations": 1,
+  "segment_count": 2,
+  "variants": ["motion_blur:5"],
+  "_comment": "Dry-run assignments for scripts/lfw2_worker.py verification only (docs/BATCH_WORK/DESIGN.md sec 12.5). Not a real campaign.",
+  "units": {
+    "dryrun_member": [["motion_blur:5", 1], ["motion_blur:5", 2]]
+  }
+}

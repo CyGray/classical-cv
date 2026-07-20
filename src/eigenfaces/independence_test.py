@@ -163,19 +163,18 @@ def select_one_image_per_person(
     random_seed: int = 42,
 ) -> Dict[str, str]:
     """
-    Select exactly one image per person randomly.
+    Select light_front.jpg for every person - deterministic, so the same
+    N x (N-1) comparisons are produced on every run/iteration (fixes the
+    prior rng.choice-based selection, which could silently vary the probe
+    image per person across seeds/iterations).
     """
     selected: Dict[str, str] = {}
-    rng = random.Random(random_seed)
-    
     for person, person_path in person_dirs:
-        image_files = [f for f in sorted(os.listdir(person_path)) if is_image_file(f)]
-        if not image_files:
-            continue
-        # Randomly select one image
-        selected_image = rng.choice(image_files)
-        selected[person] = os.path.join(person_path, selected_image)
-    
+        target_path = os.path.join(person_path, "light_front.jpg")
+        if not os.path.exists(target_path):
+            found_files = os.listdir(person_path)
+            raise FileNotFoundError(f"Missing light_front.jpg for {person}. Found: {found_files}")
+        selected[person] = target_path
     return selected
 
 

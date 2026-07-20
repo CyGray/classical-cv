@@ -71,7 +71,7 @@ sentence changes.
 
 | Leg | Artifact | Run date | Protocol | Status / caveats |
 |---|---|---|---|---|
-| La Salle DB1 (756 = 28×27) | `reports/independence/lbph_lasalle/` | Jun 10 | 10 seeded repeats, aggregated | ✅ **Canonical** (restored in the 07-08 audit). Threshold 21.35 raw / 85.88 norm at the 8th pair (10,582 ppm realized). Per-run normalized stability 68.03 ± 1.83 — the mean-before-rank inflation note is in METRICS.md Table 3. |
+| La Salle DB1 (756 = 28x27) | `reports/independence/lbph_lasalle/` | Jun 10 | 1 deterministic light_front run | ✅ **Canonical** (restored in the 07-08 audit). Threshold 21.35 raw / 85.88 norm at the 8th pair (10,582 ppm realized). Per-run normalized stability 68.03 ± 1.83 - the mean-before-rank inflation note is in METRICS.md Table 3. |
 | LS-DB2 light (aug. split) | `reports/independence/lbph_lsdb2/` | Jul 8 | 10 seeded repeats | ✅ Done (light tier; named without a tier suffix — rename is Part-C item 10 of the improvement spec). |
 | LFW smoke (300 ids, 89,700) | `reports/independence/lbph_lfw/` | Jun 10 | streaming, 1 iter | ✅ Done. Boundary pair = the known annotation error (Caldecott/Gilligan). |
 | **LFW full (5,749 ids, 33,045,252)** | `reports/independence/lbph_lfw1/` + `lbph_latest/lfw1_summary.json` | **Jul 8** | streaming, 1 iter | ✅ **Run** — this is the sweep METRICS.md/PAPER.md still call "pending". Reported spec point is rank 330,453 = **10,000 ppm** (θ = 19.18 raw / 55.86 norm, boundary Johnny_Hallyday vs Larry_Coker). ⚠ The **10-ppm / 331st-pair spec anchor is not yet extracted** into any doc — the rank curve in the summary must be read (or re-ranked) at k=331. ⚠ Streaming path = 1 iteration, no run-to-run stability estimate (known protocol gap, IMPROVEMENT_SPEC B-series note). |
@@ -93,9 +93,8 @@ diversity table, Q/φ/disagreement/double-fault, Fisher both directions, obs/exp
 FP, cascade FP + escalation, and both engines' rank-threshold curves. Numbers in §0.
 
 **Protocol gaps vs what §4.5 promises:**
-1. Paper text says "pooled over **10 seeded repeats**" — the Jul 8 La Salle legs ran
-   **iterations=1** (the default was changed to 1 on 07-08, commit 56ab21f).
-   → Rerun the three La Salle legs at `--iterations 10` (cheap locally; see plan P0-3).
+1. Paper text incorrectly says "pooled over **10 seeded repeats**" for La Salle DB1 — La Salle DB1 actually strictly uses **1 deterministic light_front run** per the canonical spec.
+   → Keep the Jul 8 La Salle legs at `--iterations 1` since they properly implement this.
    LFW legs stay 1-iteration (33 M pairs; the streaming-stability gap is a stated limitation).
 2. §4.5's "LBPH at τ_a admits [run to fill]" → answer from lsdb1: **0 of 756** (τ_a = 73.04);
    overlap **0**. Fisher degenerate on that leg — exactly the base-rate wall
@@ -389,8 +388,8 @@ admits 50/7,560 and the positive co-occurrence becomes significant on **every** 
 Salle leg, consistent with LFW. There is no leg left where the errors avoid each
 other. Meanwhile the cascade undercuts **both** engines on lsdb2_light and
 lsdb2_medium (and on lfw1 from Jul 8), and undercuts SFace on lsdb1. §4.5's reference
-sentence should quote these 10-iteration numbers for La Salle, per the paper's own
-"pooled over 10 seeded repeats" protocol.
+sentence should quote these 1-iteration deterministic `light_front` numbers for La Salle, correcting the paper's 
+incorrect "pooled over 10 seeded repeats" protocol.
 
 ### 5.5 Evidence matrix — La Salle legs
 

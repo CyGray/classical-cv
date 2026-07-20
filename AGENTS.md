@@ -17,7 +17,8 @@ selected via independence testing. Deliverable: the IW-FCV 2026 paper at
   - `sface/` — SFace embedding recognizer; the DL half of the hybrid. Not a
     standalone track.
   - `hybrid/` — LBPH fast path + SFace escalation cascade (enroll, evaluate,
-    calibrate, gate, joint independence test).
+    calibrate, gate, joint independence test). Modes: `cascade` (deployed),
+    `cv_only`, `dl_only` — the `parallel` (run-both) mode was removed.
   - `benchmark/` — cross-model comparison, TAR@FAR, 41-mod accuracy ratio,
     evidence matrix, aggregation.
   - `independence_common.py`, `stats_utils.py`, `dataset_layout.py`,
@@ -44,10 +45,11 @@ selected via independence testing. Deliverable: the IW-FCV 2026 paper at
   running the relevant script.
 - **Frozen thresholds:** all thresholds are derived once on La Salle DB1 and
   frozen (SHA-256 recorded by the evidence matrix). Other datasets (LS-DB2,
-  LFW) are transfer legs — never re-tune on them.
-- **Independence tests** (LBPH, Eigenfaces, Fisherfaces): 10-fold repetition
-  with different seeds; raw results in `_raw_runs/run_X/`; aggregate by mean;
-  keep the 0–100 normalized distance scaling.
+  LFW) are transfer legs — never re-tune on them. The hybrid gate's LBPH
+  `tau_accept` (70.6089) and the SFace genuine L2 distance (1.106796) are
+  frozen as of 2026-07-20 — see `docs/READ THIS/FROZEN_THRESHOLDS.md` before
+  changing either.
+- **Independence tests** (LBPH, Eigenfaces, Fisherfaces): La Salle DB1 uses exactly one fixed, deterministic `light_front` image per identity (no per-run variation). Large datasets like LFW use 10-fold repetition with different seeds; raw results in `_raw_runs/run_X/`; aggregate by mean; keep the 0–100 normalized distance scaling.
 
 ## Key Resources
 
@@ -69,4 +71,9 @@ This project runs inside a **Termux PRoot Ubuntu (aarch64)** container.
 - **Viewing Output Plots**: As the environment is headless, you cannot use interactive visual GUI windows (`cv.imshow`). Use the shell utility function `export-cv-figs` (defined in `/root/.bashrc`) to copy generated plots (from `reports/figures/` or specified as arguments) to `/data/data/com.termux/files/home/storage/shared/Pictures/CV_Reports` to view them in the Android Gallery app.
 - **Hardware Details**: Deployed on a MediaTek Dimensity 8500 Ultra with 8 GB RAM. The octa-core ARM64 CPU is highly capable for both classical CV (LBPH, Eigenfaces, Fisherfaces) and deep learning (YuNet detector and SFace recognizer via ONNX runtime).
 
+## Benchmark Execution Benchmarks (Agent Memory)
 
+- **LFW2 41-Modification Benchmark (`scripts/run_lfw2_robustness.py`)**:
+  - **Workload**: 235,709 probes (5,749 identities $\times$ 41 modifications).
+  - **Empirical Execution Time**: **1 hour 52 minutes 52 seconds** (112.8 minutes total wall-clock time) when run on 16 CPU cores / 15.9 GB RAM with `--num-workers 10`.
+  - **Per-Probe Latency**: $\sim 28\text{ ms}$ per probe (YuNet detection + SFace ONNX + LBPH distance + gate evaluation across 3 modes under 10-worker CPU core contention). (Measured before the `parallel` mode was dropped; 3 modes now run instead of 4.)
