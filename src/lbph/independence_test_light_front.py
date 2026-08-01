@@ -1,4 +1,4 @@
-﻿"""
+"""
 LBPH Independence Test using only light_front.jpg for each identity.
 
 Purpose:
