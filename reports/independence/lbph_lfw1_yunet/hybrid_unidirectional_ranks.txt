@@ -1,0 +1,11 @@
+identities=5749  ordered=33045252  unique=16522626  expected_unique=16522626
+
+=== rank 165 (unidirectional, far_ppm=9.9863) ===
+  [LBPH raw distance (lower = closer)] rank=165 far_ppm=9.9863  value=74.644440  pair=(np.str_('Chris_Claiborne') vs np.str_('Richard_Parsons'))
+  [SFace L2 distance (lower = closer)] rank=165 far_ppm=9.9863  value=1.030628  pair=(np.str_('Jorge_Rodolfo_Canicoba_Corral') vs np.str_('Leon_Barmore'))
+  [SFace cosine (higher = closer)] rank=165 far_ppm=9.9863  value=0.468903  pair=(np.str_('Jorge_Rodolfo_Canicoba_Corral') vs np.str_('Leon_Barmore'))
+
+=== rank 165226 (unidirectional, far_ppm=9999.9843) ===
+  [LBPH raw distance (lower = closer)] rank=165226 far_ppm=9999.9843  value=89.106094  pair=(np.str_('Andy_Hebb') vs np.str_('Gunter_Pleuger'))
+  [SFace L2 distance (lower = closer)] rank=165226 far_ppm=9999.9843  value=1.191515  pair=(np.str_('Roman_Tam') vs np.str_('Tony_Shalhoub'))
+  [SFace cosine (higher = closer)] rank=165226 far_ppm=9999.9843  value=0.290145  pair=(np.str_('Roman_Tam') vs np.str_('Tony_Shalhoub'))
