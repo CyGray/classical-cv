@@ -1,0 +1,534 @@
+{
+  "meta": {
+    "split_manifest": "C:/Users/acer/Downloads/USLS 4th Year/Computer Vision/classical-cv/data/splits/lfw_ident_split_seed42.json",
+    "split_manifest_triples_sha256": "ce922042297ef99571ac235ab43e274166a02fe8213e1f8b3028667f5b8fb98a",
+    "dataset_root": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lfw-dataset",
+    "lbph_model": "C:\\Users\\acer\\.claude\\jobs\\f483a823\\tmp\\enroll\\lbph_manifest2ef84e167992_crop-box.yml",
+    "lbph_labels": "C:\\Users\\acer\\.claude\\jobs\\f483a823\\tmp\\enroll\\lbph_labels_manifest2ef84e167992_crop-box.json",
+    "gallery_enrolled_by_this_script": true,
+    "crop_mode": "box",
+    "assume_cropped": false,
+    "detector": "yunet",
+    "scale": "native cv.face.LBPHFaceRecognizer.predict_collect() (radius=1, neighbors=8, grid=8x8)",
+    "n_probes_scored": 1680,
+    "n_gallery": 5749,
+    "n_no_face_fallback": 0,
+    "n_unreadable": 0,
+    "n_unenrolled": 0
+  },
+  "tau_accept": {
+    "tau_accept": 67.18253326416016,
+    "far_target_ppm": 10.0,
+    "rank": 96,
+    "n_impostor_comparisons": 9656640,
+    "realized_far_comparison_ppm": 9.941346058256288,
+    "realized_fpir": 0.0380952380952381,
+    "fpir_resolution_ppm": 595.2380952380952,
+    "curve": [
+      {
+        "rank": 1,
+        "tau": 41.99039840698242,
+        "far_comparison_ppm": 0.10355568810683634
+      },
+      {
+        "rank": 2,
+        "tau": 49.55601501464844,
+        "far_comparison_ppm": 0.20711137621367268
+      },
+      {
+        "rank": 4,
+        "tau": 63.72652053833008,
+        "far_comparison_ppm": 0.41422275242734535
+      },
+      {
+        "rank": 8,
+        "tau": 64.99473571777344,
+        "far_comparison_ppm": 0.8284455048546907
+      },
+      {
+        "rank": 16,
+        "tau": 65.61686706542969,
+        "far_comparison_ppm": 1.6568910097093814
+      },
+      {
+        "rank": 32,
+        "tau": 66.50855255126953,
+        "far_comparison_ppm": 3.313782019418763
+      },
+      {
+        "rank": 64,
+        "tau": 66.97743225097656,
+        "far_comparison_ppm": 6.627564038837526
+      },
+      {
+        "rank": 96,
+        "tau": 67.18253326416016,
+        "far_comparison_ppm": 9.941346058256288
+      },
+      {
+        "rank": 128,
+        "tau": 67.38188171386719,
+        "far_comparison_ppm": 13.255128077675051
+      },
+      {
+        "rank": 165,
+        "tau": 67.55665588378906,
+        "far_comparison_ppm": 17.086688537627996
+      },
+      {
+        "rank": 256,
+        "tau": 67.87727355957031,
+        "far_comparison_ppm": 26.510256155350103
+      },
+      {
+        "rank": 512,
+        "tau": 68.46479034423828,
+        "far_comparison_ppm": 53.020512310700205
+      },
+      {
+        "rank": 1024,
+        "tau": 69.01719665527344,
+        "far_comparison_ppm": 106.04102462140041
+      },
+      {
+        "rank": 4096,
+        "tau": 70.30904388427734,
+        "far_comparison_ppm": 424.16409848560164
+      }
+    ]
+  },
+  "tau_reject": {
+    "frr_target": 0.01,
+    "tau_reject_frr_driven": 79.74212646484375,
+    "rates_at_frr_driven": {
+      "confident_accept_rate": 0.06011904761904762,
+      "escalation_rate": 0.9303571428571429,
+      "pre_gate_reject_rate": 0.009523809523809525,
+      "n_confident_accept": 101,
+      "n_escalate": 1563,
+      "n_pre_gate_reject": 16
+    },
+    "escalation_budget": 0.5,
+    "tau_reject_budget_capped": 71.16276550292969,
+    "rates_at_budget_capped": {
+      "confident_accept_rate": 0.06011904761904762,
+      "escalation_rate": 0.5,
+      "pre_gate_reject_rate": 0.4398809523809524,
+      "n_confident_accept": 101,
+      "n_escalate": 840,
+      "n_pre_gate_reject": 739
+    },
+    "budget_meets_frr_target": false,
+    "tau_reject": 71.16276550292969,
+    "binding_constraint": "escalation_budget",
+    "rates_at_chosen": {
+      "confident_accept_rate": 0.06011904761904762,
+      "escalation_rate": 0.5,
+      "pre_gate_reject_rate": 0.4398809523809524,
+      "n_confident_accept": 101,
+      "n_escalate": 840,
+      "n_pre_gate_reject": 739
+    }
+  },
+  "tau_accept_used": 67.18253326416016,
+  "rank1_accuracy": 0.05416666666666667,
+  "genuine_percentiles": {
+    "p1": 64.06037521362305,
+    "p5": 70.00331764221191,
+    "p25": 77.82988929748535,
+    "p50": 83.25471878051758,
+    "p75": 89.35993766784668,
+    "p95": 96.5208023071289,
+    "p99": 102.03635299682617
+  },
+  "genuine_min": 50.67049789428711,
+  "genuine_max": 122.1161117553711,
+  "d1_percentiles": {
+    "p50": 70.74227523803711,
+    "p90": 74.82761459350586,
+    "p95": 76.40475082397461,
+    "p99": 79.29730278015137
+  },
+  "deployed_comparison": {
+    "thresholds_json": "C:/Users/acer/Downloads/USLS 4th Year/Computer Vision/classical-cv/src/hybrid/thresholds.json",
+    "deployed_tau_accept": 77.7693,
+    "deployed_tau_reject": 88.4927,
+    "deployed_tau_accept_far_ppm": 53687.514497796335,
+    "deployed_tau_accept_fpir": 0.9714285714285714,
+    "rates_at_deployed": {
+      "confident_accept_rate": 0.9714285714285714,
+      "escalation_rate": 0.02738095238095238,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "n_confident_accept": 1632,
+      "n_escalate": 46,
+      "n_pre_gate_reject": 2
+    },
+    "standalone_tau_accept": 67.03325520645528,
+    "standalone_tau_accept_far_ppm": 7.559565231799052,
+    "standalone_artifact": "reports/independence/lbph_lfw1/native_predict_scale_yunet.json",
+    "standalone_crop_family": "box",
+    "note": "standalone_* is the box-cropped family; comparable to these numbers only when this run used --crop-mode box."
+  },
+  "tradeoff_curve": [
+    {
+      "tau_reject": 67.18253326416016,
+      "escalation_rate": 0.0,
+      "pre_gate_reject_rate": 0.9404761904761905,
+      "rank1_correct_lost_rate": 0.030357142857142857
+    },
+    {
+      "tau_reject": 67.75549678479211,
+      "escalation_rate": 0.03511904761904762,
+      "pre_gate_reject_rate": 0.9047619047619048,
+      "rank1_correct_lost_rate": 0.026785714285714284
+    },
+    {
+      "tau_reject": 68.32846030542406,
+      "escalation_rate": 0.0875,
+      "pre_gate_reject_rate": 0.8523809523809524,
+      "rank1_correct_lost_rate": 0.023809523809523808
+    },
+    {
+      "tau_reject": 68.90142382605602,
+      "escalation_rate": 0.16488095238095238,
+      "pre_gate_reject_rate": 0.775,
+      "rank1_correct_lost_rate": 0.02023809523809524
+    },
+    {
+      "tau_reject": 69.47438734668796,
+      "escalation_rate": 0.24107142857142858,
+      "pre_gate_reject_rate": 0.6988095238095238,
+      "rank1_correct_lost_rate": 0.017261904761904763
+    },
+    {
+      "tau_reject": 70.04735086731992,
+      "escalation_rate": 0.3345238095238095,
+      "pre_gate_reject_rate": 0.6053571428571428,
+      "rank1_correct_lost_rate": 0.015476190476190477
+    },
+    {
+      "tau_reject": 70.62031438795186,
+      "escalation_rate": 0.4261904761904762,
+      "pre_gate_reject_rate": 0.5136904761904761,
+      "rank1_correct_lost_rate": 0.0125
+    },
+    {
+      "tau_reject": 71.19327790858382,
+      "escalation_rate": 0.5035714285714286,
+      "pre_gate_reject_rate": 0.4363095238095238,
+      "rank1_correct_lost_rate": 0.008928571428571428
+    },
+    {
+      "tau_reject": 71.76624142921577,
+      "escalation_rate": 0.5803571428571429,
+      "pre_gate_reject_rate": 0.3595238095238095,
+      "rank1_correct_lost_rate": 0.006547619047619048
+    },
+    {
+      "tau_reject": 72.33920494984773,
+      "escalation_rate": 0.6523809523809524,
+      "pre_gate_reject_rate": 0.2875,
+      "rank1_correct_lost_rate": 0.005357142857142857
+    },
+    {
+      "tau_reject": 72.91216847047967,
+      "escalation_rate": 0.7077380952380953,
+      "pre_gate_reject_rate": 0.23214285714285715,
+      "rank1_correct_lost_rate": 0.004166666666666667
+    },
+    {
+      "tau_reject": 73.48513199111163,
+      "escalation_rate": 0.7517857142857143,
+      "pre_gate_reject_rate": 0.1880952380952381,
+      "rank1_correct_lost_rate": 0.0035714285714285713
+    },
+    {
+      "tau_reject": 74.05809551174357,
+      "escalation_rate": 0.7880952380952381,
+      "pre_gate_reject_rate": 0.15178571428571427,
+      "rank1_correct_lost_rate": 0.002976190476190476
+    },
+    {
+      "tau_reject": 74.63105903237553,
+      "escalation_rate": 0.8267857142857142,
+      "pre_gate_reject_rate": 0.1130952380952381,
+      "rank1_correct_lost_rate": 0.0011904761904761906
+    },
+    {
+      "tau_reject": 75.20402255300748,
+      "escalation_rate": 0.8535714285714285,
+      "pre_gate_reject_rate": 0.08630952380952381,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 75.77698607363943,
+      "escalation_rate": 0.875,
+      "pre_gate_reject_rate": 0.06488095238095239,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 76.34994959427138,
+      "escalation_rate": 0.8892857142857142,
+      "pre_gate_reject_rate": 0.050595238095238096,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 76.92291311490334,
+      "escalation_rate": 0.9005952380952381,
+      "pre_gate_reject_rate": 0.039285714285714285,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 77.49587663553528,
+      "escalation_rate": 0.9083333333333333,
+      "pre_gate_reject_rate": 0.03154761904761905,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 78.06884015616724,
+      "escalation_rate": 0.9130952380952381,
+      "pre_gate_reject_rate": 0.026785714285714284,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 78.64180367679919,
+      "escalation_rate": 0.9220238095238096,
+      "pre_gate_reject_rate": 0.017857142857142856,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 79.21476719743114,
+      "escalation_rate": 0.9279761904761905,
+      "pre_gate_reject_rate": 0.011904761904761904,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 79.7877307180631,
+      "escalation_rate": 0.930952380952381,
+      "pre_gate_reject_rate": 0.008928571428571428,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 80.36069423869505,
+      "escalation_rate": 0.9315476190476191,
+      "pre_gate_reject_rate": 0.008333333333333333,
+      "rank1_correct_lost_rate": 0.0005952380952380953
+    },
+    {
+      "tau_reject": 80.93365775932699,
+      "escalation_rate": 0.9339285714285714,
+      "pre_gate_reject_rate": 0.005952380952380952,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 81.50662127995895,
+      "escalation_rate": 0.9351190476190476,
+      "pre_gate_reject_rate": 0.004761904761904762,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 82.07958480059091,
+      "escalation_rate": 0.9357142857142857,
+      "pre_gate_reject_rate": 0.004166666666666667,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 82.65254832122285,
+      "escalation_rate": 0.9363095238095238,
+      "pre_gate_reject_rate": 0.0035714285714285713,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 83.22551184185481,
+      "escalation_rate": 0.9375,
+      "pre_gate_reject_rate": 0.002380952380952381,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 83.79847536248676,
+      "escalation_rate": 0.9380952380952381,
+      "pre_gate_reject_rate": 0.0017857142857142857,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 84.37143888311871,
+      "escalation_rate": 0.9380952380952381,
+      "pre_gate_reject_rate": 0.0017857142857142857,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 84.94440240375066,
+      "escalation_rate": 0.9380952380952381,
+      "pre_gate_reject_rate": 0.0017857142857142857,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 85.51736592438262,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 86.09032944501456,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 86.66329296564652,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 87.23625648627846,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 87.80922000691042,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 88.38218352754237,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 88.95514704817433,
+      "escalation_rate": 0.9386904761904762,
+      "pre_gate_reject_rate": 0.0011904761904761906,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 89.52811056880628,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 90.10107408943823,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 90.67403761007017,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 91.24700113070213,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 91.81996465133409,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 92.39292817196603,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 92.96589169259798,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 93.53885521322994,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 94.1118187338619,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 94.68478225449384,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 95.2577457751258,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 95.83070929575774,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 96.4036728163897,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 96.97663633702165,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 97.5495998576536,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 98.12256337828555,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 98.6955268989175,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 99.26849041954947,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 99.84145394018141,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 100.41441746081335,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    },
+    {
+      "tau_reject": 100.98738098144531,
+      "escalation_rate": 0.9392857142857143,
+      "pre_gate_reject_rate": 0.0005952380952380953,
+      "rank1_correct_lost_rate": 0.0
+    }
+  ]
+}
