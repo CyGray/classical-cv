@@ -70,10 +70,33 @@ not adopted."* Against the cropped (deployment-faithful) distribution:
 | `tau_reject` | 88.4927 | 74.3496 | +19.0% |
 | `l2_genuine` | 1.0313 | 1.030628 (hybrid-derived) | +0.065% |
 
-`tau_accept` = 77.7693 sits **above the cropped 1%-FAR point (74.3496)**,
-against a stated ~10 ppm design target — and `tau_accept` is the edge below
-which LBPH accepts alone, without escalating to SFace. The SFace value is
-independently reproduced and needs no action.
+Measured directly — the realized FAR of each candidate value on the cropped
+(deployment) LBPH distribution, same sweep conditions, 16,522,626 unique pairs:
+
+| Value | Role | Realized FAR (cropped) | vs ~10 ppm target |
+|---:|---|---:|---|
+| **67.0084** | committed `tau_accept` | **9.62 ppm** (159 pairs) | **on target** |
+| 67.033255 | this re-run, rank 165 | 9.99 ppm (165 pairs) | on target |
+| **77.7693** | proposed `tau_accept` | **5.3635%** (886,192 pairs) | **~5,370x looser** |
+| 76.85 | committed `tau_reject` | 3.6443% (602,141 pairs) | — |
+| **88.4927** | proposed `tau_reject` | **56.80%** (9,385,438 pairs) | — |
+| 74.3496 | this re-run, rank 165,226 | 1.0000% (165,227 pairs) | — |
+
+FAR target -> cropped threshold: 0.001% -> 67.0333 | 0.01% -> 68.8808 |
+0.1% -> 71.1718 | 1% -> 74.3496 | 5% -> 77.5943 | 10% -> 79.5150 |
+50% -> 87.3465.
+
+So the **committed 67.0084 is correct** — it realizes 9.62 ppm against its
+10 ppm design target. The proposed 77.7693 would accept **5.36% of impostor
+pairs on LBPH alone, without escalating to SFace**. `tau_accept` is the edge
+below which LBPH accepts unverified, which is what makes this the
+safety-critical one. The SFace value is independently reproduced and needs no
+action.
+
+Note also that the committed `tau_reject` = 76.85 realizes 3.64%, not the ~1%
+its provenance claims; the true 1% point on cropped YuNet data is 74.3496.
+Both sweeps cross-check: 67.0333 -> 9.99 ppm and 74.3496 -> 1.0000% reproduce
+the rank-165 and rank-165,226 results exactly.
 
 Corroborating: the hybrid run applies the *old* frozen 67.0084 to its inflated
 full-frame distances and logs only **44 LBPH false accepts in 33,045,252 ordered

@@ -1,0 +1,85 @@
+{
+  "identities": 5749,
+  "unique_pairs": 16522626,
+  "scale": "native predict_collect, YuNet, assume_cropped=False",
+  "deployed_threshold_far": [
+    {
+      "threshold": 77.7693,
+      "pairs_at_or_below": 886192,
+      "realized_far_ppm": 53635.0577686622,
+      "realized_far_pct": 5.363505776866219
+    },
+    {
+      "threshold": 88.4927,
+      "pairs_at_or_below": 9385438,
+      "realized_far_ppm": 568035.4926632122,
+      "realized_far_pct": 56.80354926632123
+    },
+    {
+      "threshold": 67.0084,
+      "pairs_at_or_below": 159,
+      "realized_far_ppm": 9.623167649016567,
+      "realized_far_pct": 0.0009623167649016567
+    },
+    {
+      "threshold": 76.85,
+      "pairs_at_or_below": 602141,
+      "realized_far_ppm": 36443.420071361536,
+      "realized_far_pct": 3.644342007136154
+    },
+    {
+      "threshold": 67.0333,
+      "pairs_at_or_below": 165,
+      "realized_far_ppm": 9.986306050866249,
+      "realized_far_pct": 0.0009986306050866248
+    },
+    {
+      "threshold": 74.3496,
+      "pairs_at_or_below": 165227,
+      "realized_far_ppm": 10000.04478706956,
+      "realized_far_pct": 1.0000044787069562
+    }
+  ],
+  "percentiles": [
+    {
+      "far_pct": 0.001,
+      "threshold": 67.03325520645528
+    },
+    {
+      "far_pct": 0.01,
+      "threshold": 68.88076428952283
+    },
+    {
+      "far_pct": 0.1,
+      "threshold": 71.1717504321251
+    },
+    {
+      "far_pct": 0.5,
+      "threshold": 73.26864217275123
+    },
+    {
+      "far_pct": 1,
+      "threshold": 74.34959041529041
+    },
+    {
+      "far_pct": 2,
+      "threshold": 75.59451069842397
+    },
+    {
+      "far_pct": 5,
+      "threshold": 77.59429802282048
+    },
+    {
+      "far_pct": 10,
+      "threshold": 79.51498917969545
+    },
+    {
+      "far_pct": 25,
+      "threshold": 83.03338303698054
+    },
+    {
+      "far_pct": 50,
+      "threshold": 87.34649981197961
+    }
+  ]
+}
