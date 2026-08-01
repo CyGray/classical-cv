@@ -56,7 +56,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--lbph-labels", default=DEFAULT_LBPH_LABELS)
     p.add_argument("--sface-gallery", default=DEFAULT_SFACE_GALLERY)
     p.add_argument("--report-md", default=root_path("reports", "benchmark", "hybrid_comparison.md"))
-    p.add_argument("--report-json", default=root_path("reports", "benchmark", "hybrid_comparison.json"))
+    p.add_argument("--report-json", default=root_path("outputs", "benchmark", "hybrid_comparison.json"))
     p.add_argument("--assume-cropped", action=argparse.BooleanOptionalAction, default=True)
     return p.parse_args()
 

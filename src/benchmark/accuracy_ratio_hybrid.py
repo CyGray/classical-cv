@@ -99,9 +99,9 @@ def parse_args() -> argparse.Namespace:
                              "don't re-run identical LBPH/SFace work (up to ~3x faster on large "
                              "galleries). Reported per-mode latencies become meaningless - keep "
                              "OFF for latency-bearing runs.")
-    parser.add_argument("--output-json", default="reports/benchmark/accuracy_ratio_hybrid.json")
+    parser.add_argument("--output-json", default="outputs/benchmark/accuracy_ratio_hybrid.json")
     parser.add_argument("--output-md", default="reports/benchmark/accuracy_ratio_hybrid.md")
-    parser.add_argument("--battery-csv", default="reports/benchmark/accuracy_ratio_hybrid_probes.csv",
+    parser.add_argument("--battery-csv", default="outputs/benchmark/accuracy_ratio_hybrid_probes.csv",
                         help="Per-probe pairing rows (cv/dl correctness + gate signal) for the "
                              "complementarity battery; empty string disables.")
     return parser.parse_args()
@@ -109,7 +109,7 @@ def parse_args() -> argparse.Namespace:
 
 def select_originals(base_dir: str, select_one_per_person: bool = False, seed: int = 42) -> list[tuple[str, str]]:
     """(person, image_path) selection only — the RNG sequence is the probe-set
-    contract, so enrollment (scripts/run_lfw2_robustness.py) reuses this exact
+    contract, so enrollment (scripts/pipeline/run_lfw2_robustness.py) reuses this exact
     function to enroll the same clean images the benchmark will modify."""
     import random
     out: list[tuple[str, str]] = []

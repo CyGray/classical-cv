@@ -42,7 +42,7 @@ Thumbs.db
 # ===================================
 lfw/
 cv_term_project_master/
-archive/
+/archive/
 # ===================================
 # Large Datasets (Local & Machine-Specific)
 # ===================================
@@ -178,4 +178,7 @@ ui/console/run_history.jsonl
 # Tool & nested workspace artifacts
 .codegraph/
 face-detection-g3/
+.claude/
+.gemini/
+
 

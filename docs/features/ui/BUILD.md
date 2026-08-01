@@ -2,7 +2,7 @@
 
 **Status:** ready to execute. **Input:** `docs/ui/DESIGN.md` (read that first — this
 plan doesn't re-explain the architecture, only sequences building it). **Scope:** no
-product code exists yet under `ui/` or `scripts/build_study_manifest.py` as of
+product code exists yet under `ui/` or `scripts/utils/build_study_manifest.py` as of
 2026-07-11 — everything below is new work.
 
 Every checkbox is meant to be executable without re-deriving intent from `DESIGN.md`.
@@ -53,7 +53,7 @@ yet.
       conflict noted in `DESIGN.md` §6.5 between the official Root Directory doc
       ("cannot use `..`") and a community-sourced mention of a bypass checkbox.
       **Record the outcome as a one-line comment at the top of
-      `scripts/build_study_manifest.py`** (e.g. `# Vercel Root Directory sandboxes
+      `scripts/utils/build_study_manifest.py`** (e.g. `# Vercel Root Directory sandboxes
       builds; verified 2026-07-XX; content/, public/figures/ copy-step below is
       required, not optional`) so Phase 1 doesn't re-litigate this.
 - [ ] Regardless of the outcome: proceed with the copy-into-`ui/dashboard/` approach
@@ -67,7 +67,7 @@ yet.
       post-dates `STATE-07-10.md` (2026-07-10): as of this review, the working tree has
       untracked `reports/independence/hybrid/{lsdb1_i10,lsdb2_light_i10,lsdb2_medium_i10}/`
       (the 10-iteration paper-protocol reruns — STATE-07-10.md §5.4 numbers), an
-      untracked `scripts/sweep_gate_curve.py`, and modified `docs/PAPER.md`,
+      untracked `scripts/pipeline/sweep_gate_curve.py`, and modified `docs/PAPER.md`,
       `src/benchmark/accuracy_ratio_hybrid.py`, `src/stats_utils.py`. These represent
       audit-session work that is done but not yet committed or reflected in any
       `[status: done]` entry. Write `study_status.yml`'s `legs[]`/`checklist[]` against
@@ -89,11 +89,11 @@ yet.
       in 0.7 will hard-fail (not warn) if one doesn't exist, by design, so a fake path
       is caught immediately rather than silently rendering "done" for nothing.
 
-### 0.6-0.8 Write `scripts/build_study_manifest.py`
+### 0.6-0.8 Write `scripts/utils/build_study_manifest.py`
 
 - [ ] Add `PyYAML` to `requirements.txt` (new dependency — nothing currently parses
       YAML in this repo; `rg -l yaml src/ scripts/` returns nothing).
-- [ ] Create `scripts/build_study_manifest.py`. Responsibilities, in order:
+- [ ] Create `scripts/utils/build_study_manifest.py`. Responsibilities, in order:
   1. Load `docs/ui/study_status.yml` (`yaml.safe_load`).
   2. For each `legs[]` entry, resolve `artifact_path` relative to repo root; record
      `artifact_exists`, `artifact_mtime` (newest file under the path), `artifact_files`
@@ -122,13 +122,13 @@ yet.
      privileges for symlinks; Termux/Android doesn't support them reliably either).
   7. Print a summary line count of what changed (files copied, manifest size) so a
      human running it locally can eyeball the diff before `git add`.
-- [ ] Run it: `python scripts/build_study_manifest.py`. Fix any hard-fail path errors
+- [ ] Run it: `python scripts/utils/build_study_manifest.py`. Fix any hard-fail path errors
       by correcting `study_status.yml`, not by loosening the script's validation.
-- [ ] `git add docs/ui/study_status.yml scripts/build_study_manifest.py requirements.txt ui/dashboard/data/manifest.json ui/dashboard/content/ ui/dashboard/public/figures/` and commit.
+- [ ] `git add docs/ui/study_status.yml scripts/utils/build_study_manifest.py requirements.txt ui/dashboard/data/manifest.json ui/dashboard/content/ ui/dashboard/public/figures/` and commit.
 
 ### Phase 0 — Definition of done
 
-- [ ] `python scripts/build_study_manifest.py` runs clean (exit 0) from a fresh clone
+- [ ] `python scripts/utils/build_study_manifest.py` runs clean (exit 0) from a fresh clone
       of the current commit.
 - [ ] `ui/dashboard/data/manifest.json` exists, is valid JSON, and every `legs[]` entry
       in it has `artifact_exists: true`.

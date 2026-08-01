@@ -47,9 +47,9 @@ returns: the **full `comparisons.csv`** for their batch plus a mergeable
 | Segment CLI flags on the hybrid test | **WIRED (2026-07-19).** `--segment-count` / `--segment-index` now slice query rows in `run_sweep()` per §7.1; candidates stay global. Verified per §12.1–12.2 (results recorded in §12). Cosine kernel changed to per-row matvec for segment invariance — see §9 BLAS row. |
 | Canonical slicing helper | `segment_bounds(n, segment_count, segment_index)` in `src/independence_report.py:219` — 1-based, query-rows-[0,n) slicing. |
 | Proven precedent | Classical `*_light_front.py` tests run segmented LFW sweeps: `archive/outputs-5-17/.../_segments/lfw_seg{1..6}of6/` (eigenfaces, 6-way) and `lfw_seg{1,2}of2` (LBPH). `try_merge_segment_outputs()` (`src/lbph/independence_test_light_front.py:1008`) merges segment summaries: sums FP counts per threshold label, recomputes FPR over summed totals, merges lowest-pairs top-20, and deliberately leaves `comparisons.csv` per-segment. |
-| Robustness test | `src/benchmark/accuracy_ratio_hybrid.py` — iterates originals × 41 deterministic (mod, level) probes from `src/benchmark/modifications.py`. Every probe's RNG comes from `stable_rng()` seeded per (image, mod, level) → **per-image deterministic, order-independent, therefore shard-safe by identity**. Uses the deployed LBPH model + SFace gallery (`DEFAULT_LBPH_MODEL`, `DEFAULT_SFACE_GALLERY`) and the frozen `src/hybrid/thresholds.json`. **UPDATE 2026-07-19: `--segment-count`/`--segment-index` now present** (slices originals via `segment_bounds`, emits segment fields in the JSON); merged by `scripts/merge_robustness_segments.py`. |
-| LFW1 acquisition | `scripts/setup_datasets.py::setup_lfw()` — downloads/extracts LFW (verifies 5,749 identity dirs), plus `run_augmentation()` count-verification pattern. |
-| LFW1 → LFW2 augmentation | `scripts/augment_split_light_medium.py` — seeded (`--seed 42`) but uses **one sequential `np.random.default_rng`** consumed in directory-sorted order. Deterministic only if the whole set is processed, in the same order, with the same NumPy version (NumPy does not guarantee bit-identical distribution streams across versions). This is the single biggest reproducibility risk for "everyone augments locally" (§5, §10). |
+| Robustness test | `src/benchmark/accuracy_ratio_hybrid.py` — iterates originals × 41 deterministic (mod, level) probes from `src/benchmark/modifications.py`. Every probe's RNG comes from `stable_rng()` seeded per (image, mod, level) → **per-image deterministic, order-independent, therefore shard-safe by identity**. Uses the deployed LBPH model + SFace gallery (`DEFAULT_LBPH_MODEL`, `DEFAULT_SFACE_GALLERY`) and the frozen `src/hybrid/thresholds.json`. **UPDATE 2026-07-19: `--segment-count`/`--segment-index` now present** (slices originals via `segment_bounds`, emits segment fields in the JSON); merged by `scripts/utils/merge_robustness_segments.py`. |
+| LFW1 acquisition | `scripts/utils/setup_datasets.py::setup_lfw()` — downloads/extracts LFW (verifies 5,749 identity dirs), plus `run_augmentation()` count-verification pattern. |
+| LFW1 → LFW2 augmentation | `scripts/utils/augment_split_light_medium.py` — seeded (`--seed 42`) but uses **one sequential `np.random.default_rng`** consumed in directory-sorted order. Deterministic only if the whole set is processed, in the same order, with the same NumPy version (NumPy does not guarantee bit-identical distribution streams across versions). This is the single biggest reproducibility risk for "everyone augments locally" (§5, §10). |
 | Pre-modified LFW probes | `data/lfw/{light,medium,heavy}/` — 5,749 identities of pre-generated modified probes (`<Person>_0001__processed__<mod>.jpg`). **No generator script exists in the repo** — external artifact. `evidence_matrix.py`'s `lfw2_41mods` leg expects `data/lfw2_41mods` which currently does not exist (leg reports SKIPPED). Past manual hybrid runs exist at `reports/independence/hybrid/lfw2_light/` and `lfw2_medium/`. Which "LFW2" definition the paper run uses is an open decision (§13). |
 | Frozen inputs | `src/hybrid/thresholds.json` (SHA-256 already recorded by `evidence_matrix.py`), deployed LBPH model/labels, SFace gallery/impostors. All must be byte-identical on every member machine. |
 
@@ -169,7 +169,7 @@ LFW1 themselves (`setup_datasets.py::setup_lfw()`); modifications are applied
 **in memory** by `--modification` (systematic doc §3.1), so no augmented
 dataset or probe-pack zip is ever distributed. Approach B survives as its
 cleanest part: a **committed selection manifest**
-(`scripts/make_selection_manifest.py` output, SHA-256 per probe file) that the
+(`scripts/utils/make_selection_manifest.py` output, SHA-256 per probe file) that the
 independence test verifies via `--selection-manifest` before sweeping —
 bit-identical inputs by construction without any upload. Approach C deferred.
 
@@ -180,7 +180,7 @@ bit-identical inputs by construction without any upload. Approach C deferred.
 ```
                     Kyle (coordinator)                     Member i (of N)
   ┌──────────────────────────────────┐        ┌─────────────────────────────────┐
-  │ scripts/make_probe_pack.py       │  zip   │ scripts/lfw2_worker.py          │
+  │ scripts/make_probe_pack.py       │  zip   │ scripts/pipeline/lfw2_worker.py          │
   │  - seeded selection over LFW2    │──────▶ │  1 preflight (env+SHA checks)   │
   │  - selection_manifest.json+SHAs  │        │  2 fetch inputs (pack or A-path)│
   │ assignments.json (batch table)   │        │  3 canary micro-sweep           │
@@ -188,7 +188,7 @@ bit-identical inputs by construction without any upload. Approach C deferred.
                  ▲                            │  5 robustness  seg i of N       │
                  │  lfw2_seg{i}of{N}.zip      │  6 package results + manifest   │
   ┌──────────────┴───────────────────┐        └─────────────────────────────────┘
-  │ scripts/merge_lfw2_segments.py   │
+  │ scripts/utils/merge_lfw2_segments.py   │
   │  - manifest cross-verification   │
   │  - count-sum merge + global stats│
   │  - canary comparison             │
@@ -196,15 +196,15 @@ bit-identical inputs by construction without any upload. Approach C deferred.
   └──────────────────────────────────┘
 ```
 
-### 6.1 `scripts/lfw2_worker.py` — the shareable bridge script
+### 6.1 `scripts/pipeline/lfw2_worker.py` — the shareable bridge script
 
 One command per member:
 
 ```
-python scripts/lfw2_worker.py --segment-index 3 --segment-count 8 \
+python scripts/pipeline/lfw2_worker.py --segment-index 3 --segment-count 8 \
     --probe-pack path/to/lfw2_probe_pack_light.zip
 # Approach-A fallback (no pack):
-python scripts/lfw2_worker.py --segment-index 3 --segment-count 8 --self-augment
+python scripts/pipeline/lfw2_worker.py --segment-index 3 --segment-count 8 --self-augment
 ```
 
 Phases, each idempotent with a `[SKIP] already done` fast path and a stamp file
@@ -254,7 +254,7 @@ iteration count, source-dir fingerprint), zips it. The worker feeds
 loads exactly the manifest paths (§7.1, change 3 — this is the cleaner seam and
 also removes the "identical file listing" requirement entirely).
 
-### 6.3 `scripts/merge_lfw2_segments.py` (Kyle-side)
+### 6.3 `scripts/utils/merge_lfw2_segments.py` (Kyle-side)
 Input: a folder of the N result zips (+ `assignments.json`).
 
 1. **Verify** — all manifests agree on commit, SHAs, seed, tier, iteration
@@ -272,7 +272,7 @@ Input: a folder of the N result zips (+ `assignments.json`).
 3. **Merge robustness** — sum per-(mode, modification) correct/total/no-face
    counts, recompute AR percentages and cv_stronger/dl_stronger/tie tags,
    concatenate the per-probe battery CSVs; rerun
-   `scripts/generate_robustness_report.py` on the merged JSON.
+   `scripts/reporting/generate_robustness_report.py` on the merged JSON.
 4. **comparisons.csv** — keep per-segment `comparisons.csv.gz` side by side
    (the merged summary records their SHAs); optionally emit one concatenated
    file. **Path normalization:** the CSV stores each machine's absolute image
@@ -346,17 +346,17 @@ already does. No behavior change when `--segment-count 1` (verification §12.1).
    percentages. Add the same `segment` block to the JSON.
 
 ### 7.3 New scripts — ALL BUILT 2026-07-19
-- `scripts/lfw2_worker.py` (§6.1) — 5 idempotent stamped phases
+- `scripts/pipeline/lfw2_worker.py` (§6.1) — 5 idempotent stamped phases
   (PREFLIGHT / DATASET / CANARY / UNITS / PACKAGE); every heavy step is a
   subprocess of existing modules. `--member <name>` reads (variant, segment)
   units from `assignments.json`; `--pins` overridable for testing.
-- `scripts/make_selection_manifest.py` (replaces the planned
+- `scripts/utils/make_selection_manifest.py` (replaces the planned
   `make_probe_pack.py` — no pack zip needed under the in-memory-mods flow,
-  §5 decision) + `scripts/make_batch_pins.py`.
-- `scripts/merge_lfw2_segments.py` (§6.3) — coverage proof (segment set
+  §5 decision) + `scripts/utils/make_batch_pins.py`.
+- `scripts/utils/merge_lfw2_segments.py` (§6.3) — coverage proof (segment set
   exact, bounds tile [0, n_total), per-segment row counts), count-sum merge
   via `src/stats_utils.py`, merged summary shaped like an unsegmented run,
-  `comparisons.csv.gz` concat. `scripts/build_systematic_matrix.py` — 41-row
+  `comparisons.csv.gz` concat. `scripts/archive/build_systematic_matrix.py` — 41-row
   tier-grouped matrix (md + json + FAR figure), PENDING for missing variants.
 - `docs/BATCH_WORK/batch_pins.json` (7 artifact SHA-256s, versions; commit
   placeholder until campaign start), `assignments.json` (41-variant template),
@@ -524,7 +524,7 @@ measure on the canary and extrapolate exactly). Hence:
 
 1. §7.1 segment wiring + verification 12.1–12.2. ✅
 2. §7.2 robustness sharding + count emission (plus
-   `scripts/merge_robustness_segments.py`, `scripts/run_lfw2_robustness.py`). ✅
+   `scripts/utils/merge_robustness_segments.py`, `scripts/pipeline/run_lfw2_robustness.py`). ✅
 3. `make_selection_manifest.py` + `--selection-manifest` seam +
    `--modification` seam + verification 12.3. ✅
 4. `merge_lfw2_segments.py` + `build_systematic_matrix.py` + sabotage

@@ -100,7 +100,7 @@ head-to-head report.
 Dataset-composition matrix: every classical family trained on five training
 recipes from the same DB and compared inter-/intra-model.
 
-### NEW: `scripts/run_dataset_matrix.py` + `docs/DATASET_MATRIX.md`
+### NEW: `scripts/pipeline/run_dataset_matrix.py` + `docs/DATASET_MATRIX.md`
 - One reproducible suite: 3 families (lbph, eigenfaces, fisherfaces) x 5
   training recipes from the leakage-free La Salle split - `clean` (280),
   `aug_light` (840), `aug_light_medium` (1,400), `light_only` (140),
@@ -140,7 +140,7 @@ launcher's switch to the clean artifacts.
   - **SubspaceMatcher** - Eigen/Fisher matcher upgrades: drop leading PCA
     components, eigenvalue whitening (Mahalanobis), cosine distance, centroid
     galleries; features stay the standard OpenCV projections.
-- `scripts/compare_variants.py` benchmarks unedited vs all variants on the clean
+- `scripts/pipeline/compare_variants.py` benchmarks unedited vs all variants on the clean
   split with 13,149 LFW impostors -> `reports/benchmark/variant_comparison.{json,md}`
   (84 rows). Headlines:
   - Custom full-histogram matcher reproduces unedited LBPH EXACTLY (harness is
@@ -200,7 +200,7 @@ inherent 64 KB feature vector and the <30 fps live loop (a Stage-3 hybrid
 target; Stage-1 "accuracy >90% @ 1 face/s" is comfortably met).
 
 ### Measured pipeline improvement: Tan-Triggs for LBPH
-- New `scripts/sweep_classical_configs.py` sweeps (family x num_components x
+- New `scripts/pipeline/sweep_classical_configs.py` sweeps (family x num_components x
   equalization) on the clean split with LFW impostors ->
   `reports/benchmark/classical_config_sweep.{json,md}`. Findings:
   - **LBPH + tan-triggs: 100% rank-1, EER 0.04-0.07%** (from 96.4% / 3.6%).
@@ -247,7 +247,7 @@ target; Stage-1 "accuracy >90% @ 1 face/s" is comfortably met).
   team spec sheet - the suite is a documented stand-in with matching counts.
 
 ### NEW: gated full-LFW independence path (7/15 deliverable, second half)
-- `scripts/run_lfw_independence.py` implements the ordered N x (N-1) LFW DB1
+- `scripts/pipeline/run_lfw_independence.py` implements the ordered N x (N-1) LFW DB1
   protocol (5,749 ids -> 33,045,252 comparisons, threshold = 331st error pair
   ~ 10 ppm) via a streaming unique-pair top-K (33M records never materialized).
   LBPH histograms batch-extracted exactly from OpenCV; Eigen basis trained on a
@@ -314,7 +314,7 @@ threshold (the threshold-determination half of the 7/15 deliverable).
   Fisherfaces) with `--target-far-ppm` (default 10000) and `--error-pair-rank`
   (explicit k). Each run now prints the spec operating point, the boundary
   impostor pair, and a FAR-vs-threshold curve.
-- New `scripts/run_independence_thresholds.py` runs all three on La Salle DB1 and
+- New `scripts/pipeline/run_independence_thresholds.py` runs all three on La Salle DB1 and
   writes `reports/benchmark/independence_thresholds.{json,md}`.
 
 ### Determined thresholds (La Salle DB1, 28 ids, 756 comparisons, 8th error pair)
@@ -401,7 +401,7 @@ their previously copy-pasted code into one shared backbone.
   `reports/benchmark/classical_comparison.{json,md}` with spec columns: rank-1 /
   best-sweep / hit@thr / model size / feature size / <1 KB? / live FPS / >=30 fps?
   / verdict (FAR/FRR noted as pending the independence test).
-- New `scripts/run_classical_clean_loop.py` trains+evaluates all three (baseline
+- New `scripts/pipeline/run_classical_clean_loop.py` trains+evaluates all three (baseline
   and a train-only light-aug variant) and writes the table in one command.
 
 ### 7) Launcher wiring (`main.py`)

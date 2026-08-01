@@ -57,21 +57,21 @@ def resolve_path(path_value: str) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build the classical recognizer spec comparison table.")
-    parser.add_argument("--reports-dir", default=root_path("reports", "evaluation"))
+    parser.add_argument("--reports-dir", default=root_path("outputs", "evaluation"))
     parser.add_argument(
         "--fps-summary",
-        default=root_path("reports", "benchmark", "live_fps", "aggregate_summary.json"),
+        default=root_path("outputs", "benchmark", "live_fps", "aggregate_summary.json"),
     )
-    parser.add_argument("--output-json", default=root_path("reports", "benchmark", "classical_comparison.json"))
+    parser.add_argument("--output-json", default=root_path("outputs", "benchmark", "classical_comparison.json"))
     parser.add_argument("--output-md", default=root_path("reports", "benchmark", "classical_comparison.md"))
     parser.add_argument(
         "--tar-at-far-json",
-        default=root_path("reports", "benchmark", "tar_at_far.json"),
+        default=root_path("outputs", "benchmark", "tar_at_far.json"),
         help="Optional TAR@FAR report (src/benchmark/tar_at_far.py) to fill the verification columns.",
     )
     parser.add_argument(
         "--accuracy-ratio-json",
-        default=root_path("reports", "benchmark", "accuracy_ratio.json"),
+        default=root_path("outputs", "benchmark", "accuracy_ratio.json"),
         help="Optional Accuracy-Ratio report (src/benchmark/accuracy_ratio.py) for the "
              "modification-robustness table.",
     )
@@ -479,14 +479,38 @@ def to_markdown(
 def main() -> None:
     args = parse_args()
     args.reports_dir = resolve_path(args.reports_dir)
+    if not Path(args.reports_dir).exists() and "outputs" in args.reports_dir:
+        alt = args.reports_dir.replace("outputs", "reports")
+        if Path(alt).exists():
+            args.reports_dir = alt
     args.fps_summary = resolve_path(args.fps_summary)
+    if not Path(args.fps_summary).exists() and "outputs" in args.fps_summary:
+        alt = args.fps_summary.replace("outputs", "reports")
+        if Path(alt).exists():
+            args.fps_summary = alt
     args.output_json = resolve_path(args.output_json)
     args.output_md = resolve_path(args.output_md)
 
     fps_map = load_fps_map(args.fps_summary)
-    tar_far = load_tar_at_far(resolve_path(args.tar_at_far_json))
-    accuracy_ratio = load_accuracy_ratio(resolve_path(args.accuracy_ratio_json))
+    tar_far_path = resolve_path(args.tar_at_far_json)
+    if not Path(tar_far_path).exists() and "outputs" in tar_far_path:
+        alt = tar_far_path.replace("outputs", "reports")
+        if Path(alt).exists():
+            tar_far_path = alt
+    tar_far = load_tar_at_far(tar_far_path)
+
+    acc_ratio_path = resolve_path(args.accuracy_ratio_json)
+    if not Path(acc_ratio_path).exists() and "outputs" in acc_ratio_path:
+        alt = acc_ratio_path.replace("outputs", "reports")
+        if Path(alt).exists():
+            acc_ratio_path = alt
+    accuracy_ratio = load_accuracy_ratio(acc_ratio_path)
     rows = collect_rows(args.reports_dir, fps_map, args.dataset_contains)
+    if not rows and "outputs" in args.reports_dir:
+        alt = args.reports_dir.replace("outputs", "reports")
+        if Path(alt).exists():
+            args.reports_dir = alt
+            rows = collect_rows(args.reports_dir, fps_map, args.dataset_contains)
     if not rows:
         raise RuntimeError(f"No classical evaluation reports found in: {args.reports_dir}")
     selection = apply_selection_rule(rows, tar_far, accuracy_ratio)

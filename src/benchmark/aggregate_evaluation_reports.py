@@ -23,12 +23,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--reports-dir",
-        default=root_path("reports", "evaluation"),
+        default=root_path("outputs", "evaluation"),
         help="Directory containing evaluator JSON reports.",
     )
     parser.add_argument(
         "--output-json",
-        default=root_path("reports", "benchmark", "evaluation_entities_summary.json"),
+        default=root_path("outputs", "benchmark", "evaluation_entities_summary.json"),
         help="Path to write aggregated JSON summary.",
     )
     parser.add_argument(
@@ -104,6 +104,13 @@ def main() -> None:
 
     reports_dir = Path(args.reports_dir)
     report_files = sorted(reports_dir.glob("*.json"))
+    if not report_files and reports_dir != Path(root_path("reports", "evaluation")):
+        fallback_dir = Path(root_path("reports", "evaluation"))
+        if fallback_dir.exists():
+            fallback_files = sorted(fallback_dir.glob("*.json"))
+            if fallback_files:
+                reports_dir = fallback_dir
+                report_files = fallback_files
     if not report_files:
         raise RuntimeError(f"No JSON reports found in: {reports_dir}")
 

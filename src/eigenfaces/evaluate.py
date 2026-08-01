@@ -55,7 +55,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--labels-path", default=root_path("models", FAMILY, "labels_lasalle_clean.json"))
     parser.add_argument("--unknown-threshold", type=float, default=spec.default_unknown_threshold)
     parser.add_argument("--threshold-sweep", default=_default_sweep_str(spec))
-    parser.add_argument("--report-json", default=root_path("reports", "evaluation", f"{FAMILY}_eval.json"))
+    parser.add_argument("--report-json", default=root_path("outputs", "evaluation", f"{FAMILY}_eval.json"))
     parser.add_argument("--run-tag", default="")
     parser.add_argument("--max-images-per-person", type=int, default=0)
     parser.add_argument("--random-seed", type=int, default=42)

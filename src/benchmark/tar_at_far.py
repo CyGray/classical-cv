@@ -71,7 +71,7 @@ def parse_args() -> argparse.Namespace:
                         help="Override contrast normalization for ALL families "
                              "(default: each family's RecognizerSpec default).")
     parser.add_argument("--cascade-path", default=root_path("haar", "haarcascade_frontalface_default.xml"))
-    parser.add_argument("--output-json", default="reports/benchmark/tar_at_far.json")
+    parser.add_argument("--output-json", default="outputs/benchmark/tar_at_far.json")
     parser.add_argument("--output-md", default="reports/benchmark/tar_at_far.md")
     return parser.parse_args()
 

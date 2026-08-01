@@ -85,7 +85,7 @@ touch data.**
   not La Salle). The launcher's dataset manager swaps these. **Consequence:** committed reports were
   produced against *different* underlying datasets at different times; you cannot tell which split a
   report used without the symlink state at run time. **Pin/record the active target per report.**
-- **Gap:** the base **split-creation script is not in the repo** (only `scripts/augment_split_light_medium.py`,
+- **Gap:** the base **split-creation script is not in the repo** (only `scripts/utils/augment_split_light_medium.py`,
   which *consumes* an existing split and correctly augments per-split, so augmented copies of a train
   image cannot leak into test — check 4b passes *given* a clean base split).
 
@@ -105,7 +105,7 @@ touch data.**
 | `src/independence_common.py` | **Works** | shared train→extract→pairwise; `normalize_distances_0_100` is **max-only**. |
 | `src/reporting/identity.py` | **Works** | `attach_entity_identity` / `build_dataset_profile` give the shared `entity_key` schema. |
 | `main.py` launcher | **Works, sophisticated** | dataset prompts, auto artifact slugs, duplicate-combo warnings, LFW segmenting. Only training/eval/light-front get preset args; the *plain* independence action runs bare defaults. |
-| `scripts/augment_split_light_medium.py` | **Works, leakage-safe** | augments `train/`→`train/`, `test/`→`test/` separately. |
+| `scripts/utils/augment_split_light_medium.py` | **Works, leakage-safe** | augments `train/`→`train/`, `test/`→`test/` separately. |
 | `scripts/independence_failure_check/*` | **Works + self-critical** | collapse/multi-image/regional/occlusion suite; reports correctly flag their own apples-to-oranges magnitude comparisons. |
 
 ---

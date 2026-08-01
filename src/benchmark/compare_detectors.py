@@ -318,7 +318,7 @@ def main() -> None:
     if args.yunet_score_threshold != DEFAULT_YUNET_SCORE_THRESHOLD:
         default_stem += f"_yunet{args.yunet_score_threshold:g}"
     out_json = resolve_path(args.output_json) if args.output_json else root_path(
-        "reports", "benchmark", f"{default_stem}.json"
+        "outputs", "benchmark", f"{default_stem}.json"
     )
     out_md = resolve_path(args.output_md) if args.output_md else root_path(
         "reports", "benchmark", f"{default_stem}.md"

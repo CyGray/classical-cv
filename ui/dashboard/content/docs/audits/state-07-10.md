@@ -257,7 +257,7 @@ Keep the pairing the script already computes and discards. Changes:
    recovery high & concentrated on LBPH-collapse mods; gate AUC > 0.8; McNemar
    p < 0.05 with y ≫ x; curve point on the frontier.
 
-### 3.3 Gate operating-curve sweep (`scripts/sweep_gate_curve.py`, new)
+### 3.3 Gate operating-curve sweep (`scripts/pipeline/sweep_gate_curve.py`, new)
 
 - Sweep the gate's aggressiveness around the frozen point: grid over
   `margin_min ∈ {0, 0.025, 0.05, 0.1, 0.2}` × `τ_a shift ∈ {−8, −4, 0, +4, +8}`
@@ -279,7 +279,7 @@ Keep the pairing the script already computes and discards. Changes:
 | Joint sweep, lsdb2 light/medium | same with `--dataset-dir data/split_augmented41mods_lasalle_clean/<tier>/train --output-dir reports/independence/hybrid/lsdb2_<tier>_i10` | local |
 | Hybrid AR + battery | `python -m src.benchmark.accuracy_ratio_hybrid` (defaults) — verify AR parity against the committed Jul 9 MD before trusting latency deltas | local |
 | Evidence matrix, LS legs | `python -m src.benchmark.evidence_matrix --only ls_db1,ls_db2_41mods` | local |
-| Gate curve | `python scripts/sweep_gate_curve.py` | local |
+| Gate curve | `python scripts/pipeline/sweep_gate_curve.py` | local |
 | LFW legs (matrix, 41-mod, any joint re-runs) | evidence matrix `--only lfw1,lfw2_41mods` | **D: machine — open** |
 
 ### 3.5 Paper-edit design (P1)
@@ -353,7 +353,7 @@ ambiguous_band = 11 — the quality probes carry the routing, as §4.3's design 
 
 ### 5.3 Gate operating curve — §4.4's missing sweep (new instrument)
 
-`scripts/sweep_gate_curve.py` (new): each probe scored once per engine, 25 gate
+`scripts/pipeline/sweep_gate_curve.py` (new): each probe scored once per engine, 25 gate
 settings (margin_min × τ-band shift) evaluated as pure routing arithmetic. Output:
 `reports/benchmark/gate_operating_curve.{json,md,png}`.
 

@@ -67,17 +67,17 @@ GROUPED_CHOICES = [
     (
         "Benchmark",
         [
-            ("run clean classical loop", "scripts/run_classical_clean_loop.py"),
+            ("run clean classical loop", "scripts/pipeline/run_classical_clean_loop.py"),
             ("compare classical (spec table)", "src/benchmark/compare_classical.py"),
             ("compare detectors (haar vs yunet)", "src/benchmark/compare_detectors.py"),
-            ("independence thresholds (La Salle DB1)", "scripts/run_independence_thresholds.py"),
-            ("independence thresholds (LFW DB1, gated)", "scripts/run_lfw_independence.py"),
+            ("independence thresholds (La Salle DB1)", "scripts/pipeline/run_independence_thresholds.py"),
+            ("independence thresholds (LFW DB1, gated)", "scripts/pipeline/run_lfw_independence.py"),
             ("TAR@FAR vs LFW impostors", "src/benchmark/tar_at_far.py"),
             ("accuracy ratio (41-mod suite, classical)", "src/benchmark/accuracy_ratio.py"),
             ("accuracy ratio (41-mod, cv vs dl vs cascade)", "src/benchmark/accuracy_ratio_hybrid.py"),
             ("evidence matrix (frozen thresholds, all datasets)", "src/benchmark/evidence_matrix.py"),
-            ("variants: unedited vs compact/upgraded", "scripts/compare_variants.py"),
-            ("config sweep (components x equalization)", "scripts/sweep_classical_configs.py"),
+            ("variants: unedited vs compact/upgraded", "scripts/pipeline/compare_variants.py"),
+            ("config sweep (components x equalization)", "scripts/pipeline/sweep_classical_configs.py"),
             ("aggregate live FPS", "src/benchmark/aggregate_live_fps.py"),
             ("aggregate evaluation reports", "src/benchmark/aggregate_evaluation_reports.py"),
         ],
@@ -90,24 +90,24 @@ MODEL_INFO_CONFIG = {
     # dirs still hold multi-GB deprecated trainer_*.yml files.
     "LBPH": {
         "trained_markers": ["models/lbph/lasalle_clean.yml"],
-        "evaluated_reports": ["reports/evaluation/lbph_eval.json"],
+        "evaluated_reports": ["outputs/evaluation/lbph_eval.json"],
         "size_paths": ["models/lbph/lasalle_clean.yml"],
     },
     "Eigenfaces": {
         "trained_markers": ["models/eigenfaces/lasalle_clean.yml"],
-        "evaluated_reports": ["reports/evaluation/eigenfaces_eval.json"],
+        "evaluated_reports": ["outputs/evaluation/eigenfaces_eval.json"],
         "size_paths": ["models/eigenfaces/lasalle_clean.yml"],
     },
     "Fisherfaces": {
         "trained_markers": ["models/fisherfaces/lasalle_clean.yml"],
-        "evaluated_reports": ["reports/evaluation/fisherfaces_eval.json"],
+        "evaluated_reports": ["outputs/evaluation/fisherfaces_eval.json"],
         "size_paths": ["models/fisherfaces/lasalle_clean.yml"],
     },
     # Hybrid = LBPH fast path + SFace escalation. "Trained" once the SFace gallery
     # exists (enroll); footprint is the deployed DL stack + the LBPH model.
     "Hybrid": {
         "trained_markers": ["models/sface/gallery.npy"],
-        "evaluated_reports": ["reports/evaluation/hybrid_eval.json"],
+        "evaluated_reports": ["outputs/evaluation/hybrid_eval.json"],
         "size_paths": [
             "models/sface/gallery.npy",
             "models/sface/face_recognition_sface_2021dec.onnx",
@@ -124,19 +124,19 @@ MODEL_INFO_CONFIG = {
 
 BENCHMARK_OVERVIEW_CONFIG = {
     "LBPH": {
-        "eval_report": "reports/evaluation/lbph_eval.json",
+        "eval_report": "outputs/evaluation/lbph_eval.json",
         "fps_algorithm": "lbph",
     },
     "Eigenfaces": {
-        "eval_report": "reports/evaluation/eigenfaces_eval.json",
+        "eval_report": "outputs/evaluation/eigenfaces_eval.json",
         "fps_algorithm": "eigenfaces",
     },
     "Fisherfaces": {
-        "eval_report": "reports/evaluation/fisherfaces_eval.json",
+        "eval_report": "outputs/evaluation/fisherfaces_eval.json",
         "fps_algorithm": "fisherfaces",
     },
     "Hybrid": {
-        "eval_report": "reports/evaluation/hybrid_eval.json",
+        "eval_report": "outputs/evaluation/hybrid_eval.json",
         "fps_algorithm": "hybrid",
     },
 }
@@ -445,7 +445,9 @@ def extract_accuracy_percent(report_payload: dict | None) -> float | None:
 
 
 def collect_fps_summary() -> dict[str, float]:
-    aggregate_path = resolve_path("reports/benchmark/live_fps/aggregate_summary.json")
+    aggregate_path = resolve_path("outputs/benchmark/live_fps/aggregate_summary.json")
+    if not aggregate_path.exists():
+        aggregate_path = resolve_path("reports/benchmark/live_fps/aggregate_summary.json")
     aggregate_payload = load_json_if_exists(aggregate_path)
     if aggregate_payload:
         out: dict[str, float] = {}
@@ -460,7 +462,9 @@ def collect_fps_summary() -> dict[str, float]:
         if out:
             return out
 
-    runs_dir = resolve_path("reports/benchmark/live_fps/runs")
+    runs_dir = resolve_path("outputs/benchmark/live_fps/runs")
+    if not runs_dir.exists():
+        runs_dir = resolve_path("reports/benchmark/live_fps/runs")
     if not runs_dir.exists():
         return {}
 
@@ -491,7 +495,9 @@ def collect_fps_summary() -> dict[str, float]:
 
 
 def collect_evaluation_entities() -> list[dict]:
-    reports_dir = resolve_path("reports/evaluation")
+    reports_dir = resolve_path("outputs/evaluation")
+    if not reports_dir.exists() or not list(reports_dir.glob("*.json")):
+        reports_dir = resolve_path("reports/evaluation")
     if not reports_dir.exists():
         return []
 
@@ -1333,10 +1339,10 @@ def prompt_core_dataset_args(is_training: bool, model_name: str = "") -> list[st
     lfw_exists = lfw_dir.is_dir() and any(lfw_dir.iterdir())
 
     print(f"\nSelect base dataset source for {phase_label}:")
-    status_1 = "" if split_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_1 = "" if split_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]"
     status_2 = "" if raw_exists else " [NOT FOUND - raw dataset is local-only]"
-    status_3 = "" if lfw_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
-    status_4 = "" if (raw_exists and lfw_exists) else (" [NOT FOUND - raw local-only]" if not raw_exists else " [NOT FOUND - run scripts/setup_datasets.py]")
+    status_3 = "" if lfw_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]"
+    status_4 = "" if (raw_exists and lfw_exists) else (" [NOT FOUND - raw local-only]" if not raw_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]")
 
     print(f"  1. La Salle CLEAN split (held-out, recommended) -> data/split_lasalle/{{train|test}} [pre-cropped]{status_1}")
     print(f"  2. La Salle raw  -> data/lasalle_db1{status_2}")
@@ -1349,17 +1355,17 @@ def prompt_core_dataset_args(is_training: bool, model_name: str = "") -> list[st
     # Validate choice exists on disk
     if selected == "1" and not split_exists:
         print("\n[WARN] The La Salle CLEAN split directory was not found or is empty.")
-        print("Please run 'python scripts/setup_datasets.py' first to pull it via LFS and fix links.")
+        print("Please run 'python scripts/utils/setup_datasets.py' first to pull it via LFS and fix links.")
     elif selected == "2" and not raw_exists:
         print("\n[WARN] The raw La Salle DB1 dataset (data/lasalle_db1) was not found.")
         print("Since raw images are large and local-only, they are not tracked in Git/LFS.")
         print("Please select Option 1 instead to use the pre-cropped/aligned LFS split.")
     elif selected == "3" and not lfw_exists:
         print("\n[WARN] The LFW dataset (data/lfw-dataset) was not found or is empty.")
-        print("Please run 'python scripts/setup_datasets.py' first to download and extract LFW.")
+        print("Please run 'python scripts/utils/setup_datasets.py' first to download and extract LFW.")
     elif selected == "4" and (not raw_exists or not lfw_exists):
         print(f"\n[WARN] One or both datasets are missing (La Salle raw: {raw_exists}, LFW: {lfw_exists}).")
-        print("Please run 'python scripts/setup_datasets.py' to download LFW, or use Option 1.")
+        print("Please run 'python scripts/utils/setup_datasets.py' to download LFW, or use Option 1.")
 
     # Option 1: the clean leakage-free held-out La Salle split (pre-cropped 100x100
     # faces). Train on /train, evaluate on the held-out /test, no Haar / no fallback.
@@ -1527,10 +1533,10 @@ def prompt_independence_dataset_args() -> list[str]:
     split_aug_exists = split_aug_dir.is_dir() and any(split_aug_dir.iterdir())
 
     print("\nSelect dataset for independence test:")
-    status_1 = "" if processed_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
-    status_2 = "" if lsdb2_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
-    status_3 = "" if lfw_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
-    status_4 = "" if split_aug_exists else " [NOT FOUND - run scripts/setup_datasets.py]"
+    status_1 = "" if processed_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]"
+    status_2 = "" if lsdb2_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]"
+    status_3 = "" if lfw_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]"
+    status_4 = "" if split_aug_exists else " [NOT FOUND - run scripts/utils/setup_datasets.py]"
 
     print(f"  1. La Salle DB1          -> data/lasalle_db1_processed{status_1}")
     print(f"  2. LSDB2 (DB1 augmented) -> data/split_augmented41mods_lasalle_clean/{{light|medium}}/train{status_2}")
@@ -1541,13 +1547,13 @@ def prompt_independence_dataset_args() -> list[str]:
         selected = "1"
 
     if selected == "1" and not processed_exists:
-        print("\n[WARN] Processed dataset directory was not found or is empty. Please run scripts/setup_datasets.py.")
+        print("\n[WARN] Processed dataset directory was not found or is empty. Please run scripts/utils/setup_datasets.py.")
     elif selected == "2" and not lsdb2_exists:
-        print("\n[WARN] LSDB2 augmented directory was not found or is empty. Please run scripts/setup_datasets.py.")
+        print("\n[WARN] LSDB2 augmented directory was not found or is empty. Please run scripts/utils/setup_datasets.py.")
     elif selected == "3" and not lfw_exists:
-        print("\n[WARN] LFW dataset directory was not found or is empty. Please run scripts/setup_datasets.py.")
+        print("\n[WARN] LFW dataset directory was not found or is empty. Please run scripts/utils/setup_datasets.py.")
     elif selected == "4" and not split_aug_exists:
-        print("\n[WARN] LFW2 augmented directory was not found or is empty. Please run scripts/setup_datasets.py.")
+        print("\n[WARN] LFW2 augmented directory was not found or is empty. Please run scripts/utils/setup_datasets.py.")
 
     def _prompt_severity() -> str:
         severity = input("  Severity [1=light, 2=medium] (default: 1): ").strip()

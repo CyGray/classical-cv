@@ -52,7 +52,7 @@ Run augment_split_light_medium.py --split-root data/split_lasalle --output-root 
 
 Phase 6 — Spec comparison table + orchestration script
 src/benchmark/compare_classical.py (replaces the broken compare_models.py use): reads the three latest *_eval.json for the clean entity + FPS from reports/benchmark/live_fps/aggregate_summary.json + footprint, and writes reports/benchmark/classical_comparison.{json,md}. Columns mapped to the spec (docs/READ THIS/BRIEFING.md §6): Model | Hit-rate (held-out) | Best-sweep acc | Model size | Feature size | <1 KB? | Live FPS | ≥30 fps? | Verdict. Notes section records that TAR@FAR/FRR need impostors (independence test, the separate 7/15 deliverable) and that the FPS bottleneck is shared Haar detection.
-scripts/run_classical_clean_loop.py — one command: (optional) regenerate aug → train all three (baseline + aug) on split_lasalle/train → eval all three on split_lasalle/test → run compare_classical.py. Reuses main.py:get_python_command() style subprocess invocation.
+scripts/pipeline/run_classical_clean_loop.py — one command: (optional) regenerate aug → train all three (baseline + aug) on split_lasalle/train → eval all three on split_lasalle/test → run compare_classical.py. Reuses main.py:get_python_command() style subprocess invocation.
 Phase 7 — Launcher wiring (main.py)
 Add a dataset-source option in prompt_core_dataset_args for "La Salle clean split (held-out)" that sets --base-data-dir data/split_lasalle, --raw-dir-name train (train) / test (eval), and the --assume-cropped flag — making the menu loop leakage-free by default.
 Add a Benchmark action "compare classical (spec table)" → compare_classical.py; retire the broken compare_models.py menu entry.
@@ -60,13 +60,13 @@ Phase 8 — Cleanup
 Delete dead src/classical_faces/common.py (superseded). Remove the now-unused duplicated helpers from the six pipeline files. Drop the ignored --assume-processed-are-cropped no-op in favor of the real --assume-cropped. Refresh docs/changelogs/CHANGELOG.md.
 
 Critical files
-New: src/classical_faces/{preprocess,datasets,pipeline}.py, src/benchmark/compare_classical.py, scripts/run_classical_clean_loop.py.
+New: src/classical_faces/{preprocess,datasets,pipeline}.py, src/benchmark/compare_classical.py, scripts/pipeline/run_classical_clean_loop.py.
 Rewrite (thin): src/{lbph,eigenfaces,fisherfaces}/{trainer,evaluate}.py.
 Edit: src/lbph/preprocess.py (→ shim), src/{eigenfaces,fisherfaces}/detect.py (preprocessing), main.py (clean-split option + benchmark action), src/benchmark/aggregate_evaluation_reports.py (read unified hit_rate_percent).
 Reuse as-is: src/reporting/identity.py, src/dataset_layout.py, augment_split_light_medium.py, src/lbph/detect.py (reference live loop).
 Verification (end-to-end)
 Unit smoke: python -c "from src.classical_faces.pipeline import run_training" imports clean; the src.lbph.preprocess shim still exports extract_lbph_face, normalize_face, etc. (independence + detect scripts import OK).
-Clean loop, all three via scripts/run_classical_clean_loop.py (or python main.py → each model → train → evaluate using the new clean-split option). Confirm in each report: dataset_profile.label mentions split=train/test + La Salle, known_total==evaluated, unknown_total==0, detection/fallback counts show no full-image fallback, and a plausible held-out hit_rate_percent (a real number, not 100% and not 0%).
+Clean loop, all three via scripts/pipeline/run_classical_clean_loop.py (or python main.py → each model → train → evaluate using the new clean-split option). Confirm in each report: dataset_profile.label mentions split=train/test + La Salle, known_total==evaluated, unknown_total==0, detection/fallback counts show no full-image fallback, and a plausible held-out hit_rate_percent (a real number, not 100% and not 0%).
 No leakage: assert train and test image sets are disjoint for all 28 ids (filename check, as in the audit) and that eval never reads an augmented folder.
 Comparison table: compare_classical.py writes reports/benchmark/classical_comparison.md with all three rows, model/feature sizes, and spec verdicts; sanity-check LBPH feature ≈ 64 KB (fails <1 KB), Eigen/Fisher < 1 KB.
 Live (manual): run one detect.py per model against a webcam; confirm it loads the clean-split model, recognizes a trained identity, and appends an FPS summary that the table then picks up.

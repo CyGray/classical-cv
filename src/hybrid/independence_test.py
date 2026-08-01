@@ -46,6 +46,7 @@ import hashlib
 import json
 import os
 import random
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -310,6 +311,35 @@ def load_probes(
     return probes
 
 
+# --------------------------------------------------------------------------- #
+# Multiprocess LBPH sweep - predict_collect() is the dominant cost (one native
+# call per query row, each O(N) inside OpenCV's C++) and every row is
+# independent (no shared mutable state), so it parallelizes cleanly across
+# worker processes. Each worker trains its own recognizer once via the pool
+# initializer (cheap, O(N)) then serves per-row predict requests for the life
+# of the pool - avoids re-sending the N-image training set on every task.
+# --------------------------------------------------------------------------- #
+_worker_recognizer = None
+
+
+def _lbph_pool_init(lbph_faces: list[np.ndarray]) -> None:
+    global _worker_recognizer
+    rec = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    rec.train(lbph_faces, np.arange(len(lbph_faces), dtype=np.int32))
+    _worker_recognizer = rec
+
+
+def _lbph_pool_predict_rows(
+    rows: list[tuple[int, np.ndarray]]
+) -> list[tuple[int, list[tuple[int, float]]]]:
+    out = []
+    for row_idx, face in rows:
+        collector = cv.face.StandardCollector_create()
+        _worker_recognizer.predict_collect(face, collector)
+        out.append((row_idx, collector.getResults(True)))
+    return out
+
+
 def run_sweep(
     probes: list[ProbeData],
     sface: SFaceRecognizer,
@@ -342,18 +372,38 @@ def run_sweep(
     names = [p.person for p in probes]
     image_paths = [p.image_path for p in probes]
 
-    # -- LBPH: train once on ALL N tiles, then predict_collect per query row --
-    recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
-    recognizer.train([p.lbph_face for p in probes], np.arange(n, dtype=np.int32))
+    # -- LBPH: train once (per worker), then predict_collect per query row,
+    # spread across processes (each row is O(N) inside OpenCV C++ and
+    # independent of every other row - this is the sweep's dominant cost).
     lbph_dist = np.full((seg_len, n), np.inf, dtype=np.float64)
-    for row, i in enumerate(range(seg_start, seg_end)):
-        collector = cv.face.StandardCollector_create()
-        recognizer.predict_collect(probes[i].lbph_face, collector)
-        for label, dist in collector.getResults(True):
-            label = int(label)
-            d = float(dist)
-            if d < lbph_dist[row, label]:
-                lbph_dist[row, label] = d
+    lbph_faces_all = [p.lbph_face for p in probes]
+    n_workers = max(1, min(os.cpu_count() or 1, seg_len))
+    if n_workers > 1:
+        query_rows = [(i, lbph_faces_all[i]) for i in range(seg_start, seg_end)]
+        chunk_size = max(1, -(-len(query_rows) // (n_workers * 4)))
+        chunks = [query_rows[k:k + chunk_size] for k in range(0, len(query_rows), chunk_size)]
+        with ProcessPoolExecutor(
+            max_workers=n_workers, initializer=_lbph_pool_init, initargs=(lbph_faces_all,)
+        ) as pool:
+            for chunk_result in pool.map(_lbph_pool_predict_rows, chunks):
+                for i, results in chunk_result:
+                    row = i - seg_start
+                    for label, dist in results:
+                        label = int(label)
+                        d = float(dist)
+                        if d < lbph_dist[row, label]:
+                            lbph_dist[row, label] = d
+    else:
+        recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+        recognizer.train(lbph_faces_all, np.arange(n, dtype=np.int32))
+        for row, i in enumerate(range(seg_start, seg_end)):
+            collector = cv.face.StandardCollector_create()
+            recognizer.predict_collect(probes[i].lbph_face, collector)
+            for label, dist in collector.getResults(True):
+                label = int(label)
+                d = float(dist)
+                if d < lbph_dist[row, label]:
+                    lbph_dist[row, label] = d
 
     # -- SFace: vectorised cosine + L2 (same rule as src/sface/independence_test.py) --
     feats = np.concatenate([p.sface_feature for p in probes], axis=0).astype(np.float32)
@@ -588,10 +638,50 @@ def save_aggregated_csv(aggregated: dict, path: str) -> None:
     print(f"[SAVE] CSV: {path}")
 
 
+def _cos_dist_report_to_l2(report: dict) -> dict:
+    """sface_rank_report's raw_threshold is on the ``1 - cosine`` scale (see
+    main()'s ``sface_pairs = _top_pairs(1.0 - cosine, ...)``). L2 and cosine
+    are a fixed monotonic pair for unit vectors (``l2 = sqrt(2 - 2*cos)``, so
+    ``l2 = sqrt(2 * (1 - cos))``), which is what the deployed gate and
+    ``l2_genuine`` actually use - convert so the L2 plots' threshold line
+    lands on the right axis instead of silently plotting a cosine-distance
+    number under an L2 label."""
+
+    def conv(entry: dict | None) -> dict | None:
+        if entry is None:
+            return None
+        out = dict(entry)
+        out["raw_threshold"] = float(np.sqrt(2.0 * entry["raw_threshold"]))
+        return out
+
+    return {
+        **report,
+        "spec": conv(report.get("spec")),
+        "curve": [conv(e) for e in report.get("curve", [])],
+    }
+
+
+# Histograms/KDE curves only need a representative sample, not literally
+# every ordered comparison - on full LFW1 (33M) passing the raw arrays
+# straight through does 2x redundant O(points * n) KDE passes per engine
+# (histogram + curve plot each recompute it) and was enough to OOM. Cap at
+# 2M, seeded for reproducibility; below the cap this is a no-op copy.
+PLOT_SAMPLE_CAP = 2_000_000
+
+
+def _plot_sample(values: np.ndarray, cap: int = PLOT_SAMPLE_CAP, seed: int = 42) -> np.ndarray:
+    values = np.asarray(values, dtype=np.float64)
+    if values.size <= cap:
+        return values
+    rng = np.random.default_rng(seed)
+    return rng.choice(values, size=cap, replace=False)
+
+
 def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_rank_report: dict) -> dict:
     """Write the plots."""
-    lbph_distances = aggregated["mean_lbph_distance"]
-    sface_distances = 1.0 - np.asarray(aggregated["mean_sface_cosine"], dtype=np.float64)
+    lbph_distances = _plot_sample(aggregated["mean_lbph_distance"])
+    sface_distances = _plot_sample(np.asarray(aggregated["mean_sface_l2"], dtype=np.float64))
+    sface_rank_report_l2 = _cos_dist_report_to_l2(sface_rank_report)
 
     # 2. Write the plots
     # Filenames are prefixed with "<output_dir_basename>_<engine>" so they stay
@@ -629,22 +719,22 @@ def _write_hybrid_plots(args, aggregated: dict, lbph_rank_report: dict, sface_ra
     save_distance_histogram(
         sface_distances,
         os.path.join(sface_dir, f"{sface_prefix}_distance_histogram.png"),
-        threshold=sface_rank_report["spec"]["raw_threshold"],
+        threshold=sface_rank_report_l2["spec"]["raw_threshold"],
         title="Hybrid Test (SFace): Inter-Identity Distance Histogram",
-        xlabel="Cosine distance (Raw)",
-        far_percent=sface_rank_report["spec"].get("realized_far_percent"),
+        xlabel="L2 distance (Raw)",
+        far_percent=sface_rank_report_l2["spec"].get("realized_far_percent"),
     )
     save_distance_curve_plot(
         sface_distances,
         os.path.join(sface_dir, f"{sface_prefix}_distance_curve_plot.png"),
-        threshold=sface_rank_report["spec"]["raw_threshold"],
+        threshold=sface_rank_report_l2["spec"]["raw_threshold"],
         title="Hybrid Test (SFace): Inter-Identity Distance Curve",
-        xlabel="Cosine distance (Raw)",
+        xlabel="L2 distance (Raw)",
     )
     save_far_curve(
-        sface_rank_report,
+        sface_rank_report_l2,
         os.path.join(sface_dir, f"{sface_prefix}_far_curve.png"),
-        model_label="Hybrid", engine_label="SFace",
+        model_label="Hybrid", engine_label="SFace (L2)",
     )
 
     return {
@@ -882,21 +972,52 @@ def main() -> int:
             for i in idx
         ]
 
-    # For LFW, 10000 ppm of 33M is ~330k pairs. Taking top 500k is safe.
-    top_k = min(comparisons, 500000)
+    # Unidirectional: run_sweep still scores every ordered (i, j) pair (the
+    # cascade gate needs each probe's full nearest-neighbor row over ALL other
+    # identities, so that part can't be halved - see AGENTS.md/skill-map note).
+    # But LBPH/SFace raw distances are symmetric (d(i,j) == d(j,i)), so the
+    # ordered array holds each impostor pair twice. For the rank-based FAR/
+    # threshold report - the thing tau_accept/tau_reject/l2_genuine come from -
+    # keep only the upper triangle (query_idx < candidate_idx) so every unique
+    # pair is counted once, matching the same unidirectional convention used
+    # for the frozen LBPH-only tau_accept (rank-165 unidirectional unique pair).
+    qi_all = aggregated["query_idx"]
+    cj_all = aggregated["candidate_idx"]
+    uni_mask = qi_all < cj_all
+    unique_comparisons = int(uni_mask.sum())
+    assert unique_comparisons == comparisons // 2, (
+        f"expected exactly half of ordered pairs to survive the i<j filter "
+        f"(comparisons={comparisons}, kept={unique_comparisons}) - a non-symmetric "
+        f"distance would silently corrupt the unidirectional rank report"
+    )
+    print(f"[INFO] Unidirectional unique pairs: {unique_comparisons} "
+          f"(of {comparisons} ordered)")
+
+    top_k = min(unique_comparisons, 500000)
     lbph_pairs = _top_pairs(
-        aggregated["mean_lbph_distance"], aggregated["names"],
-        aggregated["query_idx"], aggregated["candidate_idx"], top_k
+        aggregated["mean_lbph_distance"][uni_mask], aggregated["names"],
+        qi_all[uni_mask], cj_all[uni_mask], top_k
     )
     sface_pairs = _top_pairs(
-        1.0 - aggregated["mean_sface_cosine"], aggregated["names"],
-        aggregated["query_idx"], aggregated["candidate_idx"], top_k
+        1.0 - aggregated["mean_sface_cosine"][uni_mask], aggregated["names"],
+        qi_all[uni_mask], cj_all[uni_mask], top_k
     )
 
     lbph_rank_report = error_pair_report(
         lbph_pairs, target_far_ppm=args.target_far_ppm, explicit_rank=args.error_pair_rank)
     sface_rank_report = error_pair_report(
         sface_pairs, target_far_ppm=args.target_far_ppm, explicit_rank=args.error_pair_rank)
+    if top_k < unique_comparisons:
+        # error_pair_report's FAR%/rank math is computed against len(records) -
+        # i.e. against top_k, not the true unique_comparisons - so anything
+        # beyond the top-500k pool silently underreports FAR by unique_comparisons
+        # / top_k. Ranks up to top_k are unaffected; flag it instead of
+        # miscomputing quietly further downstream (docs/READ THIS notes this too).
+        print(f"[WARN] unique_comparisons ({unique_comparisons}) exceeds the "
+              f"{top_k}-pair rank-report pool - realized_far_ppm in "
+              f"lbph_rank_thresholds/sface_rank_thresholds is only valid for "
+              f"ranks <= {top_k}; recompute FAR = rank / {unique_comparisons} "
+              f"manually for anything reported from this run.")
 
 
     overlap_ratios = [
@@ -963,7 +1084,8 @@ def main() -> int:
             "path": selection_manifest_path, "sha256": selection_manifest_sha256,
         }
 
-    summary["plots"] = _write_hybrid_plots(args, aggregated, lbph_rank_report, sface_rank_report)
+    if args.plots:
+        summary["plots"] = _write_hybrid_plots(args, aggregated, lbph_rank_report, sface_rank_report)
 
     save_aggregated_csv(aggregated, os.path.join(args.output_dir, "comparisons.csv"))
     json_path = os.path.join(args.output_dir, "summary.json")

@@ -4,7 +4,7 @@
 # generated FROM this + a scan of reports/, never edited by hand).
 #
 # Schema: docs/ui/DESIGN.md §7.1. Every artifact_path must be a real repo-relative
-# path — scripts/build_study_manifest.py hard-fails (non-zero exit) if one is missing,
+# path — scripts/utils/build_study_manifest.py hard-fails (non-zero exit) if one is missing,
 # by design, so a typo is caught immediately rather than rendering "done" for nothing.
 
 updated: "2026-07-13"

@@ -6,7 +6,7 @@
   "iterations": 1,
   "segment_count": 2,
   "variants": ["motion_blur:5"],
-  "_comment": "Dry-run assignments for scripts/lfw2_worker.py verification only (docs/BATCH_WORK/DESIGN.md sec 12.5). Not a real campaign.",
+  "_comment": "Dry-run assignments for scripts/pipeline/lfw2_worker.py verification only (docs/BATCH_WORK/DESIGN.md sec 12.5). Not a real campaign.",
   "units": {
     "dryrun_member": [["motion_blur:5", 1], ["motion_blur:5", 2]]
   }

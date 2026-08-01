@@ -1,7 +1,7 @@
 {
   "_note": "Deployed hybrid config derived by src/hybrid/calibrate.py. Values are measured-now or carried-with-provenance; see 'provenance'. gate.tau_accept and sface.l2_genuine are FROZEN, see docs/READ_THIS.md.",
   "gate": {
-    "tau_accept": 70.6089,
+    "tau_accept": 67.0084,
     "tau_reject": 76.85,
     "margin_min": 0.05
   },
@@ -19,7 +19,7 @@
       0.0
     ],
     [
-      70.6089,
+      67.0084,
       0.0001
     ],
     [
@@ -33,17 +33,17 @@
   ],
   "sface": {
     "cosine_genuine": 0.363,
-    "l2_genuine": 1.106796,
+    "l2_genuine": 1.018,
     "cosine_operating": 0.4144,
     "cosine_operating_1pct": 0.2883
   },
   "provenance": {
-    "gate.tau_accept": "frozen: LS-DB1 rank-8 impostor distance, reports/independence/hybrid/lsdb1_fixed (see docs/READ_THIS.md)",
+    "gate.tau_accept": "frozen 2026-07-28: LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR, native cv.face.LBPHFaceRecognizer.predict_collect() scale), reports/independence/lbph_lfw1/native_predict_scale.json. Replaces the LS-DB1-derived 70.6089 (docs/audits/STATE-07-28.md) - deviates from the AGENTS.md 'LS-DB1 frozen, LFW diagnostic-only' protocol; see that audit note.",
     "gate.tau_reject": "carried: reports/benchmark/tar_at_far.md (LBPH vs 13,149 LFW impostors), ~1% FAR",
     "gate.margin_min": "policy: relative top1-top2 gap 0.05 (not dataset-fitted; train margins are inflated by memorisation, test-fitting would leak)",
     "quality.*": "measured: clean-crop probe distribution edges (train); DB2 41-mod LBPH<->SFace crossover refinement deferred to Phase 6.4",
     "sface.cosine_operating": "measured: SFaceFarModel.cosine_at_far(1e-04) over impostors-lfw.npy",
-    "sface.l2_genuine": "frozen: hardcoded 1.106796 (see docs/READ_THIS.md)"
+    "sface.l2_genuine": "frozen 2026-07-28: 1.018, supplied by the SFace sub-team (not re-derived here - see docs/audits/STATE-07-28.md). Replaces hardcoded 1.106796."
   },
   "calibration_stats": {
     "lbph_margin": {

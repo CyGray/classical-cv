@@ -1,6 +1,6 @@
 import csv
 
-with open('reports/independence/hybrid/lsdb1_fixed/_raw_runs/run_1/comparisons.csv', 'r') as f:
+with open('outputs/independence/hybrid/lsdb1_fixed/_raw_runs/run_1/comparisons.csv', 'r') as f:
     reader = csv.DictReader(f)
     rows = list(reader)
 

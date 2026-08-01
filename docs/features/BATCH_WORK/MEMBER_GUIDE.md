@@ -28,7 +28,7 @@ checks these on every run and refuses to continue if they don't match.
 ## 3. Run your batch
 
 ```
-python scripts/lfw2_worker.py --member <your_name>
+python scripts/pipeline/lfw2_worker.py --member <your_name>
 ```
 
 Replace `<your_name>` with the name Kyle gave you (must match a key in

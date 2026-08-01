@@ -63,7 +63,7 @@ scripts/
   run_*.py, make_*_figures.py, …  # Orchestration & figure scripts
 data/
   lasalle_db1_processed/            # Cropped/aligned La Salle images (LFS)
-  split_lasalle/                    # La Salle train/test split (junction - see scripts/setup_datasets.py)
+  split_lasalle/                    # La Salle train/test split (junction - see scripts/utils/setup_datasets.py)
   split_lfw/                        # LFW split (junction)
   split_augmented41mods_lasalle_clean/, split_augmented41mods_lfw/   # 41-mod suites
 models/                     # Trained artifacts (paper-essential ones tracked)
@@ -73,7 +73,7 @@ reports/
   benchmark/                # (generated, gitignored) aggregated comparison reports
   independence/             # Independence test results (tracked, per model x dataset)
   independence_failure_check/  # (generated, gitignored) failure-analysis outputs
-  figures/                  # Paper figures + METRICS.md (tracked; built by scripts/make_report_figures.py
+  figures/                  # Paper figures + METRICS.md (tracked; built by scripts/reporting/make_report_figures.py
                              #   from reports/benchmark/*.json, which are gitignored - METRICS.md is
                              #   committed but not regenerable from a fresh clone until those runs are
                              #   re-executed, or the source JSONs are committed)
@@ -93,7 +93,7 @@ Each classical pipeline has the same scripts: `trainer.py`, `evaluate.py`, `dete
 
 - **La Salle (`lasalle_db1`)** — primary dataset; processed (cropped/aligned) variant only
 - **LFW** — supplementary; processed only
-- **Augmented splits** — generated via `scripts/augment_split_light_medium.py`; `light` and `medium` augmentation tiers applied to train/test splits
+- **Augmented splits** — generated via `scripts/utils/augment_split_light_medium.py`; `light` and `medium` augmentation tiers applied to train/test splits
 
 The launcher guides dataset selection interactively. Evaluation reports embed a `dataset_profile` so cross-dataset runs are never mixed.
 

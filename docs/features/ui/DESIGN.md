@@ -85,7 +85,7 @@ Grounded in what's actually on disk right now, not a hypothetical:
                  │   ├── Forms tab     → subprocess → src/*   │
                  │   └── reads reports/, docs/, models/ live  │
                  │                                             │
-                 │   scripts/build_study_manifest.py          │
+                 │   scripts/utils/build_study_manifest.py          │
                  │   reads reports/ + docs/ui/study_status.yml│
                  │   writes ui/dashboard/data/manifest.json   │
                  └───────────────────┬─────────────────────────┘
@@ -357,7 +357,7 @@ verified false, not verified true. Rather than gamble the whole dashboard on an
 unconfirmed checkbox, the fix adopted here removes the dependency entirely:
 
 **Fix: make the dashboard self-contained inside its own Root Directory.**
-`scripts/build_study_manifest.py` (§7) is extended beyond just writing
+`scripts/utils/build_study_manifest.py` (§7) is extended beyond just writing
 `manifest.json` — it also **copies** (not symlinks; Windows/Termux-hostile) the exact
 set of files the dashboard needs into `ui/dashboard/`:
 - `docs/**/*.md` (incl. `docs/READ THIS/*.md`, `docs/reports/*.md`, `docs/changelogs/*.md`,
@@ -404,13 +404,13 @@ page or a static-JSON fetch resolved at build time, consistent with §1 decision
 ```
 docs/ui/study_status.yml          (hand-maintained: the source of truth)
         │
-        ▼  scripts/build_study_manifest.py
+        ▼  scripts/utils/build_study_manifest.py
         │  (reads the yml + scans reports/ for artifact paths/dates)
         ▼
 ui/dashboard/data/manifest.json   (generated, committed, small)
 ```
 
-Run manually for now (`python scripts/build_study_manifest.py`); could become a button
+Run manually for now (`python scripts/utils/build_study_manifest.py`); could become a button
 in the console (§5) or a `main.py` menu action later, but isn't required for v1.
 
 **A concrete blocker found while writing this doc, not a hypothetical one:**
@@ -538,7 +538,7 @@ headline_finding:
 
 ### 7.2 `ui/dashboard/data/manifest.json` — generated output schema
 
-Written by `scripts/build_study_manifest.py`. Next.js reads this at build time (or,
+Written by `scripts/utils/build_study_manifest.py`. Next.js reads this at build time (or,
 once copied per §6.5's monorepo fix below, from inside its own Root Directory). It is
 `study_status.yml`'s content **plus** mechanical facts the script derives by scanning
 `reports/` (the "supplementary artifact inventory" §6.1 mentions) — never judgment

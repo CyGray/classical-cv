@@ -5,7 +5,7 @@ def main():
     print("Calculating distances for all cross-identity pairs...\n")
     print("Initiating N x (N-1) Independence Test (FP)...")
     
-    csv_path = 'reports/independence/hybrid/lsdb1_fixed/_raw_runs/run_1/comparisons.csv'
+    csv_path = 'outputs/independence/hybrid/lsdb1_fixed/_raw_runs/run_1/comparisons.csv'
     
     with open(csv_path, 'r') as f:
         reader = csv.DictReader(f)

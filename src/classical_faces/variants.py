@@ -1,7 +1,7 @@
 """Optional/backup variant matchers for the classical recognizers.
 
 These do NOT replace the deployed OpenCV recognizers - they are opt-in
-alternatives benchmarked side by side (``scripts/compare_variants.py``):
+alternatives benchmarked side by side (``scripts/pipeline/compare_variants.py``):
 
 * **CompactLBPH** - implements ``docs/archive/SUGGESTION.md`` ("focus only on the
   specific features like eyes, eyebrow, nose, and mouth" / keep only the

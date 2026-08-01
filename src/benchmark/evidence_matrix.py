@@ -48,7 +48,7 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_THRESHOLDS = PROJECT_ROOT / "src" / "hybrid" / "thresholds.json"
-OUT_JSON = PROJECT_ROOT / "reports" / "benchmark" / "evidence_matrix.json"
+OUT_JSON = PROJECT_ROOT / "outputs" / "benchmark" / "evidence_matrix.json"
 OUT_MD = PROJECT_ROOT / "reports" / "benchmark" / "evidence_matrix.md"
 
 
@@ -65,7 +65,7 @@ class Leg:
     def output_json(self) -> Path:
         if self.kind == "independence":
             return PROJECT_ROOT / "outputs" / "hybrid" / "independence_test" / self.name / "summary.json"
-        return PROJECT_ROOT / "reports" / "benchmark" / "evidence" / f"{self.name}.json"
+        return PROJECT_ROOT / "outputs" / "benchmark" / "evidence" / f"{self.name}.json"
 
     def command(self, thresholds: Path) -> list[str]:
         if self.kind == "independence":

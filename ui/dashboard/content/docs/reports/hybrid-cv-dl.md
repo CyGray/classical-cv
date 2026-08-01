@@ -317,7 +317,7 @@ python src/benchmark/compare_hybrid.py \
     --test-dir data/split_augmented41mods_lasalle_clean/medium/test \
     --report-md reports/benchmark/hybrid_comparison_degraded.md \
     --report-json reports/benchmark/hybrid_comparison_degraded.json
-python scripts/make_hybrid_report_figures.py     # regenerate docs/figures/*.png
+python scripts/reporting/make_hybrid_report_figures.py     # regenerate docs/figures/*.png
 # or just: python main.py  ->  Hybrid
 ```
 
@@ -349,7 +349,7 @@ python scripts/make_hybrid_report_figures.py     # regenerate docs/figures/*.png
 **New code:** `src/sface/{__init__,recognizer,independence_test}.py`,
 `src/hybrid/{__init__,recognizer,quality,gate,calibrate,evaluate,enroll,detect}.py`,
 `src/hybrid/thresholds.json`, `src/benchmark/compare_hybrid.py`,
-`scripts/make_hybrid_report_figures.py`. **Edited (additive):** `main.py`
+`scripts/reporting/make_hybrid_report_figures.py`. **Edited (additive):** `main.py`
 (Hybrid group + overview + FPS), `docs/changelogs/CHANGELOG.md`.
 
 **Vendored:** `models/yunet/face_detection_yunet_2023mar.onnx`

@@ -21,7 +21,7 @@ no server, no API, nothing runs from the public URL.
 # 1. Edit the hand-maintained source of truth when a run finishes or the paper changes:
 #    docs/ui/study_status.yml
 # 2. Regenerate the manifest + copy docs/figures/results into the dashboard:
-python scripts/build_study_manifest.py
+python scripts/utils/build_study_manifest.py
 # 3. Preview:
 cd ui/dashboard
 npm install        # first time only

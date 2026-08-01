@@ -147,7 +147,7 @@ the spec's own instruction to leave concurrent uncommitted work alone.
 - `src/benchmark/tar_at_far.py:operating_point()`: now also returns
   `n_genuine`, `genuine_correct`, `n_impostor`, `impostor_accepted` (raw
   counts, not just percentages) so CIs are computable downstream.
-- `scripts/make_report_figures.py`: added `fmt_with_ci()` (wraps
+- `scripts/reporting/make_report_figures.py`: added `fmt_with_ci()` (wraps
   `src.stats_utils.wilson_interval_percent`); Table 1's TAR/FRR cells now
   render as `98.21% [90.6-99.7]`.
 - Hand-inserted the matching CIs into the **committed** tables (the source
@@ -174,7 +174,7 @@ the spec's own instruction to leave concurrent uncommitted work alone.
   `normalized_distance` per pair inside `all_runs_records` (previously
   raw-only), writes `random_seed_base` into `summary.json`, and adds a
   `per_run_thresholds` block using the same `k` as the published spec.
-- New script `scripts/per_run_thresholds.py`: backfills the stability numbers
+- New script `scripts/archive/per_run_thresholds.py`: backfills the stability numbers
   from the **already-committed** `_raw_runs/run_*/comparisons.csv` — no
   re-running the N×(N-1) sweep. Documents an honest limitation: those
   committed CSVs only store `distance_normalized`, not `raw_distance`, so the
@@ -202,7 +202,7 @@ the spec's own instruction to leave concurrent uncommitted work alone.
 ### B3. EER computation
 - Discovered mid-implementation that an EER function (`equal_error_rate` in
   `src/benchmark/tar_at_far.py`) **already existed** since the initial commit
-  and was already wired into `scripts/sweep_classical_configs.py`'s table —
+  and was already wired into `scripts/pipeline/sweep_classical_configs.py`'s table —
   the spec's audit claim ("no EER anywhere") was an audit miss, not
   something I needed to build from scratch for that path.
 - What was genuinely missing: the per-model evaluation JSON path
@@ -268,8 +268,8 @@ src/benchmark/tar_at_far.py
 src/lbph/independence_test.py
 src/eigenfaces/independence_test.py
 src/fisherfaces/independence_test.py
-scripts/make_report_figures.py
-scripts/per_run_thresholds.py   (new)
+scripts/reporting/make_report_figures.py
+scripts/archive/per_run_thresholds.py   (new)
 reports/figures/METRICS.md
 reports/independence/lbph_lasalle/*   (reverted to committed state, A1)
 test_venv/   (deleted)

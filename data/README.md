@@ -37,5 +37,5 @@ data/
 
 ## Recreating the Splits
 The dataset splits and augmentations are created using orchestrator scripts located in `scripts/`:
-* Run `python scripts/setup_datasets.py` to organize the basic database structures.
-* Run `python scripts/augment_split_light_medium.py` to generate the light/medium robustness tiers.
+* Run `python scripts/utils/setup_datasets.py` to organize the basic database structures.
+* Run `python scripts/utils/augment_split_light_medium.py` to generate the light/medium robustness tiers.

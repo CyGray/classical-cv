@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     )
     p.add_argument(
         "--report-json",
-        default=str(PROJECT_ROOT / "reports" / "independence" / "sface_lfw_parity.json"),
+        default=str(PROJECT_ROOT / "outputs" / "independence" / "sface_lfw_parity.json"),
     )
     return p.parse_args()
 

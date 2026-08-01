@@ -256,7 +256,7 @@ become measured numbers.
 - [ ] **LBPH gate edges** from LBPH independence vs LFW impostors:
       `tau_accept` = 100 ppm FAR (≈ **73.04**), `tau_reject` = band edge ≈ 1% FAR
       (≈ **76.85**). Reuse `src/independence_common.py` +
-      `scripts/run_lfw_independence.py`.
+      `scripts/pipeline/run_lfw_independence.py`.
 - [ ] **SFace operating threshold** at the **same FAR budget**, from the SFace
       impostor distribution (Phase 2.3).
 - [ ] **Quality-probe thresholds** via measured crossover on the La Salle DB2
@@ -411,7 +411,7 @@ The system is "ready to be integrated into the Pi 5" when **all** of these hold:
 
 **Reuse as-is**
 - [ ] `src/classical_faces/detection.py` — YuNet backend, `create_face_detector`
-- [ ] `src/independence_common.py` + `scripts/run_lfw_independence.py` — threshold calibration
+- [ ] `src/independence_common.py` + `scripts/pipeline/run_lfw_independence.py` — threshold calibration
 - [ ] `src/benchmark/{tar_at_far,accuracy_ratio,compare_detectors}.py` — eval machinery
 - [ ] `src/arcface_mobilenet_int8/quantize_model.py` — INT8 recipe
 - [ ] `face-detection-g3-dl/{dnn,feature-extract,loader,ldb2-independence}.py` + `features-*.npy` — SFace reference & impostor data

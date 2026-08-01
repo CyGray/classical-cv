@@ -67,7 +67,7 @@ def parse_args() -> argparse.Namespace:
                         help="Also use data/split_lasalle/train originals (literal DB2 scheme, "
                              "280x41; optimistic for identification - gallery saw the originals).")
     parser.add_argument("--train-dir", default="data/split_lasalle/train")
-    parser.add_argument("--tar-at-far-json", default="reports/benchmark/tar_at_far.json",
+    parser.add_argument("--tar-at-far-json", default="outputs/benchmark/tar_at_far.json",
                         help="Source of the deployable threshold per family.")
     parser.add_argument("--at-far-percent", type=float, default=1.058,
                         help="Which TAR@FAR operating point's threshold to use (target FAR %%).")
@@ -76,7 +76,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--save-samples-dir", default="",
                         help="Optional: dump one modified example per (mod, level) here.")
-    parser.add_argument("--output-json", default="reports/benchmark/accuracy_ratio.json")
+    parser.add_argument("--output-json", default="outputs/benchmark/accuracy_ratio.json")
     parser.add_argument("--output-md", default="reports/benchmark/accuracy_ratio.md")
     return parser.parse_args()
 

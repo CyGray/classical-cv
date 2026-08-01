@@ -99,7 +99,7 @@ Each pipeline has the same four scripts: `trainer.py`, `evaluate.py`, `detect.py
 | **La Salle** (`lasalle_db1`) — primary | 28 persons × 10 cases = 280 photos | 280 × 41 modifications ≈ 11,480 photos |
 | **LFW** — supplementary, processed only | 5,749 persons, 13,233 photos | 13,233 × 41 modifications ≈ 542,553 photos |
 
-La Salle has raw (`lasalle_db1`) and cropped/aligned (`lasalle_db1_processed`) variants. **Augmented splits** (`light` / `medium` tiers) are generated via `scripts/augment_split_light_medium.py`. Evaluation reports embed a `dataset_profile` so cross-dataset runs are never mixed.
+La Salle has raw (`lasalle_db1`) and cropped/aligned (`lasalle_db1_processed`) variants. **Augmented splits** (`light` / `medium` tiers) are generated via `scripts/utils/augment_split_light_medium.py`. Evaluation reports embed a `dataset_profile` so cross-dataset runs are never mixed.
 
 DB1 sets are used for the **independence test and threshold determination**; DB2 sets (the 41-modification variants) are used for **recognition accuracy testing**.
 

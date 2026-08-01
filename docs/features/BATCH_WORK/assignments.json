@@ -3,7 +3,7 @@
   "commit": "TBD_AT_CAMPAIGN_START",
   "dataset_dir": "data/lfw-dataset",
   "selection_manifest": "docs/BATCH_WORK/selection_manifest_lfw.json",
-  "selection_manifest_note": "NOT YET GENERATED. Kyle must run scripts/make_selection_manifest.py --dataset-dir data/lfw-dataset --seed 42 --iterations 1 --output docs/BATCH_WORK/selection_manifest_lfw.json (after data/lfw-dataset is populated via scripts/setup_datasets.py::setup_lfw()) and commit the result before distributing this assignments file to members.",
+  "selection_manifest_note": "NOT YET GENERATED. Kyle must run scripts/utils/make_selection_manifest.py --dataset-dir data/lfw-dataset --seed 42 --iterations 1 --output docs/BATCH_WORK/selection_manifest_lfw.json (after data/lfw-dataset is populated via scripts/utils/setup_datasets.py::setup_lfw()) and commit the result before distributing this assignments file to members.",
   "iterations": 1,
   "segment_count": 8,
   "variants": [
@@ -20,7 +20,7 @@
     "zoom:0.9", "zoom:0.95", "zoom:1.05", "zoom:1.1",
     "occlusion:0.075", "occlusion:0.125", "occlusion:0.175"
   ],
-  "_comment": "One work unit = [variant, segment_index] (segment_index is 1-based, 1..segment_count, matching src.hybrid.independence_test's --segment-index). 'units' maps a member name to their flat list of assigned [variant, segment_index] pairs. Kyle replaces the EXAMPLE_member_a placeholder below with the real member names and their assigned units before distributing this file; scripts/lfw2_worker.py hard-fails with a clear message (listing known members) if --member is not a key in 'units'.",
+  "_comment": "One work unit = [variant, segment_index] (segment_index is 1-based, 1..segment_count, matching src.hybrid.independence_test's --segment-index). 'units' maps a member name to their flat list of assigned [variant, segment_index] pairs. Kyle replaces the EXAMPLE_member_a placeholder below with the real member names and their assigned units before distributing this file; scripts/pipeline/lfw2_worker.py hard-fails with a clear message (listing known members) if --member is not a key in 'units'.",
   "units": {
     "EXAMPLE_member_a": [["motion_blur:5", 1], ["motion_blur:5", 2]]
   }

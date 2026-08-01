@@ -197,9 +197,9 @@ audit's "INVALID" verdict and these numbers close the question from both directi
 ## 6. Reproduce / artifacts
 
 ```text
-python scripts/run_dataset_matrix.py                  # everything (subsets, train, 45 evals, TAR@FAR, summary)
-python scripts/run_dataset_matrix.py --skip-tar-far   # fast pass without the LFW impostor stage
-python scripts/run_dataset_matrix.py --tarfar-resume  # resume an interrupted impostor pass
+python scripts/pipeline/run_dataset_matrix.py                  # everything (subsets, train, 45 evals, TAR@FAR, summary)
+python scripts/pipeline/run_dataset_matrix.py --skip-tar-far   # fast pass without the LFW impostor stage
+python scripts/pipeline/run_dataset_matrix.py --tarfar-resume  # resume an interrupted impostor pass
 ```
 
 - Models: `models/<family>/lasalle_{clean,clean_aug_light,clean_aug_light_medium,light_only,dark_only}.yml`

@@ -429,7 +429,7 @@ def error_pair_report_from_topk(
     valid. All metrics currently wired through this function (chi-square,
     Euclidean, cosine) satisfy this. An asymmetric metric would silently halve
     the reported FAR; see call sites in ``src/independence_report.py`` and
-    ``scripts/run_lfw_independence.py``.
+    ``scripts/pipeline/run_lfw_independence.py``.
     """
     n = int(total_ordered_comparisons)
     if n == 0 or len(top_unique_distances) == 0:
