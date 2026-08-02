@@ -1,0 +1,15 @@
+# dependencies
+/node_modules
+
+# next.js build output
+/.next/
+/out/
+
+# misc
+*.tsbuildinfo
+next-env.d.ts.bak
+.DS_Store
+
+# NOTE: data/manifest.json, content/**, and public/figures/** are GENERATED but
+# intentionally COMMITTED (DESIGN.md §6.5) so Vercel's shallow clone has them.
+# Do NOT add them here.

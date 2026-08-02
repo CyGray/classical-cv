@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block title %}Forms · Run Console{% endblock %}
+{% block content %}
+<p class="eyebrow">Forms</p>
+<h1 class="page" style="font-size:1.35rem">Guided runs</h1>
+<p class="lede">
+  Pick an action, fill the form, and run it. The console builds the same command the
+  interactive menu would and streams the output live. One run at a time.
+</p>
+
+<div class="form-layout">
+  <aside class="action-list">
+    {% for g in groups %}
+    <div class="action-group">
+      <h4>{{ g.model }}</h4>
+      {% for a in g.actions %}
+      <button class="action-btn" data-model="{{ g.model }}" data-action="{{ a.label }}">{{ a.label }}</button>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </aside>
+
+  <section>
+    <div id="form-panel" class="card">
+      <p class="muted" id="form-empty">Select an action on the left to begin.</p>
+      <form id="run-form" class="hidden">
+        <h3 id="form-title" style="margin-top:0"></h3>
+        <div id="form-fields"></div>
+        <div class="field">
+          <label for="extra-args">Extra args (optional)</label>
+          <input type="text" id="extra-args" name="extra-args" placeholder="e.g. --limit 100 --verbose" />
+          <div class="help">Passed through verbatim after the form's arguments.</div>
+        </div>
+        <div id="cmd-preview-wrap" class="hidden">
+          <div class="help" style="margin-bottom:.2rem">Command preview</div>
+          <div class="cmd-preview" id="cmd-preview"></div>
+        </div>
+        <div id="run-banner"></div>
+        <div style="display:flex; gap:.6rem; align-items:center">
+          <button class="btn primary" type="submit" id="run-btn">Run</button>
+          <button class="btn danger hidden" type="button" id="cancel-btn">Cancel</button>
+          <span class="muted" id="run-state" style="font-size:.82rem"></span>
+        </div>
+      </form>
+    </div>
+
+    <div id="output-card" class="card hidden" style="margin-top:1rem">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:.5rem">
+        <h3 style="margin:0; font-size:.95rem">Output</h3>
+        <span class="muted mono" id="output-runid" style="font-size:.75rem"></span>
+      </div>
+      <div class="term" id="run-output" style="border-radius:10px; max-height:360px"></div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <h3 style="margin:0 0 .6rem; font-size:.95rem">Recent runs</h3>
+      <div style="overflow-x:auto">
+        <table class="hist">
+          <thead><tr><th>When</th><th>Model</th><th>Action</th><th>Status</th><th>Exit</th></tr></thead>
+          <tbody id="hist-body"><tr><td colspan="5" class="muted">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let current = null;      // {model, action, fields}
+let activeRunId = null;
+let runWs = null;
+
+const $ = (id) => document.getElementById(id);
+
+async function loadForm(model, action){
+  current = {model, action, fields: []};
+  $('form-empty').classList.add('hidden');
+  $('run-form').classList.remove('hidden');
+  $('form-title').textContent = `${model} · ${action}`;
+  $('run-banner').innerHTML = '';
+  const res = await fetch(`/api/actions/form-fields?model=${encodeURIComponent(model)}&action=${encodeURIComponent(action)}`);
+  const data = await res.json();
+  current.fields = data.fields || [];
+  renderFields(current.fields);
+  updatePreview();
+}
+
+function renderFields(fields){
+  const wrap = $('form-fields');
+  wrap.innerHTML = '';
+  for(const f of fields){
+    if(f.type === 'note'){
+      const n = document.createElement('div');
+      n.className = 'note-box';
+      n.innerHTML = `<strong>${f.label}</strong><br>${f.help || ''}`;
+      wrap.appendChild(n);
+      continue;
+    }
+    const div = document.createElement('div');
+    div.className = 'field' + (f.type === 'checkbox' ? ' checkbox' : '');
+    const id = 'f_' + f.name;
+    if(f.type === 'select'){
+      div.innerHTML = `<label for="${id}">${f.label}</label>
+        <select id="${id}" data-name="${f.name}">
+          ${(f.options||[]).map(o => `<option value="${o.value}" ${o.value===f.default?'selected':''}>${o.label}</option>`).join('')}
+        </select>
+        ${f.help ? `<div class="help">${f.help}</div>` : ''}`;
+    } else if(f.type === 'checkbox'){
+      div.innerHTML = `<input type="checkbox" id="${id}" data-name="${f.name}" ${f.default?'checked':''}/>
+        <div><label for="${id}">${f.label}</label>${f.help ? `<div class="help">${f.help}</div>` : ''}</div>`;
+    } else {
+      const t = f.type === 'number' ? 'number' : 'text';
+      div.innerHTML = `<label for="${id}">${f.label}</label>
+        <input type="${t}" id="${id}" data-name="${f.name}" value="${f.default||''}" placeholder="${f.flag||''}"/>
+        ${f.help ? `<div class="help">${f.help}</div>` : ''}`;
+    }
+    wrap.appendChild(div);
+  }
+  wrap.querySelectorAll('input,select').forEach(el => el.addEventListener('input', updatePreview));
+  $('extra-args').addEventListener('input', updatePreview);
+}
+
+function collectValues(){
+  const values = {};
+  $('form-fields').querySelectorAll('[data-name]').forEach(el => {
+    values[el.dataset.name] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  return values;
+}
+
+// Local preview mirrors the server's build_args ordering for the common field types.
+function updatePreview(){
+  if(!current) return;
+  const values = collectValues();
+  const args = [];
+  for(const f of current.fields){
+    const v = values[f.name];
+    if(f.type === 'select'){
+      const opt = (f.options||[]).find(o => o.value === v) || (f.options||[]).find(o => o.value === f.default);
+      if(opt && opt.args) args.push(...opt.args);
+    } else if(f.type === 'checkbox'){
+      if(v && f.args) args.push(...f.args);
+    } else if(f.type === 'text' || f.type === 'number'){
+      if(v !== '' && v != null) args.push(f.flag, String(v));
+    }
+  }
+  const extra = $('extra-args').value.trim();
+  const preview = `python <script for ${current.action}> ${args.join(' ')}${extra ? ' ' + extra : ''}`;
+  $('cmd-preview').textContent = preview;
+  $('cmd-preview-wrap').classList.remove('hidden');
+}
+
+document.querySelectorAll('.action-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.action-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    loadForm(btn.dataset.model, btn.dataset.action);
+  });
+});
+
+$('run-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if(!current) return;
+  $('run-banner').innerHTML = '';
+  $('run-btn').disabled = true;
+  $('run-state').textContent = 'submitting…';
+  const body = {
+    model: current.model, action: current.action,
+    values: collectValues(), extra_args: $('extra-args').value.trim(),
+  };
+  const res = await fetch('/api/runs', {
+    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if(res.status === 409){
+    banner('warn', 'A run is already in progress. Wait for it to finish or cancel it.');
+    $('run-btn').disabled = false; $('run-state').textContent = '';
+    return;
+  }
+  if(!res.ok){
+    banner('err', data.error || 'Failed to start run.');
+    $('run-btn').disabled = false; $('run-state').textContent = '';
+    return;
+  }
+  if(data.warnings && data.warnings.length){
+    banner('warn', 'Warnings: ' + data.warnings.join('; '));
+  }
+  activeRunId = data.run_id;
+  streamRun(data.run_id);
+});
+
+function banner(kind, text){
+  $('run-banner').innerHTML = `<div class="banner ${kind}">${text}</div>`;
+}
+
+function streamRun(runId){
+  $('output-card').classList.remove('hidden');
+  $('output-runid').textContent = runId;
+  const out = $('run-output'); out.innerHTML = '';
+  $('cancel-btn').classList.remove('hidden');
+  $('run-state').textContent = 'running…';
+  const dot = $('run-status'); dot.classList.add('busy'); dot.querySelector('.t').textContent = 'running';
+
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  runWs = new WebSocket(`${proto}://${location.host}/api/runs/${runId}/stream`);
+  runWs.onmessage = (ev) => {
+    const msg = JSON.parse(ev.data);
+    const div = document.createElement('div');
+    if(msg.type === 'stdout'){ div.textContent = msg.line; }
+    else if(msg.type === 'exit'){
+      div.className = msg.status === 'error' ? 'err' : 'exit';
+      div.textContent = `[console] finished — status ${msg.status}, exit code ${msg.code}`;
+      finishRun();
+    } else if(msg.type === 'error'){ div.className = 'err'; div.textContent = msg.message; }
+    out.appendChild(div); out.scrollTop = out.scrollHeight;
+  };
+  runWs.onclose = () => finishRun();
+}
+
+function finishRun(){
+  $('run-btn').disabled = false;
+  $('cancel-btn').classList.add('hidden');
+  $('run-state').textContent = 'done';
+  const dot = $('run-status'); dot.classList.remove('busy'); dot.querySelector('.t').textContent = 'console up';
+  loadHistory();
+}
+
+$('cancel-btn').addEventListener('click', async () => {
+  if(!activeRunId) return;
+  await fetch(`/api/runs/${activeRunId}/cancel`, {method: 'POST'});
+  $('run-state').textContent = 'cancelling…';
+});
+
+async function loadHistory(){
+  try {
+    const res = await fetch('/api/runs');
+    const rows = await res.json();
+    const body = $('hist-body');
+    if(!rows.length){ body.innerHTML = '<tr><td colspan="5" class="muted">No runs yet.</td></tr>'; return; }
+    body.innerHTML = rows.slice(0, 15).map(r => `
+      <tr>
+        <td class="muted mono" style="font-size:.75rem">${(r.start||'').replace('T',' ').replace('Z','')}</td>
+        <td>${r.model||''}</td>
+        <td>${r.action||''}</td>
+        <td><span class="tag ${r.status}">${r.status}</span></td>
+        <td class="mono">${r.exit_code == null ? '—' : r.exit_code}</td>
+      </tr>`).join('');
+  } catch(e){ /* ignore */ }
+}
+loadHistory();
+</script>
+{% endblock %}

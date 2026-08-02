@@ -1,0 +1,4 @@
+model,distance_metric,comparisons,realized_far_ppm,realized_far_percent,raw_threshold,min_distance,max_distance,mean_distance,median_distance,std_dev
+LBPH,LBPH chi-square (native cv2.face predict_collect),756,10582.0106,1.0582,70.608902,67.5250,92.6225,81.6486,82.0563,4.6510
+Eigenfaces,"Eigenfaces Euclidean, PCA space (native cv2.face predict_collect)",756,10582.0106,1.0582,3698.566073,3614.5279,5426.9918,4545.5314,4563.7343,321.5448
+Fisherfaces,"Fisherfaces Euclidean, LDA space (native cv2.face predict_collect)",756,10582.0106,1.0582,1956.001496,1812.2309,4905.8005,3308.8332,3346.5755,552.4043

@@ -1,0 +1,173 @@
+{
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 3rd Year\\Computer Vision\\face-detection-g3\\data\\lfw-dataset",
+    "total_identities": 300,
+    "selected_identities": 300,
+    "skipped_no_face_or_unreadable": 0
+  },
+  "protocol": {
+    "ordered_comparisons": 89700,
+    "distance": "chi-square (LBPH histograms)",
+    "equalization": "tan-triggs",
+    "target_far_ppm": 10.0,
+    "explicit_rank": null,
+    "num_components": null
+  },
+  "max_raw_distance": 33.02684831888473,
+  "error_pair_thresholds": {
+    "comparisons": 89700,
+    "spec": {
+      "error_pair_rank": 1,
+      "comparisons": 89700,
+      "raw_threshold": 12.758335896531207,
+      "normalized_threshold": 38.63019496545784,
+      "realized_far_ppm": 11.148272017837236,
+      "realized_far_percent": 0.0011148272017837235,
+      "query_identity": "Andrew_Caldecott",
+      "candidate_identity": "Andrew_Gilligan",
+      "target_far_ppm": 10.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 89700,
+        "raw_threshold": 12.758335896531207,
+        "normalized_threshold": 38.63019496545784,
+        "realized_far_ppm": 11.148272017837236,
+        "realized_far_percent": 0.0011148272017837235,
+        "query_identity": "Andrew_Caldecott",
+        "candidate_identity": "Andrew_Gilligan"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 89700,
+        "raw_threshold": 12.758335896531207,
+        "normalized_threshold": 38.63019496545784,
+        "realized_far_ppm": 22.296544035674472,
+        "realized_far_percent": 0.002229654403567447,
+        "query_identity": "Andrew_Caldecott",
+        "candidate_identity": "Andrew_Gilligan"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 89700,
+        "raw_threshold": 16.9526685629462,
+        "normalized_threshold": 51.32996160960559,
+        "realized_far_ppm": 44.593088071348944,
+        "realized_far_percent": 0.004459308807134894,
+        "query_identity": "Alessandro_Nesta",
+        "candidate_identity": "Alexandra_Vodjanikova"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 89700,
+        "raw_threshold": 17.17138884824817,
+        "normalized_threshold": 51.99221155604358,
+        "realized_far_ppm": 89.18617614269789,
+        "realized_far_percent": 0.008918617614269788,
+        "query_identity": "Alexis_Bledel",
+        "candidate_identity": "Alicia_Keys"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 89700,
+        "raw_threshold": 17.580374093748105,
+        "normalized_threshold": 53.230553288052185,
+        "realized_far_ppm": 178.37235228539578,
+        "realized_far_percent": 0.017837235228539576,
+        "query_identity": "Amy_Cotton",
+        "candidate_identity": "Ana_Paula_Gerard"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 89700,
+        "raw_threshold": 17.692900351190474,
+        "normalized_threshold": 53.57126474909107,
+        "realized_far_ppm": 356.74470457079155,
+        "realized_far_percent": 0.03567447045707915,
+        "query_identity": "Alan_Mulally",
+        "candidate_identity": "Andrei_Nikolishin"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 89700,
+        "raw_threshold": 17.78995105686772,
+        "normalized_threshold": 53.86511872129027,
+        "realized_far_ppm": 713.4894091415831,
+        "realized_far_percent": 0.0713489409141583,
+        "query_identity": "Alexandra_Vodjanikova",
+        "candidate_identity": "Andrei_Nikolishin"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 89700,
+        "raw_threshold": 18.010702317413234,
+        "normalized_threshold": 54.533518135046286,
+        "realized_far_ppm": 1426.9788182831662,
+        "realized_far_percent": 0.1426978818283166,
+        "query_identity": "Alessandro_Nesta",
+        "candidate_identity": "Andrew_Bernard"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 89700,
+        "raw_threshold": 18.156610542559065,
+        "normalized_threshold": 54.97530484062909,
+        "realized_far_ppm": 2853.9576365663324,
+        "realized_far_percent": 0.2853957636566332,
+        "query_identity": "Al_Leiter",
+        "candidate_identity": "Alicia_Molik"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 89700,
+        "raw_threshold": 18.393377725944447,
+        "normalized_threshold": 55.692197900176645,
+        "realized_far_ppm": 5707.915273132665,
+        "realized_far_percent": 0.5707915273132664,
+        "query_identity": "Alan_Jackson",
+        "candidate_identity": "Alejandro_Lembo"
+      },
+      {
+        "error_pair_rank": 1024,
+        "comparisons": 89700,
+        "raw_threshold": 18.63655170808488,
+        "normalized_threshold": 56.42848971885856,
+        "realized_far_ppm": 11415.83054626533,
+        "realized_far_percent": 1.1415830546265329,
+        "query_identity": "Akmal_Taher",
+        "candidate_identity": "Ana_Sebastiao"
+      },
+      {
+        "error_pair_rank": 2048,
+        "comparisons": 89700,
+        "raw_threshold": 18.919146146618004,
+        "normalized_threshold": 57.28414035740749,
+        "realized_far_ppm": 22831.66109253066,
+        "realized_far_percent": 2.2831661092530657,
+        "query_identity": "Alvaro_Noboa",
+        "candidate_identity": "Andrew_Shutley"
+      },
+      {
+        "error_pair_rank": 4096,
+        "comparisons": 89700,
+        "raw_threshold": 19.243885946722003,
+        "normalized_threshold": 58.26740039169393,
+        "realized_far_ppm": 45663.32218506132,
+        "realized_far_percent": 4.5663322185061315,
+        "query_identity": "Alan_Mulally",
+        "candidate_identity": "Andrzej_Tyszkiewicz"
+      },
+      {
+        "error_pair_rank": 8192,
+        "comparisons": 89700,
+        "raw_threshold": 19.64389697122533,
+        "normalized_threshold": 59.47856962177333,
+        "realized_far_ppm": 91326.64437012264,
+        "realized_far_percent": 9.132664437012263,
+        "query_identity": "Adrian_Fernandez",
+        "candidate_identity": "Andrea_Yates"
+      }
+    ]
+  }
+}

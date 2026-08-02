@@ -1,0 +1,96 @@
+{
+  "_note": "Deployed hybrid config derived by src/hybrid/calibrate.py. Values are measured-now or carried-with-provenance; see 'provenance'. gate.tau_accept and sface.l2_genuine are FROZEN, see docs/READ_THIS.md.",
+  "gate": {
+    "tau_accept": 67.0084,
+    "tau_reject": 88.4927,
+    "margin_min": 0.05
+  },
+  "quality": {
+    "tau_blur": 587.83,
+    "luma_lo": 52.88,
+    "luma_hi": 137.71,
+    "tau_noise": 8.206,
+    "tau_pose": 63.74,
+    "px_min": 61
+  },
+  "lbph_far_anchors": [
+    [
+      0.0,
+      0.0
+    ],
+    [
+      67.0084,
+      0.0001
+    ],
+    [
+      88.4927,
+      0.01
+    ],
+    [
+      200.0,
+      1.0
+    ]
+  ],
+  "sface": {
+    "cosine_genuine": 0.363,
+    "l2_genuine": 1.0313,
+    "cosine_operating": 0.4144,
+    "cosine_operating_1pct": 0.2883
+  },
+  "provenance": {
+    "gate.tau_accept": "frozen 2026-08-01: LFW1 YuNet joint hybrid run rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR, native predict_collect scale), docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md.",
+    "gate.tau_reject": "frozen 2026-08-01: LFW1 YuNet joint hybrid run rank-165,226 unidirectional unique-pair impostor distance (~1.0% FAR), docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md.",
+    "gate.margin_min": "policy: relative top1-top2 gap 0.05 (not dataset-fitted; train margins are inflated by memorisation, test-fitting would leak)",
+    "quality.*": "measured: clean-crop probe distribution edges (train); DB2 41-mod LBPH<->SFace crossover refinement deferred to Phase 6.4",
+    "sface.cosine_operating": "measured: SFaceFarModel.cosine_at_far(1e-04) over impostors-lfw.npy",
+    "sface.l2_genuine": "frozen 2026-08-01: 1.0313, LFW1 YuNet joint hybrid run rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR), docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md."
+  },
+  "calibration_stats": {
+    "lbph_margin": {
+      "min": 66438056.493,
+      "p5": 67918349.282,
+      "median": 72924706.169,
+      "p95": 79655889.312,
+      "max": 84188591.157
+    },
+    "_lbph_margin_note": "diagnostic only, raw chi-square scale; NOT used by gate.py, which applies the relative margin_min from the gate block",
+    "quality": {
+      "clean_samples": 279,
+      "blur_var": {
+        "min": 422.763,
+        "p5": 587.828,
+        "median": 1694.777,
+        "p95": 4327.594,
+        "max": 5815.729
+      },
+      "luma_mean": {
+        "min": 38.951,
+        "p5": 57.757,
+        "median": 84.722,
+        "p95": 126.729,
+        "max": 164.525
+      },
+      "noise_sigma": {
+        "min": 1.973,
+        "p5": 2.753,
+        "median": 5.238,
+        "p95": 8.206,
+        "max": 10.457
+      },
+      "pose_angle": {
+        "min": 0.064,
+        "p5": 0.615,
+        "median": 4.739,
+        "p95": 63.738,
+        "max": 90.0
+      },
+      "face_px": {
+        "min": 61.0,
+        "p5": 68.0,
+        "median": 77.0,
+        "p95": 89.0,
+        "max": 100.0
+      }
+    }
+  }
+}

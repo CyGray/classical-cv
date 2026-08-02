@@ -1,0 +1,17 @@
+{
+  "schema": "lsface-batch-pins-v1",
+  "commit": "TBD_AT_CAMPAIGN_START",
+  "python": "3.11.9",
+  "numpy": "2.4.3",
+  "opencv": "4.13.0.92",
+  "artifacts": {
+    "src/hybrid/thresholds.json": "0b51dfdc61be25f7d7e8fc69ff0ead1a5a8d30eb26a5c6b23926be307d0c2b72",
+    "models/lbph/lasalle_clean.yml": "7076b633edef3237dd1c1931ef4c2a4af341408159c6bbf2247c9cf1b0c3bb9e",
+    "models/lbph/labels_lasalle_clean.json": "914ef99a14de94bb585f94d8d6f0f2568e6e72413a47f6a124acc435662c6aa8",
+    "models/sface/gallery.npy": "ed04ea103918f33c78fc571dc93455f45a489003f8551c574edf97933b4c3a11",
+    "models/sface/labels.json": "914ef99a14de94bb585f94d8d6f0f2568e6e72413a47f6a124acc435662c6aa8",
+    "models/sface/face_recognition_sface_2021dec.onnx": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79",
+    "models/yunet/face_detection_yunet_2023mar.onnx": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+  },
+  "selection_manifests": {}
+}

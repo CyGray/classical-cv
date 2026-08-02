@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Terminal · Run Console{% endblock %}
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:.8rem; flex-wrap:wrap; gap:.6rem">
+  <div>
+    <p class="eyebrow" style="margin:0">Terminal</p>
+    <h1 class="page" style="margin:.1rem 0 0; font-size:1.3rem">main.py — live</h1>
+  </div>
+  <div style="display:flex; gap:.5rem">
+    <button class="btn" id="restart-btn">Restart</button>
+    <button class="btn danger" id="stop-btn">Stop</button>
+  </div>
+</div>
+<p class="lede" style="margin-bottom:.9rem">
+  This is <code>main.py</code>'s own interactive menu. Type a menu number and press Enter
+  — output streams below in real time. Enter <code>q</code> to quit the menu process.
+</p>
+
+<div class="term-shell">
+  <div class="term" id="term" aria-live="polite"></div>
+  <form class="term-input-row" id="term-form" autocomplete="off">
+    <input type="text" id="term-input" placeholder="Type a menu choice and press Enter (e.g. 1, then 3)…" aria-label="Terminal input" />
+    <button class="btn primary" type="submit">Send</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const term = document.getElementById('term');
+const input = document.getElementById('term-input');
+let ws = null;
+
+function line(text, cls){
+  const div = document.createElement('div');
+  if(cls) div.className = cls;
+  div.textContent = text;
+  term.appendChild(div);
+  term.scrollTop = term.scrollHeight;
+}
+
+function connect(){
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${location.host}/api/terminal`);
+  ws.onopen = () => line('[console] connected — main.py starting…', 'sys');
+  ws.onmessage = (ev) => {
+    const msg = JSON.parse(ev.data);
+    if(msg.type === 'stdout') line(msg.line);
+    else if(msg.type === 'exit') line(`[console] main.py exited (code ${msg.code})`, 'exit');
+  };
+  ws.onclose = () => line('[console] session closed.', 'sys');
+  ws.onerror = () => line('[console] connection error.', 'err');
+}
+
+document.getElementById('term-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const val = input.value;
+  if(ws && ws.readyState === WebSocket.OPEN){
+    ws.send(JSON.stringify({input: val}));
+    line('> ' + val, 'sys');
+  }
+  input.value = '';
+  input.focus();
+});
+
+document.getElementById('stop-btn').addEventListener('click', () => {
+  if(ws){ ws.close(); ws = null; line('[console] stopped.', 'sys'); }
+});
+document.getElementById('restart-btn').addEventListener('click', () => {
+  if(ws) ws.close();
+  term.innerHTML = '';
+  connect();
+});
+
+connect();
+input.focus();
+</script>
+{% endblock %}

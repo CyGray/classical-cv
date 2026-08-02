@@ -1,0 +1,108 @@
+# ===================================
+# Configs & Hidden Files / Directories
+# ===================================
+.*
+!.gitignore
+!.gitattributes
+
+# ===================================
+# Archive Directories
+# ===================================
+archive/
+**/archive/
+
+# ===================================
+# Python Virtual Environments
+# ===================================
+.venv/
+venv/
+test_venv/
+env/
+ENV/
+.env
+
+# ===================================
+# Python Cache & Compiled Files
+# ===================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.Python
+
+# ===================================
+# IDE & Editor Files
+# ===================================
+.vscode/
+.idea/
+*.vs/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# ===================================
+# Datasets (Local & Machine-Specific)
+# ===================================
+data/*
+!data/README.md
+**/data/*
+!**/data/README.md
+lfw/
+**/lfw/
+cv_term_project_master/
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# ===================================
+# Large Model Files, Feature Arrays & Binary Artifacts
+# ===================================
+*.pb
+*.h5
+*.hdf5
+*.pth
+*.pt
+*.safetensors
+*.bin
+*.weights
+*.ckpt
+*.pkl
+*.pickle
+*.joblib
+*.npy
+*.npz
+
+# Exclude heavy model weight directories
+models/lfw2/
+**/models/lfw2/
+
+# ===================================
+# Generated Outputs & Logs
+# ===================================
+outputs/
+**/outputs/
+*.log
+*.out
+*.err
+*.tmp
+*.temp
+*.bak
+
+# ===================================
+# Sensitive Data & Credentials
+# ===================================
+*.key
+*.pem
+.env.local
+config_secrets.json
+hw_profile.json

@@ -1,0 +1,173 @@
+{
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 3rd Year\\Computer Vision\\face-detection-g3\\data\\lfw-dataset",
+    "total_identities": 300,
+    "selected_identities": 300,
+    "skipped_no_face_or_unreadable": 0
+  },
+  "protocol": {
+    "ordered_comparisons": 89700,
+    "distance": "euclidean (PCA projections)",
+    "equalization": "equalize",
+    "target_far_ppm": 10.0,
+    "explicit_rank": null,
+    "num_components": 50
+  },
+  "max_raw_distance": 12643.353569673316,
+  "error_pair_thresholds": {
+    "comparisons": 89700,
+    "spec": {
+      "error_pair_rank": 1,
+      "comparisons": 89700,
+      "raw_threshold": 917.8124899724594,
+      "normalized_threshold": 7.259248781699413,
+      "realized_far_ppm": 11.148272017837236,
+      "realized_far_percent": 0.0011148272017837235,
+      "query_identity": "Andrew_Caldecott",
+      "candidate_identity": "Andrew_Gilligan",
+      "target_far_ppm": 10.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 89700,
+        "raw_threshold": 917.8124899724594,
+        "normalized_threshold": 7.259248781699413,
+        "realized_far_ppm": 11.148272017837236,
+        "realized_far_percent": 0.0011148272017837235,
+        "query_identity": "Andrew_Caldecott",
+        "candidate_identity": "Andrew_Gilligan"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 89700,
+        "raw_threshold": 917.8124899724594,
+        "normalized_threshold": 7.259248781699413,
+        "realized_far_ppm": 22.296544035674472,
+        "realized_far_percent": 0.002229654403567447,
+        "query_identity": "Andrew_Caldecott",
+        "candidate_identity": "Andrew_Gilligan"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 89700,
+        "raw_threshold": 2787.13095962518,
+        "normalized_threshold": 22.04423805967482,
+        "realized_far_ppm": 44.593088071348944,
+        "realized_far_percent": 0.004459308807134894,
+        "query_identity": "Adam_Sandler",
+        "candidate_identity": "Amy_Yasbeck"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 89700,
+        "raw_threshold": 2827.2585633127183,
+        "normalized_threshold": 22.361619073077698,
+        "realized_far_ppm": 89.18617614269789,
+        "realized_far_percent": 0.008918617614269788,
+        "query_identity": "Ahmed_Ahmed",
+        "candidate_identity": "Ali_Mohammed_Maher"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 89700,
+        "raw_threshold": 3013.5473244954633,
+        "normalized_threshold": 23.835031646380894,
+        "realized_far_ppm": 178.37235228539578,
+        "realized_far_percent": 0.017837235228539576,
+        "query_identity": "Adam_Rich",
+        "candidate_identity": "Amy_Yasbeck"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 89700,
+        "raw_threshold": 3205.2961193013357,
+        "normalized_threshold": 25.351629230631055,
+        "realized_far_ppm": 356.74470457079155,
+        "realized_far_percent": 0.03567447045707915,
+        "query_identity": "Adam_Rich",
+        "candidate_identity": "Alexis_Bledel"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 89700,
+        "raw_threshold": 3434.834693462654,
+        "normalized_threshold": 27.167117288418947,
+        "realized_far_ppm": 713.4894091415831,
+        "realized_far_percent": 0.0713489409141583,
+        "query_identity": "Abdulaziz_Kamilov",
+        "candidate_identity": "Ali_Mohammed_Maher"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 89700,
+        "raw_threshold": 3675.0213638666773,
+        "normalized_threshold": 29.0668242694856,
+        "realized_far_ppm": 1426.9788182831662,
+        "realized_far_percent": 0.1426978818283166,
+        "query_identity": "Alberto_Ruiz_Gallardon",
+        "candidate_identity": "Alex_Popov"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 89700,
+        "raw_threshold": 3876.007027010723,
+        "normalized_threshold": 30.656478960675567,
+        "realized_far_ppm": 2853.9576365663324,
+        "realized_far_percent": 0.2853957636566332,
+        "query_identity": "Aaron_Patterson",
+        "candidate_identity": "Amy_Yasbeck"
+      },
+      {
+        "error_pair_rank": 512,
+        "comparisons": 89700,
+        "raw_threshold": 4206.894901720611,
+        "normalized_threshold": 33.273568428960026,
+        "realized_far_ppm": 5707.915273132665,
+        "realized_far_percent": 0.5707915273132664,
+        "query_identity": "Alexandra_Vodjanikova",
+        "candidate_identity": "Anette_Hosoi"
+      },
+      {
+        "error_pair_rank": 1024,
+        "comparisons": 89700,
+        "raw_threshold": 4489.580142602356,
+        "normalized_threshold": 35.509409096738246,
+        "realized_far_ppm": 11415.83054626533,
+        "realized_far_percent": 1.1415830546265329,
+        "query_identity": "Adriana_Lima",
+        "candidate_identity": "Ahmed_Chalabi"
+      },
+      {
+        "error_pair_rank": 2048,
+        "comparisons": 89700,
+        "raw_threshold": 4853.456612275493,
+        "normalized_threshold": 38.38741505985503,
+        "realized_far_ppm": 22831.66109253066,
+        "realized_far_percent": 2.2831661092530657,
+        "query_identity": "Alexa_Vega",
+        "candidate_identity": "Alexander_Rumyantsev"
+      },
+      {
+        "error_pair_rank": 4096,
+        "comparisons": 89700,
+        "raw_threshold": 5298.443795147006,
+        "normalized_threshold": 41.906949496817,
+        "realized_far_ppm": 45663.32218506132,
+        "realized_far_percent": 4.5663322185061315,
+        "query_identity": "Abdullatif_Sener",
+        "candidate_identity": "Adam_Sandler"
+      },
+      {
+        "error_pair_rank": 8192,
+        "comparisons": 89700,
+        "raw_threshold": 5881.198359913441,
+        "normalized_threshold": 46.51612665503747,
+        "realized_far_ppm": 91326.64437012264,
+        "realized_far_percent": 9.132664437012263,
+        "query_identity": "Alan_Mulally",
+        "candidate_identity": "Ally_Sheedy"
+      }
+    ]
+  }
+}

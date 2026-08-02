@@ -1,0 +1,80 @@
+{
+  "detector": "yunet",
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lfw-dataset",
+    "total_identities": 5749,
+    "selected_identities": 5749,
+    "skipped_by_detector": 0
+  },
+  "scale": "native cv.face.LBPHFaceRecognizer.predict_collect() (radius=1, neighbors=8, grid=8x8)",
+  "unique_pairs": 16522626,
+  "unique_rank": 165,
+  "raw_threshold": 67.03325520645528,
+  "realized_far_ppm": 9.986306050866249,
+  "boundary_pair": {
+    "query_identity": "Ahmed_Qureia",
+    "candidate_identity": "Ferenc_Madl"
+  },
+  "curve": [
+    {
+      "unique_rank": 1,
+      "raw_threshold": 0.0,
+      "realized_far_ppm": 0.060523066974946964
+    },
+    {
+      "unique_rank": 2,
+      "raw_threshold": 0.0,
+      "realized_far_ppm": 0.12104613394989393
+    },
+    {
+      "unique_rank": 4,
+      "raw_threshold": 49.55601578644047,
+      "realized_far_ppm": 0.24209226789978786
+    },
+    {
+      "unique_rank": 8,
+      "raw_threshold": 59.44504354804161,
+      "realized_far_ppm": 0.4841845357995757
+    },
+    {
+      "unique_rank": 16,
+      "raw_threshold": 64.64241924127946,
+      "realized_far_ppm": 0.9683690715991514
+    },
+    {
+      "unique_rank": 32,
+      "raw_threshold": 65.45893925918372,
+      "realized_far_ppm": 1.9367381431983028
+    },
+    {
+      "unique_rank": 64,
+      "raw_threshold": 66.20216104763317,
+      "realized_far_ppm": 3.8734762863966057
+    },
+    {
+      "unique_rank": 128,
+      "raw_threshold": 66.86772591420446,
+      "realized_far_ppm": 7.746952572793211
+    },
+    {
+      "unique_rank": 165,
+      "raw_threshold": 67.03325520645528,
+      "realized_far_ppm": 9.986306050866249
+    },
+    {
+      "unique_rank": 256,
+      "raw_threshold": 67.33507925568247,
+      "realized_far_ppm": 15.493905145586423
+    },
+    {
+      "unique_rank": 512,
+      "raw_threshold": 67.8859642736974,
+      "realized_far_ppm": 30.987810291172845
+    },
+    {
+      "unique_rank": 1024,
+      "raw_threshold": 68.48045520732516,
+      "realized_far_ppm": 61.97562058234569
+    }
+  ]
+}
