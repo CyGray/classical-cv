@@ -9,7 +9,16 @@
 5. With item 4 finished, run the robustness test (hybrid)
 
 Current state: 
-The robustness test (standalone only) is NOT presentible to the adviser as of yet of yet
+The robustness test (standalone only) is now presentable with a big finding: the TAR is not because of an error in the test, but rather
+the actual performance of the models. Particularly, the LBPH performs rather poorly with LFW, even on clean probes. The problem lies with the model itself;
+it was never meant for these kinds of things. Another source of the problem is the way we get the threshold: our (N*(N-1))/2 independence test only checks impostor pairs
+and the false acceptance rate (FAR) requirement and never really checks the TAR.
+
+Hypothesis: LBPH passed the algorithm test because the LSDB (the dataset it was trained and tested with) was more controlled.
+
+Also done is finalizing the standalone SFace threshold, as well as an experimental `tau_reject` source and figure (decided on p99: heavy): [insert value here].
+
+However, using the new tau_reject p99 value causes 97% of probes to escalate -- most probe skips the fast path 
 
 ## Open Decisions for Tomorrow (2026-08-02)
 
