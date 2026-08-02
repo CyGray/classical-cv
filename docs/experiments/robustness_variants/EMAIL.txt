@@ -1,0 +1,26 @@
+Dear Dr. Oh,
+
+Please accept my apologies for the delay in updates. I have been working through the robustness tests and have now identified definitive results:
+
+[insert per-modification table of docs/experiments/robustness_variants/hybrid-identification/per_modification_identification_table.png]
+
+The issue with the deep learning results being too high has been resolved. However, LBPH's True Acceptance Rate (TAR) is very low. This is not an error; LBPH simply cannot achieve true positives at our 0.01% False Acceptance Rate (FAR) requirement under the real-life conditions of the LFW dataset. The high results previously observed were because training=test data.
+
+Note: We also adjusted the fast reject threshold where the cascade rejects a probe instead of escalating to SFace, so escalation rate is now ~97.5%, meaning almost all cases are passed to SFace to avoid rejecting candidates SFace could have saved. Cascade (82.5ms) is still faster than SFace-only (84.4ms), but this means LBPH does not help much, as the cascade's Acceptance Rate (AR) matches SFace's at 80.65%.
+
+Given these findings, should we proceed with writing this up as-is, or explore further? Below is a summary of the approaches I have already tested:
+
+1. Write it up as-is: LBPH cannot effectively gate the LFW dataset, leading the cascade to rely on SFace, though latency remains acceptable. Even changing our thresholds does not help much (TAR up to 31%), indicating this is not a threshold issue.
+
+2. Provide LBPH with more training photos per person: This improves results by approximately 9-10x, but the performance remains too low for practical deployment.
+
+3. Test on a controlled dataset (AT&T faces, 40 people, uniform lighting): LBPH performs significantly better here (39% vs. 2% on LFW), demonstrating that the algorithm functions correctly but requires low-variation images.
+
+4. Re-test the La Salle dataset with a single training photo per person: LBPH's performance drops sharply (8% vs. 90%+ with 10 photos). This suggests the primary limitation is the volume of quality training photos per person rather than the environment (controlled vs. wild).
+
+I believe combining points 1, 3, and 4 presents the strongest narrative: LBPH's limitations stem from wild, single-photo enrollment rather than the test framework or threshold settings.
+
+Please let me know how you would like to proceed, or if I should begin drafting the write-up based on this direction.
+
+Best regards,
+Kyle Yuan Uy
