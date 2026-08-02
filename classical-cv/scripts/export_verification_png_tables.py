@@ -99,29 +99,50 @@ MOD_FAMILIES = [
 ]
 
 
-def render_full_bleed_table(headers, data, col_widths, output_path, family_boundaries=None):
-    """Render a clean, modern, full-bleed table image with merged/grouped family boundaries."""
+def render_full_bleed_table(headers, data, col_widths, output_path, family_boundaries=None,
+                             caption=None):
+    """Render a clean, modern, full-bleed table image with merged/grouped family boundaries.
+
+    ``caption``: optional string rendered as a small footer band below the
+    table (wrapped, left-aligned) — e.g. the LFW-derived-threshold caveat that
+    must travel WITH the image into a paper, not live only in the README
+    prose next to it. ``None`` (default) reproduces the exact prior output
+    (no footer band added), so existing callers are unaffected."""
     num_rows = len(data)
     num_cols = len(headers)
-    
+
     # Calculate dimensions
     row_height = 0.36
     header_height = 0.55
-    total_height = header_height + (num_rows * row_height)
+    caption_height = 0.0
+    if caption:
+        # ~14 chars per width-unit at 8pt italic fits comfortably; count
+        # wrapped lines so the footer band is sized to the actual text,
+        # not a fixed guess (avoids leftover blank space under the caption).
+        import textwrap
+        total_width_guess = sum(col_widths)
+        wrap_width = max(60, int(total_width_guess * 14))
+        caption_lines = textwrap.wrap(caption, width=wrap_width) or [caption]
+        caption_height = 0.12 + 0.135 * len(caption_lines)
+    total_height = header_height + (num_rows * row_height) + caption_height
     total_width = sum(col_widths)
-    
+
     fig, ax = plt.subplots(figsize=(total_width, total_height), dpi=300)
     fig.patch.set_facecolor('#ffffff')
     ax.axis('off')
-    
-    # Create full-bleed table
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+
+    caption_frac = (caption_height / total_height) if caption else 0.0
+
+    # Create full-bleed table (occupies the region ABOVE the caption band)
     table = ax.table(
         cellText=data,
         colLabels=headers,
         colWidths=[w / total_width for w in col_widths],
         cellLoc='center',
         loc='center',
-        bbox=[0, 0, 1, 1]
+        bbox=[0, caption_frac, 1, 1 - caption_frac]
     )
     
     table.auto_set_font_size(False)
@@ -173,6 +194,14 @@ def render_full_bleed_table(headers, data, col_widths, output_path, family_bound
                 cell.set_fontsize(9.5)
             else:
                 cell.get_text().set_ha('center')
+
+    if caption:
+        ax.text(
+            0.01, caption_frac - 0.01, "\n".join(caption_lines),
+            transform=ax.transAxes, ha='left', va='top',
+            fontsize=8, color='#475569', style='italic',
+            linespacing=1.4,
+        )
 
     plt.subplots_adjust(left=0, right=1, top=1, bottom=0)
     plt.savefig(output_path, dpi=300, bbox_inches='tight', pad_inches=0)

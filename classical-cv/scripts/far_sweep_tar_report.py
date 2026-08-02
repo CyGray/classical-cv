@@ -77,9 +77,10 @@ def main() -> None:
     rows = []
     for point in sweep["sweep"]:
         threshold = point["raw_threshold"]
+        lbl = f"{point['target_far_ppm']:.0f} ppm target (current, deployed)" if abs(point["target_far_ppm"] - 10.0) < 1e-3 else f"{point['target_far_ppm']:.0f} ppm target"
         rows.append(
             {
-                "label": f"{point['target_far_ppm']:.0f} ppm target",
+                "label": lbl,
                 "target_far_ppm": point["target_far_ppm"],
                 "realized_far_ppm": point["realized_far_ppm"],
                 "raw_threshold": threshold,
@@ -89,26 +90,13 @@ def main() -> None:
             }
         )
 
-    # Reference row: the actual deployed gate (may not land exactly on a swept
-    # checkpoint - computed the same way, at the exact deployed value).
-    rows.append(
-        {
-            "label": f"Deployed tau_accept ({deployed_tau:.4f}, current)",
-            "target_far_ppm": None,
-            "realized_far_ppm": None,
-            "raw_threshold": deployed_tau,
-            "clean_tar_percent": tar_at(clean_dists, deployed_tau),
-            "overall_tar_percent": tar_at(mods_dists, deployed_tau),
-            "family": "deployed",
-        }
-    )
-
     for ref in EER_REFERENCE_ROWS:
+        eer_far_ppm = ref["eer_percent"] * 10000.0
         rows.append(
             {
                 "label": ref["label"],
-                "target_far_ppm": None,
-                "realized_far_ppm": None,
+                "target_far_ppm": eer_far_ppm,
+                "realized_far_ppm": eer_far_ppm,
                 "raw_threshold": ref["threshold"],
                 "clean_tar_percent": tar_at(clean_dists, ref["threshold"]),
                 "overall_tar_percent": tar_at(mods_dists, ref["threshold"]),
