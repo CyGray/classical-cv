@@ -388,7 +388,7 @@ class HybridRecognizer:
             return self._sface_decision(sample, base)
 
         if self.mode == "cv_only":
-            # Standalone LBPH accepts on tau_accept (67.0084), NOT tau_reject.
+            # Standalone LBPH accepts on tau_accept (67.03325520645528), NOT tau_reject.
             # tau_accept IS the LBPH-only independence-test threshold (LFW1
             # rank-165 unidirectional unique pair, ~10 ppm FAR - see
             # thresholds.json provenance and docs/READ THIS/FROZEN_THRESHOLDS.md);

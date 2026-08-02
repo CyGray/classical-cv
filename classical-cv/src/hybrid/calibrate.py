@@ -43,12 +43,16 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp"}
 
 # FROZEN — see docs/READ THIS/FROZEN_THRESHOLDS.md before touching. LBPH_TAU_ACCEPT
-# is the LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR,
-# YuNet joint hybrid run, docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md).
-LBPH_TAU_ACCEPT = 67.0084  # LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR)
-LBPH_TAU_REJECT = 88.4927  # LFW1 rank-165226 unidirectional unique-pair impostor distance (~1.0% FAR)
-TAR_AT_FAR_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165,226 unidirectional unique-pair impostor distance (~1.0% FAR), YuNet joint hybrid run"
-LBPH_TAU_ACCEPT_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR), YuNet joint hybrid run (see docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md)"
+# is the LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR),
+# STANDALONE box-cropped YuNet LBPH-only sweep (reports/independence/lbph_lfw1/
+# native_predict_scale_yunet.json). 2026-08-02: unified with the deployed
+# cv_only threshold — see thresholds.json provenance.gate.tau_accept and
+# docs/audits/STATE-08-02.md for why the earlier joint-hybrid-derived 77.769348
+# was rejected (box-crop harness bug, not a real alternate calibration).
+LBPH_TAU_ACCEPT = 67.03325520645528  # LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR)
+LBPH_TAU_REJECT = 88.4927  # LFW1 rank-165226 unidirectional unique-pair impostor distance (~1.0% FAR) — SUSPECT, see thresholds.json provenance.gate.tau_reject
+TAR_AT_FAR_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165,226 unidirectional unique-pair impostor distance (~1.0% FAR), YuNet joint hybrid run -- CAUTION: same full-frame harness bug that invalidated the LBPH tau_accept candidate from this run likely taints this value too (see docs/audits/STATE-08-02.md); not yet re-derived"
+LBPH_TAU_ACCEPT_PROVENANCE = "frozen 2026-08-02: LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR), STANDALONE box-cropped YuNet LBPH-only sweep (reports/independence/lbph_lfw1/native_predict_scale_yunet.json); unified with cv_only's threshold by design decision (docs/audits/STATE-08-02.md) — supersedes the 2026-08-01 joint-hybrid-run provenance previously stated here"
 
 # Relative top1<->top2 gap below which LBPH is treated as a near-tie and escalated.
 # A POLICY default, deliberately not dataset-fitted: train distances are inflated

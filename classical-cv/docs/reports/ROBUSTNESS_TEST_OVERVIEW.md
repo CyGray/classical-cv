@@ -196,7 +196,7 @@ for why it is not a valid recognition-accuracy measurement.
 | `dl_only` | SFace alone | correct identity **and** `cosine >= cosine_genuine` **and** `l2 <= l2_genuine` |
 | `cascade` | LBPH fast path + SFace escalation | see gate logic, §5 |
 
-`cv_only`'s threshold is `tau_accept` (67.0084), not `tau_reject`.
+`cv_only`'s threshold is `tau_accept` (67.03325520645528 as of 2026-08-02, was 67.0084), not `tau_reject`.
 `tau_accept` *is* LBPH's own standalone independence-test threshold — LFW1
 rank-165 unidirectional unique pair, ~10 ppm FAR (see the `provenance` block
 in `src/hybrid/thresholds.json`), and `src/hybrid/independence_test.py`:488
@@ -212,11 +212,11 @@ the two are compared at the same ~10 ppm FAR operating point: LBPH at
 `cv_only` at ~1% FAR against `dl_only`'s ~10 ppm — a ~1000x mismatch in
 LBPH's favour. Fixed; see `docs/audits/STATE-08-01.md` §5a.
 
-**Frozen thresholds** (`src/hybrid/thresholds.json`, current as of 2026-07-28 — see the repo's `cv-repo-map` skill before quoting these anywhere else, since this repo has two non-comparable LBPH distance scales and it's easy to grab the wrong one):
+**Frozen thresholds** (`src/hybrid/thresholds.json`; `tau_accept` current as of 2026-08-02, other rows not re-verified this pass — see the repo's `cv-repo-map` skill before quoting these anywhere else, since this repo has two non-comparable LBPH distance scales and it's easy to grab the wrong one):
 
 | Threshold | Value | Meaning |
 | --- | ---: | --- |
-| `gate.tau_accept` | **67.0084** | LBPH distance ≤ this ⇒ accept (native `predict_collect()` scale) — both the cascade's confident-accept bound **and** standalone `cv_only`'s accept rule |
+| `gate.tau_accept` | **67.03325520645528** | LBPH distance ≤ this ⇒ accept (native `predict_collect()` scale) — both the cascade's confident-accept bound **and** standalone `cv_only`'s accept rule (unified 2026-08-02, see `docs/independence/MASTER_FILE.md`) |
 | `gate.tau_reject` | 76.85 | LBPH distance ≥ this ⇒ confident reject — **cascade gate only**, not used by standalone `cv_only` |
 | `gate.margin_min` | 0.05 | minimum relative top1/top2 margin (below this ⇒ escalate) |
 | `sface.cosine_genuine` | 0.363 | SFace cosine ≥ this required to accept |

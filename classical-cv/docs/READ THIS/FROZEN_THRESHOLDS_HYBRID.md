@@ -1,4 +1,17 @@
-# Hybrid-model independence-test thresholds — candidate values, NOT yet deployed
+# Hybrid-model independence-test thresholds — candidate values, mostly NOT deployed
+
+**UPDATE 2026-08-02:** the LBPH `tau_accept` candidate below (77.769348) was
+evaluated and **rejected** — see "What's surprising" below, corrected in
+place. It was a box-crop-vs-full-frame harness bug in
+`src/hybrid/independence_test.py`, not a legitimate detector-driven
+recalibration. The deployed `gate.tau_accept` moved instead to
+**67.03325520645528**, the box-cropped YuNet **standalone** LBPH sweep
+(`FROZEN_THRESHOLDS.md`), unified with `cv_only`'s threshold. Full trail:
+`docs/independence/MASTER_FILE.md`, `docs/audits/STATE-08-02.md`. The
+`tau_reject`/SFace rows below are unaffected by that specific correction but
+remain open for other reasons — `tau_reject` in particular is now suspect for
+the *same* box-crop bug, since it comes from the identical full-frame run
+(see `docs/NOTES.md` item 3).
 
 *Generated 2026-07-28. This doc is intentionally separate from
 [`FROZEN_THRESHOLDS.md`](FROZEN_THRESHOLDS.md), which covers the deployed
@@ -36,30 +49,53 @@ Boundary pairs (for anyone re-verifying): LBPH rank-165 = `Joao_Rocha` vs
 rank-165 = `Ray_Allen` vs `Stacey_Jones`; SFace rank-165226 = `Donna_Ralston`
 vs `Sadie_Frost`.
 
-## What's surprising: the LBPH numbers moved a lot, and it's the detector, not noise
+## What's surprising: the LBPH numbers moved a lot — CORRECTED 2026-08-02, it's the crop, not the detector
 
 77.77 vs 67.01 (tau_accept-equivalent) and 88.49 vs 76.85 (tau_reject-equivalent)
 are large gaps for the *same dataset, same seed, same per-identity image picks*.
-Cause identified, not a bug in the rank math:
 
-- The frozen `tau_accept` (67.0084) was derived by
+**Original explanation below (detector mismatch) is WRONG — falsified by a
+like-for-like test.** Keeping the original text for the record, then the
+correction:
+
+- The frozen `tau_accept` (67.0084 at the time) was derived by
   `scripts/archive/run_lfw_lbph_native_predict_independence.py`, which detects faces
   with a **Haar cascade** and skipped 46 of 5,749 identities (no face found,
   `--min-face-size 40`) — final N=5,703 (`docs/audits/STATE-07-28.md` §1.2).
 - This hybrid run detects faces with **YuNet** (`create_face_detector("yunet")`,
   the same detector the deployed hybrid pipeline actually uses end-to-end) and
   kept **all 5,749** identities — zero skips.
-- Different detector -> different face boxes -> different Tan-Triggs-normalized
+- ~~Different detector -> different face boxes -> different Tan-Triggs-normalized
   LBPH tiles -> different chi-square distances, even off the identical source
   photos. The two `tau_accept` numbers are not measuring the same face-crop
-  pipeline.
+  pipeline.~~ **This diagnosis was never isolated as a controlled variable —
+  detector and crop-mode both changed at once between the two runs compared.**
 
-Practically: the currently-deployed `tau_accept`=67.0084 was measured on a
-detector (Haar) that isn't the one running in production (YuNet, used by both
-the classical-track's own YuNet option and the hybrid/SFace path). This
-hybrid-derived number is arguably the more representative one for what's
-actually deployed — but that's a call for whoever owns the threshold-freeze
-decision, not something this run makes unilaterally.
+**Correction (2026-08-02):** ran the same box-cropped standalone script with
+the **YuNet** detector instead of Haar — isolating detector as the only
+variable — and got **67.03325520645528**
+(`reports/independence/lbph_lfw1/native_predict_scale_yunet.json`), landing
+right next to the old Haar-standalone 67.0084 and nowhere near this run's
+77.769348. Swapping the detector alone does not reproduce the gap. What *does*
+differ between the two `tau_accept`-producing runs is crop: this hybrid run's
+`independence_test.py` feeds LBPH the **whole frame**
+(`normalize_face(gray, ...)`), while both the standalone scripts and actual
+deployment (`LBPHAdapter._normalize`, `src/hybrid/recognizer.py:190`) feed it
+the **detected face box**. A direct crop-mode A/B on the same detector
+(`cv-workspace-map` §3.2) measured cropped 67.03 vs full-frame 74.64 — most of
+this run's 77.77 gap, with the small remainder plausibly sampling/rank noise.
+**Conclusion: 77.769348 is a box-crop harness artifact from `independence_test.py`,
+not a legitimate YuNet-vs-Haar recalibration. Not adopted; `gate.tau_accept`
+instead unified with the standalone value (67.03325520645528) — see
+`FROZEN_THRESHOLDS.md` and `docs/audits/STATE-08-02.md`.**
+
+Practically: the previously-deployed `tau_accept`=67.0084 was measured on a
+detector (Haar) that isn't the one running in production (YuNet). That's
+still true and still worth fixing — which is exactly what the 2026-08-02
+YuNet-standalone re-derivation (67.03325520645528) did, **without** also
+picking up this run's full-frame crop bug. This run's own tau_accept number
+is not "the more representative one for what's deployed" as originally
+speculated here; it's representative of a crop mode deployment doesn't use.
 
 The SFace `l2` gap (1.031 vs 1.018) is much smaller (~1.3%) and in the
 direction you'd expect from a supplied-not-derived value landing close to,

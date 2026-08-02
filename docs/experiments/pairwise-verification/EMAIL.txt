@@ -1,0 +1,15 @@
+Good day, Dr. Oh!
+
+Good update now. Sorry for the long periods without an update -- I've been stuck with the robustness test for quite long now, but now after working on this for countless hours,
+I have come up with something definitive, attached as an image below:
+
+[insert TAR summary table of pairwise verification/TAR]
+
+This is the results of the robustness test of the models (standalone only -- I'm trying to find the best thresholds for the hybrid for now because independence testing
+is NOT the best for this). See that our previous concern, the deep learning algo results being too high, is now fixed. However, as you can see, the LBPH TAR is now very low. 
+But this is not because of an error on our part -- LBPH just cannot get true positives with our requirement of 0.01% FAR. **With that said, we have seen a weakness of 
+our independence test: it only checks impostor pairs using the N*(N-1) comparisons, so it can only give us a threshold to meet the 0.01% FAR requirement, but not a TAR requirement**
+
+Attached below is the full per-modification table for your reference. I will follow up with the results for the hybrid cascade model by today.
+
+[Insert TAR per-modification table of pairwise verification/TAR]

@@ -15,7 +15,8 @@
 | **LBPH Threshold ($	au_{accept}$)** | **`67.0084`** (from `src/hybrid/thresholds.json`, native `predict_collect()` scale) |
 | **SFace Threshold Rule** | Cosine $\ge 0.363$ & $L_2 \le 1.0313$ (`src/sface/recognizer.py`) |
 | **No-Face Policy** | `fallback` (whole-tile fallback on YuNet miss) |
-| **PNG Artifacts** | [`summary_verification_table.png`](file:///C:/Users/acer/Downloads/USLS%204th%20Year/Computer%20Vision/docs/experiments/pairwise-verification/summary_verification_table.png)<br>[`per_modification_verification_table.png`](file:///C:/Users/acer/Downloads/USLS%204th%20Year/Computer%20Vision/docs/experiments/pairwise-verification/per_modification_verification_table.png) |
+| **PNG Artifacts (AR/Accuracy@tau)** | [`summary_verification_table.png`](file:///C:/Users/acer/Downloads/USLS%204th%20Year/Computer%20Vision/docs/experiments/AR/summary_verification_table.png)<br>[`per_modification_verification_table.png`](file:///C:/Users/acer/Downloads/USLS%204th%20Year/Computer%20Vision/docs/experiments/AR/per_modification_verification_table.png) |
+| **PNG Artifacts (TAR)** | [`summary_tar_table.png`](file:///C:/Users/acer/Downloads/USLS%204th%20Year/Computer%20Vision/docs/experiments/AR/summary_tar_table.png)<br>[`per_modification_tar_table.png`](file:///C:/Users/acer/Downloads/USLS%204th%20Year/Computer%20Vision/docs/experiments/AR/per_modification_tar_table.png) (run `scripts/export_tar_png_tables.py` separately) |
 
 ---
 
@@ -81,5 +82,6 @@
 
 ## 3. Scientific Key Takeaways
 
-1. **Protocol vs. Threshold Confound**: Scoring under 1:1 pairwise verification vs 1-to-N open-set identification yields nearly identical low AR numbers for LBPH at the deployment gate $\tau_{accept}=67.0084$ (~50.7% vs 1.74%). This proves the low performance is caused by **wild LFW domain shift on LBPH raw distance scale**, NOT Rank-1 loss to competing gallery candidates.
+1. **Protocol vs. Threshold Confound**: The two protocols agree once compared on the same metric — pairwise **TAR** (True Accept Rate, == the JSON payload's `gar_percent` field; 1.41% overall) is close to 1-to-N open-set identification **AR** (1.74%) at the same deployment gate $\tau_{accept}=67.0084$. (`Accuracy@tau`, at 50.70%, is not directly comparable to identification AR — it is `(TAR + (100-FAR))/2`, and FAR pins near 0% here, so it is not the number that demonstrates the confound.) This shows the low performance is caused by **wild LFW domain shift on LBPH raw distance scale** — genuine pairs mostly don't clear the gate even before any modification — NOT Rank-1 loss to competing gallery candidates.
 2. **SFace Deep Feature Resilience**: SFace retains **90.57% AR** across the full 41-modification suite, maintaining high verification accuracy even under extreme spatial/noise degradations.
+3. **LBPH AR floor is a metric-averaging artifact, not evidence of "no degradation"**: FAR is 0.00% on every LBPH row, so `Accuracy@tau` is mathematically confined to `[50%, 51.13%]`. The real, monotone degradation signal is TAR (this project's preferred term over GAR): clean 2.26% -> light 1.80% -> medium 1.30% -> heavy 0.93% (a 59% relative drop compressed to 0.66 points by the averaging). See `AR/summary_tar_table.png` for the full TAR breakdown. AR stays the reported headline per spec; TAR/FAR/EER are reported alongside as the supporting diagnostic, not as a replacement metric.

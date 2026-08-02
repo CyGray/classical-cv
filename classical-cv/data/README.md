@@ -33,7 +33,7 @@ This repo uses the ORIGINAL UNFUNNELED build. `scripts/utils/setup_datasets.py` 
 
 Do not substitute the Kaggle dataset `jessicali9530/lfw-dataset`. That copy is the DEEP-FUNNELED build. Deep-funneling pre-warps every face into a canonical position, which does part of the pipeline's own alignment work for it and inflates LBPH results in particular.
 
-The frozen threshold `tau_accept = 67.0084` was derived on the original unfunneled build. Mixing builds silently changes LBPH distances and invalidates that threshold. If you ever run a funneled or deep-funneled leg, label it explicitly as a separate ablation and never pool its distances with original-build numbers.
+The frozen threshold `tau_accept = 67.03325520645528` (as of 2026-08-02; was 67.0084) was derived on the original unfunneled build. Mixing builds silently changes LBPH distances and invalidates that threshold. If you ever run a funneled or deep-funneled leg, label it explicitly as a separate ablation and never pool its distances with original-build numbers.
 
 ## Do not source gallery or probe images from processed trees
 
