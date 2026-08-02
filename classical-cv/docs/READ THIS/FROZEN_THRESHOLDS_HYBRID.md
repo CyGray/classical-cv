@@ -7,11 +7,17 @@ place. It was a box-crop-vs-full-frame harness bug in
 recalibration. The deployed `gate.tau_accept` moved instead to
 **67.03325520645528**, the box-cropped YuNet **standalone** LBPH sweep
 (`FROZEN_THRESHOLDS.md`), unified with `cv_only`'s threshold. Full trail:
-`docs/independence/MASTER_FILE.md`, `docs/audits/STATE-08-02.md`. The
-`tau_reject`/SFace rows below are unaffected by that specific correction but
-remain open for other reasons — `tau_reject` in particular is now suspect for
-the *same* box-crop bug, since it comes from the identical full-frame run
-(see `docs/NOTES.md` item 3).
+`docs/independence/MASTER_FILE.md`, `docs/audits/STATE-08-02.md`.
+
+**UPDATE 2026-08-02 (later same day):** `gate.tau_reject`'s candidate below
+(88.492676, ~88.4927 as deployed) was **also superseded** — canonized instead
+to **140.13**, via an entirely different method (an FRR-vs-escalation
+trade-off curve, not an impostor-tail rank like this row) —
+`docs/independence/TAU_REJECT_METHOD.md`. The SFace `l2_genuine` row below
+(1.031255, rounded 1.0313 as deployed) was **kept** — resolved 2026-08-02 as
+immaterial vs. the standalone-derived 1.0306278467178345, no config change,
+see `docs/independence/MASTER_FILE.md` row 5. Both closures: `docs/NOTES.md`
+items 3 and 4.
 
 *Generated 2026-07-28. This doc is intentionally separate from
 [`FROZEN_THRESHOLDS.md`](FROZEN_THRESHOLDS.md), which covers the deployed

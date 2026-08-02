@@ -11,8 +11,14 @@ turned out to be a box-crop-vs-full-frame harness bug (`independence_test.py`
 feeds LBPH the whole frame; deployment and the standalone sweep below both
 feed it the detected face box), not a legitimate alternate calibration. See
 "LBPH `tau_accept`" below and `docs/independence/MASTER_FILE.md` for the
-full evidence trail. Its `tau_reject`/SFace numbers are still open — read
-that doc for what remains unresolved.
+full evidence trail. Its `tau_reject` candidate (88.492676) is likewise
+superseded — `gate.tau_reject` was canonized 2026-08-02 to a different value
+(140.13) via a different method entirely (see "LBPH `tau_reject`" below, new
+section). SFace `l2_genuine`'s standalone-vs-joint gap was also resolved
+2026-08-02 (immaterial, no config change) — see `docs/independence/MASTER_FILE.md`
+row 5. The pre-existing 1.018-vs-1.0313 SFace provenance question below
+("SFace `l2_genuine`" section) is a *different*, still-unresolved history
+question, not re-investigated this pass.
 
 The hybrid gate's `tau_accept` (LBPH) and the SFace genuine-match L2 distance
 are **frozen**. Do not recalibrate or overwrite them via `src/hybrid/calibrate.py`
@@ -26,12 +32,13 @@ rule on purpose (re-derived directly on LFW1, on explicit instruction) — see
 `docs/audits/STATE-07-28.md` for the full record. AGENTS.md has been updated
 to match; if you're reading this expecting LS-DB1-only provenance, don't.
 
-## The two frozen values
+## The three frozen values
 
 | Threshold | Value | Meaning |
 |---|---|---|
 | LBPH `tau_accept` (gate) | **67.03325520645528** | LBPH raw distance (native `predict_collect()` scale); below this, LBPH accepts on its own without escalating to SFace. Also `cv_only`'s standalone accept rule — same value, see "Standalone == hybrid" below. |
-| SFace `l2_genuine` | **1.018** | SFace L2 embedding distance; the dual genuine rule is `cosine >= 0.363 AND l2 <= 1.018`. |
+| LBPH `tau_reject` (gate) | **140.13** | LBPH raw distance; at or above this, LBPH rejects outright without ever calling SFace. Canonized 2026-08-02 — see "LBPH `tau_reject`" below. |
+| SFace `l2_genuine` | **1.018** (module constant deployed: **1.0313**, see below) | SFace L2 embedding distance; the dual genuine rule is `cosine >= 0.363 AND l2 <= L2_GENUINE_THRESHOLD`. This table's own row disagrees with the deployed constant — a pre-existing, still-unresolved provenance gap, see "SFace `l2_genuine`" below. Not touched by this pass's `tau_reject`/SFace-hybrid work. |
 
 ### LBPH `tau_accept` = 67.03325520645528 (was 67.0084)
 
@@ -67,10 +74,26 @@ to match; if you're reading this expecting LS-DB1-only provenance, don't.
   the ~1% FAR operating point, over
   `reports/independence/hybrid/lsdb1_fixed/_raw_runs/run_1/comparisons.csv`).
   Before that: 73.04, carried from `reports/benchmark/tar_at_far.md` / LFW
-  impostors, 100 ppm FAR. `tau_reject` (88.4927) is **unchanged** and now the
-  odd one out — it still comes from the same full-frame joint run whose
-  `tau_accept` sibling was just rejected, so it's suspect for the same
-  reason and not yet re-derived; see `docs/NOTES.md` item 3.
+  impostors, 100 ppm FAR.
+
+### LBPH `tau_reject` = 140.13 (was 88.4927)
+
+- **Canonized 2026-08-02, advisor sign-off.** The old 88.4927 came from the
+  same full-frame joint run as the rejected `tau_accept` candidate
+  (77.769348) and carried the identical box-crop harness-bug taint.
+- **Not re-derived by a plain impostor-tail rank or a plain genuine
+  percentile.** Method: an FRR-vs-escalation trade-off curve —
+  `docs/independence/TAU_REJECT_METHOD.md`
+  (`scripts/pipeline/tau_reject_tradeoff_curve.py`, sweep 70-170). At every
+  candidate tested, genuine-probe escalation and impostor-probe escalation
+  track almost 1:1 — **no knee, no separation-favorable region exists in
+  this range on wild LFW.**
+- Given that, 140.13 (heavy-tier p99 genuine LBPH distance,
+  `docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md`) is a **deliberate
+  permissive engineering choice**, not a derived separation bound — it makes
+  the confident-reject branch functionally near-inert on wild LFW, favoring
+  SFace escalation. Does not generalize to La Salle DB1. Full trail:
+  `docs/independence/MASTER_FILE.md` row 6.
 
 ### SFace `l2_genuine` = 1.018 (was 1.106796)
 
@@ -94,9 +117,9 @@ to match; if you're reading this expecting LS-DB1-only provenance, don't.
 
 ## Where these values live (keep in sync)
 
-- `src/hybrid/thresholds.json` — `gate.tau_accept`, `lbph_far_anchors[1]`, `sface.l2_genuine` (the file actually loaded at runtime).
-- `src/hybrid/gate.py` — `_FALLBACK_GATE_DEFAULTS["tau_accept"]` (last-resort fallback if `thresholds.json` is missing).
-- `src/hybrid/calibrate.py` — `LBPH_TAU_ACCEPT` (regenerates `thresholds.json`; keep the constant in step with the frozen value so a re-run doesn't clobber it).
+- `src/hybrid/thresholds.json` — `gate.tau_accept`, `gate.tau_reject`, `lbph_far_anchors[1]`, `sface.l2_genuine` (the file actually loaded at runtime).
+- `src/hybrid/gate.py` — `_FALLBACK_GATE_DEFAULTS["tau_accept"]` / `["tau_reject"]` (last-resort fallback if `thresholds.json` is missing).
+- `src/hybrid/calibrate.py` — `LBPH_TAU_ACCEPT`, `LBPH_TAU_REJECT` (regenerates `thresholds.json`; keep the constants in step with the frozen values so a re-run doesn't clobber them). `LBPH_FAR_ANCHOR_1PCT` is deliberately a *separate* constant from `LBPH_TAU_REJECT` as of 2026-08-02 — `lbph_far_anchors[2]` is a FAR-curve point, not the reject bound; don't re-couple them.
 - `src/sface/recognizer.py` — `L2_GENUINE_THRESHOLD` (the actual runtime enforcement point for the SFace genuine rule).
 
 ## Parallel ensemble mode: removed

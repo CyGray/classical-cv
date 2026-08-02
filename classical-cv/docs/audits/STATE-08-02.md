@@ -115,3 +115,102 @@ history of what those runs actually executed at): `docs/audits/STATE-07-28.md`,
 `classical-cv/reports/**`, `classical-cv/outputs/**`, worktree checkouts
 under `classical-cv/.claude/worktrees/`, and the `.gemini/skills` /
 `GEMINI.md` mirrors (untracked, out of scope this pass).
+
+---
+
+## Addendum, same day: `tau_reject` canonized, SFace hybrid threshold resolved
+
+*Follows the `tau_accept` unification above. Advisor sign-off obtained before
+any config write (per user instruction).*
+
+### What changed
+
+- `gate.tau_reject` moved **88.4927 → 140.13**.
+- `sface.l2_genuine` / `L2_GENUINE_THRESHOLD` — **unchanged, 1.0313**, but the
+  question of whether it should move is now formally closed rather than open.
+- `calibrate.py` gained a new constant, `LBPH_FAR_ANCHOR_1PCT = 88.4927`,
+  decoupling `lbph_far_anchors[2]` from `LBPH_TAU_REJECT` (they used to be the
+  same constant; keeping them tied would have silently mislabeled 140.13 as a
+  1%-FAR point on the next `calibrate.py` re-run — it isn't one).
+
+### Why — `tau_reject`
+
+`docs/NOTES.md` item 3 asked for the right derivation method, not just a
+number. The prior working value (140.13, heavy-tier p99 genuine LBPH
+distance from `docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md`) had been
+picked but the user explicitly withheld canon status pending a check on
+whether a better, separation-based method existed. Advisor review proposed
+an FRR-vs-escalation trade-off curve instead of either a plain impostor-tail
+rank (the old, box-crop-tainted method) or a plain genuine percentile (the
+provisional pick's own method): sweep `tau_reject`, at each candidate
+compare the fraction of genuine probes permanently hard-rejected against the
+fraction of impostors let into the escalation band.
+
+Result (`scripts/pipeline/tau_reject_tradeoff_curve.py`,
+`reports/independence/tau_reject_tradeoff/curve.json`, sweep 70-170 step 5):
+**no knee.** Genuine-escalated and impostor-escalated rates track almost 1:1
+across the entire range (e.g. at 100: 87.73% vs 86.24%). LBPH does not
+separate genuine from impostor distances in this band on wild LFW — the same
+conclusion `robustness-protocol-map` §4 reached from the EER-crossover
+angle, now confirmed across the full range rather than one point.
+
+Since no candidate is separation-defensible over another, 140.13 was adopted
+as a **stated engineering choice**, not a derived bound: make the
+confident-reject branch permissive (near-inert on LFW) since LBPH cannot
+reject correctly here anyway, and the cascade's headline result depends on
+SFace getting a chance to see genuine probes. Consequence — the reject
+branch resolves almost nothing on wild LFW — is stated explicitly in
+`docs/independence/TAU_REJECT_METHOD.md`, not left implicit.
+
+### Why — hybrid SFace threshold
+
+`docs/NOTES.md` item 4 asked whether a hybrid-specific SFace threshold could
+now be derived, contingent on `tau_reject`. A first-pass band-conditioned
+diagnostic (`docs/experiments/hybrid_sface_threshold/ANALYSIS.md`,
+pre-advisor-review version) filtered the pairwise-verification CSV to LBPH's
+escalation band and found L2 barely mattered vs. cosine — **this finding was
+backwards**, caught on advisor review: since
+`l2 = sqrt(2 - 2·cos)` exactly, `l2 <= 1.0313` (deployed) implies
+`cosine >= 0.4682`, well past the 0.363 gate, so L2 alone is the active
+constraint and cosine is dead code at current settings. Corrected in place
+in the analysis doc.
+
+The corrected framing didn't change the ultimate resolution, though: the
+"~97-99% of all probes escalate on LFW" side-finding (already present in the
+original diagnostic) means the escalation band is not meaningfully different
+from the marginal population the standalone/joint sweeps already measure.
+Three independent SFace threshold derivations — joint-deployed (1.0313),
+standalone (1.0306278467178345), and this diagnostic's own zero-observed-FA
+floor (1.0417) — agree within ~1% of each other. **Decision: no config
+change.** `docs/independence/MASTER_FILE.md` row 5 closed as immaterial,
+scoped explicitly to LFW (does not hold on La Salle DB1, where the
+escalation band is a real, much smaller subset per `docs/PAPER.md`).
+
+### Where these values live (kept in sync this addendum)
+
+- `classical-cv/src/hybrid/thresholds.json` — `gate.tau_reject`,
+  `provenance.gate.tau_reject`, `_hybrid_sface_band_diagnostic` (corrected
+  finding), `_standalone_reference` (SFace note updated to "resolved").
+- `classical-cv/src/hybrid/gate.py` — `_FALLBACK_GATE_DEFAULTS["tau_reject"]`
+  and its header comment.
+- `classical-cv/src/hybrid/calibrate.py` — `LBPH_TAU_REJECT` (now 140.13),
+  new `LBPH_FAR_ANCHOR_1PCT` constant, `lbph_far_anchors` construction,
+  `provenance["gate.tau_reject"]` / new `provenance["lbph_far_anchors[2]"]`.
+- `docs/independence/TAU_REJECT_METHOD.md` — new, the canon method doc.
+- `docs/independence/MASTER_FILE.md` — rows 5 (closed) and 6 (new, closed).
+- `docs/NOTES.md` — items 3 and 4 closed; free-text "Current state" section
+  updated to drop the `[insert value here]` placeholder.
+- `docs/experiments/hybrid_sface_threshold/ANALYSIS.md` — cosine/L2 finding
+  corrected in place (struck through where the reasoning changed, not
+  silently rewritten), new "Resolution" section added.
+- Auto-memory (`frozen-thresholds-stay-frozen.md`) — both threshold
+  paragraphs updated, description frontmatter updated, `MEMORY.md` index
+  line updated.
+
+**Not touched, deliberately:** `docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md`
+(the provisional-value exploration that fed into the canon method — left as
+the run record it is, not rewritten to claim it was always the final
+method). `reports/independence/hybrid_sface_band/band_conditioned.json` (raw
+diagnostic output — the JSON data itself was never wrong, only the prose
+interpretation of it in `ANALYSIS.md`/`thresholds.json`, which is what got
+corrected).

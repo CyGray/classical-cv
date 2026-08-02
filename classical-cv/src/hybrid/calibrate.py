@@ -50,8 +50,17 @@ IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp"}
 # docs/audits/STATE-08-02.md for why the earlier joint-hybrid-derived 77.769348
 # was rejected (box-crop harness bug, not a real alternate calibration).
 LBPH_TAU_ACCEPT = 67.03325520645528  # LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR)
-LBPH_TAU_REJECT = 88.4927  # LFW1 rank-165226 unidirectional unique-pair impostor distance (~1.0% FAR) — SUSPECT, see thresholds.json provenance.gate.tau_reject
-TAR_AT_FAR_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165,226 unidirectional unique-pair impostor distance (~1.0% FAR), YuNet joint hybrid run -- CAUTION: same full-frame harness bug that invalidated the LBPH tau_accept candidate from this run likely taints this value too (see docs/audits/STATE-08-02.md); not yet re-derived"
+# CANONIZED 2026-08-02 (advisor sign-off): 140.13, heavy-tier p99 genuine LBPH distance
+# (docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md), method: docs/independence/TAU_REJECT_METHOD.md.
+# This is a genuine-side FRR-budget pick, NOT an impostor-FAR-derived value — do not reuse it as a
+# FAR-curve anchor point (see LBPH_FAR_ANCHOR_1PCT below, kept separate on purpose).
+LBPH_TAU_REJECT = 140.13
+# The old impostor-tail-rank tau_reject candidate (88.4927) is retained ONLY as the FAR-anchor's
+# second point (lbph_far_anchors below) — it is still the best available ~1% impostor-FAR distance
+# on record, even though it's tainted by the same box-crop harness bug as tau_accept's old
+# 77.769348 candidate (not yet re-derived on the corrected pipeline). It is NOT the reject bound.
+LBPH_FAR_ANCHOR_1PCT = 88.4927
+TAR_AT_FAR_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165,226 unidirectional unique-pair impostor distance (~1.0% FAR), YuNet joint hybrid run -- CAUTION: same full-frame harness bug that invalidated the LBPH tau_accept candidate from this run likely taints this value too (see docs/audits/STATE-08-02.md); not yet re-derived. Used only as the lbph_far_anchors 1% FAR point, decoupled from gate.tau_reject as of 2026-08-02 canonization."
 LBPH_TAU_ACCEPT_PROVENANCE = "frozen 2026-08-02: LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR), STANDALONE box-cropped YuNet LBPH-only sweep (reports/independence/lbph_lfw1/native_predict_scale_yunet.json); unified with cv_only's threshold by design decision (docs/audits/STATE-08-02.md) — supersedes the 2026-08-01 joint-hybrid-run provenance previously stated here"
 
 # Relative top1<->top2 gap below which LBPH is treated as a near-tie and escalated.
@@ -208,7 +217,7 @@ def main() -> int:
             "margin_min": margin_min,
         },
         "quality": quality.to_dict(),
-        "lbph_far_anchors": [[0.0, 0.0], [LBPH_TAU_ACCEPT, 1e-4], [LBPH_TAU_REJECT, 1e-2], [200.0, 1.0]],
+        "lbph_far_anchors": [[0.0, 0.0], [LBPH_TAU_ACCEPT, 1e-4], [LBPH_FAR_ANCHOR_1PCT, 1e-2], [200.0, 1.0]],
         "sface": {
             "cosine_genuine": COSINE_GENUINE_THRESHOLD,
             "l2_genuine": L2_GENUINE_THRESHOLD,
@@ -217,7 +226,8 @@ def main() -> int:
         },
         "provenance": {
             "gate.tau_accept": LBPH_TAU_ACCEPT_PROVENANCE,
-            "gate.tau_reject": f"carried: {TAR_AT_FAR_PROVENANCE}, ~1% FAR",
+            "gate.tau_reject": "CANONIZED 2026-08-02 (advisor sign-off): 140.13, heavy-tier p99 genuine LBPH distance, an FRR-budget pick (see docs/independence/TAU_REJECT_METHOD.md) -- NOT an impostor-FAR-derived value like tau_accept.",
+            "lbph_far_anchors[2]": f"carried, decoupled from gate.tau_reject 2026-08-02: {TAR_AT_FAR_PROVENANCE}, ~1% FAR",
             "gate.margin_min": "policy: relative top1-top2 gap 0.05 (not dataset-fitted; "
             "train margins are inflated by memorisation, test-fitting would leak)",
             "quality.*": f"measured: clean-crop probe distribution edges ({clean_dir.name}); "

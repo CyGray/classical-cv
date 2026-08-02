@@ -36,12 +36,14 @@ from src.hybrid.quality import QualityReport
 # Last-resort fallback if thresholds.json is missing/unreadable at import time.
 # The frozen values themselves live in thresholds.json (the file the evidence
 # matrix SHA-256-hashes); these literals must never be the only copy.
-# tau_accept is FROZEN — see docs/READ THIS/FROZEN_THRESHOLDS.md before touching.
+# tau_accept and tau_reject are FROZEN — see docs/READ THIS/FROZEN_THRESHOLDS.md before touching.
 # 2026-08-02: tau_accept moved 67.0084 -> 67.03325520645528 (unified with the
 # standalone LBPH sweep; see thresholds.json's provenance.gate.tau_accept and
-# docs/audits/STATE-08-02.md). tau_reject is unchanged but flagged suspect —
-# see thresholds.json's provenance.gate.tau_reject.
-_FALLBACK_GATE_DEFAULTS = {"tau_accept": 67.03325520645528, "tau_reject": 88.4927, "margin_min": 0.05}
+# docs/audits/STATE-08-02.md). tau_reject moved 88.4927 -> 140.13 (CANONIZED,
+# advisor sign-off, an FRR-budget pick — NOT an impostor-FAR-derived value like
+# tau_accept; see docs/independence/TAU_REJECT_METHOD.md and thresholds.json's
+# provenance.gate.tau_reject).
+_FALLBACK_GATE_DEFAULTS = {"tau_accept": 67.03325520645528, "tau_reject": 140.13, "margin_min": 0.05}
 _THRESHOLDS_JSON = Path(__file__).with_name("thresholds.json")
 
 
