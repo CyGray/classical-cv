@@ -106,3 +106,8 @@ outputs/
 .env.local
 config_secrets.json
 hw_profile.json
+
+# Agent context files
+AGENTS.md
+GEMINI.md
+
