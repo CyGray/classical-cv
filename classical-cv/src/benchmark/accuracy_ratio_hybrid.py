@@ -246,14 +246,22 @@ def load_gallery_from_manifest(manifest: dict) -> list[tuple[str, str]]:
     """(person, absolute gallery image path) for EVERY manifest identity
     (including singletons/demoted). Consumed by enrollment
     (run_lfw2_robustness.py.ensure_lfw2_enrollment), not by this module's own
-    probe loop."""
+    probe loop. ``gallery`` is normally a single relpath string (one enrolled
+    image per identity); a multi-shot manifest (e.g.
+    make_lasalle_clean10_split.py) may instead give a LIST of relpaths, in
+    which case this yields one (person, path) tuple per image -- repeated
+    person entries are the enrollment contract multi-shot LBPH already
+    relies on (see enroll_lfw_multishot.py)."""
     root = manifest["dataset_root"]
     out: list[tuple[str, str]] = []
     for person in sorted(manifest["identities"]):
         entry = manifest["identities"][person]
         rel = entry.get("gallery")
-        if rel:
-            out.append((person, os.path.join(root, rel)))
+        if not rel:
+            continue
+        rels = rel if isinstance(rel, list) else [rel]
+        for r in rels:
+            out.append((person, os.path.join(root, r)))
     return out
 
 
