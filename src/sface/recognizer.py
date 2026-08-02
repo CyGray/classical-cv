@@ -31,8 +31,8 @@ FR_COSINE = int(getattr(cv, "FaceRecognizerSF_FR_COSINE", 0))
 FR_NORM_L2 = int(getattr(cv, "FaceRecognizerSF_FR_NORM_L2", 1))
 COSINE_GENUINE_THRESHOLD = 0.363
 # FROZEN — see docs/READ THIS/FROZEN_THRESHOLDS.md before touching.
-# 2026-07-28: 1.018, supplied by the SFace sub-team, not re-derived in this repo.
-L2_GENUINE_THRESHOLD = 1.018
+# 2026-08-01: 1.0313, LFW1 YuNet joint hybrid run rank-165 unidirectional unique-pair distance (~10 ppm FAR).
+L2_GENUINE_THRESHOLD = 1.0313
 SFACE_FEATURE_DIM = 128
 SFACE_FEATURE_BYTES = SFACE_FEATURE_DIM * 4  # float32 => 512 bytes
 

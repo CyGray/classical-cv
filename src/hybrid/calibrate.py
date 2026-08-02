@@ -44,13 +44,11 @@ IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp"}
 
 # FROZEN — see docs/READ THIS/FROZEN_THRESHOLDS.md before touching. LBPH_TAU_ACCEPT
 # is the LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR,
-# native predict_collect() scale, reports/independence/lbph_lfw1/native_predict_scale.json);
-# no longer the LS-DB1 rank-8 value (70.6089) or the earlier LFW-carried tar_at_far.md
-# value (73.04) — see docs/audits/STATE-07-28.md.
+# YuNet joint hybrid run, docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md).
 LBPH_TAU_ACCEPT = 67.0084  # LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR)
-LBPH_TAU_REJECT = 76.85   # ~1% FAR band edge (TAR 100.00%)
-TAR_AT_FAR_PROVENANCE = "reports/benchmark/tar_at_far.md (LBPH vs 13,149 LFW impostors)"
-LBPH_TAU_ACCEPT_PROVENANCE = "frozen 2026-07-28: LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR), reports/independence/lbph_lfw1/native_predict_scale.json (see docs/audits/STATE-07-28.md)"
+LBPH_TAU_REJECT = 88.4927  # LFW1 rank-165226 unidirectional unique-pair impostor distance (~1.0% FAR)
+TAR_AT_FAR_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165,226 unidirectional unique-pair impostor distance (~1.0% FAR), YuNet joint hybrid run"
+LBPH_TAU_ACCEPT_PROVENANCE = "frozen 2026-08-01: LFW1 rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR), YuNet joint hybrid run (see docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md)"
 
 # Relative top1<->top2 gap below which LBPH is treated as a near-tie and escalated.
 # A POLICY default, deliberately not dataset-fitted: train distances are inflated

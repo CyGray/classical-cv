@@ -37,7 +37,7 @@ from src.hybrid.quality import QualityReport
 # The frozen values themselves live in thresholds.json (the file the evidence
 # matrix SHA-256-hashes); these literals must never be the only copy.
 # tau_accept is FROZEN — see docs/READ THIS/FROZEN_THRESHOLDS.md before touching.
-_FALLBACK_GATE_DEFAULTS = {"tau_accept": 67.0084, "tau_reject": 76.85, "margin_min": 0.05}
+_FALLBACK_GATE_DEFAULTS = {"tau_accept": 67.0084, "tau_reject": 88.4927, "margin_min": 0.05}
 _THRESHOLDS_JSON = Path(__file__).with_name("thresholds.json")
 
 

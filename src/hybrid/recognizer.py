@@ -388,7 +388,17 @@ class HybridRecognizer:
             return self._sface_decision(sample, base)
 
         if self.mode == "cv_only":
-            accept = lbph_match.distance <= self.gate_thresholds.tau_reject
+            # Standalone LBPH accepts on tau_accept (67.0084), NOT tau_reject.
+            # tau_accept IS the LBPH-only independence-test threshold (LFW1
+            # rank-165 unidirectional unique pair, ~10 ppm FAR - see
+            # thresholds.json provenance and docs/READ THIS/FROZEN_THRESHOLDS.md);
+            # src/hybrid/independence_test.py:488 already scores LBPH-alone
+            # false accepts as `d <= tau_accept`. tau_reject is the *cascade
+            # gate's* confident-reject bound and has no role outside the
+            # cascade. This line used tau_reject until 2026-08-01, which ran
+            # cv_only at ~1% FAR while dl_only ran at ~10 ppm - see
+            # docs/audits/STATE-08-01.md.
+            accept = lbph_match.distance <= self.gate_thresholds.tau_accept
             return HybridDecision(
                 name=lbph_match.name if accept else "Unknown",
                 name_raw=lbph_match.name,

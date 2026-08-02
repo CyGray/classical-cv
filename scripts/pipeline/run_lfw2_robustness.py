@@ -26,6 +26,7 @@ DEFAULT_LFW_ROOT = PROJECT_ROOT / "data" / "lfw-dataset"
 
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(PROJECT_ROOT / "scripts" / "utils"))  # setup_datasets.py lives here, not scripts/pipeline
 from main import build_subprocess_env, describe_hardware_profile, load_or_build_hardware_profile  # noqa: E402
 from setup_datasets import setup_lfw  # noqa: E402
 
@@ -105,39 +106,151 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Thresholds JSON forwarded to accuracy_ratio_hybrid (default: frozen hybrid thresholds).",
     )
+    parser.add_argument(
+        "--split-manifest",
+        default=None,
+        help="Path to an lsface-lfw-ident-split-v1 manifest (see "
+             "scripts/utils/make_lfw_identification_split.py). When given, enrollment "
+             "uses the manifest's GALLERY images (one per identity, including "
+             "singletons) and probes are the manifest's disjoint PROBE images - the "
+             "fixed gallery/probe-disjoint protocol (docs/audits/STATE-08-01.md). "
+             "When omitted, falls back to the original same-image "
+             "select_originals(...) path (reported as transform_sensitivity, not "
+             "Accuracy Ratio) for backward compatibility with old report reruns.",
+    )
+    parser.add_argument(
+        "--mod-set",
+        choices=["legacy", "dl41"],
+        default="dl41",
+        help="Forwarded to accuracy_ratio_hybrid --mod-set (default dl41).",
+    )
+    parser.add_argument(
+        "--headline-scope",
+        choices=["all41", "exclude-canonical"],
+        default="all41",
+        help="Forwarded to accuracy_ratio_hybrid --headline-scope. all41 (default): "
+             "the headline mean covers all 41 dl41 variants, comparable to the DL "
+             "team's ar-table.py. exclude-canonical: drop rot_90/180/270 and flip_lr "
+             "from the headline mean (they are broken out separately either way).",
+    )
+    parser.add_argument(
+        "--limit-identities",
+        type=int,
+        default=0,
+        help="Debug/smoke-test only: forwarded to accuracy_ratio_hybrid --limit-identities "
+             "(0 = all). Also caps enrollment to the same identities.",
+    )
+    parser.add_argument(
+        "--no-face-policy",
+        choices=["fallback", "strict"],
+        default=None,
+        help="Forwarded to accuracy_ratio_hybrid --no-face-policy. Default: "
+             "accuracy_ratio_hybrid's own default (fallback). Recommended 'strict' "
+             "for headline --mod-set dl41 runs (detection failure is a genuine "
+             "system failure under that taxonomy).",
+    )
+    parser.add_argument(
+        "--lbph-assume-cropped",
+        choices=["true", "false"],
+        default="false",
+        help="Forwarded to accuracy_ratio_hybrid --lbph-assume-cropped, and also "
+             "controls enrollment (ensure_lfw2_enrollment). 'true': pre-cropped tile "
+             "datasets (e.g. data/lasalle_db1_processed) need true. 'false' "
+             "(default): raw LFW frames need false, so LBPH uses the detected YuNet "
+             "face box instead of the whole 250x250 frame.",
+    )
     return parser.parse_args()
 
 
-def ensure_lfw2_enrollment(lfw_root: Path, seed: int) -> dict[str, str]:
-    """Train/enroll LBPH + SFace on LFW2 (one clean image per identity, the same
-    seeded selection the benchmark probes use) and cache the artifacts under
-    models/lfw2/. A matching cache is reused; delete the files to force re-enroll."""
+def _sha256_file(path: Path) -> str:
+    import hashlib
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def ensure_lfw2_enrollment(
+    lfw_root: Path,
+    seed: int,
+    split_manifest_path: str | None = None,
+    limit_identities: int = 0,
+    assume_cropped: bool = False,
+) -> dict[str, str]:
+    """Train/enroll LBPH + SFace on LFW2 and cache the artifacts under
+    models/lfw2/. A matching cache is reused; delete the files to force re-enroll.
+
+    Two enrollment sources:
+
+    * ``split_manifest_path`` given: enroll from the manifest's GALLERY images
+      (``scripts/utils/make_lfw_identification_split.py`` output) - disjoint
+      from the probes the benchmark will score (docs/audits/STATE-08-01.md).
+      The cache key includes the manifest's own ``triples_sha256`` (not just
+      lfw_root/seed) so a stale ``manifest_seed{seed}.json`` cache can never be
+      silently reused against a DIFFERENT split manifest that happens to share
+      the same seed.
+    * omitted: the original same-image ``select_originals(..., seed=seed)``
+      path (backward compatible with old transform_sensitivity reruns).
+
+    ``assume_cropped`` must mirror the benchmark's own ``--lbph-assume-cropped``
+    (accuracy_ratio_hybrid.py): it controls whether LBPH enrolls on the whole
+    frame or the detected YuNet face box, and is baked into the cache filenames
+    (``_fullframe`` / ``_boxcrop``) AND the cached-manifest match check below,
+    so the two crop modes never silently reuse each other's LBPH model.
+    """
+    manifest_suffix = ""
+    split_manifest_sha = None
+    if split_manifest_path is not None:
+        split_manifest_sha = _sha256_file(Path(split_manifest_path))
+        manifest_suffix = f"_manifest{split_manifest_sha[:12]}"
+    crop_token = "_fullframe" if assume_cropped else "_boxcrop"
+
     paths = {
-        "lbph_model": ENROLL_DIR / f"lbph_seed{seed}.yml",
-        "lbph_labels": ENROLL_DIR / f"lbph_labels_seed{seed}.json",
-        "sface_gallery": ENROLL_DIR / f"sface_gallery_seed{seed}.npy",
-        "sface_labels": ENROLL_DIR / f"sface_labels_seed{seed}.json",
+        "lbph_model": ENROLL_DIR / f"lbph_seed{seed}{manifest_suffix}{crop_token}.yml",
+        "lbph_labels": ENROLL_DIR / f"lbph_labels_seed{seed}{manifest_suffix}{crop_token}.json",
+        "sface_gallery": ENROLL_DIR / f"sface_gallery_seed{seed}{manifest_suffix}{crop_token}.npy",
+        "sface_labels": ENROLL_DIR / f"sface_labels_seed{seed}{manifest_suffix}{crop_token}.json",
     }
-    manifest_path = ENROLL_DIR / f"manifest_seed{seed}.json"
+    manifest_path = ENROLL_DIR / f"manifest_seed{seed}{manifest_suffix}{crop_token}.json"
     if manifest_path.exists() and all(p.exists() for p in paths.values()):
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        if manifest.get("lfw_root") == str(lfw_root) and manifest.get("seed") == seed:
+        cached = json.loads(manifest_path.read_text(encoding="utf-8"))
+        matches = (
+            cached.get("lfw_root") == str(lfw_root)
+            and cached.get("seed") == seed
+            and cached.get("split_manifest_sha256") == split_manifest_sha
+            and cached.get("limit_identities", 0) == limit_identities
+            and cached.get("assume_cropped", False) == assume_cropped
+        )
+        if matches:
             print(f"[ENROLL] Reusing cached LFW2 enrollment "
-                  f"({manifest['identities']} identities) in {ENROLL_DIR}")
+                  f"({cached['identities']} identities) in {ENROLL_DIR}")
             return {k: str(v) for k, v in paths.items()}
-        print("[ENROLL] Cached manifest does not match this root/seed; re-enrolling.")
+        print("[ENROLL] Cached manifest does not match this root/seed/split-manifest/crop-mode; re-enrolling.")
 
     sys.path.insert(0, str(PROJECT_ROOT))
     import cv2 as cv
     import numpy as np
-    from src.benchmark.accuracy_ratio_hybrid import select_originals
+    from src.benchmark.accuracy_ratio_hybrid import (
+        load_gallery_from_manifest,
+        load_split_manifest,
+        select_originals,
+    )
     from src.classical_faces.detection import create_face_detector
     from src.classical_faces.pipeline import SPECS
     from src.classical_faces.preprocess import IMG_SIZE, normalize_face
     from src.hybrid.recognizer import detect_sample
     from src.sface.recognizer import SFaceGallery, SFaceRecognizer, default_sface_model_path
 
-    selection = select_originals(str(lfw_root), select_one_per_person=True, seed=seed)
+    if split_manifest_path is not None:
+        split_manifest = load_split_manifest(split_manifest_path)
+        selection = load_gallery_from_manifest(split_manifest)
+        print(f"[ENROLL] Enrolling from split manifest {split_manifest_path} "
+              f"(gallery images, disjoint from probes)...")
+    else:
+        selection = select_originals(str(lfw_root), select_one_per_person=True, seed=seed)
+    if limit_identities:
+        selection = selection[:limit_identities]
     if not selection:
         raise RuntimeError(f"No identity folders with images under {lfw_root}")
     print(f"[ENROLL] Enrolling {len(selection)} identities (one clean image each, seed={seed})...")
@@ -156,9 +269,11 @@ def ensure_lfw2_enrollment(lfw_root: Path, seed: int) -> dict[str, str]:
         if img is None:
             continue
         gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-        # Mirror the benchmark probe path exactly: assume_cropped=True means LBPH
-        # sees the whole tile normalized; SFace align-crops via YuNet landmarks.
-        sample = detect_sample(detector, image_bgr=img, image_gray=gray, assume_cropped=True)
+        # Mirror the benchmark probe path exactly: assume_cropped controls whether
+        # LBPH sees the whole tile normalized (True, pre-cropped tile datasets) or
+        # the detected YuNet face box (False, raw LFW frames); SFace always
+        # align-crops via YuNet landmarks regardless.
+        sample = detect_sample(detector, image_bgr=img, image_gray=gray, assume_cropped=assume_cropped)
         if sample is None:
             face_gray = gray
             feature = sface.feature_from_crop(img)
@@ -194,7 +309,16 @@ def ensure_lfw2_enrollment(lfw_root: Path, seed: int) -> dict[str, str]:
         "lfw_root": str(lfw_root),
         "seed": seed,
         "identities": len(label_map),
-        "selection": "one image per person, same seeded pick as the benchmark probes",
+        "selection": (
+            "split-manifest gallery images (disjoint from probes)"
+            if split_manifest_path is not None
+            else "one image per person, same seeded pick as the benchmark probes "
+                 "(transform_sensitivity path - see docs/audits/STATE-08-01.md)"
+        ),
+        "split_manifest_path": split_manifest_path,
+        "split_manifest_sha256": split_manifest_sha,
+        "limit_identities": limit_identities,
+        "assume_cropped": assume_cropped,
         "equalization": equalization,
         "yunet_misses_whole_tile_fallback": yunet_misses,
         "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -257,6 +381,35 @@ def run_segment(
     return segment_index, seg_json, seg_csv
 
 
+def _manifest_probe_count(split_manifest: str | None, limit_identities: int) -> int:
+    """Number of probe rows the benchmark will actually process, mirroring
+    accuracy_ratio_hybrid's own manifest path (including the
+    --limit-identities gallery intersection). 0 when not running the manifest
+    protocol, in which case the caller leaves the segment count alone."""
+    if not split_manifest:
+        return 0
+    path = Path(split_manifest)
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
+    if not path.exists():
+        return 0
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    identities = manifest.get("identities", {})
+    people = sorted(identities)
+    if limit_identities:
+        enrolled = {p for p in people if identities[p].get("gallery")}
+        people = [p for p in people if p in enrolled][:limit_identities]
+    count = 0
+    for person in people:
+        entry = identities[person]
+        rels = entry.get("probes")
+        if rels is None:
+            single = entry.get("probe")
+            rels = [single] if single else []
+        count += len(rels)
+    return count
+
+
 def main() -> int:
     ensure_dependencies()
     args = parse_args()
@@ -280,6 +433,22 @@ def main() -> int:
 
     requested_workers = args.num_workers if args.num_workers is not None else hardware_profile["workers"]
     num_segments = args.num_segments or max(16, requested_workers)
+    # segment_bounds() sizes every segment as ceil(n/k), so the first k-1
+    # segments can already cover all n probes and leave the last one an EMPTY
+    # slice - the benchmark then divides by len(originals) to build ar_percent
+    # and dies with ZeroDivisionError, killing the whole run. Shrink k until
+    # the tail segment has work. Bites on small --limit-identities smoke runs
+    # (500 gallery identities intersect to 147 probes: ceil(147/16)*15 = 150 >
+    # 147); a full 1,680-probe run is unaffected (ceil(1680/16)*15 = 1575).
+    n_probes = _manifest_probe_count(args.split_manifest, args.limit_identities)
+    if n_probes:
+        capped = num_segments
+        while capped > 1 and ((n_probes + capped - 1) // capped) * (capped - 1) >= n_probes:
+            capped -= 1
+        if capped != num_segments:
+            print(f"[INFO] Capping segments {num_segments} -> {capped}: {n_probes} probes "
+                  f"would leave the tail segment(s) empty.")
+            num_segments = capped
     num_workers = min(requested_workers, num_segments)
 
     print(f"=== LFW2 41-Modification Hybrid Robustness Harness ===")
@@ -287,11 +456,22 @@ def main() -> int:
     print(f"Workers: {num_workers} | Segments: {num_segments} (finished segments are skipped on re-launch)")
     print(f"Output Dir: {out_dir}")
     print(f"Seed: {args.seed}")
+    print(f"Split manifest: {args.split_manifest or '(none - legacy same-image path)'}")
+    print(f"Mod set: {args.mod_set}")
 
     # LFW2 needs LFW2-enrolled models (the benchmark defaults are La Salle-enrolled,
     # which scores all zeroes here). Auto-enroll + cache unless explicitly overridden.
+    # Cache key includes the split manifest's own sha256 (ensure_lfw2_enrollment) so a
+    # stale models/lfw2/manifest_seed{seed}*.json can never be silently reused against
+    # a different split manifest sharing the same seed.
+    lbph_assume_cropped = args.lbph_assume_cropped == "true"
     if args.lbph_model is None or args.sface_gallery is None:
-        enrolled = ensure_lfw2_enrollment(lfw_path, args.seed)
+        enrolled = ensure_lfw2_enrollment(
+            lfw_path, args.seed,
+            split_manifest_path=args.split_manifest,
+            limit_identities=args.limit_identities,
+            assume_cropped=lbph_assume_cropped,
+        )
         if args.lbph_model is None:
             args.lbph_model = enrolled["lbph_model"]
             if args.lbph_labels is None:
@@ -306,9 +486,16 @@ def main() -> int:
         ("--lbph-labels", args.lbph_labels),
         ("--sface-gallery", args.sface_gallery),
         ("--thresholds-json", args.thresholds_json),
+        ("--mod-set", args.mod_set),
+        ("--headline-scope", args.headline_scope),
+        ("--split-manifest", args.split_manifest),
+        ("--no-face-policy", args.no_face_policy),
+        ("--lbph-assume-cropped", args.lbph_assume_cropped),
     ):
         if value is not None:
             passthrough.extend([flag, value])
+    if args.limit_identities:
+        passthrough.extend(["--limit-identities", str(args.limit_identities)])
     # AR/battery run, not a latency run: share engine scores across modes (~3x less work).
     passthrough.append("--reuse-engine-scores")
 
