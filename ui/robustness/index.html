@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robustness Variants Benchmark Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header class="header">
+    <div class="brand-section">
+      <div class="brand-icon">LS</div>
+      <div>
+        <div class="brand-title">Robustness Variants Benchmark</div>
+        <div style="font-size: 12px; color: var(--text-muted); display: flex; gap: 8px; align-items: center;">
+          <span>lsface classical-cv / robustness_variants</span>
+          <span class="brand-badge">v0.81.0</span>
+        </div>
+      </div>
+    </div>
+    
+    <nav class="nav-links">
+      <button class="nav-btn active" data-tab="holistic">Holistic Overview</button>
+      <button class="nav-btn" data-tab="tracks">Tracks Inspector</button>
+      <button class="nav-btn" data-tab="simulator">Trade-off Simulator</button>
+      <button class="nav-btn" data-tab="matrix">41-Mod Matrix</button>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- TAB 0: HOLISTIC DASHBOARD -->
+    <section id="tab-holistic" class="tab-section">
+      <div class="section-header">
+        <h1 class="section-title">Holistic Overview & TAR Delta Benchmark</h1>
+        <p class="section-desc">Tracks sorted from least to greatest LBPH Clean TAR with absolute TAR gains measured against the lowest baseline (Track 1 LFW Wild = 2.26%).</p>
+      </div>
+
+      <!-- Quick Empirical Levers Visualizer -->
+      <div class="glass-card" style="margin-bottom: 24px;">
+        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: #0f172a;">Primary Levers Impact on LBPH Accuracy (Sorted Least to Greatest)</h3>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+          <!-- Lever 1 -->
+          <div style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: var(--radius-md); padding: 16px;">
+            <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">Baseline (Lowest TAR)</div>
+            <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">Wild 1-Photo LFW: 2.26% TAR</div>
+            <div class="meter-bar-bg" style="margin-top: 8px;"><div class="meter-bar-fill" style="width: 2.26%; background: #0f172a;"></div></div>
+            <div style="font-size: 11px; color: #475569; margin-top: 6px; font-weight: 600;">2.26% (Baseline Anchor)</div>
+          </div>
+
+          <!-- Lever 2 -->
+          <div style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: var(--radius-md); padding: 16px;">
+            <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">Lever 1: Environment Control</div>
+            <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">AT&T Controlled: 38.75% TAR</div>
+            <div class="meter-bar-bg" style="margin-top: 8px;"><div class="meter-bar-fill" style="width: 38.75%; background: #0f172a;"></div></div>
+            <div style="font-size: 11px; color: #475569; margin-top: 6px; font-weight: 600;">38.75% (+36.49% over baseline)</div>
+          </div>
+
+          <!-- Lever 3 -->
+          <div style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: var(--radius-md); padding: 16px;">
+            <div style="font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase;">Lever 2: Enrollment Volume</div>
+            <div style="font-size: 14px; font-weight: 700; color: #0f172a; margin-top: 4px;">La Salle 10-Photo: 92.86% TAR</div>
+            <div class="meter-bar-bg" style="margin-top: 8px;"><div class="meter-bar-fill" style="width: 92.86%; background: #0f172a;"></div></div>
+            <div style="font-size: 11px; color: #475569; margin-top: 6px; font-weight: 600;">92.86% (+90.60% over baseline)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Holistic Comparison Table -->
+      <div class="glass-card" style="margin-bottom: 24px;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px;">
+          <h3 style="font-size: 16px; font-weight: 800; color: #0f172a;">Master Comparison Matrix (Least to Greatest TAR)</h3>
+          
+          <!-- Mode Display Toggler -->
+          <div class="mode-toggler" id="holisticModeToggler">
+            <span style="font-size: 12px; font-weight: 700; color: var(--text-faint); margin-right: 4px;">Engine View:</span>
+            <button class="mode-chip active" data-mode="all">All Engines</button>
+            <button class="mode-chip" data-mode="lbph">LBPH Only</button>
+            <button class="mode-chip" data-mode="sface">SFace Only</button>
+            <button class="mode-chip" data-mode="hybrid">Hybrid (Cascade)</button>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="data-table" id="holisticTable">
+            <thead id="holisticThead">
+              <!-- Dynamically populated via app.js -->
+            </thead>
+            <tbody id="holisticTableBody">
+              <!-- Dynamically populated via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Track Cards Grid -->
+      <h3 style="font-size: 18px; font-weight: 800; margin-bottom: 16px; color: #0f172a;">Track Explanations</h3>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;" id="holisticCardsGrid">
+        <!-- Dynamically populated via app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 1: TRACKS INSPECTOR -->
+    <section id="tab-tracks" class="tab-section hidden">
+      <div class="section-header">
+        <h1 class="section-title">Robustness Variant Tracks</h1>
+        <p class="section-desc">Select an experiment track to explore metrics, comparative benchmarks, and key findings.</p>
+      </div>
+
+      <!-- Tracks Switcher -->
+      <div class="track-switcher-grid" id="trackSwitcherGrid">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+
+      <!-- Selected Track Details Card -->
+      <div class="glass-card" id="trackDetailContainer">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </section>
+
+    <!-- TAB 2: TRADE-OFF SIMULATOR -->
+    <section id="tab-simulator" class="tab-section hidden">
+      <div class="section-header">
+        <h1 class="section-title">FAR Target & Latency Simulator</h1>
+        <p class="section-desc">Interactively adjust the False Acceptance Rate (FAR) operating target to simulate LBPH True Acceptance Rate (TAR), cascade escalation rate, and latency trade-offs.</p>
+      </div>
+
+      <div class="glass-card">
+        <div class="sim-grid">
+          <!-- Control Panel -->
+          <div class="sim-control-group">
+            <div class="sim-slider-container">
+              <div class="slider-header">
+                <span>Target Impostor FAR Checkpoint</span>
+                <span class="slider-val-badge" id="farValBadge">10 ppm (Deployed)</span>
+              </div>
+              <input type="range" id="farRange" min="0" max="6" value="0" step="1">
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-faint); margin-top: 4px;">
+                <span>10 ppm</span>
+                <span>100 ppm</span>
+                <span>0.1%</span>
+                <span>1%</span>
+                <span>5%</span>
+                <span>10%</span>
+                <span>EER</span>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 2px solid #cbd5e1; border-radius: var(--radius-md); padding: 16px;">
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 8px;">Operating Threshold ($\tau_{accept}$)</h4>
+              <div class="font-mono" style="font-size: 24px; color: #0f172a;" id="simTau">67.0333</div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
+                Raw LBPH Chi-Square native distance threshold evaluated on 16.5M unique LFW impostor pairs.
+              </p>
+            </div>
+          </div>
+
+          <!-- Output Panel -->
+          <div class="sim-output-card">
+            <h3 style="font-size: 16px; font-weight: 700; color: #0f172a;">Simulated Performance Outputs</h3>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="metric-box">
+                <div class="metric-label">Clean LBPH TAR</div>
+                <div class="metric-val" id="simCleanTar">2.26%</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">41-Mod Avg TAR</div>
+                <div class="metric-val" id="simOverallTar">1.43%</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Escalation Rate</div>
+                <div class="metric-val" id="simEscalation">97.5%</div>
+              </div>
+              <div class="metric-box">
+                <div class="metric-label">Est. Cascade Latency</div>
+                <div class="metric-val" id="simLatency">82.54 ms</div>
+              </div>
+            </div>
+
+            <!-- Visual Meters -->
+            <div class="sim-meter">
+              <div class="meter-header">
+                <span>Clean LBPH TAR</span>
+                <span id="meterTextTar">2.26%</span>
+              </div>
+              <div class="meter-bar-bg">
+                <div class="meter-bar-fill" id="barTarClean" style="width: 3.4%;"></div>
+              </div>
+            </div>
+
+            <div class="sim-meter">
+              <div class="meter-header">
+                <span>41-Mod Pooled TAR</span>
+                <span id="meterTextOverall">1.43%</span>
+              </div>
+              <div class="meter-bar-bg">
+                <div class="meter-bar-fill" id="barTarOverall" style="width: 2.1%;"></div>
+              </div>
+            </div>
+
+            <div class="sim-meter">
+              <div class="meter-header">
+                <span>Cascade SFace Escalation Rate</span>
+                <span id="meterTextEsc">97.5%</span>
+              </div>
+              <div class="meter-bar-bg">
+                <div class="meter-bar-fill" id="barEscalation" style="width: 97.5%;"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 41-MOD MATRIX -->
+    <section id="tab-matrix" class="tab-section hidden">
+      <div class="section-header">
+        <h1 class="section-title">41-Modification Breakdown Matrix</h1>
+        <p class="section-desc">Per-modification baseline accuracy comparison across Light, Medium, and Heavy severity tiers.</p>
+      </div>
+
+      <div class="glass-card">
+        <!-- Search & Filter Controls -->
+        <div class="filter-bar">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search modification family (e.g. Blur, Noise, Rotation)...">
+          
+          <button class="filter-chip active" data-tier="All">All Tiers</button>
+          <button class="filter-chip" data-tier="Light">Light</button>
+          <button class="filter-chip" data-tier="Medium">Medium</button>
+          <button class="filter-chip" data-tier="Heavy">Heavy</button>
+        </div>
+
+        <!-- Matrix Table -->
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Modification Family</th>
+                <th>Severity Tier & Detail</th>
+                <th>LBPH Standalone AR</th>
+                <th>SFace Standalone AR</th>
+                <th>Cascade (Hybrid) AR</th>
+              </tr>
+            </thead>
+            <tbody id="modTableBody">
+              <!-- Rendered dynamically via app.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Robustness Variants Interactive Dashboard &bull; LSFace Project &bull; Clean Monochrome Theme</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
