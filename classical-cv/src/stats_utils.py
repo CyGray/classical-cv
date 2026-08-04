@@ -187,9 +187,10 @@ def mcnemar_test(b: int, c: int) -> dict:
     * ``p_exact`` - exact binomial: under H0 the b-vs-c split is
       Binom(b + c, 1/2); two-sided p = 2 * P(X <= min(b, c)), clamped to 1.
       Preferred whenever b + c is small (the La Salle regime).
+      ``p_exact_log10`` retains the magnitude when ``p_exact`` underflows.
     * ``statistic`` / ``p_chi2`` - the continuity-corrected chi-square form
-      (|b - c| - 1)^2 / (b + c) against chi2(1 df), whose survival function is
-      erfc(sqrt(x / 2)) - no scipy needed.
+      max(|b - c| - 1, 0)^2 / (b + c) against chi2(1 df), whose survival
+      function is erfc(sqrt(x / 2)) - no scipy needed.
 
     ``b + c == 0`` (the engines never disagree) is degenerate: no evidence
     either way.
@@ -200,15 +201,23 @@ def mcnemar_test(b: int, c: int) -> dict:
     if m == 0:
         return {"b": 0, "c": 0, "statistic": None, "p_chi2": None,
                 "p_exact": None, "degenerate": True}
-    stat = (abs(b - c) - 1.0) ** 2 / m if m > 0 else 0.0
+    # The continuity correction cannot cross zero: tied discordant counts
+    # are exactly compatible with the null rather than weak evidence against it.
+    corrected_difference = max(abs(b - c) - 1.0, 0.0)
+    stat = corrected_difference ** 2 / m
     p_chi2 = math.erfc(math.sqrt(stat / 2.0))
     k = min(b, c)
-    # log-sum-exp over the lower binomial tail, reusing _log_binom.
+    # Log-sum-exp keeps the exact-test magnitude available even when the
+    # floating-point p-value underflows for a very lopsided large sample.
     log_half_m = m * math.log(0.5)
-    tail = sum(math.exp(_log_binom(m, x) + log_half_m) for x in range(k + 1))
-    p_exact = min(1.0, 2.0 * tail)
+    log_terms = [_log_binom(m, x) + log_half_m for x in range(k + 1)]
+    max_log = max(log_terms)
+    log_tail = max_log + math.log(sum(math.exp(term - max_log) for term in log_terms))
+    log_p_exact = min(0.0, math.log(2.0) + log_tail)
+    p_exact = math.exp(log_p_exact) if log_p_exact > math.log(float.fromhex("0x1.0p-1022")) else 0.0
     return {"b": int(b), "c": int(c), "statistic": stat, "p_chi2": p_chi2,
-            "p_exact": p_exact, "degenerate": False}
+            "p_exact": p_exact, "p_exact_log10": log_p_exact / math.log(10.0),
+            "degenerate": False}
 
 
 # --------------------------------------------------------------------------- #

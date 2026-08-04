@@ -854,7 +854,10 @@ def main() -> int:
                   f"[{rec['ci95_low_percent']:.2f}-{rec['ci95_high_percent']:.2f}] "
                   f"({rec['count']}/{rec['trials']}); both-fail = {bf['percent']:.2f}%")
         if not mc["degenerate"]:
-            print(f"[BATTERY] McNemar x={mc['b']} y={mc['c']} p_exact={mc['p_exact']:.3g}")
+            print(
+                f"[BATTERY] McNemar x={mc['b']} y={mc['c']} "
+                f"p_exact={_fmt_p(mc['p_exact'], mc.get('p_exact_log10'))}"
+            )
         gate = (bat.get("gate") or {}).get("modified_only")
         if gate:
             evw = gate["escalate_vs_lbph_wrong"]
@@ -1066,9 +1069,11 @@ def _fmt_pct_ci(entry: dict | None) -> str:
             f"-{entry['ci95_high_percent']:.1f}]")
 
 
-def _fmt_p(p: float | None) -> str:
+def _fmt_p(p: float | None, log10_p: float | None = None) -> str:
     if p is None:
         return "n/a"
+    if p == 0.0 and log10_p is not None:
+        return f"< 1e{int(log10_p)}"
     return f"{p:.2g}" if p >= 1e-4 else f"{p:.1e}"
 
 
@@ -1090,7 +1095,8 @@ def battery_markdown(battery: dict) -> list[str]:
         f"({om['recovery_rate_ci95']['count']}/{om['recovery_rate_ci95']['trials']})"
         if om["recovery_rate_ci95"] else "- Recovery rate: n/a (LBPH never wrong)",
         f"- **Both-fail ceiling** = {_fmt_pct_ci(om['both_fail_ci95'])}",
-        f"- **McNemar** (x={mc['b']} vs y={mc['c']}): p_exact = {_fmt_p(mc['p_exact'])}, "
+        f"- **McNemar** (x={mc['b']} vs y={mc['c']}): p_exact = "
+        f"{_fmt_p(mc['p_exact'], mc.get('p_exact_log10'))}, "
         f"chi2_cc = {mc['statistic']:.1f}" if not mc["degenerate"]
         else "- McNemar: degenerate (no discordant probes)",
     ]
@@ -1114,7 +1120,7 @@ def battery_markdown(battery: dict) -> list[str]:
             f"| {row['modification']} | {wrong} | {rt['dl_only_right']} | "
             f"{(rec['percent'] if rec else float('nan')):.0f}% | "
             f"{row['both_fail_ci95']['percent']:.1f}% | "
-            f"{_fmt_p(row['mcnemar']['p_exact'])} | "
+            f"{_fmt_p(row['mcnemar']['p_exact'], row['mcnemar'].get('p_exact_log10'))} | "
             + (f"{auc:.2f} |" if auc is not None else "n/a |")
         )
     gate = battery.get("gate") or {}

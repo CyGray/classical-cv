@@ -20,9 +20,147 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.benchmark.modifications import DL41_DETECTOR_CANONICAL, get_modification_set
-from src.stats_utils import wilson_interval_percent
+from src.stats_utils import mcnemar_test, wilson_interval_percent
 
 AR_TIE_TOLERANCE = 2.0  # keep in sync with src/benchmark/accuracy_ratio_hybrid.py
+PAIRING_TABLE_KEYS = ("both_right", "cv_only_right", "dl_only_right", "both_wrong")
+
+
+def _pairing_stats(table: dict) -> dict:
+    """Recompute A/B metrics from a summed paired-correctness table."""
+    try:
+        counts = {key: int(table[key]) for key in PAIRING_TABLE_KEYS}
+    except (KeyError, TypeError, ValueError) as exc:
+        raise RuntimeError("Invalid complementarity pairing table.") from exc
+    if any(value < 0 for value in counts.values()):
+        raise RuntimeError("Complementarity pairing counts must be non-negative.")
+
+    probes = sum(counts.values())
+    lbph_wrong = counts["dl_only_right"] + counts["both_wrong"]
+    return {
+        "probes": probes,
+        "table": counts,
+        "recovery_rate_ci95": (
+            wilson_interval_percent(counts["dl_only_right"], lbph_wrong)
+            if lbph_wrong else None
+        ),
+        "both_fail_ci95": wilson_interval_percent(counts["both_wrong"], probes) if probes else None,
+        "mcnemar": mcnemar_test(counts["cv_only_right"], counts["dl_only_right"]),
+    }
+
+
+def _sum_pairing_stats(stats: list[dict]) -> dict:
+    """Sum segment 2x2 cells before deriving rates and p-values."""
+    table = {key: 0 for key in PAIRING_TABLE_KEYS}
+    for stat in stats:
+        source = stat.get("table") if isinstance(stat, dict) else None
+        if not isinstance(source, dict):
+            raise RuntimeError("Segment is missing complementarity pairing data.")
+        for key in PAIRING_TABLE_KEYS:
+            try:
+                value = int(source[key])
+            except (KeyError, TypeError, ValueError) as exc:
+                raise RuntimeError("Segment has an invalid complementarity pairing table.") from exc
+            if value < 0:
+                raise RuntimeError("Segment has negative complementarity pairing counts.")
+            table[key] += value
+        expected_probes = stat.get("probes")
+        if expected_probes is not None and int(expected_probes) != sum(int(source[key]) for key in PAIRING_TABLE_KEYS):
+            raise RuntimeError("Segment complementarity probe count does not match its pairing table.")
+    return _pairing_stats(table)
+
+
+def _merge_complementarity_battery(payloads: list[dict], modifications_list: list[tuple]) -> dict:
+    """Merge only recovery/McNemar A/B evidence from compatible segments."""
+    batteries = []
+    for payload in payloads:
+        battery = payload.get("complementarity_battery")
+        if not isinstance(battery, dict):
+            raise RuntimeError(
+                "All cv_only+dl_only segments must include complementarity_battery; "
+                "rerun missing segments with both modes enabled."
+            )
+        batteries.append(battery)
+
+    expected_names = [entry[0] for entry in modifications_list]
+    per_segment = []
+    for battery in batteries:
+        rows = battery.get("per_modification")
+        if not isinstance(rows, list):
+            raise RuntimeError("Segment is missing per-modification complementarity data.")
+        indexed = {row.get("modification"): row for row in rows if isinstance(row, dict)}
+        if set(indexed) != set(expected_names) or len(indexed) != len(expected_names):
+            raise RuntimeError("Segment complementarity modifications do not match the configured suite.")
+        per_segment.append(indexed)
+
+    clean_rows = [battery.get("clean") for battery in batteries]
+    if any(row is None for row in clean_rows):
+        raise RuntimeError("Segment is missing clean complementarity pairing data.")
+    return {
+        "note": (
+            "Identification-axis pairing (correct identity within threshold). "
+            "cv_correct = cv_only accept; dl_correct = dl_only accept. "
+            "recovery = P(SFace right | LBPH wrong); McNemar tests discordant "
+            "cells (x = cv-only-right vs y = dl-only-right)."
+        ),
+        "clean": _sum_pairing_stats(clean_rows),
+        "overall_modified": _sum_pairing_stats([battery.get("overall_modified") for battery in batteries]),
+        "per_modification": [
+            {"modification": name, **_sum_pairing_stats([segment[name] for segment in per_segment])}
+            for name in expected_names
+        ],
+    }
+
+
+def _fmt_p(result: dict) -> str:
+    p_value = result.get("p_exact")
+    if p_value is None:
+        return "n/a"
+    if p_value == 0.0 and result.get("p_exact_log10") is not None:
+        return f"< 1e{int(result['p_exact_log10'])}"
+    return f"{p_value:.2g}" if p_value >= 1e-4 else f"{p_value:.1e}"
+
+
+def _battery_markdown(battery: dict) -> list[str]:
+    overall = battery["overall_modified"]
+    table = overall["table"]
+    mcnemar = overall["mcnemar"]
+    lines = [
+        "## Complementarity Tests A/B (identification axis)",
+        "",
+        "Same-probe cv_only vs dl_only pairing: w = both right, x = only LBPH right, "
+        "y = only SFace right, z = both wrong. Recovery = y/(y+z); McNemar tests x vs y.",
+        "",
+        f"- Modified probes: {overall['probes']} | w/x/y/z = "
+        f"{table['both_right']}/{table['cv_only_right']}/{table['dl_only_right']}/{table['both_wrong']}",
+        (
+            f"- **Recovery rate** = {overall['recovery_rate_ci95']['percent']:.2f}% "
+            f"[{overall['recovery_rate_ci95']['ci95_low_percent']:.2f}-"
+            f"{overall['recovery_rate_ci95']['ci95_high_percent']:.2f}] "
+            f"({overall['recovery_rate_ci95']['count']}/{overall['recovery_rate_ci95']['trials']})"
+            if overall["recovery_rate_ci95"] else "- Recovery rate: n/a (LBPH never wrong)"
+        ),
+        (
+            f"- **McNemar** (x={mcnemar['b']} vs y={mcnemar['c']}): "
+            f"p_exact = {_fmt_p(mcnemar)}, chi2_cc = {mcnemar['statistic']:.1f}"
+            if not mcnemar["degenerate"] else "- McNemar: degenerate (no discordant probes)"
+        ),
+        "",
+        "| Modification | LBPH wrong | SFace rescues | Recovery | McNemar p |",
+        "|---|---:|---:|---:|---:|",
+    ]
+    for row in battery["per_modification"]:
+        pairing = row["table"]
+        recovery = row["recovery_rate_ci95"]
+        test = row["mcnemar"]
+        recovery_text = f"{recovery['percent']:.0f}%" if recovery else "n/a"
+        lines.append(
+            f"| {row['modification']} | {pairing['dl_only_right'] + pairing['both_wrong']} | "
+            f"{pairing['dl_only_right']} | "
+            f"{recovery_text} | "
+            f"{(_fmt_p(test) if not test['degenerate'] else 'n/a')} |"
+        )
+    return lines
 
 
 def parse_args() -> argparse.Namespace:
@@ -350,6 +488,11 @@ def main() -> int:
             merged_payload["complementarity"]["cascade_within_2pts_of_best"] = sum(
                 1 for r in per_mod if r["cascade_vs_best_points"] >= -AR_TIE_TOLERANCE
             )
+        # The segment payloads already contain per-probe paired A/B outcomes.
+        # Sum those cells first, then recompute recovery and McNemar centrally.
+        merged_payload["complementarity_battery"] = _merge_complementarity_battery(
+            payloads, modifications_list
+        )
 
     # Save JSON
     out_json_path = Path(args.output_json)
@@ -498,6 +641,10 @@ def main() -> int:
             ]
             for row in canonical_rows:
                 lines.append(_fmt_rank1_row(row))
+
+    battery = merged_payload.get("complementarity_battery")
+    if battery:
+        lines.extend([""] + _battery_markdown(battery))
 
     lines.append("")
     out_md_path.write_text("\n".join(lines), encoding="utf-8")

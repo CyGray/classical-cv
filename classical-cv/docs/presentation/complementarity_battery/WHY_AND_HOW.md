@@ -32,8 +32,8 @@ one connected story.
 | # | What we claim | The test that proves it | Do we have it? |
 |---|---|---|:--:|
 | 1 | **CV is fast** | latency: cascade vs SFace-only | ✅ §4.4 |
-| 2 | **DL is more accurate — and it's real, not noise** | Rank-1 gap **+ McNemar** (test 3 below) | ⚠️ gap yes, significance no |
-| 3 | **DL saves CV** — where LBPH fails, SFace succeeds | **recovery rate** (test 1 below) | ❌ missing |
+| 2 | **DL is more accurate — and it's real, not noise** | Rank-1 gap **+ McNemar** (test 3 below) | ⚠️ implemented; held-out smoke result pending |
+| 3 | **DL saves CV** — where LBPH fails, SFace succeeds | **recovery rate** (test 1 below) | ⚠️ implemented; held-out smoke result pending |
 | 4 | **The cascade gets both, and routing isn't luck** | near-SFace accuracy at near-LBPH cost + **gate AUC** (tests 2 & 4) | ⚠️ partly |
 
 Claims 1–4 are the thesis. The security/independence work (the other doc) is claim 5 —
@@ -79,9 +79,10 @@ i.e. SFace is catching almost everything LBPH drops. Also report `both-fail`: it
 honest ceiling, the frames *nobody* gets, and stating it up front is what keeps this
 defensible instead of salesy.
 
-**Status / cost:** not computed yet, but the data is already produced per probe — this
-is a ~10-line change in `accuracy_ratio_hybrid.py` (keep `y` and `y+z` in the existing
-loop), not a new experiment.
+**Status / cost:** implemented. `accuracy_ratio_hybrid.py` records the paired outcomes,
+and `merge_robustness_segments.py` now recomputes recovery from pooled `w/x/y/z` cells
+for the canonical merged report. The held-out LFW smoke result remains pending until the
+dataset and split manifest are available locally.
 
 ## 2. Gate competence (AUC) — does CV know when to call DL?
 
@@ -131,8 +132,9 @@ statistic = (|x - y| - 1)² / (x + y)      # McNemar with continuity correction
 hard frames" is statistically real, not a sampling artifact. It's the paired,
 same-probes version of the accuracy comparison — which a bare "97% vs 60%" is not.
 
-**Status / cost:** trivial. Same table as test 1; `src/stats_utils.py` already has the
-combinatorics (`fisher_exact`) we'd reuse.
+**Status / cost:** implemented from the same table as test 1. The standard-library
+helper reports exact and continuity-corrected forms; extremely small exact p-values are
+rendered as bounds rather than a misleading literal zero.
 
 ## 4. Speed–accuracy operating curve — both benefits at once
 
@@ -202,9 +204,10 @@ advance."
 
 ## How we'll do it
 
-1. **Recovery rate + both-fail + McNemar** — keep the per-probe pairing already computed
-   in `accuracy_ratio_hybrid.py` (run with `--modes cv_only,dl_only,cascade`); ~10 lines
-   plus a tiny McNemar helper. **Do first — highest value, lowest cost.**
+1. **Recovery rate + both-fail + McNemar** — implemented in
+   `accuracy_ratio_hybrid.py` and preserved by `merge_robustness_segments.py` when run
+   with `--modes cv_only,dl_only,cascade`. The next required evidence run is the held-out
+   LFW smoke protocol, not a new metric implementation.
 2. **Gate AUC** — surface the LBPH distance/margin per probe (currently discarded), pair
    with the "LBPH correct?" label, compute ROC AUC offline.
 3. **Operating curve** — sweep the gate thresholds, re-run the benchmark, plot
@@ -217,8 +220,8 @@ advance."
 
 | Test | Where | Effort | Proves |
 |---|---|---|---|
-| Recovery rate + both-fail | `src/benchmark/accuracy_ratio_hybrid.py` | ~10 lines (data exists) | **DL saves CV** (claim 3) |
-| McNemar | same table + `src/stats_utils.py` | trivial | accuracy gap is real (claim 2) |
+| Recovery rate + both-fail | benchmark + segment merge | implemented; needs held-out run | **DL saves CV** (claim 3) |
+| McNemar | same paired table + `src/stats_utils.py` | implemented; needs held-out run | accuracy gap is real (claim 2) |
 | Gate AUC | near `src/hybrid/gate.py`, benchmark loop | small | routing isn't luck (claim 4) |
 | Operating curve | `src/benchmark/`, sweep gate thresholds | medium | both benefits at once (claim 4) |
 | Security panel @ LFW | `src/hybrid/independence_test.py` | run-only (already coded) | error independence (claim 5) |
