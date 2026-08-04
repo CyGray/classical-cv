@@ -21,6 +21,8 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.benchmark.modifications import DL41_DETECTOR_CANONICAL, get_modification_set
 from src.stats_utils import wilson_interval_percent
+;from src.benchmark.accuracy_ratio_hybrid import compute_battery, battery_markdown
+import csv
 
 AR_TIE_TOLERANCE = 2.0  # keep in sync with src/benchmark/accuracy_ratio_hybrid.py
 
@@ -351,6 +353,56 @@ def main() -> int:
                 1 for r in per_mod if r["cascade_vs_best_points"] >= -AR_TIE_TOLERANCE
             )
 
+    battery_rows = []
+    # Concatenate per-segment battery CSVs (header kept from the first file only).
+    if args.battery_csvs:
+        csv_paths: list[Path] = []
+        for pattern in args.battery_csvs:
+            expanded = glob.glob(pattern)
+            if expanded:
+                csv_paths.extend(Path(p) for p in sorted(expanded))
+            else:
+                csv_paths.append(Path(pattern))
+        csv_paths = [p for p in dict.fromkeys(csv_paths) if p.exists()]
+        if csv_paths:
+            out_csv_path = Path(args.output_battery_csv)
+            out_csv_path.parent.mkdir(parents=True, exist_ok=True)
+            with out_csv_path.open("w", encoding="utf-8", newline="") as fh:
+                for idx, p in enumerate(csv_paths):
+                    rows = p.read_text(encoding="utf-8").splitlines()
+                    if not rows:
+                        continue
+                    for row in rows if idx == 0 else rows[1:]:
+                        fh.write(row + "\n")
+            print(f"[OK] Concatenated {len(csv_paths)} battery CSVs -> {out_csv_path}")
+
+            with out_csv_path.open("r", encoding="utf-8") as fh:
+                reader = csv.DictReader(fh)
+                for row in reader:
+                    # Convert types back from CSV strings
+                    try:
+                        row["level"] = float(row["level"]) if row["level"] not in ("", "None") else None
+                    except ValueError:
+                        pass
+                    row["no_face"] = row["no_face"] == "True"
+                    row["cv_correct"] = row["cv_correct"] == "True"
+                    row["dl_correct"] = row["dl_correct"] == "True"
+                    row["escalated"] = row["escalated"] == "True" if row.get("escalated") not in ("", "None") else None
+                    if row.get("lbph_distance") not in ("", "None"):
+                        row["lbph_distance"] = float(row["lbph_distance"])
+                    else:
+                        row["lbph_distance"] = None
+                    if row.get("lbph_margin") not in ("", "None"):
+                        row["lbph_margin"] = float(row["lbph_margin"])
+                    else:
+                        row["lbph_margin"] = None
+                    battery_rows.append(row)
+        else:
+            print("[WARN] --battery-csvs given but no files found; skipping CSV merge.")
+
+    if battery_rows and "cv_only" in modes and "dl_only" in modes:
+        merged_payload["complementarity_battery"] = compute_battery(battery_rows, modes)
+
     # Save JSON
     out_json_path = Path(args.output_json)
     out_json_path.parent.mkdir(parents=True, exist_ok=True)
@@ -499,32 +551,13 @@ def main() -> int:
             for row in canonical_rows:
                 lines.append(_fmt_rank1_row(row))
 
+    if "complementarity_battery" in merged_payload:
+        lines += battery_markdown(merged_payload["complementarity_battery"])
+
     lines.append("")
     out_md_path.write_text("\n".join(lines), encoding="utf-8")
 
-    # Concatenate per-segment battery CSVs (header kept from the first file only).
-    if args.battery_csvs:
-        csv_paths: list[Path] = []
-        for pattern in args.battery_csvs:
-            expanded = glob.glob(pattern)
-            if expanded:
-                csv_paths.extend(Path(p) for p in sorted(expanded))
-            else:
-                csv_paths.append(Path(pattern))
-        csv_paths = [p for p in dict.fromkeys(csv_paths) if p.exists()]
-        if csv_paths:
-            out_csv_path = Path(args.output_battery_csv)
-            out_csv_path.parent.mkdir(parents=True, exist_ok=True)
-            with out_csv_path.open("w", encoding="utf-8", newline="") as fh:
-                for idx, p in enumerate(csv_paths):
-                    rows = p.read_text(encoding="utf-8").splitlines()
-                    if not rows:
-                        continue
-                    for row in rows if idx == 0 else rows[1:]:
-                        fh.write(row + "\n")
-            print(f"[OK] Concatenated {len(csv_paths)} battery CSVs -> {out_csv_path}")
-        else:
-            print("[WARN] --battery-csvs given but no files found; skipping CSV merge.")
+
 
     print(f"[SUCCESS] Merged {len(payloads)} segments -> {out_json_path} and {out_md_path}")
     return 0
