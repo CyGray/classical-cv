@@ -15,9 +15,13 @@ CLASSICAL_CV_DIR = SCRIPT_DIR.parent
 WORKSPACE_ROOT = CLASSICAL_CV_DIR.parent
 
 REPORT_JSON = CLASSICAL_CV_DIR / "reports" / "benchmark" / "far_sweep_tar_report.json"
-OUT_DIR = WORKSPACE_ROOT / "docs" / "experiments" / "pairwise-verification" / "lfw-results" / "SWEEP"
-OUT_DIR.mkdir(parents=True, exist_ok=True)
-OUT_PATH = OUT_DIR / "summary-table.png"
+
+OUT_PATHS = [
+    WORKSPACE_ROOT / "docs" / "experiments" / "robustness_variants" / "pairwise-verification" / "lfw-results" / "SWEEP" / "summary-table.png",
+    WORKSPACE_ROOT / "docs" / "experiments" / "robustness_variants" / "pairwise-verification" / "summary-table.png",
+    WORKSPACE_ROOT / "docs" / "experiments" / "pairwise-verification" / "lfw-results" / "SWEEP" / "summary-table.png",
+]
+
 
 
 def format_far(ppm) -> str:
@@ -50,6 +54,8 @@ def format_op_label(row: dict) -> str:
 
 
 def render_far_sweep_table(headers, data, col_widths, output_path, family_boundaries=None, row_ppms=None):
+    import matplotlib
+    matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
     num_rows = len(data)
@@ -145,8 +151,11 @@ def main() -> None:
         )
         row_ppms.append(row.get("realized_far_ppm"))
 
-    render_far_sweep_table(headers, data, col_widths, str(OUT_PATH), family_boundaries=family_boundaries, row_ppms=row_ppms)
-    print(f"[SAVE] {OUT_PATH}")
+    for out_path in OUT_PATHS:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        render_far_sweep_table(headers, data, col_widths, str(out_path), family_boundaries=family_boundaries, row_ppms=row_ppms)
+        print(f"[SAVE] {out_path}")
+
 
 
 if __name__ == "__main__":

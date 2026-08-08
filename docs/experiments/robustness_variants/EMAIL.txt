@@ -1,26 +1,24 @@
-Dear Dr. Oh,
+Subject: Correction to Robustness Test Protocol (Data Leakage) — diagrams attached
 
-Please accept my apologies for the delay in updates. I have been working through the robustness tests and have now identified definitive results:
+Dr. Oh,
 
-[insert per-modification table of docs/experiments/robustness_variants/hybrid-identification/per_modification_identification_table.png]
+Following up on our session — attaching diagrams to make the protocol change and the numbers clearer than I managed to explain live.
 
-The issue with the deep learning results being too high has been resolved. However, LBPH's True Acceptance Rate (TAR) is very low. This is not an error; LBPH simply cannot achieve true positives at our 0.01% False Acceptance Rate (FAR) requirement under the real-life conditions of the LFW dataset. The high results previously observed were because training=test data.
+What changed: the robustness test previously trained LBPH on one photo, then used a corrupted copy of that SAME photo as the probe. The model was matching a distorted copy of data it had already memorized, not an unseen photo. This produced an inflated result (LBPH clean acceptance 100%, 86.66% averaged across the 41 modifications) that measured memorization, not recognition.
 
-Note: We also adjusted the fast reject threshold where the cascade rejects a probe instead of escalating to SFace, so escalation rate is now ~97.5%, meaning almost all cases are passed to SFace to avoid rejecting candidates SFace could have saved. Cascade (82.5ms) is still faster than SFace-only (84.4ms), but this means LBPH does not help much, as the cascade's Acceptance Rate (AR) matches SFace's at 80.65%.
+Fix: the test set is now restricted to identities with at least 2 real photos (1,680 such identities in LFW). One photo enrolls the gallery; a genuinely different second photo of the same person is corrupted and used as the probe. This is a real test of generalization to an unseen photo.
 
-Given these findings, should we proceed with writing this up as-is, or explore further? Below is a summary of the approaches I have already tested:
+Under the corrected protocol, LBPH's real performance is much lower: clean TAR 2.26%, dropping to 0.93% at the heaviest modification tier, ~1.4% averaged across all 41 modifications, at the deployed threshold.
 
-1. Write it up as-is: LBPH cannot effectively gate the LFW dataset, leading the cascade to rely on SFace, though latency remains acceptable. Even changing our thresholds does not help much (TAR up to 31%), indicating this is not a threshold issue.
+Before you ask — I checked whether this is just an overly strict threshold. It isn't: even loosening the threshold to accept 10% of impostors (unusable for any real deployment), clean TAR only reaches 31%. The genuine and impostor LBPH distance distributions on wild LFW overlap heavily across the entire range — this is a distance-separability limit, not a threshold-tuning problem. Diagram 3 shows this.
 
-2. Provide LBPH with more training photos per person: This improves results by approximately 9-10x, but the performance remains too low for practical deployment.
+Attached (5 PNGs, or all combined in the single PDF):
+1. Old vs new test setup, side by side
+2. Old vs new LBPH numbers (these are not on the same scale — different protocol, different question — the point is direction, not a single before/after arrow)
+3. The threshold sweep above
+4. How to read the 41-modification table (17 families x 3 severity tiers)
+5. What "escalation %" means — this is a separate concept from the numbers above (it belongs to the hybrid LBPH+SFace cascade, not the 1:1 verification test), included since it came up in the same session
 
-3. Test on a controlled dataset (AT&T faces, 40 people, uniform lighting): LBPH performs significantly better here (39% vs. 2% on LFW), demonstrating that the algorithm functions correctly but requires low-variation images.
+Re-running the robustness suite is not yet done for the identification-protocol variants; I'll report those once complete.
 
-4. Re-test the La Salle dataset with a single training photo per person: LBPH's performance drops sharply (8% vs. 90%+ with 10 photos). This suggests the primary limitation is the volume of quality training photos per person rather than the environment (controlled vs. wild).
-
-I believe combining points 1, 3, and 4 presents the strongest narrative: LBPH's limitations stem from wild, single-photo enrollment rather than the test framework or threshold settings.
-
-Please let me know how you would like to proceed, or if I should begin drafting the write-up based on this direction.
-
-Best regards,
-Kyle Yuan Uy
+Kyle
