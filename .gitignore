@@ -111,3 +111,8 @@ hw_profile.json
 AGENTS.md
 GEMINI.md
 
+sface-porting
+
+# Recoverable cascade-porting deployment artifacts
+porting-sets/cascade-porting/models/
+porting-sets/cascade-porting/enrollment/releases/

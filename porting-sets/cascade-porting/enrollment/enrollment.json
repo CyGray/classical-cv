@@ -1,0 +1,6 @@
+{
+  "updated_utc": "2026-08-09T06:49:38Z",
+  "identities": 28,
+  "samples": 28,
+  "recipe": "YuNet one-face box crop + Tan-Triggs LBPH + SFace alignCrop"
+}
