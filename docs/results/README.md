@@ -1,0 +1,2 @@
+This folder contains the results and relevant docs about results form the four main tests of the study. It may be in any form (json, md, docx, png/jpg), but always include metadata like
+the datetime, scripts, commit.
