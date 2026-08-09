@@ -46,8 +46,10 @@ build/
 *~
 .DS_Store
 Thumbs.db
+desktop.ini
 *.sublime-project
 *.sublime-workspace
+~$*.docm
 
 # ===================================
 # Datasets (Local & Machine-Specific)
