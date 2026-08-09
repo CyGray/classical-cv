@@ -1,3 +1,9 @@
 {
-    "folder-color.pathColors": []
+    "folder-color.pathColors": [
+        {
+            "folderPath": "Computer Vision\\docs\\manuscript\\",
+            "color": "foldercolorizer.color_00afd7",
+            "badge": "P"
+        }
+    ]
 }
