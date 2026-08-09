@@ -21,7 +21,7 @@ guide stay in `docs/experiments/pairwise-verification/`.
 | **Raw JSON Payload** | `classical-cv/outputs/benchmark/accuracy_ratio_verification_full.json` | Complete programmatic JSON benchmark payload with TAR (JSON field: `gar_percent` — TAR is this project's preferred term for the same quantity, see below), FAR, Accuracy, and EER stats. |
 | **Per-Pair CSV Log** | `classical-cv/outputs/benchmark/accuracy_ratio_verification_full_pairs.csv` | Pairwise raw distance log for offline threshold and ROC/EER re-sweeps. |
 | **FAR-Sweep Table PNG** | `docs/experiments/pairwise-verification/lfw-results/SWEEP/summary-table.png` | Full-bleed table: LBPH TAR at multiple FAR-target checkpoints (10ppm, 100ppm, 0.1%, 1%, 5%, 10%) plus the deployed gate and this run's EER, for reference only — see §2c. |
-| **FAR-Sweep Raw Data** | `classical-cv/reports/independence/lbph_lfw1/far_sweep.json` (impostor side, full LFW1) + `classical-cv/reports/benchmark/far_sweep_tar_report.{json,md}` (merged with genuine side) | Backing data for the FAR-sweep table. |
+| **FAR-Sweep Raw Data** | `docs/results/independence_test/independence/lbph_lfw1/far_sweep.json` (impostor side, full LFW1) + `classical-cv/reports/benchmark/far_sweep_tar_report.{json,md}` (merged with genuine side) | Backing data for the FAR-sweep table. |
 
 ---
 

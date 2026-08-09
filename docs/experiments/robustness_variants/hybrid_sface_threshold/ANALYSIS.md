@@ -2,9 +2,9 @@
 
 *2026-08-02. Answers `docs/NOTES.md` item 4. Original diagnostic used the
 provisional `tau_reject` from
-[`docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md`](../tau_reject/THRESHOLD_ANALYSIS.md)
+[`docs/experiments/thresholds/tau_reject/THRESHOLD_ANALYSIS.md`](../../thresholds/tau_reject/THRESHOLD_ANALYSIS.md)
 (140.13); `tau_reject` has since been canonized (see
-[`docs/independence/TAU_REJECT_METHOD.md`](../../independence/TAU_REJECT_METHOD.md))
+[`docs/results/independence_test/TAU_REJECT_METHOD.md`](../../../independence_test/TAU_REJECT_METHOD.md))
 but the resolution below does not depend on the exact candidate — see "Unplanned
 finding" and "Resolution" sections. **Corrected 2026-08-02, post advisor
 review: the original cosine/L2 finding below had the two gates' relationship
@@ -151,7 +151,7 @@ diagnostic. That direction was wrong for a reason independent of the
 cosine/L2 correction above: **the escalation band is not a meaningfully
 different population from the marginal one on wild LFW.**
 
-`docs/experiments/hybrid_sface_threshold/ANALYSIS.md`'s own "unplanned
+`docs/experiments/robustness_variants/hybrid_sface_threshold/ANALYSIS.md`'s own "unplanned
 finding" (below) already established that ~97-99% of all LFW probes —
 genuine and impostor alike — land in `[tau_accept, tau_reject)` regardless of
 which `tau_reject` candidate is used. That means band-conditioning barely
@@ -175,7 +175,7 @@ within 0.0111 absolute (~1%) — stronger evidence for "these are the same
 number, noise aside" than a fourth, more expensive joint 1-to-N run would add.
 
 **Decision: no change to `sface.l2_genuine`/`L2_GENUINE_THRESHOLD`.**
-`docs/independence/MASTER_FILE.md` row 5 (joint-vs-standalone SFace split) is
+`docs/results/independence_test/MASTER_FILE.md` row 5 (joint-vs-standalone SFace split) is
 closed as: difference (0.0007, ~0.07%) judged immaterial, band ≈ marginal on
 this dataset.
 
@@ -222,9 +222,9 @@ read by any runtime path.
 ## Cross-references
 
 - `docs/NOTES.md` item 4 — the task this doc answers.
-- `docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md` — the `tau_reject`
+- `docs/experiments/thresholds/tau_reject/THRESHOLD_ANALYSIS.md` — the `tau_reject`
   candidates this analysis is contingent on.
-- `docs/independence/MASTER_FILE.md` row 5 — the joint-vs-standalone
+- `docs/results/independence_test/MASTER_FILE.md` row 5 — the joint-vs-standalone
   SFace `l2_genuine` split (1.0313 vs 1.0306278467178345), **closed by this
   analysis** as immaterial (band ≈ marginal on LFW).
 - `reports/independence/hybrid_sface_band/band_conditioned.json` — raw

@@ -1,6 +1,6 @@
 # `tau_reject` — genuine-distribution analysis and open decision point
 
-*2026-08-02. Follows the LBPH `tau_accept` unification (`docs/independence/MASTER_FILE.md`,
+*2026-08-02. Follows the LBPH `tau_accept` unification (`docs/results/independence_test/MASTER_FILE.md`,
 `classical-cv/docs/audits/STATE-08-02.md`) and `docs/NOTES.md` item 3.*
 
 ## Why this doc exists
@@ -105,7 +105,7 @@ Two independent choices, both policy calls — not something to pick silently:
 
 **The impostor-side cost of raising `tau_reject` is not precisely quantified
 yet.** The standalone LBPH impostor artifact
-(`classical-cv/reports/independence/lbph_lfw1/native_predict_scale_yunet.json`)
+(`docs/results/independence_test/independence/lbph_lfw1/native_predict_scale_yunet.json`)
 only stores curve snapshots up to rank 1024 (raw threshold 68.48, 61.98 ppm) —
 nowhere near the 94–140 range these `tau_reject` candidates sit in, so the
 fraction of the 16.5M-pair impostor sweep that would fall *below* a candidate
@@ -149,7 +149,7 @@ threshold freeze.
 ## Cross-references
 
 - `docs/NOTES.md` item 3 — the task this doc answers.
-- `docs/independence/MASTER_FILE.md` — `tau_accept`'s parallel derivation and
+- `docs/results/independence_test/MASTER_FILE.md` — `tau_accept`'s parallel derivation and
   why it's a single-engine impostor-FAR question, unlike this one.
 - `classical-cv/docs/audits/STATE-08-02.md` — why the current 88.4927 is
   additionally suspect (box-crop harness bug, same root cause as the
