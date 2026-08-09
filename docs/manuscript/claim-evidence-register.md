@@ -9,6 +9,7 @@ This register is the provenance companion for the Springer manuscript. Values ar
 | The standalone SFace boundary is L2 = 1.0306278467178345 at the same rank and realized FAR. | `classical-cv/reports/independence/sface_lfw1/standalone_l2_yunet.json` | Supported |
 | The deployed cascade uses `tau_accept = 67.03325520645528`, `tau_reject = 140.13`, and relative margin `0.05`. | `classical-cv/src/hybrid/thresholds.json`; `classical-cv/src/hybrid/gate.py`; `docs/independence/MASTER_FILE.md` | Supported |
 | `tau_reject = 140.13` is a permissive escalation/FRR trade-off decision, not an impostor-tail FAR threshold. | `thresholds.json` provenance; `docs/independence/MASTER_FILE.md` | Supported |
+| The classical candidate-selection rule is pre-committed: require TAR >= 90% at the La Salle independence operating point, a feature vector < 1 KB, and live FPS >= 3; rank eligible candidates by 41-modification AR, then TAR and model size for ties within 2 points. | `classical-cv/src/benchmark/compare_classical.py` (`SELECTION_RULE`, `apply_selection_rule`) | Supported |
 | The dl41 robustness fixture has 87 clean held-out probes and 41 variants per probe, with strict no-face handling. | `classical-cv/reports/benchmark/accuracy_ratio_hybrid.md` | Supported |
 | Archived dl41 aggregate results were produced under the previous LBPH threshold of 67.0084. | `classical-cv/reports/benchmark/accuracy_ratio_hybrid.md` | Supported, historical configuration |
 
