@@ -28,15 +28,27 @@
 Also check `classical-cv/docs/READ THIS/` before editing files that touch
 threshold provenance.
 
+## Springer manuscript production
+
+For any request to create, revise, format, or export a Springer/LNCS paper,
+DOCX, or DOCM, read `.claude/skills/springer-docm-production/SKILL.md` before
+editing. It covers the official template, `header.png`, current claim
+provenance, Word automation, and macro preservation. If macros must survive,
+create a new `.docm` copy and verify its `word/vbaProject.bin` hash matches
+`docs/splnproc2510.docm`; never overwrite or convert the original template.
+Keep generators and helper scripts under `scripts/document-production/`; keep
+`docs/` limited to manuscript sources, final office files, templates, visual
+references, and evidence documents.
+
 ---
 
 ## Workspace Structure
 
 - `classical-cv/` — Classical computer vision track (LBPH, Eigenfaces, Fisherfaces) and the Hybrid Recognizer cascade (`src/hybrid/`).
 - `deep-learning/` — Deep learning track features, embeddings, and reference evaluations (SFace, ArcFace, FaceNet).
-- `face-detection-g3/` — Auxiliary face detection and evaluation modules.
-- `preprocess/` — Face preprocessing and alignment pipeline.
-- `reports/` — Root report outputs (`reports/independence/`, benchmark summaries, figure artifacts).
+- `cascade-porting/` — Raspberry Pi / embedded deployment porting and test suites.
+- `porting-sets/` — Porting models, alignment routines, and lightweight feature assets.
+- `docs/` — Manuscript sources, LNCS templates, visual references, and evidence documents.
 - `scripts/` — Project orchestration, plotting, and report generation scripts.
 
 ---
@@ -50,14 +62,14 @@ threshold provenance.
   - **LBPH**: Raw Chi-Square distance (via OpenCV `predict_collect`).
   - **SFace**: Raw L2 distance (`FR_NORM_L2`, Euclidean distance $\sqrt{2 - 2 \cdot \text{cosine}}$).
 
-- **Canonical Standalone vs. Hybrid Thresholds (CRITICAL — DO NOT CONFUSE)**:
-  - **Standalone LBPH (`cv_only`) Canonical Threshold (`tau_accept`)**: **`67.0084`**
-    - Provenance: LFW1 rank-165 unidirectional unique-pair impostor distance ($\sim 10\text{ ppm}$ FAR, native `predict_collect` scale), matching La Salle DB1 frontal-crop tolerances.
-    - **Rule:** Never overwrite or revert `67.0084` to `77.7693` or `76.7922` for standalone LBPH tests.
-    - **Domain Shift Note:** On unconstrained, in-the-wild LFW2 images, clean AR at `67.0084` is **`1.74%`** (median clean distance $\sim 72.82$). This low AR is expected and serves as empirical proof of why classical LBPH requires the hybrid cascade (`SFace`) on wild images.
-  - **Hybrid Cascade Gate Accept Edge (`gate.tau_accept`)**: **`77.7693`** (YuNet joint hybrid run $\sim 10\text{ ppm}$ FAR accept edge).
-  - **Hybrid Cascade Gate Reject Edge (`gate.tau_reject`)**: **`88.4927`** ($\sim 1.0\%$ FAR confident-reject edge).
-  - **SFace Genuine Threshold (`sface.l2_genuine`)**: **`1.0313`** (YuNet joint hybrid run $\sim 10\text{ ppm}$ FAR).
+- **Canonical LBPH `tau_accept` — UNIFIED 2026-08-02 (standalone and hybrid cascade now share one value)**:
+  - **`tau_accept` (both `cv_only` and `gate.tau_accept`)**: **`67.03325520645528`**
+    - Provenance: LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR, native `predict_collect` scale), **box-cropped** YuNet standalone sweep — `reports/independence/lbph_lfw1/native_predict_scale_yunet.json`.
+    - **Why unified:** `cv_only`'s accept rule and the cascade's outright-accept rule are the same test (`distance <= tau_accept`, SFace never runs before this gate either way) — a single-engine LBPH question, not something the joint pipeline should be recalibrating. The previous split (67.0084 standalone / 77.7693 hybrid) was traced to a **box-crop-vs-full-frame harness bug** in `src/hybrid/independence_test.py`, not a real detector- or pipeline-driven difference — confirmed by re-running the standalone script with the joint test's own YuNet detector: box-cropped YuNet lands at 67.033, next to the old Haar-standalone 67.0084, nowhere near 77.7693. Full trail: `docs/independence/MASTER_FILE.md`, `classical-cv/docs/audits/STATE-08-02.md`.
+    - **Rule:** Do not diverge `cv_only` and `gate.tau_accept` again without re-establishing a principled reason (e.g. a real whole-system FAR-budget constraint — checked and ruled out 2026-08-02, see `docs/PAPER.md`'s cascade-undercuts-either-engine-alone finding).
+    - **Domain Shift Note:** On unconstrained, in-the-wild LFW2 images, clean AR at this threshold is **`~1.74%`** (median clean distance $\sim 72.82$). This low AR is expected and serves as empirical proof of why classical LBPH requires the hybrid cascade (`SFace`) on wild images.
+  - **Hybrid Cascade Gate Reject Edge (`gate.tau_reject`)**: **`140.13`** — **CANONIZED 2026-08-02, advisor sign-off**, replacing the box-crop-tainted 88.4927. NOT an impostor-FAR-derived value: an FRR-vs-escalation trade-off curve (`docs/independence/TAU_REJECT_METHOD.md`) found no `tau_reject` candidate in [70, 170] separates genuine from impostor escalation on wild LFW (they track ~1:1 throughout), so 140.13 (heavy-tier p99 genuine LBPH distance) was adopted as a deliberate permissive choice — makes the confident-reject branch near-inert on LFW, favoring SFace escalation. Does not generalize to La Salle DB1. See `docs/independence/MASTER_FILE.md` row 6.
+  - **SFace Genuine Threshold (`sface.l2_genuine`)**: **`1.0313`** (YuNet joint hybrid run $\sim 10\text{ ppm}$ FAR) — **resolved 2026-08-02** vs. the SFace **standalone** value (`1.0306278467178345`, `docs/independence/MASTER_FILE.md` row 2/5): gap (0.0007) judged immaterial, no config change, since ~97-99% of wild-LFW probes land in LBPH's escalation band regardless of `tau_reject` candidate, making the two derivations' populations near-identical. Scoped to LFW — see `docs/experiments/hybrid_sface_threshold/ANALYSIS.md`.
   - **LFW Impostor 1.0% FAR Sensitivity Point**: **`76.7922`** (from `tar_at_far.json`; used only for diagnostic sensitivity studies such as `docs/experiments/standalone_lbph_robustness/THRESHOLD_CHANGE.md`).
 
 ---
