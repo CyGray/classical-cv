@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300">
+<style>text{font-family:Arial,sans-serif;fill:#111}.axis{stroke:#111;stroke-width:2}.grid{stroke:#bbb;stroke-width:1}.bar{fill:#2463a6}.muted{fill:#9a9a9a}</style>
+<text x="360" y="26" text-anchor="middle" font-size="18" font-weight="bold">LSDB held-out thresholded TAR</text>
+<line class="axis" x1="120" y1="245" x2="670" y2="245"/><line class="axis" x1="120" y1="50" x2="120" y2="245"/>
+<line class="grid" x1="120" y1="147.5" x2="670" y2="147.5"/><text x="110" y="151" text-anchor="end" font-size="12">50%</text><text x="110" y="249" text-anchor="end" font-size="12">0%</text><text x="110" y="54" text-anchor="end" font-size="12">100%</text>
+<rect class="bar" x="185" y="57.0" width="105" height="188.0"/><rect class="muted" x="355" y="164.9" width="105" height="80.1"/><rect class="muted" x="525" y="144.0" width="105" height="101.0"/>
+<text x="237" y="50" text-anchor="middle" font-size="14">96.43%</text><text x="407" y="158" text-anchor="middle" font-size="14">41.07%</text><text x="577" y="137" text-anchor="middle" font-size="14">51.79%</text>
+<text x="237" y="268" text-anchor="middle" font-size="14">LBPH</text><text x="407" y="268" text-anchor="middle" font-size="14">Eigenfaces</text><text x="577" y="268" text-anchor="middle" font-size="14">Fisherfaces</text>
+</svg>

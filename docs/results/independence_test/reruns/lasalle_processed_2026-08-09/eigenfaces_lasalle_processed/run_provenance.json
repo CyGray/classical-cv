@@ -1,0 +1,26 @@
+{
+  "schema": "lsface-rerun-provenance-v1",
+  "executed_at": "2026-08-09T15:25:55.7521131Z",
+  "model": "Eigenfaces",
+  "source_script": "classical-cv/src/eigenfaces/independence_test.py",
+  "source_script_sha256": "4e6a861151898f439656a6a3fd3f3c57a8b939e440d69557a8573d4c395e8b15",
+  "source_git_commit": "6e269e260ead7585277e22730444cdc87203e4f5",
+  "source_git_commit_at": "2026-08-09T22:48:07+08:00",
+  "source_git_dirty": true,
+  "source_output_dir": "classical-cv/outputs/provenance_reruns/eigenfaces_lasalle_processed",
+  "command": "python -m src.eigenfaces.independence_test --dataset-dir data/lasalle_db1_processed --output-dir outputs/provenance_reruns/eigenfaces_lasalle_processed --quiet",
+  "runtime": { "python": "3.11.9", "opencv": "4.13.0", "numpy": "2.4.3" },
+  "preprocessing": { "crop_contract": "pre_cropped_tile", "equalization": "equalize" },
+  "dataset": {
+    "path": "classical-cv/data/lasalle_db1_processed",
+    "file_count": 336,
+    "tree_sha256": "5829ff5806d1baaae46be490c49a2f657c2b8b7a84d18cf8e853cb2d206c6cca"
+  },
+  "validation": {
+    "identities": 28,
+    "expected_cross_identity_comparisons": 756,
+    "actual_cross_identity_comparisons": 756,
+    "error_pair_rank": 8,
+    "realized_far_ppm": 10582.010582010582
+  }
+}

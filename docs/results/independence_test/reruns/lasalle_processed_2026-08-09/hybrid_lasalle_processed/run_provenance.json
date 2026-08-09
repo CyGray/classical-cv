@@ -1,0 +1,39 @@
+{
+  "schema": "lsface-rerun-provenance-v1",
+  "executed_at": "2026-08-09T15:33:33.7173272Z",
+  "model": "Hybrid LBPH-to-SFace cascade",
+  "source_script": "classical-cv/src/hybrid/independence_test.py",
+  "source_script_sha256": "614b2c0b501caae1bb56b35e48f9dcbd20d268230f6651c293116afe3d718157",
+  "source_git_commit": "6e269e260ead7585277e22730444cdc87203e4f5",
+  "source_git_commit_at": "2026-08-09T22:48:07+08:00",
+  "source_git_dirty": true,
+  "source_output_dir": "classical-cv/outputs/provenance_reruns/hybrid_lasalle_processed",
+  "command": "python -m src.hybrid.independence_test --dataset-dir data/lasalle_db1_processed --output-dir outputs/provenance_reruns/hybrid_lasalle_processed --thresholds-json src/hybrid/thresholds.json --iterations 1 --quiet",
+  "dataset": {
+    "path": "classical-cv/data/lasalle_db1_processed",
+    "file_count": 336,
+    "tree_sha256": "5829ff5806d1baaae46be490c49a2f657c2b8b7a84d18cf8e853cb2d206c6cca",
+    "crop_contract": "pre_cropped_tile"
+  },
+  "runtime": {
+    "python": "3.11.9",
+    "opencv": "4.13.0",
+    "numpy": "2.4.3"
+  },
+  "thresholds": {
+    "path": "classical-cv/src/hybrid/thresholds.json",
+    "sha256": "c35191fd7d9207420ed8c5daa341b19076cae7744d1c8e23be499147d1a57f43",
+    "gate.tau_accept": 67.03325520645528,
+    "gate.tau_reject": 140.13,
+    "sface.cosine_genuine": 0.363,
+    "sface.l2_genuine": 1.0313
+  },
+  "validation": {
+    "identities": 28,
+    "ordered_cross_identity_comparisons": 756,
+    "unique_cross_identity_pairs": 378,
+    "iterations": 1,
+    "modification": "clean"
+  },
+  "scope_note": "Current LFW-derived deployed gate evaluated on pre-cropped La Salle DB1 tiles; not a La Salle threshold calibration."
+}

@@ -1058,6 +1058,10 @@ def main() -> int:
         "dataset": {"path": args.dataset_dir, "identities": iteration_summaries[0]["identities"]},
         "iterations": len(iteration_summaries),
         "comparisons_per_iteration": comparisons,
+        "comparison": {
+            "expected_comparisons": iteration_summaries[0]["identities"] * (iteration_summaries[0]["identities"] - 1),
+            "actual_comparisons": comparisons,
+        },
         "mean_fp_percent": {
             "lbph": _mean("fp_percent", "lbph"),
             "sface": _mean("fp_percent", "sface"),

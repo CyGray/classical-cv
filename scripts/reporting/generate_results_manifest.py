@@ -22,7 +22,24 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def source_path(rel: str) -> str:
+def rerun_provenance(path: Path) -> dict | None:
+    """Load a rerun's recorded inputs when the artifact has one."""
+    reruns_root = RESULTS / "independence_test" / "reruns"
+    for parent in (path.parent, *path.parents):
+        candidate = parent / "run_provenance.json"
+        if candidate.is_file():
+            return json.loads(candidate.read_text(encoding="utf-8"))
+        if parent == reruns_root:
+            break
+    return None
+
+
+def source_path(rel: str, provenance: dict | None = None) -> str:
+    if provenance and rel.endswith("run_provenance.json"):
+        return "docs/results/" + rel
+    if provenance:
+        rerun_artifact = Path(*rel.split("/")[4:]).as_posix()
+        return f"{provenance['source_output_dir']}/{rerun_artifact}"
     if rel.startswith("independence_test/independence/"):
         return "classical-cv/reports/independence/" + rel.split("/independence/", 1)[1]
     if rel.startswith("robustness_test/benchmark/"):
@@ -59,7 +76,11 @@ def git_last_change(path: str) -> tuple[str | None, str | None]:
     return tuple(value.split("\x00", 1)) if "\x00" in value else (None, None)
 
 
-def classification(rel: str) -> tuple[str, bool, str | None]:
+def classification(rel: str, provenance: dict | None = None) -> tuple[str, bool, str | None]:
+    if rel.startswith("independence_test/reruns/"):
+        if provenance:
+            return "canonical_snapshot", False, None
+        return "needs_provenance_review", False, "Rerun artifact lacks run_provenance.json."
     if rel == "robustness_test/41mods_table/table.png":
         return "reference_specification", False, "Reference table; not an experimental result."
     if rel.startswith("algo_test/preprocess/step"):
@@ -81,7 +102,9 @@ def classification(rel: str) -> tuple[str, bool, str | None]:
     return "canonical_snapshot", False, None
 
 
-def source_script(rel: str) -> str:
+def source_script(rel: str, provenance: dict | None = None) -> str:
+    if provenance:
+        return provenance["source_script"]
     if rel.endswith("native_predict_scale_yunet.json"):
         return "classical-cv/scripts/archive/run_lfw_lbph_native_predict_independence.py"
     if rel.endswith("standalone_l2_yunet.json"):
@@ -103,14 +126,19 @@ def main() -> None:
         if not path.is_file() or path == MANIFEST:
             continue
         rel = path.relative_to(RESULTS).as_posix()
-        status, rerun_required, reason = classification(rel)
-        origin = source_path(rel)
-        commit, committed_at = git_last_change(origin)
+        provenance = rerun_provenance(path)
+        status, rerun_required, reason = classification(rel, provenance)
+        origin = source_path(rel, provenance)
+        if provenance:
+            commit = provenance["source_git_commit"]
+            committed_at = provenance["source_git_commit_at"]
+        else:
+            commit, committed_at = git_last_change(origin)
         artifacts.append(
             {
                 "path": rel,
                 "source_path": origin,
-                "source_script": source_script(rel),
+                "source_script": source_script(rel, provenance),
                 "artifact_type": path.suffix.lstrip(".").lower() or "file",
                 "bytes": path.stat().st_size,
                 "sha256": sha256(path),

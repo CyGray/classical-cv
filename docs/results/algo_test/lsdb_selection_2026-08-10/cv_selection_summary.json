@@ -1,0 +1,8 @@
+{
+  "protocol": {"dataset": "root data/lsdb/split", "fit_images": 224, "calibration_images": 56, "test_images": 56, "identities": 28, "calibration_impostor_scores": 1512, "target_far_percent": 1.058, "realized_far_percent": 0.9920634920634921, "threshold_source": "LSDB calibration cross-identity scores only"},
+  "families": {
+    "lbph": {"threshold": 73.3796936472582, "test_tar_percent": 96.42857142857143, "test_rank1_percent": 100.0, "feature_vector_bytes": 65536, "selected": true, "selection_note": "Accuracy-selected classical fast path; 64 KB feature exceeds nominal 1 KB budget."},
+    "eigenfaces": {"threshold": 4799.07773491102, "test_tar_percent": 41.07142857142857, "test_rank1_percent": 75.0, "feature_vector_bytes": 896, "selected": false},
+    "fisherfaces": {"threshold": 1178.8358382355586, "test_tar_percent": 51.785714285714285, "test_rank1_percent": 58.92857142857143, "feature_vector_bytes": 108, "selected": false}
+  }
+}

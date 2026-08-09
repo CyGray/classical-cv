@@ -471,7 +471,7 @@ def run_eigenfaces_independence_test() -> int:
     args.eye_cascade_path = resolve_path(resolve_eye_cascade_path(args.eye_cascade_path))
     args.output_dir = resolve_path(args.output_dir)
     
-    print("[INFO] Eigenfaces Independence Test (Aggregated 10x)")
+    print(f"[INFO] Eigenfaces Independence Test (Aggregated {args.iterations}x)")
     print(f"[INFO] Dataset: {args.dataset_dir}")
     
     # Load cascades
@@ -571,13 +571,18 @@ def run_eigenfaces_independence_test() -> int:
     # Compute statistics
     distances = [r.distance for r in records]
     distance_stats = compute_distance_statistics(distances)
+    successful_identities = len({r["query_identity"] for r in aggregated_records_data})
     
     # Build summary
     summary: Dict = {
         "dataset": {
             "path": args.dataset_dir,
             "total_identities": len(person_dirs),
-            "selected_identities": len({r["query_identity"] for r in aggregated_records_data}),
+            "selected_identities": successful_identities,
+        },
+        "comparison": {
+            "expected_comparisons": successful_identities * (successful_identities - 1),
+            "actual_comparisons": len(records),
         },
         "distance_statistics": {
             "min_distance": distance_stats.min_distance,

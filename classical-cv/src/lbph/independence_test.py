@@ -590,13 +590,18 @@ def run_lbph_independence_test() -> int:
     # Compute statistics
     distances = [r.distance for r in records]
     distance_stats = compute_distance_statistics(distances)
+    successful_identities = len({r["query_identity"] for r in aggregated_records_data})
     
     # Build summary
     summary: Dict = {
         "dataset": {
             "path": args.dataset_dir,
             "total_identities": len(person_dirs),
-            "selected_identities": len({r["query_identity"] for r in aggregated_records_data}),
+            "selected_identities": successful_identities,
+        },
+        "comparison": {
+            "expected_comparisons": successful_identities * (successful_identities - 1),
+            "actual_comparisons": len(records),
         },
         "distance_statistics": {
             "min_distance": distance_stats.min_distance,
