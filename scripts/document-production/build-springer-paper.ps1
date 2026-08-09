@@ -8,6 +8,12 @@ $sourceDirectory = Split-Path -Parent $sourcePaper
 $wdAlertsNone = 0
 $msoAutomationSecurityForceDisable = 3
 $wdAlignParagraphCenter = 1
+$wdBorderTop = -1
+$wdBorderBottom = -3
+$wdLineStyleNone = 0
+$wdLineStyleSingle = 1
+$wdLineWidth075pt = 6
+$wdLineWidth150pt = 12
 $script:firstBodyParagraph = $false
 
 function Get-VbaProjectHash {
@@ -127,6 +133,17 @@ function Add-Table {
             $table.Cell($r + 1, $c + 1).Range.Text = $value
         }
     }
+    # LNCS sample table design: rules only at the table top, below the header,
+    # and at the table bottom. Keep all vertical and internal body borders off.
+    $table.Borders.Enable = $wdLineStyleNone
+    $header = $table.Rows.Item(1).Range
+    $header.Borders.Item($wdBorderTop).LineStyle = $wdLineStyleSingle
+    $header.Borders.Item($wdBorderTop).LineWidth = $wdLineWidth150pt
+    $header.Borders.Item($wdBorderBottom).LineStyle = $wdLineStyleSingle
+    $header.Borders.Item($wdBorderBottom).LineWidth = $wdLineWidth075pt
+    $lastRow = $table.Rows.Item($table.Rows.Count).Range
+    $lastRow.Borders.Item($wdBorderBottom).LineStyle = $wdLineStyleSingle
+    $lastRow.Borders.Item($wdBorderBottom).LineWidth = $wdLineWidth150pt
     $doc.Range($doc.Content.End - 1, $doc.Content.End - 1).InsertAfter("`r")
     $script:firstBodyParagraph = $true
 }
