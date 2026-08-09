@@ -30,13 +30,29 @@ inside a subdirectory). Two independent git repos live under it:
   drive here. Treat any DL-side work as plan-only, written into
   `classical-cv/docs/`.
 
-`face-detection-g3/` is empty despite what root `AGENTS.md` claims. Root
-`AGENTS.md` also describes a `preprocess/` directory that does not exist —
-don't trust its structure section. When `classical-cv/AGENTS.md` and root
-`AGENTS.md` disagree, `classical-cv/AGENTS.md` wins.
+Root `AGENTS.md` lists `classical-cv/`, `deep-learning/`, `cascade-porting/`, `porting-sets/`, `docs/`, and `scripts/`. `classical-cv/AGENTS.md` remains the primary directive for `classical-cv` internals.
 
 Python: global Python 3.11 on Windows, no `.venv` in `classical-cv`. Shell:
 PowerShell primary, a POSIX bash tool is also available; `rg`/`fd` work.
+
+## Springer DOCM manuscript workflow
+
+For a Springer/LNCS manuscript, DOCX, DOCM, template, `header.png`, author
+block, figure/table, or Word-format request, read
+`.claude/skills/springer-docm-production/SKILL.md` in full before editing.
+Gemini CLI does not auto-trigger workspace skills, so this instruction is
+explicit. Use `docs/splnproc2510.docm` on Windows and never overwrite it. If
+the user wants macros preserved, copy it to a new `.docm`, open the copy in
+Word with macro execution disabled, save it as `.docm`, and verify that
+`word/vbaProject.bin` in the output has the same SHA-256 hash as the template.
+Use `docs/header.png` only as a reference for editable title/author/address
+text. Before reporting a research number, read the runtime configuration and
+the named experiment artifact; old manuscript prose and reports can describe
+superseded thresholds.
+
+Keep document-production automation under `scripts/document-production/`.
+`docs/` is reserved for manuscript files, templates, visual references, and
+evidence documents, not reusable scripts or scratch outputs.
 
 ---
 
@@ -194,6 +210,10 @@ numbers) needs this caveat before it goes into a thesis section.
 
 ## 5. Where things live
 
+- `docs/experiments/pairwise-verification/GUIDE.md` — **Expected Output Specification & Reporting Guide** for verification robustness runs.
+- `docs/experiments/pairwise-verification/README.md` — Canonical run metadata, summary tables, and family-grouped 41-modification verification results.
+- `docs/experiments/pairwise-verification/*.png` — Standard full-bleed PNG exported tables (`summary_verification_table.png` and `per_modification_verification_table.png`).
+- `classical-cv/scripts/export_verification_png_tables.py` — Exporter script generating PNG full-bleed tables and updating `docs/experiments/pairwise-verification/README.md`.
 - `classical-cv/src/hybrid/thresholds.json` — the ONE deployed threshold source (Sec 1).
 - `classical-cv/src/hybrid/recognizer.py` — `LBPHAdapter`, `SFaceAdapter`, `HybridRecognizer`, `detect_sample`.
 - `classical-cv/src/benchmark/accuracy_ratio_hybrid.py` — identification / transform-sensitivity (Sec 4).

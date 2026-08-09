@@ -1,0 +1,13 @@
+﻿{
+    "entries":  [
+                    {
+                        "path":  ".claude/skills"
+                    },
+                    {
+                        "path":  "classical-cv/.claude/skills"
+                    },
+                    {
+                        "path":  ".agents/skills"
+                    }
+                ]
+}
