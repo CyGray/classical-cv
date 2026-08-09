@@ -1,0 +1,161 @@
+{
+  "detector": "yunet",
+  "engine": "sface",
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lfw-dataset",
+    "total_identities": 5749,
+    "selected_identities": 5749,
+    "skipped_by_detector": 0
+  },
+  "scale": "SFace L2 distance (FR_NORM_L2)",
+  "unique_pairs": 16522626,
+  "sweep": [
+    {
+      "target_far_ppm": 0.0,
+      "unique_rank": 1,
+      "raw_threshold": 0.0003452669770922512,
+      "realized_far_ppm": 0.060523066974946964,
+      "realized_far_percent": 6.0523066974946966e-06
+    },
+    {
+      "target_far_ppm": 50000.0,
+      "unique_rank": 826131,
+      "raw_threshold": 1.24086332321167,
+      "realized_far_ppm": 49999.981843079906,
+      "realized_far_percent": 4.999998184307991
+    },
+    {
+      "target_far_ppm": 100000.0,
+      "unique_rank": 1652263,
+      "raw_threshold": 1.2664719820022583,
+      "realized_far_ppm": 100000.02420922679,
+      "realized_far_percent": 10.000002420922678
+    },
+    {
+      "target_far_ppm": 150000.0,
+      "unique_rank": 2478394,
+      "raw_threshold": 1.2834688425064087,
+      "realized_far_ppm": 150000.0060523067,
+      "realized_far_percent": 15.000000605230671
+    },
+    {
+      "target_far_ppm": 200000.0,
+      "unique_rank": 3304525,
+      "raw_threshold": 1.2968180179595947,
+      "realized_far_ppm": 199999.9878953866,
+      "realized_far_percent": 19.99999878953866
+    },
+    {
+      "target_far_ppm": 250000.0,
+      "unique_rank": 4130656,
+      "raw_threshold": 1.3081847429275513,
+      "realized_far_ppm": 249999.96973846652,
+      "realized_far_percent": 24.999996973846653
+    },
+    {
+      "target_far_ppm": 300000.0,
+      "unique_rank": 4956788,
+      "raw_threshold": 1.3183497190475464,
+      "realized_far_ppm": 300000.0121046134,
+      "realized_far_percent": 30.000001210461342
+    },
+    {
+      "target_far_ppm": 350000.0,
+      "unique_rank": 5782919,
+      "raw_threshold": 1.3276958465576172,
+      "realized_far_ppm": 349999.9939476933,
+      "realized_far_percent": 34.99999939476933
+    },
+    {
+      "target_far_ppm": 400000.0,
+      "unique_rank": 6609050,
+      "raw_threshold": 1.3365017175674438,
+      "realized_far_ppm": 399999.9757907732,
+      "realized_far_percent": 39.99999757907732
+    },
+    {
+      "target_far_ppm": 450000.0,
+      "unique_rank": 7435182,
+      "raw_threshold": 1.3449668884277344,
+      "realized_far_ppm": 450000.0181569201,
+      "realized_far_percent": 45.00000181569201
+    },
+    {
+      "target_far_ppm": 500000.0,
+      "unique_rank": 8261313,
+      "raw_threshold": 1.3532428741455078,
+      "realized_far_ppm": 500000.0,
+      "realized_far_percent": 50.0
+    },
+    {
+      "target_far_ppm": 550000.0,
+      "unique_rank": 9087444,
+      "raw_threshold": 1.3614786863327026,
+      "realized_far_ppm": 549999.9818430799,
+      "realized_far_percent": 54.99999818430799
+    },
+    {
+      "target_far_ppm": 600000.0,
+      "unique_rank": 9913576,
+      "raw_threshold": 1.3697798252105713,
+      "realized_far_ppm": 600000.0242092268,
+      "realized_far_percent": 60.000002420922684
+    },
+    {
+      "target_far_ppm": 650000.0,
+      "unique_rank": 10739707,
+      "raw_threshold": 1.3783373832702637,
+      "realized_far_ppm": 650000.0060523067,
+      "realized_far_percent": 65.00000060523067
+    },
+    {
+      "target_far_ppm": 700000.0,
+      "unique_rank": 11565838,
+      "raw_threshold": 1.3872922658920288,
+      "realized_far_ppm": 699999.9878953866,
+      "realized_far_percent": 69.99999878953867
+    },
+    {
+      "target_far_ppm": 750000.0,
+      "unique_rank": 12391970,
+      "raw_threshold": 1.3968675136566162,
+      "realized_far_ppm": 750000.0302615335,
+      "realized_far_percent": 75.00000302615335
+    },
+    {
+      "target_far_ppm": 800000.0,
+      "unique_rank": 13218101,
+      "raw_threshold": 1.4074788093566895,
+      "realized_far_ppm": 800000.0121046134,
+      "realized_far_percent": 80.00000121046133
+    },
+    {
+      "target_far_ppm": 850000.0,
+      "unique_rank": 14044232,
+      "raw_threshold": 1.4197454452514648,
+      "realized_far_ppm": 849999.9939476933,
+      "realized_far_percent": 84.99999939476933
+    },
+    {
+      "target_far_ppm": 900000.0,
+      "unique_rank": 14870363,
+      "raw_threshold": 1.4350239038467407,
+      "realized_far_ppm": 899999.9757907732,
+      "realized_far_percent": 89.99999757907732
+    },
+    {
+      "target_far_ppm": 950000.0,
+      "unique_rank": 15696495,
+      "raw_threshold": 1.457383632659912,
+      "realized_far_ppm": 950000.0181569201,
+      "realized_far_percent": 95.00000181569202
+    },
+    {
+      "target_far_ppm": 1000000.0,
+      "unique_rank": 16522626,
+      "raw_threshold": 1.6731593608856201,
+      "realized_far_ppm": 1000000.0,
+      "realized_far_percent": 100.0
+    }
+  ]
+}

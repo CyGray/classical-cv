@@ -1,0 +1,137 @@
+{
+  "source_csv": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\benchmark\\accuracy_ratio_verification_full_pairs.csv",
+  "n_genuine": 70560,
+  "n_impostor": 70560,
+  "tau_accept": 67.03325520645528,
+  "max_observed_genuine_dist": 169.51557028450046,
+  "max_observed_impostor_dist_in_csv": 169.48249730346663,
+  "points": [
+    {
+      "tau_reject": 70.0,
+      "genuine_hard_reject_pct": 96.7758,
+      "genuine_escalated_pct": 1.7786,
+      "impostor_escalated_pct": 0.0184
+    },
+    {
+      "tau_reject": 75.0,
+      "genuine_hard_reject_pct": 89.2219,
+      "genuine_escalated_pct": 9.3325,
+      "impostor_escalated_pct": 0.9368
+    },
+    {
+      "tau_reject": 80.0,
+      "genuine_hard_reject_pct": 74.8668,
+      "genuine_escalated_pct": 23.6876,
+      "impostor_escalated_pct": 8.2596
+    },
+    {
+      "tau_reject": 85.0,
+      "genuine_hard_reject_pct": 54.7307,
+      "genuine_escalated_pct": 43.8237,
+      "impostor_escalated_pct": 26.6553
+    },
+    {
+      "tau_reject": 90.0,
+      "genuine_hard_reject_pct": 35.4039,
+      "genuine_escalated_pct": 63.1505,
+      "impostor_escalated_pct": 51.6823
+    },
+    {
+      "tau_reject": 95.0,
+      "genuine_hard_reject_pct": 19.7222,
+      "genuine_escalated_pct": 78.8322,
+      "impostor_escalated_pct": 73.3333
+    },
+    {
+      "tau_reject": 100.0,
+      "genuine_hard_reject_pct": 10.8277,
+      "genuine_escalated_pct": 87.7268,
+      "impostor_escalated_pct": 86.2429
+    },
+    {
+      "tau_reject": 105.0,
+      "genuine_hard_reject_pct": 6.3138,
+      "genuine_escalated_pct": 92.2406,
+      "impostor_escalated_pct": 92.5213
+    },
+    {
+      "tau_reject": 110.0,
+      "genuine_hard_reject_pct": 4.1199,
+      "genuine_escalated_pct": 94.4345,
+      "impostor_escalated_pct": 95.4266
+    },
+    {
+      "tau_reject": 115.0,
+      "genuine_hard_reject_pct": 3.0442,
+      "genuine_escalated_pct": 95.5102,
+      "impostor_escalated_pct": 96.7574
+    },
+    {
+      "tau_reject": 120.0,
+      "genuine_hard_reject_pct": 2.4532,
+      "genuine_escalated_pct": 96.1012,
+      "impostor_escalated_pct": 97.4731
+    },
+    {
+      "tau_reject": 125.0,
+      "genuine_hard_reject_pct": 1.9572,
+      "genuine_escalated_pct": 96.5972,
+      "impostor_escalated_pct": 98.023
+    },
+    {
+      "tau_reject": 130.0,
+      "genuine_hard_reject_pct": 1.4101,
+      "genuine_escalated_pct": 97.1443,
+      "impostor_escalated_pct": 98.5388
+    },
+    {
+      "tau_reject": 135.0,
+      "genuine_hard_reject_pct": 0.9099,
+      "genuine_escalated_pct": 97.6446,
+      "impostor_escalated_pct": 99.0745
+    },
+    {
+      "tau_reject": 140.0,
+      "genuine_hard_reject_pct": 0.54,
+      "genuine_escalated_pct": 98.0145,
+      "impostor_escalated_pct": 99.494
+    },
+    {
+      "tau_reject": 145.0,
+      "genuine_hard_reject_pct": 0.2423,
+      "genuine_escalated_pct": 98.3121,
+      "impostor_escalated_pct": 99.7548
+    },
+    {
+      "tau_reject": 150.0,
+      "genuine_hard_reject_pct": 0.0964,
+      "genuine_escalated_pct": 98.458,
+      "impostor_escalated_pct": 99.9079
+    },
+    {
+      "tau_reject": 155.0,
+      "genuine_hard_reject_pct": 0.0496,
+      "genuine_escalated_pct": 98.5048,
+      "impostor_escalated_pct": 99.9632
+    },
+    {
+      "tau_reject": 160.0,
+      "genuine_hard_reject_pct": 0.0156,
+      "genuine_escalated_pct": 98.5388,
+      "impostor_escalated_pct": 99.9872
+    },
+    {
+      "tau_reject": 165.0,
+      "genuine_hard_reject_pct": 0.0071,
+      "genuine_escalated_pct": 98.5473,
+      "impostor_escalated_pct": 99.9943
+    },
+    {
+      "tau_reject": 170.0,
+      "genuine_hard_reject_pct": 0.0,
+      "genuine_escalated_pct": 98.5544,
+      "impostor_escalated_pct": 99.9986
+    }
+  ],
+  "note": "genuine_hard_reject_pct + genuine_escalated_pct + genuine_accepted_outright_pct (not shown, = accept fraction at tau_accept, constant across the sweep) always sum to 100. impostor_escalated_pct is a 1:1-protocol proxy per the same caveat as the hybrid SFace band diagnostic -- not the real 1-to-N escalation event."
+}

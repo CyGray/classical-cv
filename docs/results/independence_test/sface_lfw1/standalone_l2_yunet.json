@@ -1,0 +1,85 @@
+{
+  "detector": "yunet",
+  "engine": "sface",
+  "family": "standalone",
+  "dataset": {
+    "path": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lfw-dataset",
+    "build": "original-unfunneled (SHA-verified, docs/audits/STATE-08-01.md)",
+    "total_identities": 5749,
+    "selected_identities": 5749,
+    "skipped_by_detector": 0,
+    "probe_selection": "select_probes(seed=42), one image per identity, same picks as reports/independence/lbph_lfw1/native_predict_scale_yunet.json"
+  },
+  "scale": "cv.FaceRecognizerSF FR_NORM_L2 (vectorized equivalent of SFaceGallery.score(), src/sface/recognizer.py)",
+  "unique_pairs": 16522626,
+  "unique_rank": 165,
+  "raw_threshold_l2": 1.0306278467178345,
+  "boundary_cosine": 0.4689030647277832,
+  "realized_far_ppm": 9.986306050866249,
+  "boundary_pair": {
+    "query_identity": "Jorge_Rodolfo_Canicoba_Corral",
+    "candidate_identity": "Leon_Barmore"
+  },
+  "curve": [
+    {
+      "unique_rank": 1,
+      "raw_threshold_l2": 0.0003452669770922512,
+      "realized_far_ppm": 0.060523066974946964
+    },
+    {
+      "unique_rank": 2,
+      "raw_threshold_l2": 0.0006905339541845024,
+      "realized_far_ppm": 0.12104613394989393
+    },
+    {
+      "unique_rank": 4,
+      "raw_threshold_l2": 0.3461437225341797,
+      "realized_far_ppm": 0.24209226789978786
+    },
+    {
+      "unique_rank": 8,
+      "raw_threshold_l2": 0.4301110804080963,
+      "realized_far_ppm": 0.4841845357995757
+    },
+    {
+      "unique_rank": 16,
+      "raw_threshold_l2": 0.6785218119621277,
+      "realized_far_ppm": 0.9683690715991514
+    },
+    {
+      "unique_rank": 32,
+      "raw_threshold_l2": 0.8413076996803284,
+      "realized_far_ppm": 1.9367381431983028
+    },
+    {
+      "unique_rank": 64,
+      "raw_threshold_l2": 0.9887440204620361,
+      "realized_far_ppm": 3.8734762863966057
+    },
+    {
+      "unique_rank": 128,
+      "raw_threshold_l2": 1.0218695402145386,
+      "realized_far_ppm": 7.746952572793211
+    },
+    {
+      "unique_rank": 165,
+      "raw_threshold_l2": 1.0306278467178345,
+      "realized_far_ppm": 9.986306050866249
+    },
+    {
+      "unique_rank": 256,
+      "raw_threshold_l2": 1.0426167249679565,
+      "realized_far_ppm": 15.493905145586423
+    },
+    {
+      "unique_rank": 512,
+      "raw_threshold_l2": 1.05819571018219,
+      "realized_far_ppm": 30.987810291172845
+    },
+    {
+      "unique_rank": 1024,
+      "raw_threshold_l2": 1.0731276273727417,
+      "realized_far_ppm": 61.97562058234569
+    }
+  ]
+}

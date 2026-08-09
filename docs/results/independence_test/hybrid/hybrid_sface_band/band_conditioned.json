@@ -1,0 +1,104 @@
+{
+  "source_csv": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\benchmark\\accuracy_ratio_verification_full_pairs.csv",
+  "n_rows": 70560,
+  "tau_accept": 67.03325520645528,
+  "candidates": [
+    {
+      "tau_reject": 119.05,
+      "genuine_in_band": {
+        "label": "genuine_in_band",
+        "n": 67740,
+        "l2_min": 0.3367572806632574,
+        "l2_p50": 0.8509274836079241,
+        "l2_p90": 1.1458130516800415,
+        "l2_p95": 1.3308203722560126,
+        "l2_p99": 1.4266796403967446,
+        "l2_max": 1.582309764317408,
+        "cosine_min": -0.2518520951271057,
+        "cosine_p50": 0.6379736661911011,
+        "n_failing_cosine_genuine_regardless_of_l2": 7174,
+        "pct_failing_cosine_genuine_regardless_of_l2": 10.590493061706525
+      },
+      "impostor_in_band": {
+        "label": "impostor_in_band",
+        "n": 68689,
+        "l2_min": 1.041695321006846,
+        "l2_p50": 1.354422899604159,
+        "l2_p90": 1.4365575411629867,
+        "l2_p95": 1.4590709155051007,
+        "l2_p99": 1.5007958387135452,
+        "l2_max": 1.6139387587376315,
+        "cosine_min": -0.3023991584777832,
+        "cosine_p50": 0.08276930451393127,
+        "n_failing_cosine_genuine_regardless_of_l2": 68621,
+        "pct_failing_cosine_genuine_regardless_of_l2": 99.90100307181645
+      }
+    },
+    {
+      "tau_reject": 134.17,
+      "genuine_in_band": {
+        "label": "genuine_in_band",
+        "n": 68835,
+        "l2_min": 0.3367572806632574,
+        "l2_p50": 0.8538256328810621,
+        "l2_p90": 1.1963628006610971,
+        "l2_p95": 1.3499675998508442,
+        "l2_p99": 1.4369118591308292,
+        "l2_max": 1.582309764317408,
+        "cosine_min": -0.2518520951271057,
+        "cosine_p50": 0.635490894317627,
+        "n_failing_cosine_genuine_regardless_of_l2": 8185,
+        "pct_failing_cosine_genuine_regardless_of_l2": 11.890753250526622
+      },
+      "impostor_in_band": {
+        "label": "impostor_in_band",
+        "n": 69866,
+        "l2_min": 1.041695321006846,
+        "l2_p50": 1.354732687349389,
+        "l2_p90": 1.4369342587353027,
+        "l2_p95": 1.4596089171545843,
+        "l2_p99": 1.501290640300759,
+        "l2_max": 1.6139387587376315,
+        "cosine_min": -0.3023991584777832,
+        "cosine_p50": 0.08234963566064835,
+        "n_failing_cosine_genuine_regardless_of_l2": 69798,
+        "pct_failing_cosine_genuine_regardless_of_l2": 99.9026708270117
+      }
+    },
+    {
+      "tau_reject": 140.13,
+      "genuine_in_band": {
+        "label": "genuine_in_band",
+        "n": 69169,
+        "l2_min": 0.3367572806632574,
+        "l2_p50": 0.8548407492204089,
+        "l2_p90": 1.2163360359835809,
+        "l2_p95": 1.3549254370159052,
+        "l2_p99": 1.4403934616447434,
+        "l2_max": 1.582309764317408,
+        "cosine_min": -0.2518520951271057,
+        "cosine_p50": 0.634623646736145,
+        "n_failing_cosine_genuine_regardless_of_l2": 8516,
+        "pct_failing_cosine_genuine_regardless_of_l2": 12.311873816304992
+      },
+      "impostor_in_band": {
+        "label": "impostor_in_band",
+        "n": 70208,
+        "l2_min": 1.041695321006846,
+        "l2_p50": 1.3548192108698343,
+        "l2_p90": 1.4371417677293412,
+        "l2_p95": 1.4597024950397752,
+        "l2_p99": 1.5013804639971415,
+        "l2_max": 1.6139387587376315,
+        "cosine_min": -0.3023991584777832,
+        "cosine_p50": 0.08223391324281693,
+        "n_failing_cosine_genuine_regardless_of_l2": 70140,
+        "pct_failing_cosine_genuine_regardless_of_l2": 99.9031449407475
+      }
+    }
+  ],
+  "caveats": [
+    "NOT threshold-grade: band-conditioned impostor n is at most a few thousand (vs. 16.5M pairs behind the standalone SFace sweep) -- finest resolvable FAR is order 100 ppm at best, and that is a single-sample estimate, not a rank statistic.",
+    "Protocol mismatch: 'impostor in-band' means this row's 1:1 designated-impostor pair's LBPH distance falls in [tau_accept, tau_reject). Real cascade escalation triggers on argmin_i d(P, G_i) over the full N-gallery (1-to-N), which this 1:1-protocol CSV cannot reproduce. A probe's true escalation status may differ from this proxy."
+  ]
+}
