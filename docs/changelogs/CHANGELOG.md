@@ -1,6 +1,78 @@
 ﻿# Changelog
 
+## Historical backfill (2026-08-02 to 2026-08-10) — generated from git diff history
+
+## August 11, 2026
+- Changelog consolidation and migration:
+  - Moved changelog artifacts from `classical-cv/docs/changelogs` into `docs/changelogs`.
+  - Kept all reconstructed per-day files and updated this index to their canonical path.
+  - Canonically renamed old `0407`/`0421` files to `APRIL_07.md` and `APRIL_21.md`.
+
+## August 10, 2026
+- What changed:
+  - Consolidated canonical evidence and manuscript artifacts into a stable structure for downstream review and build scripts.
+  - Synchronized model-selection and result evidence flow across classical/hybrid evaluation outputs.
+  - Cleaned up workflow guidance and references used by release/document packaging.
+- Detailed session log: [./AUG_10.md](AUG_10.md)
+- Commit sequence:
+  - 02b19b4 — docs(results): consolidate canonical evidence and manuscript
+
+## August 9, 2026
+- What changed:
+  - Added the Raspberry Pi/embedded cascade porting bundle plus hardware enrollment scripts.
+  - Reorganized evidence/result references and improved manuscript/document provenance tracking.
+  - Centralized result artifacts and archived manuscript versions to make review points reproducible.
+- Detailed session log: [./AUG_09.md](AUG_09.md)
+- Commit sequence:
+  - 4096a9b — feat(porting): add cascade deployment bundle
+  - 59a7626 — feat(enrollment): add hardware identity tooling
+  - 298d121 — docs: organize result and sample references
+  - b80c194 — chore(gitignore): exclude local document artifacts
+  - c2c37a5 — docs(manuscript): preserve LNCS table formatting
+  - e3e0232 — docs(manuscript): record selection-rule evidence
+  - fdcc053 — docs(manuscript): add model-selection revision
+  - e902db3 — docs(results): centralize canonical evidence
+  - 6e269e2 — docs(manuscript): archive manuscript versions and update canonical results
+
+## August 8, 2026
+- What changed:
+  - Expanded robustness evidence generation: far sweeps and multi-segment LFW2 runs were updated with fresh reports.
+  - Refreshed exports for evidence tables/figures used in robustness analysis and summary docs.
+- Detailed session log: [./AUG_08.md](AUG_08.md)
+- Commit sequence:
+  - e022e08 — Update experiments, robustness variants, and far sweeps
+
+## August 3, 2026
+- What changed:
+  - Added interactive robustness variants dashboard UI to browse experiment evidence and per-modification comparisons.
+- Detailed session log: [./AUG_03.md](AUG_03.md)
+- Commit sequence:
+  - 8dcc882 — feat(ui): add interactive robustness variants benchmark dashboard
+
+## August 2, 2026
+- What changed:
+  - Bootstrapped/normalized repository structure for changelog and experiment outputs.
+  - Unified LBPH/SFace threshold logic, set canonical gates, and fixed threshold provenance.
+  - Added pipeline/enrollment/reporting scripts and reorganized experiment deliverables for reproducibility.
+- Detailed session log: [./AUG_02.md](AUG_02.md)
+- Commit sequence:
+  - 0169818 — feat: initialize root workspace repository structure
+  - f82c730 — docs: add 1:1 pairwise verification robustness guide, markdown report, full bleed tables, and exporter script
+  - cf15362 — feat(hybrid): unify LBPH tau_accept threshold, update FAR sweep harness, and reorganize experiment deliverables
+  - 50a69aa — refactor(cleanup): prune raw outputs and consolidate legacy reports/scripts into classical-cv
+  - a55f192 — feat(hybrid): canonize tau_reject threshold to 140.13 and update gate calibration
+  - 67102ee — feat(pipeline): add multi-shot enrollment support and dataset pipeline scripts
+  - 9ef7ce0 — feat(reporting): add table exporters and reporting scripts for evaluation suites
+  - 6799c3a — docs(experiments): restructure experiment deliverables into robustness_variants
+
+---
+
 ## June 14, 2026 — Hybrid CV + DL gated cascade (LBPH + SFace)
+
+- What changed:
+  - Implemented the full Hybrid CV + DL cascade: LBPH fast path plus SFace escalation.
+  - Added shared gate, YuNet front-end, calibrations, and compare/evaluate workflows in the hybrid stack.
+  - Added live detection and report outputs that expose escalation behavior and latency.
 
 One `HybridRecognizer` that runs an **LBPH fast path** and escalates hard frames
 to **SFace** behind a quality/score gate — the gated cascade from
@@ -53,6 +125,11 @@ launcher like every other family; live detect shows the CV→DL hand-off on scre
 
 ## June 14, 2026
 
+- What changed:
+  - Added pluggable classical detector abstraction with Haar and YuNet backends.
+  - Threaded detector choice through train/eval/live paths and launcher selection flow.
+  - Added detector comparison benchmarking with throughput, detection-rate, and false-positive outputs.
+
 Toggle-able face detector: **YuNet (CNN)** as a drop-in alternative to
 **Viola-Jones (Haar cascade)** for the classical recognizers, plus a measured
 head-to-head report.
@@ -97,6 +174,11 @@ head-to-head report.
 
 ## June 12, 2026
 
+- What changed:
+  - Added reproducible dataset-composition matrix benchmarking across five classical training recipes.
+  - Added matrix pipeline and scripts for standardized reporting of clean/augmented results.
+  - Confirmed LBPH remains the top classical option under this benchmark methodology.
+
 Dataset-composition matrix: every classical family trained on five training
 recipes from the same DB and compared inter-/intra-model.
 
@@ -127,6 +209,11 @@ recipes from the same DB and compared inter-/intra-model.
 - 9 new model artifacts: `models/<family>/lasalle_{clean_aug_light_medium,light_only,dark_only}.yml`.
 
 ## June 11, 2026
+
+- What changed:
+  - Added compact/subspace variant experiments and written spec-compliance comparison docs.
+  - Migrated to clean canonical launch/eval artifacts for classical runs.
+  - Added report/launcher fixes to reduce drift between script output and selection decisions.
 
 Variant options (feature-size / accuracy), the spec-compliance document, and the
 launcher's switch to the clean artifacts.
@@ -189,6 +276,11 @@ launcher's switch to the clean artifacts.
   (capped) helper; `--lbph-batch` default 500 -> 250.
 
 ## June 10, 2026 - second pass (pipeline audit follow-up)
+
+- What changed:
+  - Closed major audit gaps with Tan-Triggs tuning and corrected pipeline benchmark reporting at spec anchors.
+  - Added TAR@FAR and accuracy-ratio runs at deployment thresholds with updated threshold governance.
+  - Upgraded thresholding and calibration outputs for deployable LBPH/SFace behavior.
 
 Audited why "no classical model fits the specs", improved the pipeline from
 measurements, and implemented the remaining spec benchmarks. Headline: **LBPH
@@ -300,6 +392,11 @@ target; Stage-1 "accuracy >90% @ 1 face/s" is comfortably met).
 
 ## June 10, 2026
 
+- What changed:
+  - Replaced percentiles with rank-based k-th error-pair FAR thresholds.
+  - Added reusable utilities and reporting for reproducible independence thresholding.
+  - Revalidated La Salle/LFW independence flows and cleaned threshold provenance.
+
 Closed the independence-test methodology gap and determined the per-model match
 threshold (the threshold-determination half of the 7/15 deliverable).
 
@@ -351,6 +448,11 @@ threshold (the threshold-determination half of the 7/15 deliverable).
   table (e.g. LBPH 112.55).
 
 ## June 9, 2026
+
+- What changed:
+  - Refactored classical pipelines into one shared framework with one train/eval path and shared preprocessing.
+  - Standardized dataset/layout handling, launch flows, and report schemas.
+  - Added one-command clean loop and spec-comparison outputs to enforce consistent evidence generation.
 
 Reproduced a clean, leakage-free **train -> evaluate -> live -> compare** loop for
 the three classical recognizers (LBPH, Eigenfaces, Fisherfaces) and consolidated
@@ -422,6 +524,11 @@ their previously copy-pasted code into one shared backbone.
   deliverable; the table marks them pending rather than inventing them.
 
 ## April 23, 2026
+
+- What changed:
+  - Added Eigenfaces and Fisherfaces full pipelines (train/evaluate/live).
+  - Unified reporting identity, layouts, and launcher behavior across models.
+  - Added aggregator/reporting improvements and shared preprocessing/evaluation infrastructure.
 
 This document summarizes all updates completed today.
 
@@ -537,3 +644,43 @@ This document summarizes all updates completed today.
 
 ### Notes
 - No git commits were recorded today, so this changelog is based on today’s current working updates present in the repository.
+
+## April 21, 2026
+
+- What changed:
+  - Added split/augmentation wiring and standardized training defaults for processed/light/medium flow.
+  - Retrained and re-evaluated all models with the new split regime.
+  - Ran FPS sanity sessions on the updated model set.
+
+### Training/evaluation split update
+- Added light and medium augmentations into the training flow for broader coverage.
+- Pointed defaults and args to the split/augmented split data (except raw) for the training and evaluation paths.
+- Retrained and re-evaluated all models using:
+  - processed + light + medium for training,
+  - processed test split for evaluation (no augmentation).
+
+### FPS performance pass
+- Ran 60-second sessions for each model to collect average FPS numbers for the refreshed run plan.
+
+## April 7, 2026
+
+- What changed:
+  - Standardized dataset defaults across training and evaluation paths.
+  - Added webcam FPS logging controls and per-algorithm FPS summary aggregation.
+  - Kept benchmark reporting aligned with expanded processed/augmented dataset modes.
+
+### Dataset defaults cleanup
+- Standardized training/evaluation dataset defaults:
+  - Trainers now use augmented data by default and keep raw as explicit opt-in where applicable.
+  - Evaluators now use raw dataset by default with explicit opt-in processed/augmented flags.
+- Added benchmark compatibility updates to explicitly include processed + augmented datasets during comparison runs.
+
+### Live webcam FPS logging
+- Added per-run FPS logging and aggregation across live detection scripts.
+- Added controls for FPS logging outputs:
+  - `--fps-log-path`
+  - `--fps-log-interval`
+  - `--fps-summary-dir`
+  - `--disable-fps-log`
+- Added summary aggregation utility to produce per-algorithm average FPS from run summaries.
+
