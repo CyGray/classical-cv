@@ -23,9 +23,15 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
+from src.independence_common import lbph_config_metadata, resolve_lbph_config
 
 
 def parse_args() -> argparse.Namespace:
@@ -34,7 +40,15 @@ def parse_args() -> argparse.Namespace:
         "--pairs-csv",
         default=str(PROJECT_ROOT / "outputs" / "benchmark" / "accuracy_ratio_verification_full_pairs.csv"),
     )
-    parser.add_argument("--tau-accept", type=float, default=67.03325520645528)
+    parser.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
+    parser.add_argument("--thresholds-json", default=DEFAULT_THRESHOLDS_PATH)
+    parser.add_argument(
+        "--tau-accept", type=float, default=None,
+        help="Override the threshold file's tau_accept (diagnostic only).",
+    )
     parser.add_argument(
         "--sweep-start", type=float, default=70.0, help="First tau_reject candidate (just above tau_accept)."
     )
@@ -49,6 +63,17 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    threshold_cfg = load_thresholds(
+        args.thresholds_json,
+        expected_lbph_config=descriptor_config,
+    )
+    tau_accept = (
+        float(args.tau_accept)
+        if args.tau_accept is not None
+        else float(threshold_cfg.get("gate", {}).get("tau_accept"))
+    )
     genuine_dists: list[float] = []
     impostor_dists: list[float] = []
     with open(args.pairs_csv, encoding="utf-8", newline="") as f:
@@ -63,8 +88,8 @@ def main() -> int:
     tau_reject = args.sweep_start
     while tau_reject <= args.sweep_stop + 1e-9:
         genuine_hard_rejected = sum(1 for d in genuine_dists if d >= tau_reject)
-        impostor_escalated = sum(1 for d in impostor_dists if args.tau_accept <= d < tau_reject)
-        genuine_escalated = sum(1 for d in genuine_dists if args.tau_accept <= d < tau_reject)
+        impostor_escalated = sum(1 for d in impostor_dists if tau_accept <= d < tau_reject)
+        genuine_escalated = sum(1 for d in genuine_dists if tau_accept <= d < tau_reject)
         points.append(
             {
                 "tau_reject": round(tau_reject, 2),
@@ -82,7 +107,9 @@ def main() -> int:
         "source_csv": args.pairs_csv,
         "n_genuine": n_genuine,
         "n_impostor": n_impostor,
-        "tau_accept": args.tau_accept,
+        "lbph_config": descriptor_metadata,
+        "thresholds_json": str(args.thresholds_json),
+        "tau_accept": tau_accept,
         "max_observed_genuine_dist": max_genuine_dist,
         "max_observed_impostor_dist_in_csv": max_impostor_escalatable_dist,
         "points": points,

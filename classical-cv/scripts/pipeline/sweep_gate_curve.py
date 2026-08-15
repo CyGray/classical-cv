@@ -3,8 +3,8 @@
 Paper section 4.4 currently shows three operating points (LBPH-only, SFace-only,
 cascade at the deployed gate). A reviewer's first question is "did you pick the
 setting that looks good?". This script answers it by sweeping the gate's
-aggressiveness - the relative-margin floor ``margin_min`` and a symmetric shift
-of the (tau_accept, tau_reject) band - and scoring the SAME 41-modification
+aggressiveness - the relative-margin floor ``margin_min`` and ``tau_reject``,
+with frozen ``tau_accept`` - and scoring the SAME 41-modification
 probe suite (identical seeds to ``accuracy_ratio_hybrid.py``) at every setting.
 
 Efficiency: each probe is scored ONCE by each engine (LBPH distance/margin +
@@ -19,7 +19,7 @@ Semantics mirror ``HybridRecognizer`` exactly:
 * no-escalate, accept -> LBPH's name stands (d1 <= tau_accept)
 * no-escalate, reject -> Unknown
 Anchors reported from the same records: cv_only (accept = d1 <= frozen
-tau_reject, the deployed cv_only rule) and dl_only (SFace on every probe).
+tau_accept, the deployed cv_only rule) and dl_only (SFace on every probe).
 
 Writes ``reports/benchmark/gate_operating_curve.{json,md,png}``.
 """
@@ -37,7 +37,7 @@ import numpy as np
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.benchmark.modifications import MODIFICATIONS, VARIANT_COUNT, stable_rng
+from src.benchmark.modifications import get_modification_set, stable_rng
 from src.benchmark.accuracy_ratio_hybrid import load_originals, tile_sample
 from src.classical_faces.detection import create_face_detector
 from src.hybrid.gate import GateThresholds, decide_escalation
@@ -53,6 +53,7 @@ from src.hybrid.recognizer import (
     detect_sample,
     load_thresholds,
 )
+from src.independence_common import lbph_config_metadata, resolve_lbph_config
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
@@ -71,6 +72,10 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--originals-dir", default="data/split_lasalle/test")
     parser.add_argument("--thresholds-json", default=DEFAULT_THRESHOLDS_PATH)
+    parser.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
     parser.add_argument("--lbph-model", default=DEFAULT_LBPH_MODEL)
     parser.add_argument("--lbph-labels", default=DEFAULT_LBPH_LABELS)
     parser.add_argument("--sface-gallery", default=DEFAULT_SFACE_GALLERY)
@@ -80,13 +85,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--select-one-per-person", action="store_true",
                         help="Enroll-parity: one seeded image per identity (needed for the "
                              "LFW2 one-per-person models). Off = every image under originals-dir.")
+    parser.add_argument("--mod-set", choices=["legacy", "dl41"], default="dl41",
+                        help="Modification taxonomy; dl41 is the finalized battery.")
+    parser.add_argument("--no-face-policy", choices=["fallback", "strict"], default="strict",
+                        help="strict counts a detector failure as a failed probe.")
     parser.add_argument("--max-originals", type=int, default=0,
                         help="Cap originals after the seeded selection (0 = all). Shrinks the "
                              "single scoring pass; the threshold sweep over it stays free.")
     parser.add_argument("--margins", default=DEFAULT_MARGINS,
                         help="Comma list of margin_min values to sweep (gate axis).")
     parser.add_argument("--tau-shifts", default=DEFAULT_SHIFTS,
-                        help="Comma list of shifts applied to BOTH tau_accept and tau_reject (gate axis).")
+                        help="Comma list of shifts applied only to tau_reject; tau_accept stays frozen.")
     parser.add_argument("--lbph-taus", default=None,
                         help="Comma list of LBPH tau_reject values (cv_only axis). "
                              "Default: 13 auto points from genuine-match d1 quantiles.")
@@ -106,14 +115,20 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def collect_probe_records(args) -> list[dict]:
+def collect_probe_records(args, descriptor_config=None, cfg=None) -> list[dict]:
     """Score every clean + modified probe once with both engines."""
-    cfg = load_thresholds(_abs(args.thresholds_json))
+    descriptor_config = descriptor_config or resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    cfg = cfg if cfg is not None else load_thresholds(
+        _abs(args.thresholds_json),
+        expected_lbph_config=descriptor_config,
+    )
     quality_thresholds = QualityThresholds.from_dict(cfg.get("quality"))
     lbph = LBPHAdapter(
         model_path=_abs(args.lbph_model),
         labels_path=_abs(args.lbph_labels),
         far_anchors=cfg.get("lbph_far_anchors"),
+        lbph_config=descriptor_config,
     )
     impostors = _abs(args.sface_impostors) if args.sface_impostors else None
     if impostors and not Path(impostors).exists():
@@ -130,8 +145,9 @@ def collect_probe_records(args) -> list[dict]:
         raise RuntimeError(f"No original images under {args.originals_dir}")
     if args.max_originals and args.max_originals < len(originals):
         originals = originals[: args.max_originals]
+    modifications, variant_count = get_modification_set(args.mod_set)
     print(f"[INFO] originals={len(originals)}; probes = clean + "
-          f"{len(originals)} x {VARIANT_COUNT} modified")
+          f"{len(originals)} x {variant_count} modified")
 
     records: list[dict] = []
 
@@ -139,6 +155,12 @@ def collect_probe_records(args) -> list[dict]:
         bgr = cv.cvtColor(gray, cv.COLOR_GRAY2BGR)
         sample = detect_sample(detector, image_bgr=bgr, image_gray=gray, assume_cropped=True)
         if sample is None:
+            if args.no_face_policy == "strict":
+                records.append({"person": person, "mod": mod, "level": level,
+                                "no_face": True, "lbph_name": "Unknown", "d1": None,
+                                "margin": None, "sface_name": "Unknown", "sface_cosine": None,
+                                "quality": None, "lbph_ms": 0.0, "sface_ms": 0.0})
+                return
             sample = tile_sample(bgr, gray)  # fallback policy, as in the AR benchmark
         t0 = time.perf_counter()
         lm = lbph.score(sample)
@@ -153,7 +175,7 @@ def collect_probe_records(args) -> list[dict]:
         sm = sface.score(sample)
         sface_ms = (time.perf_counter() - t0) * 1000.0
         records.append({
-            "person": person, "mod": mod, "level": level,
+            "person": person, "mod": mod, "level": level, "no_face": False,
             "lbph_name": lm.name, "d1": float(lm.distance), "margin": float(lm.margin),
             "sface_name": sm.name, "sface_cosine": float(sm.cosine), "quality": quality,
             "lbph_ms": lbph_ms, "sface_ms": sface_ms,
@@ -161,12 +183,14 @@ def collect_probe_records(args) -> list[dict]:
 
     for person, fname, gray in originals:
         score(gray, person, "clean", None)
-    for mod_name, fn, levels in MODIFICATIONS:
+    for mod_name, fn, levels in modifications:
         for level in levels:
             for person, fname, gray in originals:
                 rng = stable_rng(args.seed, person, fname, mod_name, level)
                 score(fn(gray, level, rng), person, mod_name, level)
         print(f"  scored {mod_name}")
+    for record in records:
+        record["lbph_config_id"] = descriptor_metadata["id"]
     return records
 
 
@@ -178,6 +202,14 @@ def evaluate_setting(records: list[dict], thresholds: GateThresholds) -> dict:
     esc = 0
     n_mod = 0
     for r in records:
+        if r["no_face"]:
+            if r["mod"] == "clean":
+                clean_total += 1
+            else:
+                n_mod += 1
+                lv = per_mod_level.setdefault(r["mod"], {}).setdefault(r["level"], [0, 0])
+                lv[1] += 1
+            continue
         gate = decide_escalation(
             lbph_distance=r["d1"], lbph_margin=r["margin"],
             quality=r["quality"], thresholds=thresholds,
@@ -227,21 +259,21 @@ def evaluate_anchors(records: list[dict], frozen: GateThresholds) -> dict:
             lat_sum += r[lat_key]
             slot = per_mod_level.setdefault(r["mod"], {})
             lv = slot.setdefault(r["level"], [0, 0])
-            lv[0] += matched_fn(r)
+            lv[0] += False if r["no_face"] else matched_fn(r)
             lv[1] += 1
         mod_ars = [sum(100.0 * m / t for m, t in lv.values()) / len(lv)
                    for lv in per_mod_level.values()]
         return {"overall_ar_percent": sum(mod_ars) / len(mod_ars),
                 "mean_latency_ms": lat_sum / max(1, n_mod)}
 
-    cv_only = agg(lambda r: r["lbph_name"] == r["person"] and r["d1"] <= frozen.tau_reject,
+    cv_only = agg(lambda r: r["lbph_name"] == r["person"] and r["d1"] <= frozen.tau_accept,
                   "lbph_ms")
     dl_only = agg(lambda r: r["sface_name"] == r["person"], "sface_ms")
     return {"cv_only": cv_only, "dl_only": dl_only}
 
 
 # --------------------------------------------------------------------------- #
-# Single-engine threshold axes (LBPH tau_reject, SFace cosine cutoff) - swept
+# Single-engine threshold axes (LBPH tau_accept, SFace cosine cutoff) - swept
 # as pure arithmetic over the SAME cached records as the gate axis. Quality
 # probes are the calibrated gate contract and are not part of these two axes.
 # --------------------------------------------------------------------------- #
@@ -251,7 +283,7 @@ def _suite_ar(records: list[dict], matched_fn) -> tuple[float, float]:
     per_mod_level: dict[str, dict] = {}
     clean_matched = clean_total = 0
     for r in records:
-        m = bool(matched_fn(r))
+        m = False if r["no_face"] else bool(matched_fn(r))
         if r["mod"] == "clean":
             clean_matched += m
             clean_total += 1
@@ -280,13 +312,13 @@ def _auto_grid(values: list[float], lo_q: float, hi_q: float, n: int) -> list[fl
 
 
 def sweep_lbph_axis(records: list[dict], taus: list[float]) -> list[dict]:
-    """cv_only accept = nearest LBPH id correct AND d1 <= tau_reject. Latency = lbph_ms."""
+    """cv_only accept = nearest LBPH id correct AND d1 <= tau_accept. Latency = lbph_ms."""
     lat = _mean_modified_latency(records, "lbph_ms")
     out = []
     for tau in taus:
         ar, clean = _suite_ar(
             records, lambda r, t=tau: r["lbph_name"] == r["person"] and r["d1"] <= t)
-        out.append({"axis": "lbph", "tau_reject": float(tau),
+        out.append({"axis": "lbph", "tau_accept": float(tau),
                     "overall_ar_percent": ar, "clean_acceptance_percent": clean,
                     "mean_latency_ms": lat, "escalation_percent": 0.0})
     return out
@@ -310,7 +342,7 @@ def write_records_csv(records: list[dict], path: Path) -> None:
     downstream re-cuts from here with no re-scoring (FAR/ROC excepted - needs impostors)."""
     import csv
     path.parent.mkdir(parents=True, exist_ok=True)
-    fields = ["person", "mod", "level", "lbph_name", "d1", "margin", "lbph_rank1_correct",
+    fields = ["lbph_config_id", "person", "mod", "level", "lbph_name", "d1", "margin", "lbph_rank1_correct",
               "sface_name", "sface_cosine", "sface_rank1_correct",
               "blur_var", "luma_mean", "noise_sigma", "pose_angle", "face_px",
               "flag_blur", "flag_low_light", "flag_noise", "flag_off_pose", "flag_small_face",
@@ -320,8 +352,14 @@ def write_records_csv(records: list[dict], path: Path) -> None:
         w.writeheader()
         for r in records:
             q = r["quality"]
+            if q is None:
+                w.writerow({"lbph_config_id": r.get("lbph_config_id"), "person": r["person"], "mod": r["mod"], "level": r["level"],
+                            "lbph_name": r["lbph_name"], "sface_name": r["sface_name"],
+                            "lbph_ms": r["lbph_ms"], "sface_ms": r["sface_ms"]})
+                continue
             flags = q.flags
             w.writerow({
+                "lbph_config_id": r.get("lbph_config_id"),
                 "person": r["person"], "mod": r["mod"], "level": r["level"],
                 "lbph_name": r["lbph_name"], "d1": r["d1"], "margin": r["margin"],
                 "lbph_rank1_correct": r["lbph_name"] == r["person"],
@@ -376,7 +414,6 @@ def write_plot(points: list[dict], anchors: dict, deployed: dict, path: Path) ->
                label="deployed gate")
     ax.set_xlabel("Mean latency per modified probe (ms)")
     ax.set_ylabel("Overall AR over the 41-modification suite (%)")
-    ax.set_title("Cascade speed-accuracy operating curve (gate threshold sweep)")
     ax.grid(alpha=0.3)
     ax.legend(fontsize=8, loc="lower right")
     fig.tight_layout()
@@ -388,6 +425,10 @@ def to_markdown(payload: dict) -> str:
     dep = payload["deployed"]
     lines = [
         "# Gate operating curve - cascade speed-accuracy sweep",
+        "",
+        f"LBPH descriptor: `{payload['lbph_config']['id']}` "
+        f"(radius={payload['lbph_config']['radius']}, neighbors={payload['lbph_config']['neighbors']}, "
+        f"grid={payload['lbph_config']['grid_x']}x{payload['lbph_config']['grid_y']}).",
         "",
         f"Probes: `{payload['originals_dir']}` clean + 41-mod suite (seed={payload['seed']}, "
         f"same probes as `accuracy_ratio_hybrid.py`). Latency = lbph_ms + sface_ms when "
@@ -421,18 +462,25 @@ def to_markdown(payload: dict) -> str:
 
 def main() -> int:
     args = parse_args()
-    cfg = load_thresholds(_abs(args.thresholds_json))
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    cfg = load_thresholds(
+        _abs(args.thresholds_json),
+        expected_lbph_config=descriptor_config,
+    )
     frozen = GateThresholds.from_dict(cfg.get("gate"))
     margins = [float(v) for v in args.margins.split(",") if v.strip()]
     shifts = [float(v) for v in args.tau_shifts.split(",") if v.strip()]
 
-    records = collect_probe_records(args)
+    records = collect_probe_records(
+        args, descriptor_config=descriptor_config, cfg=cfg
+    )
 
     settings = []
     for m in margins:
         for s in shifts:
             gt = GateThresholds(
-                tau_accept=frozen.tau_accept + s,
+                tau_accept=frozen.tau_accept,
                 tau_reject=frozen.tau_reject + s,
                 margin_min=m,
             )
@@ -443,11 +491,11 @@ def main() -> int:
     # Single-engine axes over the same records (free): LBPH tau_reject + SFace cosine.
     taus = ([float(v) for v in args.lbph_taus.split(",") if v.strip()] if args.lbph_taus
             else _auto_grid([r["d1"] for r in records
-                             if r["lbph_name"] == r["person"] and r["mod"] != "clean"],
+                             if not r["no_face"] and r["lbph_name"] == r["person"] and r["mod"] != "clean"],
                             0.5, 0.999, 13))
     cutoffs = ([float(v) for v in args.sface_cutoffs.split(",") if v.strip()] if args.sface_cutoffs
                else _auto_grid([r["sface_cosine"] for r in records
-                                if r["sface_name"] == r["person"] and r["mod"] != "clean"],
+                                if not r["no_face"] and r["sface_name"] == r["person"] and r["mod"] != "clean"],
                                0.001, 0.5, 13))
     lbph_points = sweep_lbph_axis(records, taus)
     sface_points = sweep_sface_axis(records, cutoffs)
@@ -470,6 +518,9 @@ def main() -> int:
     payload = {
         "originals_dir": args.originals_dir,
         "seed": args.seed,
+        "lbph_config": descriptor_metadata,
+        "mod_set": args.mod_set,
+        "no_face_policy": args.no_face_policy,
         "frozen_gate": frozen.to_dict(),
         "margins": margins,
         "tau_shifts": shifts,

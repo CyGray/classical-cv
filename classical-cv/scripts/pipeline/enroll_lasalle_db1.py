@@ -3,8 +3,8 @@
 identification robustness run (28 identities, 12 images each).
 
 Modeled directly on ``ensure_lfw2_enrollment`` in
-``scripts/pipeline/run_lfw2_robustness.py`` (same LBPH hyperparameters
-radius=1/neighbors=8/grid_x=8/grid_y=8, same YuNet + SFace enrollment path,
+``scripts/pipeline/run_lfw2_robustness.py`` (same staged LBPH factory, deployed
+by default, same YuNet + SFace enrollment path,
 same manifest-driven gallery selection) but pointed at
 ``data/splits/lasalle_db1_ident_split_seed42.json`` and writing artifacts to
 a NEW directory, ``models/lasalle_db1/`` — never touches ``models/lfw2/``.
@@ -41,6 +41,10 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--split-manifest", default=str(DEFAULT_MANIFEST))
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
     p.add_argument("--lbph-assume-cropped", choices=["true", "false"], default="true",
                     help="La Salle DB1 processed tiles are pre-cropped 100x100 faces -> true (default).")
     p.add_argument("--force", action="store_true", help="Re-enroll even if a matching cache exists.")
@@ -60,6 +64,7 @@ def ensure_lasalle_db1_enrollment(
     seed: int,
     assume_cropped: bool,
     force: bool = False,
+    lbph_config: str = "deployed",
 ) -> dict[str, str]:
     import cv2 as cv
     import numpy as np
@@ -68,6 +73,11 @@ def ensure_lasalle_db1_enrollment(
     from src.classical_faces.pipeline import SPECS
     from src.classical_faces.preprocess import IMG_SIZE, normalize_face
     from src.hybrid.recognizer import detect_sample
+    from src.independence_common import (
+        create_lbph_recognizer_for_config,
+        lbph_config_metadata,
+        resolve_lbph_config,
+    )
     from src.sface.recognizer import SFaceGallery, SFaceRecognizer, default_sface_model_path
 
     split_manifest_sha = _sha256_file(Path(split_manifest_path))
@@ -75,19 +85,23 @@ def ensure_lasalle_db1_enrollment(
     # NOTE: with assume_cropped=True the "box vs full frame" distinction is moot
     # (the whole tile is treated as the face either way) - token kept simple:
     crop_token = "_cropped" if assume_cropped else "_boxcrop"
+    descriptor_config = resolve_lbph_config(lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    descriptor_token = descriptor_metadata["id"]
 
     paths = {
-        "lbph_model": ENROLL_DIR / f"lbph_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.yml",
-        "lbph_labels": ENROLL_DIR / f"lbph_labels_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
-        "sface_gallery": ENROLL_DIR / f"sface_gallery_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.npy",
-        "sface_labels": ENROLL_DIR / f"sface_labels_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
+        "lbph_model": ENROLL_DIR / f"lbph_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.yml",
+        "lbph_labels": ENROLL_DIR / f"lbph_labels_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
+        "sface_gallery": ENROLL_DIR / f"sface_gallery_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.npy",
+        "sface_labels": ENROLL_DIR / f"sface_labels_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
     }
-    cache_manifest_path = ENROLL_DIR / f"manifest_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json"
+    cache_manifest_path = ENROLL_DIR / f"manifest_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json"
     if not force and cache_manifest_path.exists() and all(p.exists() for p in paths.values()):
         cached = json.loads(cache_manifest_path.read_text(encoding="utf-8"))
         if (cached.get("split_manifest_sha256") == split_manifest_sha
                 and cached.get("seed") == seed
-                and cached.get("assume_cropped", False) == assume_cropped):
+                and cached.get("assume_cropped", False) == assume_cropped
+                and cached.get("lbph_config") == descriptor_metadata):
             print(f"[ENROLL] Reusing cached La Salle DB1 enrollment "
                   f"({cached['identities']} identities) in {ENROLL_DIR}")
             return {k: str(v) for k, v in paths.items()}
@@ -136,7 +150,7 @@ def ensure_lasalle_db1_enrollment(
         raise RuntimeError("Not enough valid La Salle DB1 images to enroll.")
 
     print(f"[ENROLL] Training LBPH on {len(faces)} faces...")
-    recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    recognizer = create_lbph_recognizer_for_config(descriptor_config)
     recognizer.train(faces, np.array(labels, dtype=np.int32))
 
     ENROLL_DIR.mkdir(parents=True, exist_ok=True)
@@ -153,6 +167,7 @@ def ensure_lasalle_db1_enrollment(
         "identities": len(label_map),
         "assume_cropped": assume_cropped,
         "equalization": equalization,
+        "lbph_config": descriptor_metadata,
         "yunet_misses_whole_tile_fallback": yunet_misses,
         "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }, indent=2), encoding="utf-8")
@@ -166,6 +181,7 @@ def main() -> int:
         args.split_manifest, args.seed,
         assume_cropped=(args.lbph_assume_cropped == "true"),
         force=args.force,
+        lbph_config=args.lbph_config,
     )
     for k, v in paths.items():
         print(f"  {k}: {v}")

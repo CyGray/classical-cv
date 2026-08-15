@@ -20,9 +20,15 @@ import argparse
 import csv
 import json
 import math
+import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
+from src.independence_common import lbph_config_metadata, resolve_lbph_config
 COSINE_GENUINE_THRESHOLD = 0.363  # src/sface/recognizer.py -- fixed policy gate, never FAR-fit
 
 
@@ -32,7 +38,15 @@ def parse_args() -> argparse.Namespace:
         "--pairs-csv",
         default=str(PROJECT_ROOT / "outputs" / "benchmark" / "accuracy_ratio_verification_full_pairs.csv"),
     )
-    parser.add_argument("--tau-accept", type=float, default=67.03325520645528)
+    parser.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
+    parser.add_argument("--thresholds-json", default=DEFAULT_THRESHOLDS_PATH)
+    parser.add_argument(
+        "--tau-accept", type=float, default=None,
+        help="Override the threshold file's tau_accept (diagnostic only).",
+    )
     parser.add_argument(
         "--tau-reject",
         type=float,
@@ -72,6 +86,17 @@ def summarize(label: str, l2s: list[float], coss: list[float]) -> dict:
 
 def main() -> int:
     args = parse_args()
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    threshold_cfg = load_thresholds(
+        args.thresholds_json,
+        expected_lbph_config=descriptor_config,
+    )
+    tau_accept = (
+        float(args.tau_accept)
+        if args.tau_accept is not None
+        else float(threshold_cfg.get("gate", {}).get("tau_accept"))
+    )
     rows = []
     with open(args.pairs_csv, encoding="utf-8", newline="") as f:
         for row in csv.DictReader(f):
@@ -80,7 +105,9 @@ def main() -> int:
     results = {
         "source_csv": args.pairs_csv,
         "n_rows": len(rows),
-        "tau_accept": args.tau_accept,
+        "lbph_config": descriptor_metadata,
+        "thresholds_json": str(args.thresholds_json),
+        "tau_accept": tau_accept,
         "candidates": [],
         "caveats": [
             "NOT threshold-grade: band-conditioned impostor n is at most a few thousand "
@@ -100,11 +127,11 @@ def main() -> int:
         impostor_l2, impostor_cos = [], []
         for row in rows:
             g_dist = float(row["lbph_genuine_dist"])
-            if args.tau_accept <= g_dist < tau_reject:
+            if tau_accept <= g_dist < tau_reject:
                 genuine_l2.append(float(row["sface_genuine_l2"]))
                 genuine_cos.append(float(row["sface_genuine_cos"]))
             i_dist = float(row["lbph_impostor_dist"])
-            if args.tau_accept <= i_dist < tau_reject:
+            if tau_accept <= i_dist < tau_reject:
                 impostor_l2.append(float(row["sface_impostor_l2"]))
                 impostor_cos.append(float(row["sface_impostor_cos"]))
 

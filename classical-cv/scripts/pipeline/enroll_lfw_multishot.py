@@ -54,12 +54,14 @@ build all requested variants' LBPH models and SFace galleries - avoids
 repeating the ~6,000-image detect+embed cost per variant.
 
 Writes (LBPHAdapter/SFaceAdapter-compatible, same formats
-ensure_lfw2_enrollment writes - see that function's docstring):
-  models/lfw_multishot/<variant>/lbph_model.yml
-  models/lfw_multishot/<variant>/lbph_labels.json
-  models/lfw_multishot/<variant>/sface_gallery.npy
-  models/lfw_multishot/<variant>/sface_labels.json
-  models/lfw_multishot/<variant>/manifest.json
+ensure_lfw2_enrollment writes - see that function's docstring), with
+``<descriptor_id>`` in each model/cache filename so staged descriptors cannot
+collide:
+  models/lfw_multishot/<variant>/lbph_model_<descriptor_id>.yml
+  models/lfw_multishot/<variant>/lbph_labels_<descriptor_id>.json
+  models/lfw_multishot/<variant>/sface_gallery_<descriptor_id>.npy
+  models/lfw_multishot/<variant>/sface_labels_<descriptor_id>.json
+  models/lfw_multishot/<variant>/manifest_<descriptor_id>.json
   data/lfw_multishot_<variant>_probes/<person>/<picked_file>  (one file per person)
   data/splits/lfw_multishot_population_seed42.json  (the 423-identity population + picks, shared by all variants)
 
@@ -99,6 +101,10 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--min-images", type=int, default=5,
                     help="Population filter: identities with >= this many images.")
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
     p.add_argument("--variant", choices=[*VARIANTS, "all"], default="all",
                     help="'all' (default) builds all three: selfmatch, heldout, singleshot.")
     p.add_argument("--out-root", default=str(PROJECT_ROOT / "models" / "lfw_multishot"))
@@ -137,6 +143,15 @@ def pick_reference(population: dict[str, list[str]], seed: int) -> dict[str, str
 def main() -> int:
     args = parse_args()
     variants = list(VARIANTS) if args.variant == "all" else [args.variant]
+    from src.independence_common import (
+        create_lbph_recognizer_for_config,
+        lbph_config_metadata,
+        resolve_lbph_config,
+    )
+
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    descriptor_token = descriptor_metadata["id"]
 
     population = build_population(args.lfw_root, args.min_images)
     if not population:
@@ -263,15 +278,15 @@ def main() -> int:
 
         print(f"[{variant.upper()}] Training LBPH on {len(faces)} faces "
               f"({len(label_map)} identities)...")
-        recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+        recognizer = create_lbph_recognizer_for_config(descriptor_config)
         recognizer.train(faces, np.array(labels, dtype=np.int32))
 
         out_dir = Path(args.out_root) / variant
         out_dir.mkdir(parents=True, exist_ok=True)
-        lbph_model = out_dir / "lbph_model.yml"
-        lbph_labels = out_dir / "lbph_labels.json"
-        sface_gallery = out_dir / "sface_gallery.npy"
-        sface_labels = out_dir / "sface_labels.json"
+        lbph_model = out_dir / f"lbph_model_{descriptor_token}.yml"
+        lbph_labels = out_dir / f"lbph_labels_{descriptor_token}.json"
+        sface_gallery = out_dir / f"sface_gallery_{descriptor_token}.npy"
+        sface_labels = out_dir / f"sface_labels_{descriptor_token}.json"
         recognizer.save(str(lbph_model))
         lbph_labels.write_text(json.dumps(label_map, indent=2), encoding="utf-8")
         SFaceGallery.from_samples(sface, embeddings).save(str(sface_gallery), str(sface_labels))
@@ -299,6 +314,7 @@ def main() -> int:
             "probes_dir": str(probes_dir),
             "probe_is_training_image": variant == "selfmatch",
             "probe_excluded_from_training_and_gallery": variant in ("heldout", "singleshot"),
+            "lbph_config": descriptor_metadata,
             "sface_gallery_file_per_person": gallery_file,
             "note": (
                 "selfmatch: probe == the LBPH-training/SFace-gallery reference image "
@@ -319,7 +335,9 @@ def main() -> int:
             ),
             "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         }
-        (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        (out_dir / f"manifest_{descriptor_token}.json").write_text(
+            json.dumps(manifest, indent=2), encoding="utf-8"
+        )
         print(f"[{variant.upper()}] Wrote {out_dir} and {probes_dir} ({len(probe_file_by_person)} probe files)")
 
     print("\n[DONE] Multi-shot enrollment complete.")

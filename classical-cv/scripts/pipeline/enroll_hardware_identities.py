@@ -58,6 +58,10 @@ def parse_args() -> argparse.Namespace:
         help="Central, append-only enrollment source database (.npz).",
     )
     parser.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
+    parser.add_argument(
         "--release-root",
         default="models/hardware/releases",
         help="Where immutable deployable LBPH + SFace bundles are written.",
@@ -250,7 +254,12 @@ def process_capture(
     return face, feature, fallback
 
 
-def update_records(args: argparse.Namespace, records: dict[str, list], input_dir: Path) -> tuple[dict, dict, dict]:
+def update_records(
+    args: argparse.Namespace,
+    records: dict[str, list],
+    input_dir: Path,
+    descriptor_metadata: dict,
+) -> tuple[dict, dict, dict]:
     from src.classical_faces.detection import create_face_detector
     from src.sface.recognizer import SFaceRecognizer
 
@@ -266,7 +275,7 @@ def update_records(args: argparse.Namespace, records: dict[str, list], input_dir
         "allow_fallback": args.allow_fallback,
         "sface_model_sha256": sha256_file(sface_model),
         "opencv_version": cv.__version__,
-        "lbph": {"radius": 1, "neighbors": 8, "grid_x": 8, "grid_y": 8},
+        "lbph": descriptor_metadata,
         "lbph_normalization": "normalize_face(100x100, configured lbph equalization)",
         "sface": "YuNet alignCrop then 128D feature; resize fallback only when allowed",
     }
@@ -342,23 +351,36 @@ def ensure_sample_minimum(records: dict[str, list], minimum: int) -> None:
         raise RuntimeError("Need at least two identities before training LBPH.")
 
 
-def build_release(records: dict[str, list], release_root: Path, database: Path, metadata: dict) -> Path:
-    import cv2 as cv
+def build_release(
+    records: dict[str, list],
+    release_root: Path,
+    database: Path,
+    metadata: dict,
+    lbph_config,
+) -> Path:
     from src.sface.recognizer import SFaceGallery
+    from src.independence_common import create_lbph_recognizer_for_config, lbph_config_metadata
 
     arrays = arrays_from_records(records)
     names = sorted(set(records["labels"]))
     label_map = {name: index for index, name in enumerate(names)}
     labels = np.asarray([label_map[name] for name in records["labels"]], dtype=np.int32)
+    descriptor_metadata = lbph_config_metadata(lbph_config)
     release_root.mkdir(parents=True, exist_ok=True)
-    release_name = f"release-{dt.datetime.now().strftime('%Y%m%dT%H%M%S')}-{uuid.uuid4().hex[:8]}"
+    release_name = (
+        f"release-{descriptor_metadata['id']}-"
+        f"{dt.datetime.now().strftime('%Y%m%dT%H%M%S')}-{uuid.uuid4().hex[:8]}"
+    )
     final_path = release_root / release_name
     temporary_path = Path(tempfile.mkdtemp(dir=release_root, prefix=".pending-"))
     try:
-        lbph = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+        lbph = create_lbph_recognizer_for_config(lbph_config)
         lbph.train([face for face in arrays["lbph_faces"]], labels)
-        lbph.save(str(temporary_path / "lbph.yml"))
-        (temporary_path / "labels.json").write_text(json.dumps(label_map, indent=2) + "\n", encoding="utf-8")
+        lbph_name = f"lbph_{descriptor_metadata['id']}.yml"
+        labels_name = f"labels_{descriptor_metadata['id']}.json"
+        manifest_name = f"manifest_{descriptor_metadata['id']}.json"
+        lbph.save(str(temporary_path / lbph_name))
+        (temporary_path / labels_name).write_text(json.dumps(label_map, indent=2) + "\n", encoding="utf-8")
         grouped = {
             name: arrays["sface_embeddings"][arrays["labels"] == name].mean(axis=0, keepdims=True)
             for name in names
@@ -373,12 +395,12 @@ def build_release(records: dict[str, list], release_root: Path, database: Path, 
             "identities": len(names),
             "samples": len(records["labels"]),
             "label_set": names,
-            "lbph": {"model": "lbph.yml", "labels": "labels.json", "radius": 1, "neighbors": 8, "grid_x": 8, "grid_y": 8},
+            "lbph": {"model": lbph_name, "labels": labels_name, **descriptor_metadata},
             "sface": {"gallery": "sface_gallery.npy", "labels": "sface_labels.json", "embedding_dim": 128},
             "parity": {"same_central_sample_count": len(records["labels"]), "same_label_set": True},
             "enrollment_metadata": metadata,
         }
-        (temporary_path / "manifest.json").write_text(
+        (temporary_path / manifest_name).write_text(
             json.dumps(release_manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
         os.replace(temporary_path, final_path)
@@ -395,12 +417,21 @@ def main() -> int:
     if not args.rebuild_only and not args.input_dir:
         raise ValueError("--input-dir is required unless --rebuild-only is used.")
     database = resolve(args.database)
+    from src.independence_common import lbph_config_metadata, resolve_lbph_config
+
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     stored_metadata = load_metadata(database)
     records = load_records(database)
     stats: dict[str, int] = {}
     if not args.rebuild_only:
-        records, stats, recipe = update_records(args, records, resolve(args.input_dir))
-        if records["labels"] and stored_metadata and stored_metadata.get("recipe") != recipe:
+        records, stats, recipe = update_records(
+            args, records, resolve(args.input_dir), descriptor_metadata
+        )
+        old_recipe = (stored_metadata or {}).get("recipe") or {}
+        old_capture_recipe = {k: v for k, v in old_recipe.items() if k != "lbph"}
+        new_capture_recipe = {k: v for k, v in recipe.items() if k != "lbph"}
+        if records["labels"] and stored_metadata and old_capture_recipe != new_capture_recipe:
             raise RuntimeError(
                 "Incoming photos use a different extraction recipe/model from central database. "
                 "Re-enroll all identities into a new database instead of mixing them."
@@ -409,6 +440,8 @@ def main() -> int:
         recipe = (stored_metadata or {}).get("recipe")
         if recipe is None:
             raise RuntimeError("Cannot rebuild: central database has no extraction recipe metadata.")
+        recipe = dict(recipe)
+        recipe["lbph"] = descriptor_metadata
     ensure_sample_minimum(records, args.min_samples_per_identity)
     metadata = {
         "schema_version": SCHEMA_VERSION,
@@ -424,12 +457,15 @@ def main() -> int:
     # Central DB is committed before its dependent release. If release creation is interrupted,
     # rerun with --rebuild-only; no incoming files need to be reprocessed.
     save_database(database, records, metadata)
-    release = build_release(records, resolve(args.release_root), database, metadata)
+    release = build_release(
+        records, resolve(args.release_root), database, metadata, descriptor_config
+    )
     print(f"[ENROLL] central database: {database}")
     print(f"[ENROLL] metadata        : {database.with_suffix('.json')}")
     print(f"[ENROLL] release bundle  : {release}")
     print(f"[ENROLL] identities={metadata['identities']} samples={metadata['samples']} stats={stats}")
-    print("[DEPLOY] Pass release/lbph.yml + release/labels.json to LBPHAdapter; pass release/sface_gallery.npy to SFaceAdapter.")
+    print("[DEPLOY] Read the descriptor-specific manifest in the release directory; "
+          "it names the matching LBPH and SFace artifacts.")
     return 0
 
 

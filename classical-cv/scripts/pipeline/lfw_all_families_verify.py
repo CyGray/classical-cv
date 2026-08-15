@@ -52,6 +52,11 @@ from src.benchmark.modifications import MODIFICATIONS, apply_variant, stable_rng
 from src.classical_faces.detection import create_face_detector
 from src.classical_faces.pipeline import SPECS
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
+from src.independence_common import (
+    create_lbph_recognizer_for_config,
+    lbph_config_metadata,
+    resolve_lbph_config,
+)
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.sface.recognizer import (
     COSINE_GENUINE_THRESHOLD,
@@ -72,6 +77,10 @@ def parse_args() -> argparse.Namespace:
                    help="Seeded identity subset (~10%% of 5749). The impostor pool is the "
                         "rest of this subset (the partial run).")
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
     p.add_argument("--far-accept", type=float, default=0.01,
                    help="FAR%% at which to place the LFW-derived tau_accept. Default 0.01%% "
                         "(100 ppm) matches the original LFW-carried recipe (73.04) and keeps "
@@ -117,11 +126,16 @@ def embed_face(gray: np.ndarray, detector, sface: SFaceRecognizer, equalization:
 def main() -> int:
     args = parse_args()
     t_start = time.time()
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     lfw_root = _abs(args.lfw_root)
     out_dir = Path(_abs(args.output_dir))
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    cfg = load_thresholds(_abs(args.thresholds_json))
+    cfg = load_thresholds(
+        _abs(args.thresholds_json),
+        expected_lbph_config=descriptor_config,
+    )
     tau_reject = float(cfg["gate"]["tau_reject"])
     cos_gen = COSINE_GENUINE_THRESHOLD
 
@@ -155,7 +169,7 @@ def main() -> int:
         if (idx + 1) % 100 == 0:
             print(f"  anchors {idx+1}/{n}")
     anchor_emb = np.stack(anchor_emb, axis=0)          # (n,128) unit-normed
-    lbph = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    lbph = create_lbph_recognizer_for_config(descriptor_config)
     lbph.train(anchor_faces, np.arange(n, dtype=np.int32))
 
     variants = [(name, lvl) for name, _fn, levels in MODIFICATIONS for lvl in levels]
@@ -311,6 +325,7 @@ def main() -> int:
     summary = {
         "protocol": "clean-anchor vs modified all-pairs verification (Dr. Oh figure, partial)",
         "identities": n, "seed": args.seed,
+        "lbph_config": descriptor_metadata,
         "genuine_pairs_per_variant": n, "impostor_pairs_per_variant": n * (n - 1),
         "variants_run": len(variants),
         "thresholds_used": {"tau_accept": tau_accept, "tau_reject": tau_reject,

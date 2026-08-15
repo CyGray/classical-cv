@@ -4,8 +4,8 @@ identification robustness run (40 identities, 10 images each, 92x112 8-bit
 grayscale .pgm).
 
 Modeled directly on ``ensure_lfw2_enrollment`` in
-``scripts/pipeline/run_lfw2_robustness.py`` (same LBPH hyperparameters
-radius=1/neighbors=8/grid_x=8/grid_y=8, same YuNet + SFace enrollment path,
+``scripts/pipeline/run_lfw2_robustness.py`` (same staged LBPH factory, deployed
+by default, same YuNet + SFace enrollment path,
 same manifest-driven gallery selection) but pointed at
 ``data/splits/att_faces_ident_split_seed42.json`` and writing artifacts to a
 NEW directory, ``models/att_faces/`` — never touches ``models/lfw2/``.
@@ -51,6 +51,10 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--split-manifest", default=str(DEFAULT_MANIFEST))
     p.add_argument("--seed", type=int, default=42)
+    p.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
+    )
     p.add_argument("--lbph-assume-cropped", choices=["true", "false"], default="false",
                     help="ORL frames need YuNet box-crop (crop-matched to the LFW-derived "
                          "threshold) -> false (default).")
@@ -71,6 +75,7 @@ def ensure_att_faces_enrollment(
     seed: int,
     assume_cropped: bool,
     force: bool = False,
+    lbph_config: str = "deployed",
 ) -> dict[str, str]:
     import cv2 as cv
     import numpy as np
@@ -79,23 +84,32 @@ def ensure_att_faces_enrollment(
     from src.classical_faces.pipeline import SPECS
     from src.classical_faces.preprocess import IMG_SIZE, normalize_face
     from src.hybrid.recognizer import detect_sample
+    from src.independence_common import (
+        create_lbph_recognizer_for_config,
+        lbph_config_metadata,
+        resolve_lbph_config,
+    )
     from src.sface.recognizer import SFaceGallery, SFaceRecognizer, default_sface_model_path
 
     split_manifest_sha = _sha256_file(Path(split_manifest_path))
     crop_token = "_boxcrop" if not assume_cropped else "_cropped"
+    descriptor_config = resolve_lbph_config(lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    descriptor_token = descriptor_metadata["id"]
 
     paths = {
-        "lbph_model": ENROLL_DIR / f"lbph_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.yml",
-        "lbph_labels": ENROLL_DIR / f"lbph_labels_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
-        "sface_gallery": ENROLL_DIR / f"sface_gallery_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.npy",
-        "sface_labels": ENROLL_DIR / f"sface_labels_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
+        "lbph_model": ENROLL_DIR / f"lbph_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.yml",
+        "lbph_labels": ENROLL_DIR / f"lbph_labels_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
+        "sface_gallery": ENROLL_DIR / f"sface_gallery_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.npy",
+        "sface_labels": ENROLL_DIR / f"sface_labels_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json",
     }
-    cache_manifest_path = ENROLL_DIR / f"manifest_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json"
+    cache_manifest_path = ENROLL_DIR / f"manifest_{descriptor_token}_seed{seed}_manifest{split_manifest_sha[:12]}{crop_token}.json"
     if not force and cache_manifest_path.exists() and all(p.exists() for p in paths.values()):
         cached = json.loads(cache_manifest_path.read_text(encoding="utf-8"))
         if (cached.get("split_manifest_sha256") == split_manifest_sha
                 and cached.get("seed") == seed
-                and cached.get("assume_cropped", False) == assume_cropped):
+                and cached.get("assume_cropped", False) == assume_cropped
+                and cached.get("lbph_config") == descriptor_metadata):
             print(f"[ENROLL] Reusing cached AT&T faces enrollment "
                   f"({cached['identities']} identities) in {ENROLL_DIR}")
             return {k: str(v) for k, v in paths.items()}
@@ -144,7 +158,7 @@ def ensure_att_faces_enrollment(
         raise RuntimeError("Not enough valid AT&T faces images to enroll.")
 
     print(f"[ENROLL] Training LBPH on {len(faces)} faces...")
-    recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    recognizer = create_lbph_recognizer_for_config(descriptor_config)
     recognizer.train(faces, np.array(labels, dtype=np.int32))
 
     ENROLL_DIR.mkdir(parents=True, exist_ok=True)
@@ -161,6 +175,7 @@ def ensure_att_faces_enrollment(
         "identities": len(label_map),
         "assume_cropped": assume_cropped,
         "equalization": equalization,
+        "lbph_config": descriptor_metadata,
         "yunet_misses_whole_tile_fallback": yunet_misses,
         "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }, indent=2), encoding="utf-8")
@@ -174,6 +189,7 @@ def main() -> int:
         args.split_manifest, args.seed,
         assume_cropped=(args.lbph_assume_cropped == "true"),
         force=args.force,
+        lbph_config=args.lbph_config,
     )
     for k, v in paths.items():
         print(f"  {k}: {v}")

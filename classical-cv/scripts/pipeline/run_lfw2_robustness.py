@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import csv
 import datetime
 import importlib.util
 import json
@@ -29,6 +30,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.path.insert(0, str(PROJECT_ROOT / "scripts" / "utils"))  # setup_datasets.py lives here, not scripts/pipeline
 from main import build_subprocess_env, describe_hardware_profile, load_or_build_hardware_profile  # noqa: E402
 from setup_datasets import setup_lfw  # noqa: E402
+from src.independence_common import (  # noqa: E402
+    create_lbph_recognizer_for_config,
+    lbph_config_metadata,
+    resolve_lbph_config,
+)
 
 
 def ensure_dependencies() -> None:
@@ -94,6 +100,13 @@ def parse_args() -> argparse.Namespace:
         "--lbph-labels",
         default=None,
         help="LBPH labels .json forwarded to accuracy_ratio_hybrid (pair of --lbph-model).",
+    )
+    parser.add_argument(
+        "--lbph-config",
+        default=None,
+        help="LBPH descriptor config ID/alias (default: active deployed config; "
+             "e.g. r3_n8_g6x6 or selected). Included in enrollment cache keys "
+             "and segment-resume validation.",
     )
     parser.add_argument(
         "--sface-gallery",
@@ -171,12 +184,53 @@ def _sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def enrollment_cache_paths(
+    seed: int,
+    split_manifest_sha: str | None,
+    assume_cropped: bool,
+    lbph_config=None,
+) -> tuple[dict[str, Path], Path, dict]:
+    """Return config-keyed enrollment paths and the expected descriptor metadata."""
+    descriptor_metadata = lbph_config_metadata(lbph_config)
+    manifest_suffix = (
+        f"_manifest{split_manifest_sha[:12]}" if split_manifest_sha else ""
+    )
+    crop_token = "_fullframe" if assume_cropped else "_boxcrop"
+    config_token = f"_cfg-{descriptor_metadata['id']}"
+    suffix = f"{config_token}_seed{seed}{manifest_suffix}{crop_token}"
+    paths = {
+        "lbph_model": ENROLL_DIR / f"lbph_{suffix}.yml",
+        "lbph_labels": ENROLL_DIR / f"lbph_labels_{suffix}.json",
+        "sface_gallery": ENROLL_DIR / f"sface_gallery_{suffix}.npy",
+        "sface_labels": ENROLL_DIR / f"sface_labels_{suffix}.json",
+    }
+    manifest_path = ENROLL_DIR / f"manifest_{suffix}.json"
+    return paths, manifest_path, descriptor_metadata
+
+
+def segment_outputs_match(seg_json: Path, seg_csv: Path, descriptor_id: str) -> bool:
+    """Validate a segment pair before resume; legacy outputs lack this proof."""
+    try:
+        payload = json.loads(seg_json.read_text(encoding="utf-8"))
+        payload_config = payload.get("lbph_config") or {}
+        if payload_config.get("id") != descriptor_id:
+            return False
+        with seg_csv.open("r", newline="", encoding="utf-8") as handle:
+            reader = csv.DictReader(handle)
+            if "lbph_config_id" not in (reader.fieldnames or []):
+                return False
+            return all(row.get("lbph_config_id") == descriptor_id for row in reader)
+    except (json.JSONDecodeError, OSError, UnicodeError):
+        return False
+
+
 def ensure_lfw2_enrollment(
     lfw_root: Path,
     seed: int,
     split_manifest_path: str | None = None,
     limit_identities: int = 0,
     assume_cropped: bool = False,
+    lbph_config=None,
 ) -> dict[str, str]:
     """Train/enroll LBPH + SFace on LFW2 and cache the artifacts under
     models/lfw2/. A matching cache is reused; delete the files to force re-enroll.
@@ -199,20 +253,14 @@ def ensure_lfw2_enrollment(
     (``_fullframe`` / ``_boxcrop``) AND the cached-manifest match check below,
     so the two crop modes never silently reuse each other's LBPH model.
     """
-    manifest_suffix = ""
+    descriptor_config = resolve_lbph_config(lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     split_manifest_sha = None
     if split_manifest_path is not None:
         split_manifest_sha = _sha256_file(Path(split_manifest_path))
-        manifest_suffix = f"_manifest{split_manifest_sha[:12]}"
-    crop_token = "_fullframe" if assume_cropped else "_boxcrop"
-
-    paths = {
-        "lbph_model": ENROLL_DIR / f"lbph_seed{seed}{manifest_suffix}{crop_token}.yml",
-        "lbph_labels": ENROLL_DIR / f"lbph_labels_seed{seed}{manifest_suffix}{crop_token}.json",
-        "sface_gallery": ENROLL_DIR / f"sface_gallery_seed{seed}{manifest_suffix}{crop_token}.npy",
-        "sface_labels": ENROLL_DIR / f"sface_labels_seed{seed}{manifest_suffix}{crop_token}.json",
-    }
-    manifest_path = ENROLL_DIR / f"manifest_seed{seed}{manifest_suffix}{crop_token}.json"
+    paths, manifest_path, descriptor_metadata = enrollment_cache_paths(
+        seed, split_manifest_sha, assume_cropped, descriptor_config
+    )
     if manifest_path.exists() and all(p.exists() for p in paths.values()):
         cached = json.loads(manifest_path.read_text(encoding="utf-8"))
         matches = (
@@ -221,12 +269,13 @@ def ensure_lfw2_enrollment(
             and cached.get("split_manifest_sha256") == split_manifest_sha
             and cached.get("limit_identities", 0) == limit_identities
             and cached.get("assume_cropped", False) == assume_cropped
+            and cached.get("lbph_config") == descriptor_metadata
         )
         if matches:
             print(f"[ENROLL] Reusing cached LFW2 enrollment "
                   f"({cached['identities']} identities) in {ENROLL_DIR}")
             return {k: str(v) for k, v in paths.items()}
-        print("[ENROLL] Cached manifest does not match this root/seed/split-manifest/crop-mode; re-enrolling.")
+        print("[ENROLL] Cached manifest does not match root/seed/split-manifest/crop-mode/descriptor; re-enrolling.")
 
     sys.path.insert(0, str(PROJECT_ROOT))
     import cv2 as cv
@@ -296,7 +345,7 @@ def ensure_lfw2_enrollment(
         raise RuntimeError("Not enough valid LFW2 images to enroll.")
 
     print(f"[ENROLL] Training LBPH on {len(faces)} faces (this writes a large .yml)...")
-    recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    recognizer = create_lbph_recognizer_for_config(descriptor_config)
     recognizer.train(faces, np.array(labels, dtype=np.int32))
 
     ENROLL_DIR.mkdir(parents=True, exist_ok=True)
@@ -319,6 +368,7 @@ def ensure_lfw2_enrollment(
         "split_manifest_sha256": split_manifest_sha,
         "limit_identities": limit_identities,
         "assume_cropped": assume_cropped,
+        "lbph_config": descriptor_metadata,
         "equalization": equalization,
         "yunet_misses_whole_tile_fallback": yunet_misses,
         "created": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -335,19 +385,18 @@ def run_segment(
     seed: int,
     passthrough: list[str],
     env: dict[str, str],
+    descriptor_id: str,
 ) -> tuple[int, Path, Path]:
     seg_json = output_dir / f"accuracy_ratio_hybrid_seg{segment_index}of{num_segments}.json"
     seg_md = output_dir / f"accuracy_ratio_hybrid_seg{segment_index}of{num_segments}.md"
     seg_csv = output_dir / f"accuracy_ratio_hybrid_seg{segment_index}of{num_segments}_probes.csv"
 
-    # Resume: a finished segment left a valid JSON + CSV pair; skip re-running it.
+    # Resume only when both outputs prove the same descriptor was used.
     if seg_json.exists() and seg_csv.exists():
-        try:
-            json.loads(seg_json.read_text(encoding="utf-8"))
+        if segment_outputs_match(seg_json, seg_csv, descriptor_id):
             print(f"[WORKER {segment_index}/{num_segments}] Already complete - skipping (resume).")
             return segment_index, seg_json, seg_csv
-        except (json.JSONDecodeError, OSError):
-            print(f"[WORKER {segment_index}/{num_segments}] Stale/corrupt output - re-running.")
+        print(f"[WORKER {segment_index}/{num_segments}] Stale/config-mismatched output - re-running.")
 
     cmd = [
         sys.executable,
@@ -432,6 +481,8 @@ def main() -> int:
     os.environ.update({k: v for k, v in env.items() if k not in os.environ})
 
     requested_workers = args.num_workers if args.num_workers is not None else hardware_profile["workers"]
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     num_segments = args.num_segments or max(16, requested_workers)
     # segment_bounds() sizes every segment as ceil(n/k), so the first k-1
     # segments can already cover all n probes and leave the last one an EMPTY
@@ -456,6 +507,9 @@ def main() -> int:
     print(f"Workers: {num_workers} | Segments: {num_segments} (finished segments are skipped on re-launch)")
     print(f"Output Dir: {out_dir}")
     print(f"Seed: {args.seed}")
+    print(f"LBPH descriptor: {descriptor_metadata['id']} "
+          f"(r{descriptor_metadata['radius']}, n{descriptor_metadata['neighbors']}, "
+          f"grid={descriptor_metadata['grid_x']}x{descriptor_metadata['grid_y']})")
     print(f"Split manifest: {args.split_manifest or '(none - legacy same-image path)'}")
     print(f"Mod set: {args.mod_set}")
 
@@ -471,6 +525,7 @@ def main() -> int:
             split_manifest_path=args.split_manifest,
             limit_identities=args.limit_identities,
             assume_cropped=lbph_assume_cropped,
+            lbph_config=descriptor_config,
         )
         if args.lbph_model is None:
             args.lbph_model = enrolled["lbph_model"]
@@ -491,6 +546,7 @@ def main() -> int:
         ("--split-manifest", args.split_manifest),
         ("--no-face-policy", args.no_face_policy),
         ("--lbph-assume-cropped", args.lbph_assume_cropped),
+        ("--lbph-config", descriptor_metadata["id"]),
     ):
         if value is not None:
             passthrough.extend([flag, value])
@@ -513,6 +569,7 @@ def main() -> int:
                 args.seed,
                 passthrough,
                 env,
+                descriptor_metadata["id"],
             )
             for seg_idx in range(1, num_segments + 1)
         ]

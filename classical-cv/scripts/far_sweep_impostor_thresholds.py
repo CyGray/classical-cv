@@ -38,6 +38,12 @@ from src.classical_faces.detection import create_face_detector  # noqa: E402
 from src.classical_faces.pipeline import SPECS  # noqa: E402
 from src.classical_faces.preprocess import IMG_SIZE, normalize_face  # noqa: E402
 from src.hybrid.recognizer import detect_sample  # noqa: E402
+from src.independence_common import (  # noqa: E402
+    create_lbph_recognizer_for_config,
+    lbph_config_metadata,
+    lbph_native_scale,
+    resolve_lbph_config,
+)
 
 DEFAULT_TARGET_FAR_PPM = [10.0, 100.0, 1000.0, 10000.0, 50000.0, 100000.0]
 
@@ -63,6 +69,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--random-seed", type=int, default=42)
     parser.add_argument("--max-identities", type=int, default=0)
     parser.add_argument(
+        "--lbph-config",
+        default=None,
+        help="LBPH descriptor config ID/alias (default: active deployed config; "
+             "e.g. r3_n8_g6x6 or selected).",
+    )
+    parser.add_argument(
         "--target-far-ppm",
         type=float,
         nargs="+",
@@ -76,6 +88,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     detector = create_face_detector("yunet")
     equalization = SPECS["lbph"].default_equalization
 
@@ -102,7 +116,7 @@ def main() -> int:
         print("[ERROR] Not enough usable probes.")
         return 1
 
-    recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    recognizer = create_lbph_recognizer_for_config(descriptor_config)
     recognizer.train(tiles, np.arange(n, dtype=np.int32))
 
     dist = np.full((n, n), np.inf, dtype=np.float64)
@@ -157,7 +171,8 @@ def main() -> int:
             "selected_identities": n,
             "skipped_by_detector": skipped,
         },
-        "scale": "native cv.face.LBPHFaceRecognizer.predict_collect() (radius=1, neighbors=8, grid=8x8)",
+        "lbph_config": descriptor_metadata,
+        "scale": lbph_native_scale(descriptor_config),
         "unique_pairs": unique_pairs,
         "sweep": sweep,
     }
