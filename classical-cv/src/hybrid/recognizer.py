@@ -23,8 +23,14 @@ import cv2 as cv
 import numpy as np
 
 from src.classical_faces.detection import Detection, FaceDetector, create_face_detector
+from src.classical_faces.lbph_config import (
+    ACTIVE_LBPH_CONFIG,
+    LBPHConfig,
+    create_lbph_recognizer,
+    resolve_lbph_config,
+)
 from src.classical_faces.pipeline import SPECS
-from src.hybrid.gate import GateDecision, GateThresholds, decide_escalation
+from src.hybrid.gate import GateDecision, GateThresholds, decide_escalation, load_thresholds
 from src.hybrid.quality import QualityReport, QualityThresholds, compute_quality
 from src.lbph.preprocess import IMG_SIZE, normalize_face
 from src.sface.recognizer import (
@@ -169,13 +175,25 @@ class LBPHAdapter:
         labels_path: str = DEFAULT_LBPH_LABELS,
         equalization: str | None = None,
         far_anchors: list[list[float]] | None = None,
+        lbph_config: LBPHConfig | None = None,
     ) -> None:
         self.spec = SPECS["lbph"]
+        self.lbph_config = resolve_lbph_config(lbph_config or ACTIVE_LBPH_CONFIG)
         self.equalization = equalization or self.spec.default_equalization
-        self.recognizer = cv.face.LBPHFaceRecognizer_create(
-            radius=1, neighbors=8, grid_x=8, grid_y=8
-        )
+        self.recognizer = create_lbph_recognizer(self.lbph_config)
         self.recognizer.read(model_path)
+        loaded = {
+            "radius": int(self.recognizer.getRadius()),
+            "neighbors": int(self.recognizer.getNeighbors()),
+            "grid_x": int(self.recognizer.getGridX()),
+            "grid_y": int(self.recognizer.getGridY()),
+        }
+        if loaded != self.lbph_config.params:
+            raise ValueError(
+                f"Loaded LBPH model has descriptor {loaded}, expected descriptor "
+                f"{self.lbph_config.config_id} {self.lbph_config.params}; the loaded model "
+                "must be retrained for the requested descriptor."
+            )
         with open(labels_path, "r", encoding="utf-8") as f:
             labels_raw = json.load(f)
         self.id_to_name = {int(idx): name for name, idx in labels_raw.items()}
@@ -451,14 +469,6 @@ def _argmax_name(match: SFaceMatch) -> str:
 # --------------------------------------------------------------------------- #
 # Threshold + factory helpers
 # --------------------------------------------------------------------------- #
-def load_thresholds(path: str = DEFAULT_THRESHOLDS_PATH) -> dict:
-    p = Path(path)
-    if not p.exists():
-        return {}
-    with p.open("r", encoding="utf-8") as f:
-        return json.load(f)
-
-
 def build_hybrid(
     *,
     mode: str = "cascade",
@@ -469,19 +479,25 @@ def build_hybrid(
     sface_model: str | None = None,
     sface_impostors: str | None = DEFAULT_SFACE_IMPOSTORS,
     require_sface: bool = True,
+    lbph_config: LBPHConfig | None = None,
 ) -> HybridRecognizer:
     """Load LBPH + SFace + thresholds into a ready ``HybridRecognizer``.
 
     ``require_sface=False`` (or ``mode=cv_only``) tolerates a missing SFace
     gallery and degrades to the CPU-only LBPH fallback (PLAN §4.3 / §10).
     """
-    cfg = load_thresholds(thresholds_path)
+    descriptor_config = resolve_lbph_config(lbph_config or ACTIVE_LBPH_CONFIG)
+    cfg = load_thresholds(
+        thresholds_path,
+        expected_lbph_config=descriptor_config,
+    )
     gate_thresholds = GateThresholds.from_dict(cfg.get("gate"))
     quality_thresholds = QualityThresholds.from_dict(cfg.get("quality"))
     lbph = LBPHAdapter(
         model_path=lbph_model,
         labels_path=lbph_labels,
         far_anchors=cfg.get("lbph_far_anchors"),
+        lbph_config=descriptor_config,
     )
 
     sface: SFaceAdapter | None = None

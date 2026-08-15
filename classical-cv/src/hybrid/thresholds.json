@@ -1,5 +1,14 @@
 {
   "_note": "Deployed hybrid config derived by src/hybrid/calibrate.py. Values are measured-now or carried-with-provenance; see 'provenance'. gate.tau_accept and sface.l2_genuine are FROZEN, see docs/READ_THIS.md.",
+  "lbph_descriptor": {
+    "id": "r1_n8_g8x8",
+    "params": {
+      "radius": 1,
+      "neighbors": 8,
+      "grid_x": 8,
+      "grid_y": 8
+    }
+  },
   "gate": {
     "tau_accept": 67.03325520645528,
     "tau_reject": 140.13,
@@ -42,6 +51,7 @@
     "gate.tau_accept": "frozen 2026-08-02: LFW1 YuNet STANDALONE (box-cropped) LBPH-only sweep, rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR, native predict_collect scale), reports/independence/lbph_lfw1/native_predict_scale_yunet.json. Unified with cv_only's threshold by design decision (see docs/independence/MASTER_FILE.md row 1/4 and docs/audits/STATE-08-02.md): tau_accept is a single-engine LBPH-marginal-distribution question (SFace never runs before this gate), so no joint/cascade-specific derivation is needed. The previous joint-hybrid candidate (77.769348, docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md) was NOT adopted -- it was measured on a harness bug (full-frame LBPH tiles instead of box-cropped, see cv-workspace-map SS3.2) which this session's like-for-like YuNet standalone box-crop result (67.033, nearly identical to the old Haar-standalone 67.0084) empirically confirms was the real cause of that gap, not detector choice as FROZEN_THRESHOLDS_HYBRID.md originally claimed.",
     "gate.tau_reject": "CANONIZED 2026-08-02 (advisor sign-off), value 140.13, replacing the box-crop-harness-bug-tainted 88.4927 (LFW1 YuNet joint hybrid run rank-165,226, docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md -- rejected for the same crop-mode reason gate.tau_accept's old 77.769348 candidate was). Method: docs/independence/TAU_REJECT_METHOD.md -- an FRR-vs-escalation trade-off curve (reports/independence/tau_reject_tradeoff/curve.json, script scripts/pipeline/tau_reject_tradeoff_curve.py), NOT a plain impostor-tail rank. Finding: on wild LFW, LBPH's genuine and impostor distance distributions are so overlapped in the 70-170 range that impostor-escalation tracks genuine-escalation almost 1:1 at every candidate tested (e.g. at tau_reject=100: 87.73% genuine vs 86.24% impostor escalate) -- there is no knee, i.e. no tau_reject value that meaningfully trades genuine rescue for impostor containment. 140.13 (heavy-tier p99 genuine LBPH distance, docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md) sits above the observed clean/light/medium genuine distribution's near-entirety and reduces heavy-tier genuine hard-reject-before-SFace from 51.09% (old value) to ~0.5%. Framing: this is a deliberate engineering choice to make the confident-reject branch functionally inert on LFW (favoring escalation over premature hard reject, since the cascade's headline result is the SFace rescue path) -- NOT a derived separation bound, because LFW does not support one in this range. Does not apply to La Salle DB1, where LBPH separates genuine/impostor far better (docs/PAPER.md).",
     "gate.margin_min": "policy: relative top1-top2 gap 0.05 (not dataset-fitted; train margins are inflated by memorisation, test-fitting would leak)",
+    "lbph_descriptor": "deployed r1_n8_g8x8 (radius=1, neighbors=8, grid=8x8); all LBPH threshold values in this file are compatible only with this descriptor",
     "quality.*": "measured: clean-crop probe distribution edges (train); DB2 41-mod LBPH<->SFace crossover refinement deferred to Phase 6.4",
     "sface.cosine_operating": "measured: SFaceFarModel.cosine_at_far(1e-04) over impostors-lfw.npy",
     "sface.l2_genuine": "frozen 2026-08-01: 1.0313, LFW1 YuNet joint hybrid run rank-165 unidirectional unique-pair impostor distance (~10 ppm FAR), docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md."

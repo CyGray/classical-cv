@@ -62,6 +62,11 @@ from src.classical_faces.detection import create_face_detector
 from src.classical_faces.pipeline import SPECS
 from src.classical_faces.preprocess import IMG_SIZE, normalize_face
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, detect_sample, load_thresholds
+from src.independence_common import (
+    create_lbph_recognizer_for_config,
+    lbph_config_metadata,
+    resolve_lbph_config,
+)
 from src.sface.recognizer import SFaceRecognizer, default_sface_model_path
 from src.stats_utils import wilson_interval_percent
 
@@ -83,6 +88,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--split-manifest", default="data/splits/lfw_ident_split_seed42.json",
                         help="lsface-lfw-ident-split-v1 manifest (gallery/probe-disjoint).")
     parser.add_argument("--engines", default="lbph,sface", help="Comma list from: lbph, sface.")
+    parser.add_argument(
+        "--lbph-config",
+        default=None,
+        help="LBPH descriptor config ID/alias (default: active deployed config; "
+             "e.g. r3_n8_g6x6 or selected).",
+    )
     parser.add_argument("--thresholds-json", default=DEFAULT_THRESHOLDS_PATH,
                         help="Source of gate.tau_accept (LBPH accept distance). SFace's "
                              "genuine rule uses the module constants in "
@@ -133,11 +144,11 @@ def _load_gallery(person_paths: list[tuple[str, str]], detector, equalization: s
 
 
 def lbph_pair_distances(genuine_face: np.ndarray, impostor_face: np.ndarray,
-                         probe_face: np.ndarray) -> tuple[float, float]:
+                         probe_face: np.ndarray, lbph_config=None) -> tuple[float, float]:
     """(genuine_dist, impostor_dist) from ONE predict_collect() call against a
     throwaway 2-class model - identical codepath to LBPHAdapter.score(), so the
     distances land on the same native predict_collect scale as tau_accept."""
-    recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    recognizer = create_lbph_recognizer_for_config(lbph_config)
     recognizer.train([genuine_face, impostor_face], np.array([0, 1], dtype=np.int32))
     collector = cv.face.StandardCollector_create()
     recognizer.predict_collect(probe_face, collector)
@@ -198,12 +209,17 @@ def accuracy_at_threshold(genuine_accept: list[bool], impostor_accept: list[bool
 
 def main() -> int:
     args = parse_args()
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     engines = [e.strip() for e in args.engines.split(",") if e.strip()]
     for e in engines:
         if e not in ENGINES:
             raise ValueError(f"Unknown engine {e!r}. Valid: {ENGINES}")
 
-    thresholds = load_thresholds(_abs(args.thresholds_json))
+    thresholds = load_thresholds(
+        _abs(args.thresholds_json),
+        expected_lbph_config=descriptor_config,
+    )
     tau_accept = float(thresholds["gate"]["tau_accept"])
 
     manifest = load_split_manifest(_abs(args.split_manifest))
@@ -221,7 +237,8 @@ def main() -> int:
 
     modifications_list, variant_count = get_modification_set(args.mod_set)
     print(f"[INFO] engines={engines} identities={len(enrolled_set)} probes={len(probes)} "
-          f"mod_set={args.mod_set} variants/probe={variant_count} tau_accept={tau_accept}")
+          f"mod_set={args.mod_set} variants/probe={variant_count} tau_accept={tau_accept} "
+          f"lbph_config={descriptor_metadata['id']}")
 
     detector = create_face_detector("yunet")
     equalization = SPECS["lbph"].default_equalization
@@ -262,7 +279,8 @@ def main() -> int:
         if "lbph" in engines:
             probe_face = normalize_face(sample.face_gray, img_size=IMG_SIZE, equalization=equalization)
             g_dist, i_dist = lbph_pair_distances(
-                gallery[person]["lbph_face"], gallery[impostor_person]["lbph_face"], probe_face)
+                gallery[person]["lbph_face"], gallery[impostor_person]["lbph_face"],
+                probe_face, descriptor_config)
             row["lbph_genuine_dist"], row["lbph_impostor_dist"] = g_dist, i_dist
         if "sface" in engines:
             probe_feature = (
@@ -297,7 +315,8 @@ def main() -> int:
     print(f"[OK] Wrote {pairs_csv_path}")
 
     payload = build_payload(
-        all_rows, engines, tau_accept, args, modifications_list, variant_count, len(probes), len(enrolled_set))
+        all_rows, engines, tau_accept, args, modifications_list, variant_count,
+        len(probes), len(enrolled_set), descriptor_config)
     out_json = Path(_abs(args.output_json))
     out_md = Path(_abs(args.output_md))
     out_json.parent.mkdir(parents=True, exist_ok=True)
@@ -353,7 +372,7 @@ def _mod_stats(rows: list[dict], engine: str, tau_accept: float) -> dict:
 
 
 def build_payload(rows, engines, tau_accept, args, modifications_list, variant_count,
-                   n_probes, n_identities) -> dict:
+                   n_probes, n_identities, lbph_config=None) -> dict:
     clean_rows = [r for r in rows if r["modification"] == "clean"]
     per_mod = []
     for mod_name, _fn, levels in modifications_list:
@@ -380,6 +399,7 @@ def build_payload(rows, engines, tau_accept, args, modifications_list, variant_c
                           "impostor pair = SAME modified probe vs a deterministic "
                           "different-identity gallery image (stable_rng token 'impostor').",
         "engines": engines,
+        "lbph_config": lbph_config_metadata(lbph_config),
         "tau_accept": tau_accept,
         "tau_accept_source": _abs(args.thresholds_json),
         "sface_genuine_rule": "cosine >= 0.363 and l2 <= 1.0313 (src/sface/recognizer.py "
@@ -410,6 +430,11 @@ def to_markdown(payload: dict) -> str:
         f"Identities enrolled: {payload['identities_enrolled']} | Probes: {payload['probes']} | "
         f"mod_set: `{payload['mod_set']}` | seed: {payload['seed']} | "
         f"no-face policy: `{payload['no_face_policy']}`",
+        "",
+        f"LBPH descriptor: `{payload['lbph_config']['id']}` "
+        f"(radius={payload['lbph_config']['radius']}, "
+        f"neighbors={payload['lbph_config']['neighbors']}, "
+        f"grid={payload['lbph_config']['grid_x']}x{payload['lbph_config']['grid_y']})",
         "",
         f"LBPH `tau_accept` = **{payload['tau_accept']}** (from `{payload['tau_accept_source']}`).",
         f"SFace genuine rule: {payload['sface_genuine_rule']}",

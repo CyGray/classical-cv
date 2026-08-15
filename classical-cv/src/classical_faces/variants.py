@@ -31,27 +31,59 @@ import cv2 as cv
 import numpy as np
 
 from src.independence_common import _read_lbph_histograms
+from src.independence_common import (
+    create_lbph_recognizer_for_config,
+    lbph_config_metadata,
+    resolve_lbph_config,
+)
 
-LBPH_GRID = 8
-LBPH_BINS = 256
-LBPH_DIM = LBPH_GRID * LBPH_GRID * LBPH_BINS  # 16384
+# The compact matcher is intentionally pinned to the deployed 8x8 histogram
+# layout.  It is an opt-in representation and must not silently change when
+# the staged standard LBPH config changes.
+COMPACT_LBPH_GRID = 8
+COMPACT_LBPH_BINS = 256
+COMPACT_LBPH_DIM = COMPACT_LBPH_GRID * COMPACT_LBPH_GRID * COMPACT_LBPH_BINS
+# Backward-compatible names used by existing compact-variant callers.
+LBPH_GRID = COMPACT_LBPH_GRID
+LBPH_BINS = COMPACT_LBPH_BINS
+LBPH_DIM = COMPACT_LBPH_DIM
+
+
+def standard_lbph_metadata(config=None) -> dict:
+    """Return the active standard descriptor metadata from the central API."""
+    return lbph_config_metadata(resolve_lbph_config(config))
+
+
+def standard_lbph_dimension(config=None) -> int:
+    metadata = standard_lbph_metadata(config)
+    return (
+        metadata["grid_x"] * metadata["grid_y"]
+        * (2 ** metadata["neighbors"])
+    )
+
+
+def standard_lbph_feature_bytes(config=None) -> int:
+    return standard_lbph_dimension(config) * 4
 
 
 # --------------------------------------------------------------------------- #
 # Feature extraction (batch round-trips through OpenCV, exact representations)
 # --------------------------------------------------------------------------- #
-def lbph_histograms_from_tiles(tiles: list[np.ndarray], batch: int = 250) -> np.ndarray:
-    """Exact OpenCV LBPH histograms (radius 1, 8 neighbours, 8x8 grid), float32.
+def lbph_histograms_from_tiles(
+    tiles: list[np.ndarray], batch: int = 250, config="deployed"
+) -> np.ndarray:
+    """Exact compact-variant LBPH histograms, float32.
 
     Round-trips through XML, not YAML: cv2's YAML parser intermittently fails
     on large LBPH model files (persistence_yml "Parsing error", data-dependent).
     Batches stay capped so a single temp model never grows unwieldy.
     """
     batch = max(1, min(int(batch), 250))
+    descriptor_config = resolve_lbph_config(config)
     feats: list[np.ndarray] = []
     for start in range(0, len(tiles), batch):
         chunk = tiles[start: start + batch]
-        model = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+        model = create_lbph_recognizer_for_config(descriptor_config)
         model.train(chunk, np.arange(len(chunk), dtype=np.int32))
         tmp = tempfile.NamedTemporaryFile(suffix=".xml", delete=False)
         tmp.close()

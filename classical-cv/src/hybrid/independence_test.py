@@ -59,6 +59,11 @@ from src.classical_faces.pipeline import SPECS
 from src.hybrid.gate import GateThresholds, decide_escalation
 from src.hybrid.quality import QualityThresholds, compute_quality
 from src.hybrid.recognizer import DEFAULT_THRESHOLDS_PATH, load_thresholds
+from src.independence_common import (
+    create_lbph_recognizer_for_config,
+    lbph_config_metadata,
+    resolve_lbph_config,
+)
 from src.independence_common import error_pair_report, format_error_pair_report
 from src.independence_report import add_scaling_args, figure_prefix, segment_bounds
 from src.independence_plots import save_distance_curve_plot, save_distance_histogram, save_far_curve
@@ -93,6 +98,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", default=root_path("outputs", "hybrid", "independence_test"))
     parser.add_argument("--thresholds-json", default=DEFAULT_THRESHOLDS_PATH,
                         help="Gate + quality thresholds (tau_accept/tau_reject/margin_min).")
+    parser.add_argument(
+        "--lbph-config",
+        default=None,
+        help="LBPH descriptor config ID/alias (default: active deployed config; "
+             "e.g. r3_n8_g6x6 or selected).",
+    )
     parser.add_argument("--iterations", type=int, default=1,
                         help="Independent repeats with different per-person image picks.")
     parser.add_argument("--max-identities", type=int, default=0,
@@ -322,9 +333,11 @@ def load_probes(
 _worker_recognizer = None
 
 
-def _lbph_pool_init(lbph_faces: list[np.ndarray]) -> None:
+def _lbph_pool_init(lbph_faces: list[np.ndarray], lbph_config_id_value: str) -> None:
     global _worker_recognizer
-    rec = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+    rec = create_lbph_recognizer_for_config(
+        resolve_lbph_config(lbph_config_id_value)
+    )
     rec.train(lbph_faces, np.arange(len(lbph_faces), dtype=np.int32))
     _worker_recognizer = rec
 
@@ -348,6 +361,7 @@ def run_sweep(
     csv_path: str | None = None,
     seg_start: int = 0,
     seg_end: int | None = None,
+    lbph_config=None,
 ) -> tuple[dict, dict]:
     """Score all ordered pairs with both engines + the cascade gate.
 
@@ -371,6 +385,8 @@ def run_sweep(
         raise ValueError(f"Bad segment bounds [{seg_start}, {seg_end}) for n={n}.")
     names = [p.person for p in probes]
     image_paths = [p.image_path for p in probes]
+    descriptor_config = resolve_lbph_config(lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
 
     # -- LBPH: train once (per worker), then predict_collect per query row,
     # spread across processes (each row is O(N) inside OpenCV C++ and
@@ -383,7 +399,9 @@ def run_sweep(
         chunk_size = max(1, -(-len(query_rows) // (n_workers * 4)))
         chunks = [query_rows[k:k + chunk_size] for k in range(0, len(query_rows), chunk_size)]
         with ProcessPoolExecutor(
-            max_workers=n_workers, initializer=_lbph_pool_init, initargs=(lbph_faces_all,)
+            max_workers=n_workers,
+            initializer=_lbph_pool_init,
+            initargs=(lbph_faces_all, descriptor_metadata["id"]),
         ) as pool:
             for chunk_result in pool.map(_lbph_pool_predict_rows, chunks):
                 for i, results in chunk_result:
@@ -394,7 +412,7 @@ def run_sweep(
                         if d < lbph_dist[row, label]:
                             lbph_dist[row, label] = d
     else:
-        recognizer = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+        recognizer = create_lbph_recognizer_for_config(descriptor_config)
         recognizer.train(lbph_faces_all, np.arange(n, dtype=np.int32))
         for row, i in enumerate(range(seg_start, seg_end)):
             collector = cv.face.StandardCollector_create()
@@ -540,6 +558,7 @@ def run_sweep(
     summary = {
         "identities": n,
         "comparisons": comparisons,
+        "lbph_config": descriptor_metadata,
         "false_accepts": {
             "lbph": fp_lbph,
             "sface": fp_sface,
@@ -751,6 +770,8 @@ def main() -> int:
     args = parse_args()
     args.dataset_dir = resolve_path(args.dataset_dir)
     args.output_dir = resolve_path(args.output_dir)
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
 
     args.segment_count = max(1, int(args.segment_count))
     args.segment_index = max(1, int(args.segment_index))
@@ -765,6 +786,9 @@ def main() -> int:
 
     print(f"[INFO] Hybrid Independence Test (aggregated {args.iterations}x)")
     print(f"[INFO] Dataset: {args.dataset_dir}")
+    print(f"[INFO] LBPH descriptor: {descriptor_metadata['id']} "
+          f"(r{descriptor_metadata['radius']}, n{descriptor_metadata['neighbors']}, "
+          f"grid={descriptor_metadata['grid_x']}x{descriptor_metadata['grid_y']})")
     if segmented:
         print(f"[INFO] Segment {args.segment_index} of {args.segment_count} "
               f"(query rows only; candidates stay global)")
@@ -796,7 +820,10 @@ def main() -> int:
         print(f"[INFO] Seeded identity subset: {len(person_dirs)} of the available folders")
 
     thresholds_path = resolve_path(args.thresholds_json)
-    cfg = load_thresholds(thresholds_path)
+    cfg = load_thresholds(
+        thresholds_path,
+        expected_lbph_config=descriptor_config,
+    )
     gate_thresholds = GateThresholds.from_dict(cfg.get("gate"))
     quality_thresholds = QualityThresholds.from_dict(cfg.get("quality"))
     equalization = SPECS["lbph"].default_equalization
@@ -849,6 +876,7 @@ def main() -> int:
             "max_identities": args.max_identities,
             "random_seed": args.random_seed + it,
             "thresholds_json": thresholds_path,
+            "lbph_config_id": descriptor_metadata["id"],
         }
         # Segmented runs fingerprint their bounds so a cache from a different
         # segment (or an unsegmented run) is never silently resumed.
@@ -903,7 +931,8 @@ def main() -> int:
 
             rec_arrays, summary = run_sweep(probes, sface, gate_thresholds, quality_thresholds,
                                             csv_path=csv_path,
-                                            seg_start=seg_start, seg_end=seg_end)
+                                            seg_start=seg_start, seg_end=seg_end,
+                                            lbph_config=descriptor_config)
             summary.update(run_fingerprint)
             if segmented:
                 summary["segment"] = {
@@ -948,6 +977,7 @@ def main() -> int:
         "candidate_idx": acc_meta["candidate_idx"],
         "names": acc_meta["names"],
         "runs": runs,
+        "lbph_config": descriptor_metadata,
     }
     comparisons = iteration_summaries[0]["comparisons"]
 
@@ -1056,6 +1086,7 @@ def main() -> int:
 
     summary = {
         "dataset": {"path": args.dataset_dir, "identities": iteration_summaries[0]["identities"]},
+        "lbph_config": descriptor_metadata,
         "iterations": len(iteration_summaries),
         "comparisons_per_iteration": comparisons,
         "comparison": {

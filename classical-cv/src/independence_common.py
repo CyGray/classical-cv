@@ -11,12 +11,170 @@ Provides:
 import math
 import os
 import tempfile
+import importlib
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Callable, Dict, List, Tuple
 
 import cv2 as cv
 import numpy as np
+
+
+# ---------------------------------------------------------------------------
+# Central LBPH descriptor configuration bridge
+# ---------------------------------------------------------------------------
+# The descriptor API lives in src/classical_faces/lbph_config.py.  Keep the
+# import lazy so the Eigenfaces/Fisherfaces independence utilities remain
+# importable when a caller does not need LBPH, while making every LBPH caller
+# below go through the same validated factory.
+
+_LBPH_CONFIG_MODULE = "src.classical_faces.lbph_config"
+
+
+def _lbph_config_module():
+    try:
+        return importlib.import_module(_LBPH_CONFIG_MODULE)
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "The central LBPH configuration API is required for LBPH benchmarks "
+            "(src/classical_faces/lbph_config.py)."
+        ) from exc
+
+
+def _config_value(config, *names):
+    if isinstance(config, dict):
+        for name in names:
+            if name in config:
+                return config[name]
+    for name in names:
+        value = getattr(config, name, None)
+        if value is not None:
+            return value() if callable(value) else value
+    return None
+
+
+def lbph_config_id(config) -> str:
+    """Return the central API's stable ID, with a parameter-derived fallback."""
+    if isinstance(config, str):
+        return config
+    value = _config_value(config, "config_id", "descriptor_id", "id", "name")
+    if value is not None and not isinstance(value, (dict, list, tuple)):
+        return str(value)
+    radius = _config_value(config, "radius")
+    neighbors = _config_value(config, "neighbors")
+    grid_x = _config_value(config, "grid_x")
+    grid_y = _config_value(config, "grid_y")
+    if None not in (radius, neighbors, grid_x, grid_y):
+        return f"r{int(radius)}_n{int(neighbors)}_g{int(grid_x)}x{int(grid_y)}"
+    raise ValueError(f"LBPH config has no stable ID or complete descriptor parameters: {config!r}")
+
+
+def lbph_config_metadata(config) -> dict:
+    """Return JSON-safe descriptor provenance for benchmark payloads/caches."""
+    resolved = resolve_lbph_config(config)
+    radius = _config_value(resolved, "radius")
+    neighbors = _config_value(resolved, "neighbors")
+    grid_x = _config_value(resolved, "grid_x")
+    grid_y = _config_value(resolved, "grid_y")
+    if None in (radius, neighbors, grid_x, grid_y):
+        match = re.fullmatch(
+            r"r(?P<radius>\d+)_n(?P<neighbors>\d+)_g(?P<grid_x>\d+)x(?P<grid_y>\d+)",
+            lbph_config_id(resolved),
+        )
+        if match is None:
+            raise ValueError(
+                f"LBPH config is missing radius/neighbors/grid parameters: {resolved!r}"
+            )
+        radius = int(match.group("radius"))
+        neighbors = int(match.group("neighbors"))
+        grid_x = int(match.group("grid_x"))
+        grid_y = int(match.group("grid_y"))
+    return {
+        "id": lbph_config_id(resolved),
+        "radius": int(radius),
+        "neighbors": int(neighbors),
+        "grid_x": int(grid_x),
+        "grid_y": int(grid_y),
+    }
+
+
+def resolve_lbph_config(selector=None):
+    """Resolve an ID/alias to the central LBPH config object.
+
+    The worker-owned central module is intentionally allowed to choose its
+    concrete config class and lookup helper. This adapter accepts its staged
+    constants plus the common lookup spellings so benchmark code remains
+    stable while that module evolves.
+    """
+    module = _lbph_config_module()
+    active = getattr(module, "ACTIVE_LBPH_CONFIG")
+    if selector is None or selector == "" or selector == "active":
+        return active
+    if not isinstance(selector, str):
+        return selector
+
+    aliases = {
+        "deployed": "DEPLOYED_LBPH_CONFIG",
+        "selected": "SELECTED_LBPH_CONFIG",
+        "active": "ACTIVE_LBPH_CONFIG",
+    }
+    constant_name = aliases.get(selector)
+    if constant_name and hasattr(module, constant_name):
+        return getattr(module, constant_name)
+
+    for name in (
+        "resolve_lbph_config",
+        "get_lbph_config",
+        "config_for_id",
+        "get_config_by_id",
+        "config_from_id",
+    ):
+        lookup = getattr(module, name, None)
+        if not callable(lookup):
+            continue
+        try:
+            resolved = lookup(selector)
+        except (KeyError, ValueError, TypeError):
+            continue
+        if resolved is not None:
+            return resolved
+
+    for constant_name in (
+        "ACTIVE_LBPH_CONFIG",
+        "DEPLOYED_LBPH_CONFIG",
+        "SELECTED_LBPH_CONFIG",
+    ):
+        candidate = getattr(module, constant_name, None)
+        if candidate is not None and lbph_config_id(candidate) == selector:
+            return candidate
+
+    for mapping_name in ("LBPH_CONFIGS", "LBPH_CONFIG_BY_ID", "CONFIGS", "CONFIG_BY_ID"):
+        mapping = getattr(module, mapping_name, None)
+        if isinstance(mapping, dict) and selector in mapping:
+            return mapping[selector]
+
+    raise ValueError(
+        f"Unknown LBPH config {selector!r}; use active, deployed, selected, "
+        "or a stable config ID such as r3_n8_g6x6."
+    )
+
+
+def create_lbph_recognizer_for_config(config=None):
+    """Create a validated native LBPH recognizer through the central factory."""
+    module = _lbph_config_module()
+    factory = getattr(module, "create_lbph_recognizer")
+    return factory(resolve_lbph_config(config))
+
+
+def lbph_native_scale(config=None) -> str:
+    metadata = lbph_config_metadata(config)
+    return (
+        "native cv.face.LBPHFaceRecognizer.predict_collect() "
+        f"(config={metadata['id']}; radius={metadata['radius']}, "
+        f"neighbors={metadata['neighbors']}, "
+        f"grid={metadata['grid_x']}x{metadata['grid_y']})"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -61,6 +219,7 @@ def train_and_extract_features(
     faces: Dict[str, "np.ndarray | List[np.ndarray]"],
     label_map: Dict[str, int],
     model_type: str,
+    lbph_config=None,
 ) -> Tuple[np.ndarray, List[str]]:
     """
     Train a single multi-identity recognizer on all faces, then extract
@@ -105,9 +264,7 @@ def train_and_extract_features(
 
     # -- train model -------------------------------------------------------
     if model_type == "lbph":
-        model = cv.face.LBPHFaceRecognizer_create(
-            radius=1, neighbors=8, grid_x=8, grid_y=8,
-        )
+        model = create_lbph_recognizer_for_config(lbph_config)
     elif model_type in ("eigenfaces", "fisherfaces"):
         if model_type == "eigenfaces":
             num_comp = min(n - 1, 50)

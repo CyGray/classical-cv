@@ -8,8 +8,9 @@ Pillow==12.3.0
 # Machine learning & data processing
 scikit-learn==1.9.0
 
-# Data visualization
+# Manuscript visual export
 matplotlib==3.11.0
+graphviz==0.21
 
 # Utilities
 tqdm==4.68.4

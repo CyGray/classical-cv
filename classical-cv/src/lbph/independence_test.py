@@ -32,6 +32,8 @@ from src.independence_common import (
     error_pair_report,
     format_error_pair_report,
     per_run_error_pair_thresholds,
+    lbph_config_metadata,
+    resolve_lbph_config,
 )
 from src.independence_report import (
     add_scaling_args, write_default_plots, run_streaming_and_save,
@@ -72,6 +74,11 @@ def parse_args() -> argparse.Namespace:
         "--output-dir",
         default=root_path("outputs", "lbph", "independence_test"),
         help="Directory to save results (CSV, JSON, reports).",
+    )
+    parser.add_argument(
+        "--lbph-config",
+        default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
     )
     parser.add_argument(
         "--threshold",
@@ -261,6 +268,7 @@ def compute_pairwise_distances(
     selected_images: Dict[str, str],
     faces: Dict[str, np.ndarray],
     label_map: Dict[str, int],
+    lbph_config=None,
 ) -> List[ComparisonRecord]:
     """
     Train a single multi-identity LBPH model on all faces, extract LBPH
@@ -272,7 +280,7 @@ def compute_pairwise_distances(
     n = len(identities)
 
     feature_matrix, identities_sorted = train_and_extract_features(
-        faces, label_map, model_type="lbph",
+        faces, label_map, model_type="lbph", lbph_config=lbph_config,
     )
 
     records_data = common_pairwise_distances(
@@ -489,9 +497,31 @@ def run_lbph_independence_test() -> int:
     args.cascade_path = resolve_path(args.cascade_path)
     args.eye_cascade_path = resolve_path(resolve_eye_cascade_path(args.eye_cascade_path))
     args.output_dir = resolve_path(args.output_dir)
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+
+    default_output = resolve_path(root_path("outputs", "lbph", "independence_test"))
+    if args.output_dir == default_output:
+        args.output_dir = resolve_path(
+            root_path("outputs", "lbph", f"independence_test_{descriptor_metadata['id']}")
+        )
+    existing_summary = Path(args.output_dir) / "summary.json"
+    if existing_summary.exists():
+        try:
+            existing = json.loads(existing_summary.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            raise RuntimeError(
+                f"Refusing to reuse unreadable LBPH result cache: {existing_summary}"
+            ) from exc
+        if existing.get("lbph_config") != descriptor_metadata:
+            raise RuntimeError(
+                f"Existing LBPH result cache {existing_summary} is not stamped for "
+                f"{descriptor_metadata['id']}; choose a new --output-dir."
+            )
     
     print(f"[INFO] LBPH Independence Test (Aggregated {args.iterations}x)")
     print(f"[INFO] Dataset: {args.dataset_dir}")
+    print(f"[INFO] LBPH descriptor: {descriptor_metadata['id']}")
     
     # Load cascades
     face_cascade: cv.CascadeClassifier | None = None
@@ -519,7 +549,9 @@ def run_lbph_independence_test() -> int:
 
     n_est = len(person_dirs)
     if (n_est * (n_est - 1) // 2) > args.streaming_threshold:
-        return _run_lbph_streaming(args, person_dirs, face_cascade, eye_cascade)
+        return _run_lbph_streaming(
+            args, person_dirs, face_cascade, eye_cascade, descriptor_config, descriptor_metadata
+        )
 
     all_runs_records = []
     
@@ -548,7 +580,9 @@ def run_lbph_independence_test() -> int:
             continue
         
         # Compute pairwise distances
-        records = compute_pairwise_distances(selected_images, faces, label_map)
+        records = compute_pairwise_distances(
+            selected_images, faces, label_map, lbph_config=descriptor_config
+        )
         
         # Save raw results for this run
         run_dir = os.path.join(args.output_dir, "_raw_runs", f"run_{i+1}")
@@ -611,6 +645,7 @@ def run_lbph_independence_test() -> int:
             "std_dev": distance_stats.std_dev,
             "percentiles": distance_stats.percentiles,
         },
+        "lbph_config": descriptor_metadata,
         "suggested_thresholds": suggest_thresholds(distance_stats),
         "error_pair_thresholds": error_pair_report(
             aggregated_records_data,
@@ -659,7 +694,9 @@ def run_lbph_independence_test() -> int:
     return 0
 
 
-def _run_lbph_streaming(args, person_dirs, face_cascade, eye_cascade) -> int:
+def _run_lbph_streaming(
+    args, person_dirs, face_cascade, eye_cascade, descriptor_config, descriptor_metadata
+) -> int:
     """Memory-safe streaming path for large N (single seeded sweep, parallel)."""
     print(f"[INFO] Large run detected -> streaming mode "
           f"({args.workers} workers, chunk_rows={args.chunk_rows}, device={args.device})")
@@ -675,17 +712,23 @@ def _run_lbph_streaming(args, person_dirs, face_cascade, eye_cascade) -> int:
 
     tiles = [faces[p] for p in names]
     print(f"[INFO] Extracting LBPH histograms for {len(tiles)} identities ...")
-    features = lbph_histograms_from_tiles(tiles, 250)
+    features = lbph_histograms_from_tiles(tiles, 250, config=descriptor_config)
     pre_stats = {
         "processed": pre.processed, "successful": pre.successful,
         "skipped_unreadable": pre.skipped_unreadable,
         "skipped_no_face": pre.skipped_no_face, "skipped_too_small": pre.skipped_too_small,
     }
-    return run_streaming_and_save(
+    result = run_streaming_and_save(
         args, names=names, feature_matrix=features, metric="chi2",
         model_label="LBPH", distance_label=STREAMING_DISTANCE_LABEL,
         person_dirs=person_dirs, pre_stats=pre_stats, model_key="lbph",
     )
+    summary_path = Path(args.output_dir) / "summary.json"
+    if summary_path.exists():
+        summary = json.loads(summary_path.read_text(encoding="utf-8"))
+        summary["lbph_config"] = descriptor_metadata
+        summary_path.write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    return result
 
 
 if __name__ == "__main__":

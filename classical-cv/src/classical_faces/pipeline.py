@@ -45,6 +45,11 @@ from src.classical_faces.preprocess import (
     extract_classical_face,
     resolve_eye_cascade_path,
 )
+from src.classical_faces.lbph_config import (
+    ACTIVE_LBPH_CONFIG,
+    create_lbph_recognizer,
+    resolve_lbph_config,
+)
 from src.reporting.identity import attach_entity_identity, build_dataset_profile
 
 
@@ -58,7 +63,7 @@ def _lbph_feature_bytes(recognizer) -> int:
         neighbors = int(recognizer.getNeighbors())
         return grid_x * grid_y * (2 ** neighbors) * 4
     except Exception:
-        return 8 * 8 * 256 * 4
+        return ACTIVE_LBPH_CONFIG.descriptor_bytes
 
 
 def _subspace_feature_bytes(recognizer) -> int:
@@ -98,9 +103,7 @@ class RecognizerSpec:
 
 LBPH_SPEC = RecognizerSpec(
     family="lbph",
-    create=lambda num_components=0: cv.face.LBPHFaceRecognizer_create(
-        radius=1, neighbors=8, grid_x=8, grid_y=8
-    ),
+    create=lambda num_components=0: create_lbph_recognizer(),
     default_unknown_threshold=73.0,
     default_threshold_sweep=(40, 50, 55, 60, 65, 70, 73, 75, 77, 80, 85, 90, 100, 110),
     feature_bytes=_lbph_feature_bytes,
@@ -521,9 +524,39 @@ def _plan_entries(
 # --------------------------------------------------------------------------- #
 # Recognizer / label IO
 # --------------------------------------------------------------------------- #
-def load_recognizer(spec: RecognizerSpec, model_path: str):
-    recognizer = spec.create()
+def load_recognizer(
+    spec: RecognizerSpec,
+    model_path: str,
+    expected_lbph_config=None,
+):
+    """Load a recognizer, optionally enforcing the requested LBPH descriptor.
+
+    Existing callers remain compatible: without ``expected_lbph_config`` the
+    active LBPH factory is used and non-LBPH loading is unchanged.  When a
+    config is supplied, the serialized OpenCV YAML parameters are checked after
+    ``read()`` because OpenCV restores the model's own descriptor settings.
+    """
+    if spec.family != "lbph":
+        recognizer = spec.create()
+        recognizer.read(model_path)
+        return recognizer
+
+    config = resolve_lbph_config(expected_lbph_config)
+    recognizer = create_lbph_recognizer(config)
     recognizer.read(model_path)
+    if expected_lbph_config is not None:
+        loaded = {
+            "radius": int(recognizer.getRadius()),
+            "neighbors": int(recognizer.getNeighbors()),
+            "grid_x": int(recognizer.getGridX()),
+            "grid_y": int(recognizer.getGridY()),
+        }
+        if loaded != config.params:
+            raise ValueError(
+                f"Loaded LBPH model has descriptor {loaded}, expected "
+                f"{config.config_id} {config.params}; the model must be retrained "
+                "for the requested descriptor."
+            )
     return recognizer
 
 

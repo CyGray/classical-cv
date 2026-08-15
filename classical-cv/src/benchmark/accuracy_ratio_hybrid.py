@@ -57,6 +57,7 @@ headline covers all 41 variants and is directly comparable to the DL team's
 from __future__ import annotations
 
 import argparse
+import inspect
 import json
 import os
 import time
@@ -89,6 +90,11 @@ from src.hybrid.recognizer import (
 )
 from src.hybrid.gate import GateThresholds
 from src.hybrid.quality import QualityThresholds
+from src.independence_common import (
+    lbph_config_id,
+    lbph_config_metadata,
+    resolve_lbph_config,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 MODES = ("cv_only", "dl_only", "cascade")
@@ -117,6 +123,13 @@ def parse_args() -> argparse.Namespace:
                         help="Comma list from: cv_only, dl_only, cascade.")
     parser.add_argument("--lbph-model", default=DEFAULT_LBPH_MODEL)
     parser.add_argument("--lbph-labels", default=DEFAULT_LBPH_LABELS)
+    parser.add_argument(
+        "--lbph-config",
+        default=None,
+        help="LBPH descriptor config ID/alias (default: active deployed config; "
+             "e.g. r3_n8_g6x6 or selected). The model must be trained with the "
+             "same descriptor config.",
+    )
     parser.add_argument("--sface-gallery", default=DEFAULT_SFACE_GALLERY)
     parser.add_argument("--sface-impostors", default=DEFAULT_SFACE_IMPOSTORS,
                         help="Optional impostor embeddings for FAR annotation (may be absent).")
@@ -311,15 +324,46 @@ class _ScoreMemo:
         return getattr(self._inner, name)
 
 
+def _build_lbph_adapter(
+    args: argparse.Namespace,
+    config,
+    thresholds: dict | None = None,
+) -> LBPHAdapter:
+    """Build LBPH while tolerating the central worker's final kwarg spelling."""
+    thresholds = thresholds or load_thresholds(
+        _abs(args.thresholds_json),
+        expected_lbph_config=config,
+    )
+    kwargs = {
+        "model_path": _abs(args.lbph_model),
+        "labels_path": _abs(args.lbph_labels),
+        "far_anchors": thresholds.get("lbph_far_anchors"),
+    }
+    init_params = inspect.signature(LBPHAdapter.__init__).parameters
+    for parameter_name in ("config", "lbph_config", "descriptor_config"):
+        if parameter_name in init_params:
+            kwargs[parameter_name] = config
+            break
+    else:
+        active_id = lbph_config_id(resolve_lbph_config())
+        requested_id = lbph_config_id(config)
+        if requested_id != active_id:
+            raise RuntimeError(
+                "LBPHAdapter does not yet accept an explicit descriptor config; "
+                f"cannot run --lbph-config {requested_id!r}."
+            )
+    return LBPHAdapter(**kwargs)
+
+
 def build_recognizers(args: argparse.Namespace, modes: list[str]) -> dict[str, HybridRecognizer]:
-    cfg = load_thresholds(_abs(args.thresholds_json))
+    descriptor_config = resolve_lbph_config(getattr(args, "lbph_config", None))
+    cfg = load_thresholds(
+        _abs(args.thresholds_json),
+        expected_lbph_config=descriptor_config,
+    )
     gate_thresholds = GateThresholds.from_dict(cfg.get("gate"))
     quality_thresholds = QualityThresholds.from_dict(cfg.get("quality"))
-    lbph = LBPHAdapter(
-        model_path=_abs(args.lbph_model),
-        labels_path=_abs(args.lbph_labels),
-        far_anchors=cfg.get("lbph_far_anchors"),
-    )
+    lbph = _build_lbph_adapter(args, descriptor_config, cfg)
     sface = None
     if any(m != "cv_only" for m in modes):
         impostors = _abs(args.sface_impostors) if args.sface_impostors else None
@@ -493,19 +537,26 @@ def compute_battery(rows: list[dict], modes: list[str]) -> dict:
     return battery
 
 
-def write_battery_csv(rows: list[dict], path: Path) -> None:
+def write_battery_csv(rows: list[dict], path: Path, lbph_config=None) -> None:
     import csv
     path.parent.mkdir(parents=True, exist_ok=True)
     fields = ["modification", "level", "person", "file", "no_face", "cv_correct",
-              "dl_correct", "escalated", "gate_reason", "lbph_distance", "lbph_margin"]
+              "dl_correct", "escalated", "gate_reason", "lbph_distance", "lbph_margin",
+              "lbph_config_id"]
+    descriptor_id = lbph_config_metadata(lbph_config)["id"]
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
-        writer.writerows({k: r.get(k) for k in fields} for r in rows)
+        writer.writerows(
+            {**{k: r.get(k) for k in fields}, "lbph_config_id": descriptor_id}
+            for r in rows
+        )
 
 
 def main() -> int:
     args = parse_args()
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
     modes = [m.strip() for m in args.modes.split(",") if m.strip()]
     for m in modes:
         if m not in MODES:
@@ -771,6 +822,7 @@ def main() -> int:
         "modified_probes_per_mode": total_probes,
         "seed": args.seed,
         "no_face_policy": args.no_face_policy,
+        "lbph_config": descriptor_metadata,
         "lbph_assume_cropped": lbph_assume_cropped,
         "clean_no_face": clean_no_face,
         "clean_matched": clean_matched,
@@ -826,7 +878,7 @@ def main() -> int:
         payload["complementarity_battery"] = compute_battery(battery_rows, modes)
         if args.battery_csv:
             csv_path = Path(_abs(args.battery_csv))
-            write_battery_csv(battery_rows, csv_path)
+            write_battery_csv(battery_rows, csv_path, descriptor_config)
             print(f"[OK] Wrote {csv_path}")
 
     out_json = Path(_abs(args.output_json))
@@ -899,6 +951,13 @@ def to_markdown(payload: dict, modes: list[str]) -> str:
     canonical_rows = [r for r in payload["modifications"]
                        if r["modification"] in (payload.get("detector_canonical_modifications") or [])]
     canonical_in_headline = headline_scope == "all41" and bool(canonical_rows)
+    descriptor = payload.get("lbph_config") or {
+        "id": "unknown",
+        "radius": "?",
+        "neighbors": "?",
+        "grid_x": "?",
+        "grid_y": "?",
+    }
 
     lines = [
         f"# {protocol_label} - {mod_set} modification set: CV (LBPH) vs DL (SFace) vs hybrid cascade",
@@ -910,6 +969,11 @@ def to_markdown(payload: dict, modes: list[str]) -> str:
             " (same-image path - enrollment and probing share the same seeded image; "
             "see docs/audits/STATE-08-01.md. This is NOT recognition accuracy.)"
         ),
+        "",
+        f"LBPH descriptor: `{descriptor['id']}` "
+        f"(radius={descriptor['radius']}, "
+        f"neighbors={descriptor['neighbors']}, "
+        f"grid={descriptor['grid_x']}x{descriptor['grid_y']})",
         "",
         f"Originals: `{payload.get('originals_dir') or split_manifest}`"
         + (" (manifest probes)" if split_manifest else "")

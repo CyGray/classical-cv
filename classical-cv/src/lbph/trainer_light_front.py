@@ -46,13 +46,21 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--model-output",
-        default=root_path("models", "lbph", "trainer_light_front.yml"),
+        default=None,
         help="Output path for trained LBPH model.",
     )
     parser.add_argument(
         "--labels-output",
-        default=root_path("models", "lbph", "labels_light_front.json"),
+        default=None,
         help="Output path for labels JSON.",
+    )
+    parser.add_argument(
+        "--manifest-output", default=None,
+        help="Optional descriptor/provenance manifest path (default: tokenized beside the model).",
+    )
+    parser.add_argument(
+        "--lbph-config", default="deployed",
+        help="LBPH descriptor alias/ID (deployed, selected, or rN_nN_gNxN).",
     )
     parser.add_argument(
         "--min-face-size",
@@ -104,6 +112,21 @@ def get_person_dirs(dataset_root: str) -> List[Tuple[str, str]]:
 
 def main() -> None:
     args = parse_args()
+    from src.independence_common import (
+        create_lbph_recognizer_for_config,
+        lbph_config_metadata,
+        resolve_lbph_config,
+    )
+
+    descriptor_config = resolve_lbph_config(args.lbph_config)
+    descriptor_metadata = lbph_config_metadata(descriptor_config)
+    descriptor_token = descriptor_metadata["id"]
+    if args.model_output is None:
+        args.model_output = root_path("models", "lbph", f"trainer_light_front_{descriptor_token}.yml")
+    if args.labels_output is None:
+        args.labels_output = root_path("models", "lbph", f"labels_light_front_{descriptor_token}.json")
+    if args.manifest_output is None:
+        args.manifest_output = root_path("models", "lbph", f"manifest_light_front_{descriptor_token}.json")
     args.dataset_dir = resolve_path(args.dataset_dir)
     args.model_output = resolve_path(args.model_output)
     args.labels_output = resolve_path(args.labels_output)
@@ -173,9 +196,7 @@ def main() -> None:
     print(f"[INFO] Training samples: {len(faces)}")
     print(f"[INFO] Skipped identities: {skipped}")
 
-    recognizer = cv.face.LBPHFaceRecognizer_create(
-        radius=1, neighbors=8, grid_x=8, grid_y=8,
-    )
+    recognizer = create_lbph_recognizer_for_config(descriptor_config)
     recognizer.train(faces, np.array(labels, dtype=np.int32))
 
     os.makedirs(os.path.dirname(args.model_output), exist_ok=True)
@@ -183,9 +204,23 @@ def main() -> None:
     recognizer.save(args.model_output)
     with open(args.labels_output, "w", encoding="utf-8") as f:
         json.dump(label_map, f, indent=2)
+    manifest = {
+        "dataset": args.dataset_dir,
+        "image_name": args.image_name,
+        "model": args.model_output,
+        "labels": args.labels_output,
+        "identities": len(label_map),
+        "training_samples": len(faces),
+        "skipped": skipped,
+        "equalization": args.equalization,
+        "lbph_config": descriptor_metadata,
+    }
+    with open(args.manifest_output, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2)
 
     print(f"[OK] Saved model to: {args.model_output}")
     print(f"[OK] Saved labels to: {args.labels_output}")
+    print(f"[OK] Saved manifest to: {args.manifest_output}")
 
 
 if __name__ == "__main__":

@@ -37,6 +37,7 @@ from src.hybrid.recognizer import (
     LBPHAdapter,
     detect_sample,
 )
+from src.hybrid.gate import active_lbph_descriptor, deployed_lbph_descriptor
 from src.sface.recognizer import COSINE_GENUINE_THRESHOLD, L2_GENUINE_THRESHOLD, SFaceFarModel
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -68,6 +69,25 @@ LBPH_TAU_ACCEPT_PROVENANCE = "frozen 2026-08-02: LFW1 rank-165 unidirectional un
 # by memorisation so a train-fitted margin over-escalates the held-out set, while
 # fitting on the test set would leak. 0.05 = "runner-up within 5% of the best".
 MARGIN_MIN_POLICY = 0.05
+
+
+def ensure_deployed_lbph_calibration() -> dict:
+    """Refuse to stamp deployed constants onto a non-deployed descriptor.
+
+    This calibrator carries frozen LBPH values; it is not a candidate-config
+    calibration command.  A selected descriptor must first receive its own
+    newly derived threshold values and a separate provenance record.
+    """
+    active = active_lbph_descriptor()
+    deployed = deployed_lbph_descriptor()
+    if active != deployed:
+        raise RuntimeError(
+            "Refusing to regenerate deployed thresholds: ACTIVE LBPH descriptor "
+            f"{active['id']} does not match deployed {deployed['id']}. Supply newly "
+            "derived LBPH threshold values and provenance for the candidate before "
+            "generating a candidate threshold file."
+        )
+    return deployed
 
 
 def root_path(*parts: str) -> str:
@@ -187,8 +207,11 @@ def main() -> int:
     if not clean_dir.exists():
         raise FileNotFoundError(f"Clean calibration dir not found: {clean_dir}")
 
+    lbph_descriptor = ensure_deployed_lbph_calibration()
+
     start = time.time()
     print(f"[CAL] Clean crops: {clean_dir}")
+    print(f"[CAL] LBPH descriptor: {lbph_descriptor['id']} {lbph_descriptor['params']}")
 
     # 1) SFace operating cosines from the real LFW impostor distribution.
     far_model = SFaceFarModel.from_features_npy(resolve_path(args.impostors_npy))
@@ -211,6 +234,7 @@ def main() -> int:
     config = {
         "_note": "Deployed hybrid config derived by src/hybrid/calibrate.py. Values are "
         "measured-now or carried-with-provenance; see 'provenance'.",
+        "lbph_descriptor": lbph_descriptor,
         "gate": {
             "tau_accept": LBPH_TAU_ACCEPT,
             "tau_reject": LBPH_TAU_REJECT,
@@ -228,6 +252,7 @@ def main() -> int:
             "gate.tau_accept": LBPH_TAU_ACCEPT_PROVENANCE,
             "gate.tau_reject": "CANONIZED 2026-08-02 (advisor sign-off): 140.13, heavy-tier p99 genuine LBPH distance, an FRR-budget pick (see docs/independence/TAU_REJECT_METHOD.md) -- NOT an impostor-FAR-derived value like tau_accept.",
             "lbph_far_anchors[2]": f"carried, decoupled from gate.tau_reject 2026-08-02: {TAR_AT_FAR_PROVENANCE}, ~1% FAR",
+            "lbph_descriptor": f"deployed descriptor {lbph_descriptor['id']} with params {lbph_descriptor['params']}; all LBPH gate constants remain tied to this descriptor",
             "gate.margin_min": "policy: relative top1-top2 gap 0.05 (not dataset-fitted; "
             "train margins are inflated by memorisation, test-fitting would leak)",
             "quality.*": f"measured: clean-crop probe distribution edges ({clean_dir.name}); "
