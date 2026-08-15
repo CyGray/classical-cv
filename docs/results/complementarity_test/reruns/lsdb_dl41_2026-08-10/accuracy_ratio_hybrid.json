@@ -1,0 +1,4773 @@
+{
+  "protocol": "transform_sensitivity",
+  "protocol_label": "Transform Sensitivity",
+  "mod_set": "dl41",
+  "split_manifest": null,
+  "split_manifest_triples_sha256": null,
+  "originals_dir": "..\\data\\lsdb\\split\\test",
+  "originals": 56,
+  "total_unsegmented_originals": 56,
+  "segment_count": 1,
+  "segment_index": 1,
+  "variant_count": 41,
+  "headline_scope": "all41",
+  "headline_variant_count": 41,
+  "headline_modifications": [
+    "brightness_p25",
+    "brightness_p20",
+    "brightness_p10",
+    "monochrome",
+    "jpeg_q30",
+    "jpeg_q60",
+    "jpeg_q80",
+    "color_8bit",
+    "rgb565",
+    "gaussnoise_12",
+    "gaussnoise_8",
+    "gaussnoise_4",
+    "histeq",
+    "autolevel",
+    "blur_7",
+    "blur_5",
+    "blur_3",
+    "rot_270",
+    "rot_180",
+    "rot_90",
+    "rot_45",
+    "rot_25",
+    "rot_10",
+    "scale_50",
+    "scale_70",
+    "scale_90",
+    "trans_30",
+    "trans_20",
+    "trans_10",
+    "flip_lr",
+    "aspect_6_3",
+    "aspect_16_9",
+    "crop_60",
+    "crop_70",
+    "crop_90",
+    "skew_10",
+    "skew_6",
+    "skew_4",
+    "persp_10",
+    "persp_6",
+    "persp_4"
+  ],
+  "detector_canonical_variant_count": 4,
+  "modified_probes_per_mode": 2296,
+  "seed": 42,
+  "no_face_policy": "strict",
+  "lbph_assume_cropped": true,
+  "clean_no_face": 0,
+  "clean_matched": {
+    "cv_only": 35,
+    "dl_only": 56,
+    "cascade": 56
+  },
+  "clean_rank1_matched": {
+    "cv_only": 56,
+    "dl_only": 56,
+    "cascade": 56
+  },
+  "clean_acceptance_percent": {
+    "cv_only": 62.5,
+    "dl_only": 100.0,
+    "cascade": 100.0
+  },
+  "clean_acceptance_ci95": {
+    "cv_only": {
+      "count": 35,
+      "trials": 56,
+      "percent": 62.5,
+      "ci95_low_percent": 49.40536590850181,
+      "ci95_high_percent": 73.98978567352911
+    },
+    "dl_only": {
+      "count": 56,
+      "trials": 56,
+      "percent": 100.0,
+      "ci95_low_percent": 93.58060632812366,
+      "ci95_high_percent": 100.0
+    },
+    "cascade": {
+      "count": 56,
+      "trials": 56,
+      "percent": 100.0,
+      "ci95_low_percent": 93.58060632812366,
+      "ci95_high_percent": 100.0
+    }
+  },
+  "clean_rank1_percent": {
+    "cv_only": 100.0,
+    "dl_only": 100.0,
+    "cascade": 100.0
+  },
+  "clean_rank1_ci95": {
+    "cv_only": {
+      "count": 56,
+      "trials": 56,
+      "percent": 100.0,
+      "ci95_low_percent": 93.58060632812366,
+      "ci95_high_percent": 100.0
+    },
+    "dl_only": {
+      "count": 56,
+      "trials": 56,
+      "percent": 100.0,
+      "ci95_low_percent": 93.58060632812366,
+      "ci95_high_percent": 100.0
+    },
+    "cascade": {
+      "count": 56,
+      "trials": 56,
+      "percent": 100.0,
+      "ci95_low_percent": 93.58060632812366,
+      "ci95_high_percent": 100.0
+    }
+  },
+  "overall_ar_percent": {
+    "cv_only": 30.79268292682927,
+    "dl_only": 87.23867595818815,
+    "cascade": 87.23867595818815
+  },
+  "overall_ar_pooled_ci95": {
+    "cv_only": {
+      "count": 707,
+      "trials": 2296,
+      "percent": 30.79268292682927,
+      "ci95_low_percent": 28.937809535277285,
+      "ci95_high_percent": 32.711720843557195
+    },
+    "dl_only": {
+      "count": 2003,
+      "trials": 2296,
+      "percent": 87.23867595818815,
+      "ci95_low_percent": 85.81141212572334,
+      "ci95_high_percent": 88.54153918061795
+    },
+    "cascade": {
+      "count": 2003,
+      "trials": 2296,
+      "percent": 87.23867595818815,
+      "ci95_low_percent": 85.81141212572334,
+      "ci95_high_percent": 88.54153918061795
+    }
+  },
+  "overall_rank1_percent": {
+    "cv_only": 70.38327526132406,
+    "dl_only": 88.19686411149826,
+    "cascade": 88.19686411149826
+  },
+  "overall_rank1_pooled_ci95": {
+    "cv_only": {
+      "count": 1616,
+      "trials": 2296,
+      "percent": 70.38327526132404,
+      "ci95_low_percent": 68.48295792670291,
+      "ci95_high_percent": 72.21549963045231
+    },
+    "dl_only": {
+      "count": 2025,
+      "trials": 2296,
+      "percent": 88.19686411149826,
+      "ci95_low_percent": 86.81288631690742,
+      "ci95_high_percent": 89.45324034468476
+    },
+    "cascade": {
+      "count": 2025,
+      "trials": 2296,
+      "percent": 88.19686411149826,
+      "ci95_low_percent": 86.81288631690742,
+      "ci95_high_percent": 89.45324034468476
+    }
+  },
+  "detector_canonical_ar_percent": {
+    "cv_only": 2.6785714285714284,
+    "dl_only": 25.0,
+    "cascade": 25.0
+  },
+  "detector_canonical_rank1_percent": {
+    "cv_only": 15.178571428571429,
+    "dl_only": 25.446428571428573,
+    "cascade": 25.446428571428573
+  },
+  "detector_canonical_modifications": [
+    "rot_270",
+    "rot_180",
+    "rot_90",
+    "flip_lr"
+  ],
+  "mean_latency_ms": {
+    "cv_only": 4.489873867599189,
+    "dl_only": 12.714675522644775,
+    "cascade": 11.10019960801115
+  },
+  "latency_ms_percentiles": {
+    "cv_only": {
+      "median": 4.6994500000892,
+      "p95": 6.218124999918473
+    },
+    "dl_only": {
+      "median": 13.505549999990762,
+      "p95": 17.049774999918554
+    },
+    "cascade": {
+      "median": 13.253150000082314,
+      "p95": 16.471849999675214
+    }
+  },
+  "modifications": [
+    {
+      "modification": "brightness_p25",
+      "ar_percent": {
+        "cv_only": 60.714285714285715,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 34,
+          "trials": 56,
+          "percent": 60.714285714285715,
+          "ci95_low_percent": 47.63340280042271,
+          "ci95_high_percent": 72.4195842698895
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 25,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 34,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 28,
+          "ar_percent": {
+            "cv_only": 60.714285714285715,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 50.0
+        }
+      ],
+      "cascade_escalation_percent": 50.0,
+      "dl_minus_cv_points": 39.285714285714285,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.9714285714285714,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "brightness_p20",
+      "ar_percent": {
+        "cv_only": 62.5,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 35,
+          "trials": 56,
+          "percent": 62.5,
+          "ci95_low_percent": 49.40536590850181,
+          "ci95_high_percent": 73.98978567352911
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 20,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 35,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 24,
+          "ar_percent": {
+            "cv_only": 62.5,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 42.857142857142854
+        }
+      ],
+      "cascade_escalation_percent": 42.857142857142854,
+      "dl_minus_cv_points": 37.5,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 1.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "brightness_p10",
+      "ar_percent": {
+        "cv_only": 60.714285714285715,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 34,
+          "trials": 56,
+          "percent": 60.714285714285715,
+          "ci95_low_percent": 47.63340280042271,
+          "ci95_high_percent": 72.4195842698895
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 10,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 34,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 23,
+          "ar_percent": {
+            "cv_only": 60.714285714285715,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 41.07142857142857
+        }
+      ],
+      "cascade_escalation_percent": 41.07142857142857,
+      "dl_minus_cv_points": 39.285714285714285,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.9714285714285714,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "monochrome",
+      "ar_percent": {
+        "cv_only": 62.5,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 35,
+          "trials": 56,
+          "percent": 62.5,
+          "ci95_low_percent": 49.40536590850181,
+          "ci95_high_percent": 73.98978567352911
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": null,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 35,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 26,
+          "ar_percent": {
+            "cv_only": 62.5,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 46.42857142857143
+        }
+      ],
+      "cascade_escalation_percent": 46.42857142857143,
+      "dl_minus_cv_points": 37.5,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 1.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "jpeg_q30",
+      "ar_percent": {
+        "cv_only": 28.571428571428573,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 16,
+          "trials": 56,
+          "percent": 28.571428571428573,
+          "ci95_low_percent": 18.41877514385891,
+          "ci95_high_percent": 41.475250715516665
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 30,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 16,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 49,
+          "ar_percent": {
+            "cv_only": 28.571428571428573,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 87.5
+        }
+      ],
+      "cascade_escalation_percent": 87.5,
+      "dl_minus_cv_points": 71.42857142857143,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.4571428571428572,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "jpeg_q60",
+      "ar_percent": {
+        "cv_only": 48.214285714285715,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 27,
+          "trials": 56,
+          "percent": 48.214285714285715,
+          "ci95_low_percent": 35.66821941245828,
+          "ci95_high_percent": 60.98961607582303
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 96.42857142857143,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 60,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 27,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 54,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 36,
+          "ar_percent": {
+            "cv_only": 48.214285714285715,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 96.42857142857143,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 64.28571428571429
+        }
+      ],
+      "cascade_escalation_percent": 64.28571428571429,
+      "dl_minus_cv_points": 51.785714285714285,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.7714285714285715,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "jpeg_q80",
+      "ar_percent": {
+        "cv_only": 55.357142857142854,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 31,
+          "trials": 56,
+          "percent": 55.357142857142854,
+          "ci95_low_percent": 42.41321478993947,
+          "ci95_high_percent": 67.61327874521666
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 80,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 31,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 30,
+          "ar_percent": {
+            "cv_only": 55.357142857142854,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 53.57142857142857
+        }
+      ],
+      "cascade_escalation_percent": 53.57142857142857,
+      "dl_minus_cv_points": 44.642857142857146,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8857142857142857,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "color_8bit",
+      "ar_percent": {
+        "cv_only": 62.5,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 35,
+          "trials": 56,
+          "percent": 62.5,
+          "ci95_low_percent": 49.40536590850181,
+          "ci95_high_percent": 73.98978567352911
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": [
+            3,
+            3,
+            2
+          ],
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 35,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 26,
+          "ar_percent": {
+            "cv_only": 62.5,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 46.42857142857143
+        }
+      ],
+      "cascade_escalation_percent": 46.42857142857143,
+      "dl_minus_cv_points": 37.5,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 1.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "rgb565",
+      "ar_percent": {
+        "cv_only": 62.5,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 35,
+          "trials": 56,
+          "percent": 62.5,
+          "ci95_low_percent": 49.40536590850181,
+          "ci95_high_percent": 73.98978567352911
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": [
+            5,
+            6,
+            5
+          ],
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 35,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 26,
+          "ar_percent": {
+            "cv_only": 62.5,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 46.42857142857143
+        }
+      ],
+      "cascade_escalation_percent": 46.42857142857143,
+      "dl_minus_cv_points": 37.5,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 1.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "gaussnoise_12",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 75.0,
+        "cascade": 75.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 42,
+          "trials": 56,
+          "percent": 75.0,
+          "ci95_low_percent": 62.307357852332515,
+          "ci95_high_percent": 84.48294531172932
+        },
+        "cascade": {
+          "count": 42,
+          "trials": 56,
+          "percent": 75.0,
+          "ci95_low_percent": 62.307357852332515,
+          "ci95_high_percent": 84.48294531172932
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 37.5,
+        "dl_only": 80.35714285714286,
+        "cascade": 80.35714285714286
+      },
+      "levels": [
+        {
+          "level": 12,
+          "modified_total": 56,
+          "no_face": 11,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 42,
+            "cascade": 42
+          },
+          "rank1_matched": {
+            "cv_only": 21,
+            "dl_only": 45,
+            "cascade": 45
+          },
+          "escalated": 45,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 75.0,
+            "cascade": 75.0
+          },
+          "rank1_percent": {
+            "cv_only": 37.5,
+            "dl_only": 80.35714285714286,
+            "cascade": 80.35714285714286
+          },
+          "cascade_escalation_percent": 80.35714285714286
+        }
+      ],
+      "cascade_escalation_percent": 80.35714285714286,
+      "dl_minus_cv_points": 75.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.75,
+        "cascade": 0.75
+      }
+    },
+    {
+      "modification": "gaussnoise_8",
+      "ar_percent": {
+        "cv_only": 14.285714285714286,
+        "dl_only": 98.21428571428571,
+        "cascade": 98.21428571428571
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 8,
+          "trials": 56,
+          "percent": 14.285714285714286,
+          "ci95_low_percent": 7.420788536920625,
+          "ci95_high_percent": 25.735921228705333
+        },
+        "dl_only": {
+          "count": 55,
+          "trials": 56,
+          "percent": 98.21428571428571,
+          "ci95_low_percent": 90.55436285060243,
+          "ci95_high_percent": 99.68407896580254
+        },
+        "cascade": {
+          "count": 55,
+          "trials": 56,
+          "percent": 98.21428571428571,
+          "ci95_low_percent": 90.55436285060243,
+          "ci95_high_percent": 99.68407896580254
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 71.42857142857143,
+        "dl_only": 98.21428571428571,
+        "cascade": 98.21428571428571
+      },
+      "levels": [
+        {
+          "level": 8,
+          "modified_total": 56,
+          "no_face": 1,
+          "matched": {
+            "cv_only": 8,
+            "dl_only": 55,
+            "cascade": 55
+          },
+          "rank1_matched": {
+            "cv_only": 40,
+            "dl_only": 55,
+            "cascade": 55
+          },
+          "escalated": 55,
+          "ar_percent": {
+            "cv_only": 14.285714285714286,
+            "dl_only": 98.21428571428571,
+            "cascade": 98.21428571428571
+          },
+          "rank1_percent": {
+            "cv_only": 71.42857142857143,
+            "dl_only": 98.21428571428571,
+            "cascade": 98.21428571428571
+          },
+          "cascade_escalation_percent": 98.21428571428571
+        }
+      ],
+      "cascade_escalation_percent": 98.21428571428571,
+      "dl_minus_cv_points": 83.92857142857142,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.2285714285714286,
+        "dl_only": 0.9821428571428571,
+        "cascade": 0.9821428571428571
+      }
+    },
+    {
+      "modification": "gaussnoise_4",
+      "ar_percent": {
+        "cv_only": 50.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 28,
+          "trials": 56,
+          "percent": 50.0,
+          "ci95_low_percent": 37.331738801362334,
+          "ci95_high_percent": 62.668261198637666
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 94.64285714285714,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 4,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 28,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 53,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 35,
+          "ar_percent": {
+            "cv_only": 50.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 94.64285714285714,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 62.5
+        }
+      ],
+      "cascade_escalation_percent": 62.5,
+      "dl_minus_cv_points": 50.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "histeq",
+      "ar_percent": {
+        "cv_only": 53.57142857142857,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 30,
+          "trials": 56,
+          "percent": 53.57142857142857,
+          "ci95_low_percent": 40.704181935661175,
+          "ci95_high_percent": 65.98014708777623
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 96.42857142857143,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": null,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 30,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 54,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 50,
+          "ar_percent": {
+            "cv_only": 53.57142857142857,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 96.42857142857143,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 89.28571428571429
+        }
+      ],
+      "cascade_escalation_percent": 89.28571428571429,
+      "dl_minus_cv_points": 46.42857142857143,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8571428571428571,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "autolevel",
+      "ar_percent": {
+        "cv_only": 60.714285714285715,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 34,
+          "trials": 56,
+          "percent": 60.714285714285715,
+          "ci95_low_percent": 47.63340280042271,
+          "ci95_high_percent": 72.4195842698895
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": null,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 34,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 35,
+          "ar_percent": {
+            "cv_only": 60.714285714285715,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 62.5
+        }
+      ],
+      "cascade_escalation_percent": 62.5,
+      "dl_minus_cv_points": 39.285714285714285,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.9714285714285714,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "blur_7",
+      "ar_percent": {
+        "cv_only": 8.928571428571429,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 5,
+          "trials": 56,
+          "percent": 8.928571428571429,
+          "ci95_low_percent": 3.8742148449586926,
+          "ci95_high_percent": 19.256001385511162
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 7,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 5,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 8.928571428571429,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 91.07142857142857,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.14285714285714285,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "blur_5",
+      "ar_percent": {
+        "cv_only": 42.857142857142854,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 24,
+          "trials": 56,
+          "percent": 42.857142857142854,
+          "ci95_low_percent": 30.768962683938234,
+          "ci95_high_percent": 55.86237926918696
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 5,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 24,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 42.857142857142854,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 57.142857142857146,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.6857142857142857,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "blur_3",
+      "ar_percent": {
+        "cv_only": 55.357142857142854,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 31,
+          "trials": 56,
+          "percent": 55.357142857142854,
+          "ci95_low_percent": 42.41321478993947,
+          "ci95_high_percent": 67.61327874521666
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 3,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 31,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 55.357142857142854,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 44.642857142857146,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8857142857142857,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "rot_270",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "cascade": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      },
+      "levels": [
+        {
+          "level": 270,
+          "modified_total": 56,
+          "no_face": 56,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 0,
+            "cascade": 0
+          },
+          "rank1_matched": {
+            "cv_only": 0,
+            "dl_only": 0,
+            "cascade": 0
+          },
+          "escalated": 0,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 0.0,
+            "cascade": 0.0
+          },
+          "rank1_percent": {
+            "cv_only": 0.0,
+            "dl_only": 0.0,
+            "cascade": 0.0
+          },
+          "cascade_escalation_percent": 0.0
+        }
+      ],
+      "cascade_escalation_percent": 0.0,
+      "dl_minus_cv_points": 0.0,
+      "winner": "tie",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      }
+    },
+    {
+      "modification": "rot_180",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "cascade": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 3.5714285714285716,
+        "dl_only": 1.7857142857142858,
+        "cascade": 1.7857142857142858
+      },
+      "levels": [
+        {
+          "level": 180,
+          "modified_total": 56,
+          "no_face": 36,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 0,
+            "cascade": 0
+          },
+          "rank1_matched": {
+            "cv_only": 2,
+            "dl_only": 1,
+            "cascade": 1
+          },
+          "escalated": 20,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 0.0,
+            "cascade": 0.0
+          },
+          "rank1_percent": {
+            "cv_only": 3.5714285714285716,
+            "dl_only": 1.7857142857142858,
+            "cascade": 1.7857142857142858
+          },
+          "cascade_escalation_percent": 35.714285714285715
+        }
+      ],
+      "cascade_escalation_percent": 35.714285714285715,
+      "dl_minus_cv_points": 0.0,
+      "winner": "tie",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      }
+    },
+    {
+      "modification": "rot_90",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "cascade": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      },
+      "levels": [
+        {
+          "level": 90,
+          "modified_total": 56,
+          "no_face": 56,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 0,
+            "cascade": 0
+          },
+          "rank1_matched": {
+            "cv_only": 0,
+            "dl_only": 0,
+            "cascade": 0
+          },
+          "escalated": 0,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 0.0,
+            "cascade": 0.0
+          },
+          "rank1_percent": {
+            "cv_only": 0.0,
+            "dl_only": 0.0,
+            "cascade": 0.0
+          },
+          "cascade_escalation_percent": 0.0
+        }
+      ],
+      "cascade_escalation_percent": 0.0,
+      "dl_minus_cv_points": 0.0,
+      "winner": "tie",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      }
+    },
+    {
+      "modification": "rot_45",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "cascade": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 0.0,
+        "dl_only": 10.714285714285714,
+        "cascade": 10.714285714285714
+      },
+      "levels": [
+        {
+          "level": 45,
+          "modified_total": 56,
+          "no_face": 37,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 0,
+            "cascade": 0
+          },
+          "rank1_matched": {
+            "cv_only": 0,
+            "dl_only": 6,
+            "cascade": 6
+          },
+          "escalated": 19,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 0.0,
+            "cascade": 0.0
+          },
+          "rank1_percent": {
+            "cv_only": 0.0,
+            "dl_only": 10.714285714285714,
+            "cascade": 10.714285714285714
+          },
+          "cascade_escalation_percent": 33.92857142857143
+        }
+      ],
+      "cascade_escalation_percent": 33.92857142857143,
+      "dl_minus_cv_points": 0.0,
+      "winner": "tie",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.0,
+        "cascade": 0.0
+      }
+    },
+    {
+      "modification": "rot_25",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 83.92857142857143,
+        "cascade": 83.92857142857143
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 47,
+          "trials": 56,
+          "percent": 83.92857142857143,
+          "ci95_low_percent": 72.19379333025047,
+          "ci95_high_percent": 91.30733239240486
+        },
+        "cascade": {
+          "count": 47,
+          "trials": 56,
+          "percent": 83.92857142857143,
+          "ci95_low_percent": 72.19379333025047,
+          "ci95_high_percent": 91.30733239240486
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 16.071428571428573,
+        "dl_only": 96.42857142857143,
+        "cascade": 96.42857142857143
+      },
+      "levels": [
+        {
+          "level": 25,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 47,
+            "cascade": 47
+          },
+          "rank1_matched": {
+            "cv_only": 9,
+            "dl_only": 54,
+            "cascade": 54
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 83.92857142857143,
+            "cascade": 83.92857142857143
+          },
+          "rank1_percent": {
+            "cv_only": 16.071428571428573,
+            "dl_only": 96.42857142857143,
+            "cascade": 96.42857142857143
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 83.92857142857143,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.8392857142857143,
+        "cascade": 0.8392857142857143
+      }
+    },
+    {
+      "modification": "rot_10",
+      "ar_percent": {
+        "cv_only": 1.7857142857142858,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 1,
+          "trials": 56,
+          "percent": 1.7857142857142858,
+          "ci95_low_percent": 0.3159210341974673,
+          "ci95_high_percent": 9.445637149397577
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 80.35714285714286,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 10,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 1,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 45,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 1.7857142857142858,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 80.35714285714286,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 98.21428571428571,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.028571428571428574,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "scale_50",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 41.07142857142857,
+        "cascade": 41.07142857142857
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 23,
+          "trials": 56,
+          "percent": 41.07142857142857,
+          "ci95_low_percent": 29.166774287846202,
+          "ci95_high_percent": 54.122403153560285
+        },
+        "cascade": {
+          "count": 23,
+          "trials": 56,
+          "percent": 41.07142857142857,
+          "ci95_low_percent": 29.166774287846202,
+          "ci95_high_percent": 54.122403153560285
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 0.0,
+        "dl_only": 41.07142857142857,
+        "cascade": 41.07142857142857
+      },
+      "levels": [
+        {
+          "level": 50,
+          "modified_total": 56,
+          "no_face": 33,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 23,
+            "cascade": 23
+          },
+          "rank1_matched": {
+            "cv_only": 0,
+            "dl_only": 23,
+            "cascade": 23
+          },
+          "escalated": 23,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 41.07142857142857,
+            "cascade": 41.07142857142857
+          },
+          "rank1_percent": {
+            "cv_only": 0.0,
+            "dl_only": 41.07142857142857,
+            "cascade": 41.07142857142857
+          },
+          "cascade_escalation_percent": 41.07142857142857
+        }
+      ],
+      "cascade_escalation_percent": 41.07142857142857,
+      "dl_minus_cv_points": 41.07142857142857,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.4107142857142857,
+        "cascade": 0.4107142857142857
+      }
+    },
+    {
+      "modification": "scale_70",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 57.142857142857146,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 70,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 32,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 57.142857142857146,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 100.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "scale_90",
+      "ar_percent": {
+        "cv_only": 57.142857142857146,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 32,
+          "trials": 56,
+          "percent": 57.142857142857146,
+          "ci95_low_percent": 44.13762073081303,
+          "ci95_high_percent": 69.23103731606176
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 90,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 32,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 42,
+          "ar_percent": {
+            "cv_only": 57.142857142857146,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 75.0
+        }
+      ],
+      "cascade_escalation_percent": 75.0,
+      "dl_minus_cv_points": 42.857142857142854,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.9142857142857144,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "trans_30",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 78.57142857142857,
+        "cascade": 78.57142857142857
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 44,
+          "trials": 56,
+          "percent": 78.57142857142857,
+          "ci95_low_percent": 66.18053643659488,
+          "ci95_high_percent": 87.29409575090436
+        },
+        "cascade": {
+          "count": 44,
+          "trials": 56,
+          "percent": 78.57142857142857,
+          "ci95_low_percent": 66.18053643659488,
+          "ci95_high_percent": 87.29409575090436
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 5.357142857142857,
+        "dl_only": 87.5,
+        "cascade": 87.5
+      },
+      "levels": [
+        {
+          "level": 30,
+          "modified_total": 56,
+          "no_face": 6,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 44,
+            "cascade": 44
+          },
+          "rank1_matched": {
+            "cv_only": 3,
+            "dl_only": 49,
+            "cascade": 49
+          },
+          "escalated": 50,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 78.57142857142857,
+            "cascade": 78.57142857142857
+          },
+          "rank1_percent": {
+            "cv_only": 5.357142857142857,
+            "dl_only": 87.5,
+            "cascade": 87.5
+          },
+          "cascade_escalation_percent": 89.28571428571429
+        }
+      ],
+      "cascade_escalation_percent": 89.28571428571429,
+      "dl_minus_cv_points": 78.57142857142857,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 0.7857142857142857,
+        "cascade": 0.7857142857142857
+      }
+    },
+    {
+      "modification": "trans_20",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 0.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 20,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 0,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 0.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 100.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "trans_10",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 7.142857142857143,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 10,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 4,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 7.142857142857143,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 100.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "flip_lr",
+      "ar_percent": {
+        "cv_only": 10.714285714285714,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 6,
+          "trials": 56,
+          "percent": 10.714285714285714,
+          "ci95_low_percent": 5.003935571117074,
+          "ci95_high_percent": 21.468445171071483
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 57.142857142857146,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": null,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 6,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 32,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 51,
+          "ar_percent": {
+            "cv_only": 10.714285714285714,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 57.142857142857146,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 91.07142857142857
+        }
+      ],
+      "cascade_escalation_percent": 91.07142857142857,
+      "dl_minus_cv_points": 89.28571428571429,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.17142857142857143,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "aspect_6_3",
+      "ar_percent": {
+        "cv_only": 44.642857142857146,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 25,
+          "trials": 56,
+          "percent": 44.642857142857146,
+          "ci95_low_percent": 32.38672125478337,
+          "ci95_high_percent": 57.58678521006054
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 2.0,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 25,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 51,
+          "ar_percent": {
+            "cv_only": 44.642857142857146,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 91.07142857142857
+        }
+      ],
+      "cascade_escalation_percent": 91.07142857142857,
+      "dl_minus_cv_points": 55.357142857142854,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.7142857142857143,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "aspect_16_9",
+      "ar_percent": {
+        "cv_only": 51.785714285714285,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 29,
+          "trials": 56,
+          "percent": 51.785714285714285,
+          "ci95_low_percent": 39.010383924176985,
+          "ci95_high_percent": 64.33178058754173
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 1.7777777777777777,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 29,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 49,
+          "ar_percent": {
+            "cv_only": 51.785714285714285,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 87.5
+        }
+      ],
+      "cascade_escalation_percent": 87.5,
+      "dl_minus_cv_points": 48.214285714285715,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8285714285714285,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "crop_60",
+      "ar_percent": {
+        "cv_only": 0.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 35.714285714285715,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 60,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 0,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 20,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 0.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 35.714285714285715,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 100.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.0,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "crop_70",
+      "ar_percent": {
+        "cv_only": 3.5714285714285716,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 2,
+          "trials": 56,
+          "percent": 3.5714285714285716,
+          "ci95_low_percent": 0.984942514823639,
+          "ci95_high_percent": 12.118780180490107
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 57.142857142857146,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 70,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 2,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 32,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 56,
+          "ar_percent": {
+            "cv_only": 3.5714285714285716,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 57.142857142857146,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 100.0
+        }
+      ],
+      "cascade_escalation_percent": 100.0,
+      "dl_minus_cv_points": 96.42857142857143,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.05714285714285715,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "crop_90",
+      "ar_percent": {
+        "cv_only": 39.285714285714285,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 22,
+          "trials": 56,
+          "percent": 39.285714285714285,
+          "ci95_low_percent": 27.58041573011051,
+          "ci95_high_percent": 52.36659719957729
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 89.28571428571429,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 90,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 22,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 50,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 48,
+          "ar_percent": {
+            "cv_only": 39.285714285714285,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 89.28571428571429,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 85.71428571428571
+        }
+      ],
+      "cascade_escalation_percent": 85.71428571428571,
+      "dl_minus_cv_points": 60.714285714285715,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.6285714285714286,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "skew_10",
+      "ar_percent": {
+        "cv_only": 37.5,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 21,
+          "trials": 56,
+          "percent": 37.5,
+          "ci95_low_percent": 26.010214326470898,
+          "ci95_high_percent": 50.59463409149819
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 98.21428571428571,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 10,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 21,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 55,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 41,
+          "ar_percent": {
+            "cv_only": 37.5,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 98.21428571428571,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 73.21428571428571
+        }
+      ],
+      "cascade_escalation_percent": 73.21428571428571,
+      "dl_minus_cv_points": 62.5,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.6,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "skew_6",
+      "ar_percent": {
+        "cv_only": 50.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 28,
+          "trials": 56,
+          "percent": 50.0,
+          "ci95_low_percent": 37.331738801362334,
+          "ci95_high_percent": 62.668261198637666
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 6,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 28,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 36,
+          "ar_percent": {
+            "cv_only": 50.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 64.28571428571429
+        }
+      ],
+      "cascade_escalation_percent": 64.28571428571429,
+      "dl_minus_cv_points": 50.0,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "skew_4",
+      "ar_percent": {
+        "cv_only": 55.357142857142854,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 31,
+          "trials": 56,
+          "percent": 55.357142857142854,
+          "ci95_low_percent": 42.41321478993947,
+          "ci95_high_percent": 67.61327874521666
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 4,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 31,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 33,
+          "ar_percent": {
+            "cv_only": 55.357142857142854,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 58.92857142857143
+        }
+      ],
+      "cascade_escalation_percent": 58.92857142857143,
+      "dl_minus_cv_points": 44.642857142857146,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.8857142857142857,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "persp_10",
+      "ar_percent": {
+        "cv_only": 8.928571428571429,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 5,
+          "trials": 56,
+          "percent": 8.928571428571429,
+          "ci95_low_percent": 3.8742148449586926,
+          "ci95_high_percent": 19.256001385511162
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 96.42857142857143,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 10,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 5,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 54,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 54,
+          "ar_percent": {
+            "cv_only": 8.928571428571429,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 96.42857142857143,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 96.42857142857143
+        }
+      ],
+      "cascade_escalation_percent": 96.42857142857143,
+      "dl_minus_cv_points": 91.07142857142857,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.14285714285714285,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "persp_6",
+      "ar_percent": {
+        "cv_only": 48.214285714285715,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 27,
+          "trials": 56,
+          "percent": 48.214285714285715,
+          "ci95_low_percent": 35.66821941245828,
+          "ci95_high_percent": 60.98961607582303
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 6,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 27,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 42,
+          "ar_percent": {
+            "cv_only": 48.214285714285715,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 75.0
+        }
+      ],
+      "cascade_escalation_percent": 75.0,
+      "dl_minus_cv_points": 51.785714285714285,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 0.7714285714285715,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    },
+    {
+      "modification": "persp_4",
+      "ar_percent": {
+        "cv_only": 64.28571428571429,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "ar_pooled_ci95": {
+        "cv_only": {
+          "count": 36,
+          "trials": 56,
+          "percent": 64.28571428571429,
+          "ci95_low_percent": 51.193887801399526,
+          "ci95_high_percent": 75.5434282923501
+        },
+        "dl_only": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "cascade": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        }
+      },
+      "rank1_percent": {
+        "cv_only": 100.0,
+        "dl_only": 100.0,
+        "cascade": 100.0
+      },
+      "levels": [
+        {
+          "level": 4,
+          "modified_total": 56,
+          "no_face": 0,
+          "matched": {
+            "cv_only": 36,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "rank1_matched": {
+            "cv_only": 56,
+            "dl_only": 56,
+            "cascade": 56
+          },
+          "escalated": 35,
+          "ar_percent": {
+            "cv_only": 64.28571428571429,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "rank1_percent": {
+            "cv_only": 100.0,
+            "dl_only": 100.0,
+            "cascade": 100.0
+          },
+          "cascade_escalation_percent": 62.5
+        }
+      ],
+      "cascade_escalation_percent": 62.5,
+      "dl_minus_cv_points": 35.71428571428571,
+      "winner": "dl_stronger",
+      "cascade_vs_best_points": 0.0,
+      "retention": {
+        "cv_only": 1.0285714285714287,
+        "dl_only": 1.0,
+        "cascade": 1.0
+      }
+    }
+  ],
+  "complementarity": {
+    "cv_stronger": [],
+    "dl_stronger": [
+      "brightness_p25",
+      "brightness_p20",
+      "brightness_p10",
+      "monochrome",
+      "jpeg_q30",
+      "jpeg_q60",
+      "jpeg_q80",
+      "color_8bit",
+      "rgb565",
+      "gaussnoise_12",
+      "gaussnoise_8",
+      "gaussnoise_4",
+      "histeq",
+      "autolevel",
+      "blur_7",
+      "blur_5",
+      "blur_3",
+      "rot_25",
+      "rot_10",
+      "scale_50",
+      "scale_70",
+      "scale_90",
+      "trans_30",
+      "trans_20",
+      "trans_10",
+      "flip_lr",
+      "aspect_6_3",
+      "aspect_16_9",
+      "crop_60",
+      "crop_70",
+      "crop_90",
+      "skew_10",
+      "skew_6",
+      "skew_4",
+      "persp_10",
+      "persp_6",
+      "persp_4"
+    ],
+    "tie": [
+      "rot_270",
+      "rot_180",
+      "rot_90",
+      "rot_45"
+    ],
+    "tie_tolerance_points": 2.0,
+    "cascade_within_2pts_of_best": 41
+  },
+  "complementarity_battery": {
+    "note": "Identification-axis pairing (correct identity within threshold), NOT the false-accept table of the joint independence sweep. cv_correct = cv_only accept; dl_correct = dl_only accept. recovery = P(SFace right | LBPH wrong); both_fail = the ceiling no fusion of these engines can beat; McNemar tests the discordant cells (x = cv-only-right vs y = dl-only-right).",
+    "clean": {
+      "probes": 56,
+      "table": {
+        "both_right": 35,
+        "cv_only_right": 0,
+        "dl_only_right": 21,
+        "both_wrong": 0
+      },
+      "recovery_rate_ci95": {
+        "count": 21,
+        "trials": 21,
+        "percent": 100.0,
+        "ci95_low_percent": 84.53609810751531,
+        "ci95_high_percent": 100.0
+      },
+      "both_fail_ci95": {
+        "count": 0,
+        "trials": 56,
+        "percent": 0.0,
+        "ci95_low_percent": 0.0,
+        "ci95_high_percent": 6.419393671876342
+      },
+      "mcnemar": {
+        "b": 0,
+        "c": 21,
+        "statistic": 19.047619047619047,
+        "p_chi2": 1.2749674921097064e-05,
+        "p_exact": 9.536743164062499e-07,
+        "degenerate": false
+      }
+    },
+    "overall_modified": {
+      "probes": 2296,
+      "table": {
+        "both_right": 707,
+        "cv_only_right": 0,
+        "dl_only_right": 1296,
+        "both_wrong": 293
+      },
+      "recovery_rate_ci95": {
+        "count": 1296,
+        "trials": 1589,
+        "percent": 81.5607300188798,
+        "ci95_low_percent": 79.57862411522704,
+        "ci95_high_percent": 83.39060577552428
+      },
+      "both_fail_ci95": {
+        "count": 293,
+        "trials": 2296,
+        "percent": 12.761324041811847,
+        "ci95_low_percent": 11.458460819382047,
+        "ci95_high_percent": 14.188587874276656
+      },
+      "mcnemar": {
+        "b": 0,
+        "c": 1296,
+        "statistic": 1294.0007716049383,
+        "p_chi2": 2.274785624183194e-283,
+        "p_exact": 0.0,
+        "degenerate": false
+      }
+    },
+    "per_modification": [
+      {
+        "modification": "brightness_p25",
+        "probes": 56,
+        "table": {
+          "both_right": 34,
+          "cv_only_right": 0,
+          "dl_only_right": 22,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 22,
+          "trials": 22,
+          "percent": 100.0,
+          "ci95_low_percent": 85.1345125391379,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 22,
+          "statistic": 20.045454545454547,
+          "p_chi2": 7.562306614504702e-06,
+          "p_exact": 4.7683715820312495e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "brightness_p20",
+        "probes": 56,
+        "table": {
+          "both_right": 35,
+          "cv_only_right": 0,
+          "dl_only_right": 21,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 21,
+          "trials": 21,
+          "percent": 100.0,
+          "ci95_low_percent": 84.53609810751531,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 21,
+          "statistic": 19.047619047619047,
+          "p_chi2": 1.2749674921097064e-05,
+          "p_exact": 9.536743164062499e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "brightness_p10",
+        "probes": 56,
+        "table": {
+          "both_right": 34,
+          "cv_only_right": 0,
+          "dl_only_right": 22,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 22,
+          "trials": 22,
+          "percent": 100.0,
+          "ci95_low_percent": 85.1345125391379,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 22,
+          "statistic": 20.045454545454547,
+          "p_chi2": 7.562306614504702e-06,
+          "p_exact": 4.7683715820312495e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "monochrome",
+        "probes": 56,
+        "table": {
+          "both_right": 35,
+          "cv_only_right": 0,
+          "dl_only_right": 21,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 21,
+          "trials": 21,
+          "percent": 100.0,
+          "ci95_low_percent": 84.53609810751531,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 21,
+          "statistic": 19.047619047619047,
+          "p_chi2": 1.2749674921097064e-05,
+          "p_exact": 9.536743164062499e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "jpeg_q30",
+        "probes": 56,
+        "table": {
+          "both_right": 16,
+          "cv_only_right": 0,
+          "dl_only_right": 40,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 40,
+          "trials": 40,
+          "percent": 100.0,
+          "ci95_low_percent": 91.23783988027135,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 40,
+          "statistic": 38.025,
+          "p_chi2": 6.984393061522158e-10,
+          "p_exact": 1.8189894035458565e-12,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "jpeg_q60",
+        "probes": 56,
+        "table": {
+          "both_right": 27,
+          "cv_only_right": 0,
+          "dl_only_right": 29,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 29,
+          "trials": 29,
+          "percent": 100.0,
+          "ci95_low_percent": 88.30302015002593,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 29,
+          "statistic": 27.03448275862069,
+          "p_chi2": 1.998581508138184e-07,
+          "p_exact": 3.725290298461911e-09,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "jpeg_q80",
+        "probes": 56,
+        "table": {
+          "both_right": 31,
+          "cv_only_right": 0,
+          "dl_only_right": 25,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 25,
+          "trials": 25,
+          "percent": 100.0,
+          "ci95_low_percent": 86.68077490609515,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 25,
+          "statistic": 23.04,
+          "p_chi2": 1.5866563039511898e-06,
+          "p_exact": 5.96046447753906e-08,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "color_8bit",
+        "probes": 56,
+        "table": {
+          "both_right": 35,
+          "cv_only_right": 0,
+          "dl_only_right": 21,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 21,
+          "trials": 21,
+          "percent": 100.0,
+          "ci95_low_percent": 84.53609810751531,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 21,
+          "statistic": 19.047619047619047,
+          "p_chi2": 1.2749674921097064e-05,
+          "p_exact": 9.536743164062499e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "rgb565",
+        "probes": 56,
+        "table": {
+          "both_right": 35,
+          "cv_only_right": 0,
+          "dl_only_right": 21,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 21,
+          "trials": 21,
+          "percent": 100.0,
+          "ci95_low_percent": 84.53609810751531,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 21,
+          "statistic": 19.047619047619047,
+          "p_chi2": 1.2749674921097064e-05,
+          "p_exact": 9.536743164062499e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "gaussnoise_12",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 42,
+          "both_wrong": 14
+        },
+        "recovery_rate_ci95": {
+          "count": 42,
+          "trials": 56,
+          "percent": 75.0,
+          "ci95_low_percent": 62.307357852332515,
+          "ci95_high_percent": 84.48294531172932
+        },
+        "both_fail_ci95": {
+          "count": 14,
+          "trials": 56,
+          "percent": 25.0,
+          "ci95_low_percent": 15.517054688270685,
+          "ci95_high_percent": 37.6926421476675
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 42,
+          "statistic": 40.023809523809526,
+          "p_chi2": 2.5088609530061287e-10,
+          "p_exact": 4.5474735088646407e-13,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "gaussnoise_8",
+        "probes": 56,
+        "table": {
+          "both_right": 8,
+          "cv_only_right": 0,
+          "dl_only_right": 47,
+          "both_wrong": 1
+        },
+        "recovery_rate_ci95": {
+          "count": 47,
+          "trials": 48,
+          "percent": 97.91666666666667,
+          "ci95_low_percent": 89.10078200474814,
+          "ci95_high_percent": 99.63128890224893
+        },
+        "both_fail_ci95": {
+          "count": 1,
+          "trials": 56,
+          "percent": 1.7857142857142858,
+          "ci95_low_percent": 0.3159210341974673,
+          "ci95_high_percent": 9.445637149397577
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 47,
+          "statistic": 45.02127659574468,
+          "p_chi2": 1.949052256116927e-11,
+          "p_exact": 1.421085471520197e-14,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "gaussnoise_4",
+        "probes": 56,
+        "table": {
+          "both_right": 28,
+          "cv_only_right": 0,
+          "dl_only_right": 28,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 28,
+          "trials": 28,
+          "percent": 100.0,
+          "ci95_low_percent": 87.93566952341541,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 28,
+          "statistic": 26.035714285714285,
+          "p_chi2": 3.351596306607738e-07,
+          "p_exact": 7.450580596923836e-09,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "histeq",
+        "probes": 56,
+        "table": {
+          "both_right": 30,
+          "cv_only_right": 0,
+          "dl_only_right": 26,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 26,
+          "trials": 26,
+          "percent": 100.0,
+          "ci95_low_percent": 87.12710781407847,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 26,
+          "statistic": 24.03846153846154,
+          "p_chi2": 9.443043861123432e-07,
+          "p_exact": 2.980232238769535e-08,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "autolevel",
+        "probes": 56,
+        "table": {
+          "both_right": 34,
+          "cv_only_right": 0,
+          "dl_only_right": 22,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 22,
+          "trials": 22,
+          "percent": 100.0,
+          "ci95_low_percent": 85.1345125391379,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 22,
+          "statistic": 20.045454545454547,
+          "p_chi2": 7.562306614504702e-06,
+          "p_exact": 4.7683715820312495e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "blur_7",
+        "probes": 56,
+        "table": {
+          "both_right": 5,
+          "cv_only_right": 0,
+          "dl_only_right": 51,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 51,
+          "trials": 51,
+          "percent": 100.0,
+          "ci95_low_percent": 92.99533801014687,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 51,
+          "statistic": 49.01960784313726,
+          "p_chi2": 2.534165198030975e-12,
+          "p_exact": 8.881784197001292e-16,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "blur_5",
+        "probes": 56,
+        "table": {
+          "both_right": 24,
+          "cv_only_right": 0,
+          "dl_only_right": 32,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 32,
+          "trials": 32,
+          "percent": 100.0,
+          "ci95_low_percent": 89.28208017449293,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 32,
+          "statistic": 30.03125,
+          "p_chi2": 4.251394408249112e-08,
+          "p_exact": 4.656612873077396e-10,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "blur_3",
+        "probes": 56,
+        "table": {
+          "both_right": 31,
+          "cv_only_right": 0,
+          "dl_only_right": 25,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 25,
+          "trials": 25,
+          "percent": 100.0,
+          "ci95_low_percent": 86.68077490609515,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 25,
+          "statistic": 23.04,
+          "p_chi2": 1.5866563039511898e-06,
+          "p_exact": 5.96046447753906e-08,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "rot_270",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 0,
+          "both_wrong": 56
+        },
+        "recovery_rate_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "both_fail_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_chi2": null,
+          "p_exact": null,
+          "degenerate": true
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "rot_180",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 0,
+          "both_wrong": 56
+        },
+        "recovery_rate_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "both_fail_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_chi2": null,
+          "p_exact": null,
+          "degenerate": true
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "rot_90",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 0,
+          "both_wrong": 56
+        },
+        "recovery_rate_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "both_fail_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_chi2": null,
+          "p_exact": null,
+          "degenerate": true
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "rot_45",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 0,
+          "both_wrong": 56
+        },
+        "recovery_rate_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "both_fail_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 0,
+          "statistic": null,
+          "p_chi2": null,
+          "p_exact": null,
+          "degenerate": true
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "rot_25",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 47,
+          "both_wrong": 9
+        },
+        "recovery_rate_ci95": {
+          "count": 47,
+          "trials": 56,
+          "percent": 83.92857142857143,
+          "ci95_low_percent": 72.19379333025047,
+          "ci95_high_percent": 91.30733239240486
+        },
+        "both_fail_ci95": {
+          "count": 9,
+          "trials": 56,
+          "percent": 16.071428571428573,
+          "ci95_low_percent": 8.692667607595139,
+          "ci95_high_percent": 27.80620666974952
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 47,
+          "statistic": 45.02127659574468,
+          "p_chi2": 1.949052256116927e-11,
+          "p_exact": 1.421085471520197e-14,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "rot_10",
+        "probes": 56,
+        "table": {
+          "both_right": 1,
+          "cv_only_right": 0,
+          "dl_only_right": 55,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 55,
+          "trials": 55,
+          "percent": 100.0,
+          "ci95_low_percent": 93.47150988829137,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 55,
+          "statistic": 53.018181818181816,
+          "p_chi2": 3.3047513038053057e-13,
+          "p_exact": 5.551115123125805e-17,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "scale_50",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 23,
+          "both_wrong": 33
+        },
+        "recovery_rate_ci95": {
+          "count": 23,
+          "trials": 56,
+          "percent": 41.07142857142857,
+          "ci95_low_percent": 29.166774287846202,
+          "ci95_high_percent": 54.122403153560285
+        },
+        "both_fail_ci95": {
+          "count": 33,
+          "trials": 56,
+          "percent": 58.92857142857143,
+          "ci95_low_percent": 45.87759684643971,
+          "ci95_high_percent": 70.83322571215379
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 23,
+          "statistic": 21.043478260869566,
+          "p_chi2": 4.489784498638637e-06,
+          "p_exact": 2.3841857910156245e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "scale_70",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 56,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 56,
+          "statistic": 54.017857142857146,
+          "p_chi2": 1.9867575986578134e-13,
+          "p_exact": 2.7755575615628975e-17,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "scale_90",
+        "probes": 56,
+        "table": {
+          "both_right": 32,
+          "cv_only_right": 0,
+          "dl_only_right": 24,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 24,
+          "trials": 24,
+          "percent": 100.0,
+          "ci95_low_percent": 86.20237953250198,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 24,
+          "statistic": 22.041666666666668,
+          "p_chi2": 2.667954593624791e-06,
+          "p_exact": 1.1920928955078144e-07,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "trans_30",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 44,
+          "both_wrong": 12
+        },
+        "recovery_rate_ci95": {
+          "count": 44,
+          "trials": 56,
+          "percent": 78.57142857142857,
+          "ci95_low_percent": 66.18053643659488,
+          "ci95_high_percent": 87.29409575090436
+        },
+        "both_fail_ci95": {
+          "count": 12,
+          "trials": 56,
+          "percent": 21.428571428571427,
+          "ci95_low_percent": 12.705904249095651,
+          "ci95_high_percent": 33.819463563405115
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 44,
+          "statistic": 42.02272727272727,
+          "p_chi2": 9.021872818347141e-11,
+          "p_exact": 1.1368683772161599e-13,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "trans_20",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 56,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 56,
+          "statistic": 54.017857142857146,
+          "p_chi2": 1.9867575986578134e-13,
+          "p_exact": 2.7755575615628975e-17,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "trans_10",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 56,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 56,
+          "statistic": 54.017857142857146,
+          "p_chi2": 1.9867575986578134e-13,
+          "p_exact": 2.7755575615628975e-17,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "flip_lr",
+        "probes": 56,
+        "table": {
+          "both_right": 6,
+          "cv_only_right": 0,
+          "dl_only_right": 50,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 50,
+          "trials": 50,
+          "percent": 100.0,
+          "ci95_low_percent": 92.86524008666413,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 50,
+          "statistic": 48.02,
+          "p_chi2": 4.218936524005766e-12,
+          "p_exact": 1.7763568394002489e-15,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "aspect_6_3",
+        "probes": 56,
+        "table": {
+          "both_right": 25,
+          "cv_only_right": 0,
+          "dl_only_right": 31,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 31,
+          "trials": 31,
+          "percent": 100.0,
+          "ci95_low_percent": 88.97446045395641,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 31,
+          "statistic": 29.032258064516128,
+          "p_chi2": 7.118304164714048e-08,
+          "p_exact": 9.313225746154776e-10,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "aspect_16_9",
+        "probes": 56,
+        "table": {
+          "both_right": 29,
+          "cv_only_right": 0,
+          "dl_only_right": 27,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 27,
+          "trials": 27,
+          "percent": 100.0,
+          "ci95_low_percent": 87.54449702581327,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 27,
+          "statistic": 25.037037037037038,
+          "p_chi2": 5.623957756679232e-07,
+          "p_exact": 1.4901161193847648e-08,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "crop_60",
+        "probes": 56,
+        "table": {
+          "both_right": 0,
+          "cv_only_right": 0,
+          "dl_only_right": 56,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 56,
+          "trials": 56,
+          "percent": 100.0,
+          "ci95_low_percent": 93.58060632812366,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 56,
+          "statistic": 54.017857142857146,
+          "p_chi2": 1.9867575986578134e-13,
+          "p_exact": 2.7755575615628975e-17,
+          "degenerate": false
+        },
+        "auc_lbph_distance": null
+      },
+      {
+        "modification": "crop_70",
+        "probes": 56,
+        "table": {
+          "both_right": 2,
+          "cv_only_right": 0,
+          "dl_only_right": 54,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 54,
+          "trials": 54,
+          "percent": 100.0,
+          "ci95_low_percent": 93.35864119091038,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 54,
+          "statistic": 52.01851851851852,
+          "p_chi2": 5.49796675505172e-13,
+          "p_exact": 1.1102230246251552e-16,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "crop_90",
+        "probes": 56,
+        "table": {
+          "both_right": 22,
+          "cv_only_right": 0,
+          "dl_only_right": 34,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 34,
+          "trials": 34,
+          "percent": 100.0,
+          "ci95_low_percent": 89.84854458466761,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 34,
+          "statistic": 32.029411764705884,
+          "p_chi2": 1.5185595523520007e-08,
+          "p_exact": 1.164153218269349e-10,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 0.9986631016042781
+      },
+      {
+        "modification": "skew_10",
+        "probes": 56,
+        "table": {
+          "both_right": 21,
+          "cv_only_right": 0,
+          "dl_only_right": 35,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 35,
+          "trials": 35,
+          "percent": 100.0,
+          "ci95_low_percent": 90.1099007675596,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 35,
+          "statistic": 33.02857142857143,
+          "p_chi2": 9.081445518184975e-09,
+          "p_exact": 5.820766091346754e-11,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "skew_6",
+        "probes": 56,
+        "table": {
+          "both_right": 28,
+          "cv_only_right": 0,
+          "dl_only_right": 28,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 28,
+          "trials": 28,
+          "percent": 100.0,
+          "ci95_low_percent": 87.93566952341541,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 28,
+          "statistic": 26.035714285714285,
+          "p_chi2": 3.351596306607738e-07,
+          "p_exact": 7.450580596923836e-09,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "skew_4",
+        "probes": 56,
+        "table": {
+          "both_right": 31,
+          "cv_only_right": 0,
+          "dl_only_right": 25,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 25,
+          "trials": 25,
+          "percent": 100.0,
+          "ci95_low_percent": 86.68077490609515,
+          "ci95_high_percent": 99.99999999999999
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 25,
+          "statistic": 23.04,
+          "p_chi2": 1.5866563039511898e-06,
+          "p_exact": 5.96046447753906e-08,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "persp_10",
+        "probes": 56,
+        "table": {
+          "both_right": 5,
+          "cv_only_right": 0,
+          "dl_only_right": 51,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 51,
+          "trials": 51,
+          "percent": 100.0,
+          "ci95_low_percent": 92.99533801014687,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 51,
+          "statistic": 49.01960784313726,
+          "p_chi2": 2.534165198030975e-12,
+          "p_exact": 8.881784197001292e-16,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "persp_6",
+        "probes": 56,
+        "table": {
+          "both_right": 27,
+          "cv_only_right": 0,
+          "dl_only_right": 29,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 29,
+          "trials": 29,
+          "percent": 100.0,
+          "ci95_low_percent": 88.30302015002593,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 29,
+          "statistic": 27.03448275862069,
+          "p_chi2": 1.998581508138184e-07,
+          "p_exact": 3.725290298461911e-09,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      },
+      {
+        "modification": "persp_4",
+        "probes": 56,
+        "table": {
+          "both_right": 36,
+          "cv_only_right": 0,
+          "dl_only_right": 20,
+          "both_wrong": 0
+        },
+        "recovery_rate_ci95": {
+          "count": 20,
+          "trials": 20,
+          "percent": 100.0,
+          "ci95_low_percent": 83.88748419471807,
+          "ci95_high_percent": 100.0
+        },
+        "both_fail_ci95": {
+          "count": 0,
+          "trials": 56,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 6.419393671876342
+        },
+        "mcnemar": {
+          "b": 0,
+          "c": 20,
+          "statistic": 18.05,
+          "p_chi2": 2.151786437812016e-05,
+          "p_exact": 1.9073486328125e-06,
+          "degenerate": false
+        },
+        "auc_lbph_distance": 1.0
+      }
+    ],
+    "gate": {
+      "modified_only": {
+        "probes": 2060,
+        "excluded_no_signal": 236,
+        "auc_lbph_distance": 0.9999278673511951,
+        "auc_lbph_margin": 0.9463698983138732,
+        "escalate_vs_lbph_wrong": {
+          "tpr_recall_of_wrong": 1.0,
+          "fpr_on_right": 0.4087694483734088,
+          "precision": 0.8239951278928136,
+          "escalated": 1642,
+          "lbph_wrong": 1353
+        },
+        "escalation_reasons_on_wrong": {
+          "ambiguous_band": 664,
+          "quality": 688,
+          "low_margin": 1
+        }
+      },
+      "all_probes": {
+        "probes": 2116,
+        "excluded_no_signal": 236,
+        "auc_lbph_distance": 0.9999293776998317,
+        "auc_lbph_margin": 0.9457071450150465,
+        "escalate_vs_lbph_wrong": {
+          "tpr_recall_of_wrong": 1.0,
+          "fpr_on_right": 0.39622641509433965,
+          "precision": 0.8237410071942446,
+          "escalated": 1668,
+          "lbph_wrong": 1374
+        },
+        "escalation_reasons_on_wrong": {
+          "ambiguous_band": 682,
+          "quality": 691,
+          "low_margin": 1
+        }
+      }
+    }
+  }
+}

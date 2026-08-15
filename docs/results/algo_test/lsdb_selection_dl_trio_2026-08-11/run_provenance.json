@@ -1,0 +1,85 @@
+{
+  "archive_boundary": "Archived DL feature files are audit-only: no held-out vectors and no per-image pixel-hash binding. Fresh trio metrics use only newly extracted current split pixels.",
+  "argv": [
+    "classical-cv/scripts/pipeline/score_lsdb_dl_selection.py",
+    "--output-dir",
+    "classical-cv/outputs/provenance_reruns/candidate_selection_lsdb_dl_trio_2026-08-11",
+    "--deepface-home",
+    "C:/Users/acer/AppData/Local/Temp/lsface-dl-selection-20260811/assets/deepface",
+    "--facenet-cache",
+    "C:/Users/acer/.keras-facenet"
+  ],
+  "counts": {
+    "calibration": 56,
+    "calibration_impostor_scores_per_model": 1512,
+    "calibration_score_rows_per_model": 1568,
+    "fit": 224,
+    "prepared": 336,
+    "test": 56,
+    "test_score_rows_per_model": 1568
+  },
+  "git_commit": "d4cbfd1ceeb4e344f7d0cbb278f74b51afe2a66a",
+  "git_status_porcelain": "M .claude/skills/cv-workspace-map/SKILL.md\n M AGENTS.md\n M GEMINI.md\n M classical-cv/AGENTS.md\n M classical-cv/docs/PAPER.md\n M classical-cv/scripts/far_sweep_tar_report.py\n M classical-cv/scripts/pipeline/sweep_gate_curve.py\n M docs/changelogs/CHANGELOG.md\n M docs/manuscript/claim-evidence-register.md\n M docs/manuscript/copy/005_lsface_lsdb-model-selection.docm\n M docs/manuscript/lsface.docm\n M docs/results/RESULTS_MANIFEST.json\n M docs/results/algo_test/README.md\n M docs/results/algo_test/lsdb_selection_2026-08-10/cv_selection_tar.svg\n M scripts/reporting/generate_results_manifest.py\n?? AGENT_START_HERE.md\n?? README.md\n?? classical-cv/scripts/pipeline/score_lsdb_dl_selection.py\n?? docs/changelogs/AUG_11.md\n?? docs/experiments/thresholds/lbph_tar_far_operating_point_2026-08-11/\n?? docs/manuscript/copy/006_lsface_independence-finalization.docm\n?? docs/manuscript/copy/006b_lsface_independence-finalization.docm\n?? docs/manuscript/copy/007_lsface_robustness-results.docm\n?? docs/manuscript/copy/008_lsface_finalized-results-discussion.docm\n?? docs/manuscript/versions/006_lsface_independence-finalization.docm\n?? docs/manuscript/versions/006b_lsface_independence-finalization.docm\n?? docs/manuscript/versions/006c_lsface_independence-finalization.docm\n?? docs/manuscript/versions/007_lsface_robustness-results.docm\n?? docs/manuscript/versions/008_lsface_finalized-results-discussion.docm\n?? docs/manuscript/versions/009_lsface_protocol-layout-corrections.docm\n?? docs/results/algo_test/lsdb_selection_dl_2026-08-11/\n?? docs/results/complementarity_test/reruns/\n?? docs/results/independence_test/reruns/finalized_2026-08-10/\n?? docs/results/robustness_test/RESULTS_SUMMARY.png\n?? docs/results/robustness_test/ROBUSTNESS_RESULT_PROVENANCE.md\n?? docs/results/robustness_test/THRESHOLD_SWEEP.png\n?? docs/results/robustness_test/per_modification_identification_table.png\n?? docs/results/robustness_test/robustness_summary_full_bleed.md\n?? docs/results/robustness_test/robustness_summary_full_bleed.png\n?? docs/results/robustness_test/summary_identification_table.png\n?? scripts/document-production/add-robustness-table-v007.ps1\n?? scripts/document-production/build-v008-complementarity-discussion.ps1\n?? scripts/document-production/inspect-word-layout.ps1\n?? scripts/reporting/generate_complementarity_assets.py\n?? scripts/reporting/generate_independence_finalization_assets.py",
+  "models": {
+    "arcface": {
+      "implementation": "DeepFace.represent(model_name='ArcFace', detector_backend='skip', enforce_detection=False)",
+      "weight_path": "C:\\Users\\acer\\AppData\\Local\\Temp\\lsface-dl-selection-20260811\\assets\\deepface\\.deepface\\weights\\arcface_weights.h5",
+      "weight_sha256": "6336979c0c602cae08d1122a66f4dfb862d059bbcd8ef80306aef2b2249b0c93",
+      "weight_source_url": "https://github.com/serengil/deepface_models/releases/download/v1.0/arcface_weights.h5"
+    },
+    "facenet": {
+      "implementation": "keras_facenet.FaceNet.embeddings after BGR-to-RGB conversion",
+      "weight_path": "C:\\Users\\acer\\.keras-facenet\\20180402-114759\\20180402-114759-weights.h5",
+      "weight_sha256": "8b71e7045497e841c00ee568f031d1a4d30908fceadf6884aef2dec4d545202b",
+      "weight_source_url": "https://github.com/faustomorales/keras-facenet/releases/download/v0.3.1/20180402-114759-weights.h5"
+    },
+    "sface": {
+      "implementation": "OpenCV FaceRecognizerSF.feature",
+      "weight_path": "deep-learning/archive/models/face_recognition_sface_2021dec.onnx",
+      "weight_sha256": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79"
+    },
+    "yunet": {
+      "path": "deep-learning/archive/models/face_detection_yunet_2023mar.onnx",
+      "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+    }
+  },
+  "preprocessing": {
+    "alignment": "FaceRecognizerSF.alignCrop",
+    "brightness": "LAB CLAHE clipLimit=2.0, tileGridSize=(8,8)",
+    "detector": "YuNet largest-face detection",
+    "detector_score_threshold": 0.5,
+    "feature": {
+      "arcface": "DeepFace.represent with detector_backend='skip' then float32 L2 normalization",
+      "facenet": "keras_facenet.FaceNet after BGR-to-RGB; raw-vector score preserved",
+      "sface": "FaceRecognizerSF.feature then float32 L2 normalization"
+    },
+    "gallery": "mean of eight fit vectors per identity; unit-model centroids normalized after mean",
+    "no_face_policy": "fail run; no silently skipped cohort records"
+  },
+  "run_name": "candidate_selection_lsdb_dl_trio_2026-08-11",
+  "runtime": {
+    "numpy": "2.5.2",
+    "opencv": "5.0.0",
+    "packages": {
+      "deepface": "0.0.100",
+      "keras": "3.14.1",
+      "keras-facenet": "0.3.2",
+      "opencv-python": "5.0.0.93",
+      "scipy": "1.18.0",
+      "tensorflow": "2.21.0",
+      "tf-keras": "2.21.0"
+    },
+    "platform": "Windows-11-10.0.22631-SP0",
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]"
+  },
+  "source_git_commit": "d4cbfd1ceeb4e344f7d0cbb278f74b51afe2a66a",
+  "source_git_commit_at": "2026-08-11T16:03:14+08:00",
+  "source_output_dir": "classical-cv/outputs/provenance_reruns/candidate_selection_lsdb_dl_trio_2026-08-11",
+  "source_script": "classical-cv/scripts/pipeline/score_lsdb_dl_selection.py",
+  "source_script_sha256": "5e00076706c869d094233ac2c323d51915a8442386c4aeada408cb658167d0ce",
+  "split_manifest": {
+    "data_tree_sha256": "3cf4d7e86a2357e14751d0f49282678a31d6d2a8329a695f5e935cf3737d0ecb",
+    "path": "split_manifest.json",
+    "sha256": "5a03fe8d868cc3258b6f6792bfb76f696cee2760a916b0ed3ea67f4e2714f482"
+  }
+}

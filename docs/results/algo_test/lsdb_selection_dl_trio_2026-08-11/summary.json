@@ -1,0 +1,79 @@
+{
+  "families": {
+    "arcface": {
+      "archive_similarity_diagnostic": "archive_similarity_arcface.json",
+      "calibration_error_rank": 15,
+      "calibration_realized_far_percent": 0.992063492063492,
+      "calibration_tar_percent": 69.64285714285714,
+      "calibration_threshold_ties": 1,
+      "enrollment_templates": 28,
+      "feature_dimension": 512,
+      "feature_vector_bytes": 2048,
+      "score_metric": "1 - cosine similarity after unit normalization (lower is more similar)",
+      "status": "fresh_same_split",
+      "test_n": 56,
+      "test_rank1_percent": 100.0,
+      "test_rank1_tie_count": 0,
+      "test_tar_percent": 96.42857142857143,
+      "threshold": 0.36933034658432007
+    },
+    "facenet": {
+      "archive_similarity_diagnostic": "archive_similarity_facenet.json",
+      "calibration_error_rank": 15,
+      "calibration_realized_far_percent": 0.992063492063492,
+      "calibration_tar_percent": 92.85714285714286,
+      "calibration_threshold_ties": 1,
+      "enrollment_templates": 28,
+      "feature_dimension": 512,
+      "feature_vector_bytes": 2048,
+      "score_metric": "Legacy raw-vector Euclidean L2 (lower is more similar)",
+      "status": "fresh_same_split",
+      "test_n": 56,
+      "test_rank1_percent": 100.0,
+      "test_rank1_tie_count": 0,
+      "test_tar_percent": 100.0,
+      "threshold": 0.6870586276054382
+    },
+    "sface": {
+      "archive_similarity_diagnostic": "archive_similarity_sface.json",
+      "calibration_error_rank": 15,
+      "calibration_realized_far_percent": 0.992063492063492,
+      "calibration_tar_percent": 96.42857142857143,
+      "calibration_threshold_ties": 1,
+      "enrollment_templates": 28,
+      "feature_dimension": 128,
+      "feature_vector_bytes": 512,
+      "score_metric": "Euclidean L2 after unit normalization (lower is more similar)",
+      "status": "fresh_same_split",
+      "test_n": 56,
+      "test_rank1_percent": 100.0,
+      "test_rank1_tie_count": 0,
+      "test_tar_percent": 100.0,
+      "threshold": 1.0324690341949463
+    }
+  },
+  "protocol": {
+    "calibration_images": 56,
+    "calibration_impostor_scores_per_model": 1512,
+    "dataset": "root data/lsdb/split",
+    "fit_images": 224,
+    "identities": 28,
+    "selection_note": "Fresh DL-only same-split comparison. It neither changes frozen LFW thresholds nor compares deep and classical model families as one accuracy contest.",
+    "target_far_percent": 1.058,
+    "test_images": 56,
+    "threshold_source": "LSDB calibration cross-identity scores only, independently per model"
+  },
+  "selected_model": "sface",
+  "selection_candidates": [
+    "sface",
+    "arcface",
+    "facenet"
+  ],
+  "selection_order": [
+    "sface",
+    "facenet",
+    "arcface"
+  ],
+  "selection_rule": "Rank held-out TAR, then held-out Rank-1, then smaller float32 feature vector; lexical model name only if still tied.",
+  "status": "fresh_same_split_dl_trio_campaign"
+}

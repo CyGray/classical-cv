@@ -1,0 +1,47 @@
+{
+  "families": {
+    "arcface": {
+      "feature_dimension": 512,
+      "feature_vector_bytes": 2048,
+      "status": "archived_train_vectors_only_no_held_out_metric"
+    },
+    "facenet": {
+      "feature_dimension": 512,
+      "feature_vector_bytes": 2048,
+      "status": "archived_train_vectors_only_no_held_out_metric"
+    },
+    "mobilenet": {
+      "feature_dimension": 1280,
+      "feature_vector_bytes": 5120,
+      "status": "archived_train_vectors_incomplete_no_held_out_metric"
+    },
+    "sface": {
+      "calibration_error_rank": 15,
+      "calibration_realized_far_percent": 0.992063492063492,
+      "calibration_tar_percent": 96.42857142857143,
+      "calibration_threshold_ties": 1,
+      "distance": "L2 of unit-normalized embeddings; lower is more similar",
+      "enrollment_templates": 28,
+      "feature_dimension": 128,
+      "feature_vector_bytes": 512,
+      "status": "fresh_same_split",
+      "test_n": 56,
+      "test_rank1_percent": 100.0,
+      "test_rank1_tie_count": 0,
+      "test_tar_percent": 100.0,
+      "threshold": 1.0346202850341797
+    }
+  },
+  "protocol": {
+    "calibration_images": 56,
+    "calibration_impostor_scores": 1512,
+    "dataset": "root data/lsdb/split",
+    "fit_images": 224,
+    "identities": 28,
+    "selection_note": "Fresh SFace same-split characterization. It does not change frozen LFW deployment thresholds.",
+    "target_far_percent": 1.058,
+    "test_images": 56,
+    "threshold_source": "LSDB calibration cross-identity scores only"
+  },
+  "status": "fresh_same_split_sface_campaign"
+}

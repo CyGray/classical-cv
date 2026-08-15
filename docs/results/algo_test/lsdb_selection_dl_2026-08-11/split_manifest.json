@@ -1,0 +1,2364 @@
+{
+  "cohorts": {
+    "calibration": [
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\light_right.jpg",
+        "relative_path": "train/Andrew_Eroyla/light_right.jpg",
+        "sha256": "33cc3605fab3d85e2d1b772fa8b4340c8335cf0135489240536eeec4ec04f1bf",
+        "split": "calibration"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\light_up.jpg",
+        "relative_path": "train/Andrew_Eroyla/light_up.jpg",
+        "sha256": "e5ec89b8d011f931cc8b857a12aacbd58cea033eee61c3cba275ebb5095a8332",
+        "split": "calibration"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\light_right.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/light_right.jpg",
+        "sha256": "bd9d542cf90ec2b2c0470fa4e9ce9f68099db30b939861278435de0fead6fbfe",
+        "split": "calibration"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\light_up.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/light_up.jpg",
+        "sha256": "859d07d66e99ea883aac9a12e70104127111a8a5168b3cdb31b85615cac0c534",
+        "split": "calibration"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\light_right.jpg",
+        "relative_path": "train/Anthony_Gallego/light_right.jpg",
+        "sha256": "75159453702c177ad3cadb9cba2ce134bad16e47593d165bb8d17260b8b3a330",
+        "split": "calibration"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\light_up.jpg",
+        "relative_path": "train/Anthony_Gallego/light_up.jpg",
+        "sha256": "8bd46c28015410c58157a08fea4a9829b040eb898332e9f08471c7835048cb5e",
+        "split": "calibration"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\light_right.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/light_right.jpg",
+        "sha256": "dc17881d75d5ff2db03958d02f2a891249e5db317728659530210346dadd8ddf",
+        "split": "calibration"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\light_up.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/light_up.jpg",
+        "sha256": "ecff62a6eb9828294bdb87ca9dce3154b03c1d57bb38f4362c33abb3d4919ee7",
+        "split": "calibration"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\light_right.jpg",
+        "relative_path": "train/Daniel_Ramos/light_right.jpg",
+        "sha256": "aaecadbbb59942587bc2b59cd23e9fc9d0aecf4156d97907f7f327262e67d98a",
+        "split": "calibration"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\light_up.jpg",
+        "relative_path": "train/Daniel_Ramos/light_up.jpg",
+        "sha256": "52946ee008b3864b9c4b007047c5235ee09469c705615085ad5339b0d1c201e0",
+        "split": "calibration"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\light_right.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/light_right.jpg",
+        "sha256": "bc2f4eb82c9e5cf66bc9fd0016b6d7009829d7af219e270d18e225ed94caac95",
+        "split": "calibration"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\light_up.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/light_up.jpg",
+        "sha256": "d2c76b29fba9704b3b89140e3d40552b86b1358fdc4bdeaa3adff24204d9f77f",
+        "split": "calibration"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\light_right.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/light_right.jpg",
+        "sha256": "f1d84b6c9109dd36b669c15bef21861139614a62b9a1b2e4db34891ff0915cd5",
+        "split": "calibration"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\light_up.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/light_up.jpg",
+        "sha256": "59d51e31c40d31fcb0d04309d7798397ccb339722021b015fbbfa978ee15c184",
+        "split": "calibration"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\light_right.jpg",
+        "relative_path": "train/Francis_Miles_Ang/light_right.jpg",
+        "sha256": "827e164736d5d3791e900d5bf10fbd4c6d5fb3f39ecff90956126beeebaae55d",
+        "split": "calibration"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\light_up.jpg",
+        "relative_path": "train/Francis_Miles_Ang/light_up.jpg",
+        "sha256": "06e2eb6306aa02abbb9e72f6c2b285341001691f55b1489da16e9ebc1a6fccbd",
+        "split": "calibration"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\light_right.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/light_right.jpg",
+        "sha256": "637fee4a4b671538fd18f84874c485ee385aadb6d814e25a8cd0a9bba40e63e9",
+        "split": "calibration"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\light_up.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/light_up.jpg",
+        "sha256": "cf2327bb3dbe0f1775da4f7f3149f3df7da00505f8ad39c75f8ee240870b5895",
+        "split": "calibration"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\light_right.jpg",
+        "relative_path": "train/John_Andrei_Gayona/light_right.jpg",
+        "sha256": "3dedeabf74be3cccdcbb83d425fb1e0b39ed03d64bf8b47ea6c4825bb4e7138d",
+        "split": "calibration"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\light_up.jpg",
+        "relative_path": "train/John_Andrei_Gayona/light_up.jpg",
+        "sha256": "2c85eb226d5168c94505bb0f8c67a1b9200f80c687391b9dfddd5160a37e628e",
+        "split": "calibration"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\light_right.jpg",
+        "relative_path": "train/John_Roland_Octavio/light_right.jpg",
+        "sha256": "b8a5615e63972e64be196a3b8fc77e739c4f2c01e07cc3a97d1a9250de4b0ae2",
+        "split": "calibration"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\light_up.jpg",
+        "relative_path": "train/John_Roland_Octavio/light_up.jpg",
+        "sha256": "24ddc1f66e895d77bd09f761ce271dde3bef84c6481d382eb4e53c70a08a540b",
+        "split": "calibration"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\light_right.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/light_right.jpg",
+        "sha256": "711fa83c006ae6a095eca51532e8d25b1a70ae300dda349f9971c8ce0bf229b4",
+        "split": "calibration"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\light_up.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/light_up.jpg",
+        "sha256": "064b6b61d7c03ec804434fbf260edaad768d637ef15b53174b899191af339712",
+        "split": "calibration"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\light_right.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/light_right.jpg",
+        "sha256": "83bcc9b74f56c637712b94931823754ecdcc5bde02d4f4dd408141800aea48dd",
+        "split": "calibration"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\light_up.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/light_up.jpg",
+        "sha256": "882be790a9976ce2871f397c080378dd3eb9680a4c37cd3aa45d4b8f776bb76c",
+        "split": "calibration"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\light_right.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/light_right.jpg",
+        "sha256": "9872f23b05e79163a9744a3033c89fa65929e646fa1041544cdbf93719748eb3",
+        "split": "calibration"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\light_up.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/light_up.jpg",
+        "sha256": "1c7c6cbd485d9e592fbd3a8320356f90b21664606f15aae3292e931f7e7124e9",
+        "split": "calibration"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\light_right.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/light_right.jpg",
+        "sha256": "6533d1329b71c880b33b7c9678d3c632f8431f8d9b44dce446f9f0a9f9e60678",
+        "split": "calibration"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\light_up.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/light_up.jpg",
+        "sha256": "aa99cfc0d76c6b93f3c2f6fb31103db0a76518b62939023f668fe520be2d6d29",
+        "split": "calibration"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\light_right.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/light_right.jpg",
+        "sha256": "2e859b012fccb2d26aa900188c90ada95a253720a71cf3c39c32c41ca68b304c",
+        "split": "calibration"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\light_up.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/light_up.jpg",
+        "sha256": "64dbb4bd68245f9aabdff75efe9cfeb052287caba27c6e263d1af20ae07f5d27",
+        "split": "calibration"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\light_right.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/light_right.jpg",
+        "sha256": "47d490fc409002a68b2f4db4c5858b3e8c1b094587227b56dfcc239aa6b8145b",
+        "split": "calibration"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\light_up.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/light_up.jpg",
+        "sha256": "b71a468a8324623719b14ff5dd33677ba4fe5397b7329ddb6b58f99b592f5925",
+        "split": "calibration"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\light_right.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/light_right.jpg",
+        "sha256": "b4e65ad07007eda39e897d3e63cdd74fdaeab205be522c304db93a7a9668cf61",
+        "split": "calibration"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\light_up.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/light_up.jpg",
+        "sha256": "c67476903ba8ee2832f3b6a33c23938343e0b8291b28c68a48ee72da0318e4c1",
+        "split": "calibration"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\light_right.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/light_right.jpg",
+        "sha256": "952b7949599a2ce8ad1f5550ab9dfeb669e43b5c96de5e8fbe1c00f8a85e1731",
+        "split": "calibration"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\light_up.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/light_up.jpg",
+        "sha256": "702a56c94c7a83511e5c16f700900cd5402f877dda7d2cc6448e19b899166f74",
+        "split": "calibration"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\light_right.jpg",
+        "relative_path": "train/Lorenz_Ciocon/light_right.jpg",
+        "sha256": "82054e6c00965cc5894596cad4a902d0567ad030000fdbd0ebb7d6d7ef8e099a",
+        "split": "calibration"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\light_up.jpg",
+        "relative_path": "train/Lorenz_Ciocon/light_up.jpg",
+        "sha256": "66876f08d812697f31f491262b9e4f73f8f5b1d6b3f418eff1dc2ec8042eade4",
+        "split": "calibration"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\light_right.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/light_right.jpg",
+        "sha256": "20953994e833376e22ec9d3c6fb14a92540777cf48d4b9c61a4e241387c7c008",
+        "split": "calibration"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\light_up.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/light_up.jpg",
+        "sha256": "e0fac3ecff5723613974104a329bc29f668bf005ad8f2f2b57308e75f259f43e",
+        "split": "calibration"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\light_right.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/light_right.jpg",
+        "sha256": "fd4332fd8b5cbe11e7d442106cf17abaf54269b98c1a5e13a7056cbb734f57ba",
+        "split": "calibration"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\light_up.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/light_up.jpg",
+        "sha256": "37c0ccff2aae90b95222bfb7c949c26c0f9568bd20c82b495ff0583a9e6a9538",
+        "split": "calibration"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\light_right.jpg",
+        "relative_path": "train/Norbert_Audines/light_right.jpg",
+        "sha256": "db05569054d75ac92eb47d9e0ea4b40040032ea1fcf6811e4b5b70196e2024bf",
+        "split": "calibration"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\light_up.jpg",
+        "relative_path": "train/Norbert_Audines/light_up.jpg",
+        "sha256": "528937c4effdbe99696cecd93419106e1b617c63381e88dda2b27a3f507ff1c2",
+        "split": "calibration"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\light_right.jpg",
+        "relative_path": "train/Raean_Tamayo/light_right.jpg",
+        "sha256": "01a1dacd6c42ab40f28b6cf940fd5c4f31eb66263475ded585590b0adbc2c1d5",
+        "split": "calibration"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\light_up.jpg",
+        "relative_path": "train/Raean_Tamayo/light_up.jpg",
+        "sha256": "a54a96d1d1e2dab128648e717b5f56d51d912f0982dc205b84df5317633c8ed3",
+        "split": "calibration"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\light_right.jpg",
+        "relative_path": "train/Thea_Ganza/light_right.jpg",
+        "sha256": "f6c2f781be7051dccfd4e087966ddc592f7ea229ecd1308a89e98dc9a28ba6bc",
+        "split": "calibration"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\light_up.jpg",
+        "relative_path": "train/Thea_Ganza/light_up.jpg",
+        "sha256": "acf371a0d6cc7df726691847b44213f5e1a6908bbd5191a7ce2767c3d0213146",
+        "split": "calibration"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\light_right.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/light_right.jpg",
+        "sha256": "80eeff665b7f63ea3f7e53d812af014c6bb27135f47705cefb8d6484263ff9f5",
+        "split": "calibration"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\light_up.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/light_up.jpg",
+        "sha256": "7f9da36f4db54dcd6c2d004e1c142841d80183f0f919a63b836bbd33e9a97654",
+        "split": "calibration"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\light_right.jpg",
+        "relative_path": "train/Wilbert_Mijares/light_right.jpg",
+        "sha256": "2415c46eeb217fc49f0ab6cd7a04f0ac406137d05986bea90d58752f9de62e82",
+        "split": "calibration"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\light_up.jpg",
+        "relative_path": "train/Wilbert_Mijares/light_up.jpg",
+        "sha256": "a849f79c416e76968c3ade680cf160b2073f80d6f41ae67aefa7df6a17d12a12",
+        "split": "calibration"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\light_right.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/light_right.jpg",
+        "sha256": "381b445440a59b03e01d19bb350a0654382e0ea98a5b3376b8550fd397ad737a",
+        "split": "calibration"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\light_up.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/light_up.jpg",
+        "sha256": "aad7df34f3157727dff484cae70e75bb4b981abf69f5ffaf9438219a25e55e4b",
+        "split": "calibration"
+      }
+    ],
+    "fit": [
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\dark_down.jpg",
+        "relative_path": "train/Andrew_Eroyla/dark_down.jpg",
+        "sha256": "1c7fc8f71879626fcdf9926143b73100e6de9ac7b4cd5b03ad37a22eb39f13c1",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\dark_front.jpg",
+        "relative_path": "train/Andrew_Eroyla/dark_front.jpg",
+        "sha256": "3f2b1038a174e6a95ceea829ac9d30e3f4c6ccc5fd1301e844c7fd40d34570f9",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\dark_left.jpg",
+        "relative_path": "train/Andrew_Eroyla/dark_left.jpg",
+        "sha256": "7ba3770cc1ddf637a6c7ad6504bddbbf4c95d5cca6c6ad1f844b7c17f9ab698c",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\dark_right.jpg",
+        "relative_path": "train/Andrew_Eroyla/dark_right.jpg",
+        "sha256": "ff26129d22af5adde7ec66e76ebf521403e0c953d3b8d38e68b511e3a09ac323",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\dark_up.jpg",
+        "relative_path": "train/Andrew_Eroyla/dark_up.jpg",
+        "sha256": "132624fa1540dc3656d1d8618edffa6f45ccd590bda2b705d20717d6cfe4955c",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\light_down.jpg",
+        "relative_path": "train/Andrew_Eroyla/light_down.jpg",
+        "sha256": "ef22785e6978cd15fe3e5964e46894bb87cc7250db0d9eb46a0ca87f68fb69f3",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\light_front.jpg",
+        "relative_path": "train/Andrew_Eroyla/light_front.jpg",
+        "sha256": "859183381d67ab766d11358e441a47e0f4fa38879c276d3cd89450e326614b34",
+        "split": "fit"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Andrew_Eroyla\\light_left.jpg",
+        "relative_path": "train/Andrew_Eroyla/light_left.jpg",
+        "sha256": "8d6e38a5362fe12a56eae4daca00f51bd2b396ee41950742190f714541ae7cea",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\dark_down.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/dark_down.jpg",
+        "sha256": "f2f1e92866cdf4a1c3d0d24a5c936b0386377c0b36fa9903297359a606b6be0b",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\dark_front.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/dark_front.jpg",
+        "sha256": "014b036f1daa10716913386afa1ca561d0cbea4796f5e83b25e1e615c0efc5de",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\dark_left.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/dark_left.jpg",
+        "sha256": "497b550abc21fa7054310df198123a0a6608e1fbef06de8b9605db8055c25d25",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\dark_right.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/dark_right.jpg",
+        "sha256": "cbbe0dc542e7a592c1062a9bd1c4646517b11c105f0f97be66eac574feff1e7d",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\dark_up.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/dark_up.jpg",
+        "sha256": "e56842dc0ee03225eab0bf64c3de380d5db0399fba07332b8612252ed4407842",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\light_down.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/light_down.jpg",
+        "sha256": "449d310a2ed3741b5162128581bb7b82dcef27fdc5f81ebefd6e84bc4579ca67",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\light_front.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/light_front.jpg",
+        "sha256": "7c4c29c699d2ac40f6129f7db2f84f786e5ed61a07478dba893bd2a34694d61a",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Charles_Saltat\\light_left.jpg",
+        "relative_path": "train/Anthony_Charles_Saltat/light_left.jpg",
+        "sha256": "601185cd1ded2dfc22f4afc51a5c40ce9a9110867d3aef2d8db879c4f76d4dc3",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\dark_down.jpg",
+        "relative_path": "train/Anthony_Gallego/dark_down.jpg",
+        "sha256": "87f22c4592a38b9f6f01c656889d83a276b466b1dea3496d5f04b2c7704b93ef",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\dark_front.jpg",
+        "relative_path": "train/Anthony_Gallego/dark_front.jpg",
+        "sha256": "1cda79b501f8beabe6d61ad5957280754d6149117a841c684b2656fd0250cc86",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\dark_left.jpg",
+        "relative_path": "train/Anthony_Gallego/dark_left.jpg",
+        "sha256": "f85a2006145ad9c34145abeeecba386b8ec74fd0c153c5a39dbc2597ae06f429",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\dark_right.jpg",
+        "relative_path": "train/Anthony_Gallego/dark_right.jpg",
+        "sha256": "78414b822fe4fc21efe3a168ca8494da594c310ce5311a98f6435747366351a2",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\dark_up.jpg",
+        "relative_path": "train/Anthony_Gallego/dark_up.jpg",
+        "sha256": "d52332cd351dbe01a9020d6e875ddc409b9105183c14da1f8369af70a2cbecbe",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\light_down.jpg",
+        "relative_path": "train/Anthony_Gallego/light_down.jpg",
+        "sha256": "2eb689823a88f1cf5381e1959d576e389c8f14b20c1ab9d069726fba7bfd5873",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\light_front.jpg",
+        "relative_path": "train/Anthony_Gallego/light_front.jpg",
+        "sha256": "79a0ab20e2ea1d331925fa4f3f28d80a19a6f65cc7c9af4b2300ee6a105092a8",
+        "split": "fit"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Anthony_Gallego\\light_left.jpg",
+        "relative_path": "train/Anthony_Gallego/light_left.jpg",
+        "sha256": "4f3bcaa5e7e95eed0a4407c6c9ce95548a0619fa7229b8114f5c72ac23857ebd",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\dark_down.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/dark_down.jpg",
+        "sha256": "ea874c3ae8855cad69538535b7bd7ed04d1d29ef75347bbd7e061a5d88e04298",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\dark_front.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/dark_front.jpg",
+        "sha256": "d83ddadac517f5eff4fb9dd4c77b34d06efffceae20208c8ecf36e50f64d2325",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\dark_left.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/dark_left.jpg",
+        "sha256": "0b5275e492e77f7bb92f319385acd380f89b5c282c0f0e6f17390c065af0a298",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\dark_right.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/dark_right.jpg",
+        "sha256": "230186b2520904d666c970b162a0773b857f3fd689098678961cb5422d1f8f0a",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\dark_up.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/dark_up.jpg",
+        "sha256": "7bd43db38c952196e8aca466d91ec5006cc762a1a4890093caff9afe14c01710",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\light_down.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/light_down.jpg",
+        "sha256": "0ef9a855d96790b777b98384fa9ffbaca920981dadc01a6ead69934e8dc42d60",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\light_front.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/light_front.jpg",
+        "sha256": "a53c1599a650ada7f82e238d941b285e58be9013372468c89dbd52ec121cc826",
+        "split": "fit"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Axel_Josh_Lorayna\\light_left.jpg",
+        "relative_path": "train/Axel_Josh_Lorayna/light_left.jpg",
+        "sha256": "c1400bd5768804db736af14083fd0be8b778b0a95744b2e5c9dfecf837d6fb49",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\dark_down.jpg",
+        "relative_path": "train/Daniel_Ramos/dark_down.jpg",
+        "sha256": "67ecb3a811f50007a931604d897c3c1046c5d56c4c2b3fab1c1fd99b99aafa35",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\dark_front.jpg",
+        "relative_path": "train/Daniel_Ramos/dark_front.jpg",
+        "sha256": "24a192aed2c948ae8f922fa8c9e6bd6f6b43434c5cf3d9742410295244a2b450",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\dark_left.jpg",
+        "relative_path": "train/Daniel_Ramos/dark_left.jpg",
+        "sha256": "b32bc4a512d1068c0056c570b7dc5f8d3ccc35fa1a49ebe04feac130388e4a77",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\dark_right.jpg",
+        "relative_path": "train/Daniel_Ramos/dark_right.jpg",
+        "sha256": "8da0298222c7ca8d62c3647538a01d0a81fa13a6f325f42944bc5b2c750beff6",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\dark_up.jpg",
+        "relative_path": "train/Daniel_Ramos/dark_up.jpg",
+        "sha256": "3a024c75c536d7be9b62b32cf505d90de892bff78e7425dca05b12617ad616d5",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\light_down.jpg",
+        "relative_path": "train/Daniel_Ramos/light_down.jpg",
+        "sha256": "d5972f1dc5fe6d13a66f7dc0319f3ca2922d32e0f36184a7e11e5b15b63a6dcf",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\light_front.jpg",
+        "relative_path": "train/Daniel_Ramos/light_front.jpg",
+        "sha256": "70b8875f609bde38fef75ff935c1f18497780bde7a6371de051cca189cfa402b",
+        "split": "fit"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Daniel_Ramos\\light_left.jpg",
+        "relative_path": "train/Daniel_Ramos/light_left.jpg",
+        "sha256": "fb4a452c2cd266cf0aa127588b1fd7aa921cad618264a9048be79b04c78f7d74",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\dark_down.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/dark_down.jpg",
+        "sha256": "17c935a9e1e6ceace8e42b819b9d07fa167ee1c4f20f924d23cc03d835d2576a",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\dark_front.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/dark_front.jpg",
+        "sha256": "6881007d798981932e180a74e57adfc5fdceb85495b677f8008d637ca38eb3f9",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\dark_left.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/dark_left.jpg",
+        "sha256": "d4651a07a8fdb3bdf3d26b56c1feb056f4aa5ee77543a979cef05f17c541640c",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\dark_right.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/dark_right.jpg",
+        "sha256": "e92d367f910fd271fc2b94d1ebb7fc019da336620d869f92f8e17f0edbc63bba",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\dark_up.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/dark_up.jpg",
+        "sha256": "e355e5ba428bbcff7277e26dce841c9610bc1bc60b4703c5f47e306143d7acc7",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\light_down.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/light_down.jpg",
+        "sha256": "207b44ae4152df932ebb038862ad659f51d6f3d623b9db8a8eaa8c1c17bd2dbf",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\light_front.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/light_front.jpg",
+        "sha256": "71b75051e8f028df96a6de4d1a7ee90854e46be6b344dba3c161de301134a732",
+        "split": "fit"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Diofel_Gwen_Haresco\\light_left.jpg",
+        "relative_path": "train/Diofel_Gwen_Haresco/light_left.jpg",
+        "sha256": "4816250269b210a78f9bad6440dfdee830ebf8b98787e125317fff65ff818a9f",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\dark_down.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/dark_down.jpg",
+        "sha256": "caddbd8391df9037b72528f645d68eb869c6ad027bf167fc2f57511b9ca24c6d",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\dark_front.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/dark_front.jpg",
+        "sha256": "fb56474df7439b2a63fe06670840e59f4f386510d5de4151b4ffb64a2a1685ce",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\dark_left.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/dark_left.jpg",
+        "sha256": "8da4767bfe80a64059f78eebe17db3d4b52e843e1dc344420ccc7c10d0c215ae",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\dark_right.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/dark_right.jpg",
+        "sha256": "b43b5d875b5210f58316ad58cea17914565f65d1168cdb41c229af2d1fe377f8",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\dark_up.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/dark_up.jpg",
+        "sha256": "ca0a48db6f34007054700f2d17d318fd947c1483d3e5e10fc702bfa629eddf3f",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\light_down.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/light_down.jpg",
+        "sha256": "08b962993eb3f9a81ff23089929cf6ecddc8db5eca151b752b29065a4c9b0816",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\light_front.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/light_front.jpg",
+        "sha256": "7943d11f10b1671eac4d94d7ce72b357e4d9acd53310ac2ffb04d8ed43fae45c",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Cromwell_Tan\\light_left.jpg",
+        "relative_path": "train/Francis_Cromwell_Tan/light_left.jpg",
+        "sha256": "33642060446a9fd07d4448e5314297b9f5c4f975baf37cac1605fbe7dc909275",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\dark_down.jpg",
+        "relative_path": "train/Francis_Miles_Ang/dark_down.jpg",
+        "sha256": "860857a208f505ebf8effb4b5e803278b3c3161ae70e9480b28ad04866f34ba7",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\dark_front.jpg",
+        "relative_path": "train/Francis_Miles_Ang/dark_front.jpg",
+        "sha256": "c687d9d24c2cc1a45566ce71e186fbf9d744cbea1d66c9faa5abe181000c4681",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\dark_left.jpg",
+        "relative_path": "train/Francis_Miles_Ang/dark_left.jpg",
+        "sha256": "fe915977b1d0fbeda82376bd4bd21ba808730fe5316b6ba4a835bd845edbf245",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\dark_right.jpg",
+        "relative_path": "train/Francis_Miles_Ang/dark_right.jpg",
+        "sha256": "8d23650590f5c0e3c79bfd4b3c96b0fe322a5c4b4d7b9537b79ace738b488578",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\dark_up.jpg",
+        "relative_path": "train/Francis_Miles_Ang/dark_up.jpg",
+        "sha256": "e88fe87fdc743768f05224bf8b3a0541a07c4a25a539dd44ebfaecf6b8477747",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\light_down.jpg",
+        "relative_path": "train/Francis_Miles_Ang/light_down.jpg",
+        "sha256": "3a07ad53d0c6c991fc57af1cf89f82280bbdb861c94a5f411f26e2af2168875c",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\light_front.jpg",
+        "relative_path": "train/Francis_Miles_Ang/light_front.jpg",
+        "sha256": "04e89d3b03dbe77e2ba5c947db384ad6df3b4fd3d8a000292af486911c980ecd",
+        "split": "fit"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Francis_Miles_Ang\\light_left.jpg",
+        "relative_path": "train/Francis_Miles_Ang/light_left.jpg",
+        "sha256": "a8ed125f795185f1897fe2cc6cf82cc32f3f5cbeefc184ea2cda63aa8f3b7f33",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\dark_down.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/dark_down.jpg",
+        "sha256": "8e8d31f03a22f1ebdd49df0ccf80af072e44e88bed0d93ea65832e399d6114e6",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\dark_front.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/dark_front.jpg",
+        "sha256": "f646e6a0260953952a66124dc61762b6db87e2d1418884d4abf67a43340dbb24",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\dark_left.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/dark_left.jpg",
+        "sha256": "0626e05197d27d7740163eea3ad9e08e734749e703557f0e7cf4091e63d5fe55",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\dark_right.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/dark_right.jpg",
+        "sha256": "5c4797ed375cc599c30b0ffba809bedc404fea935a9e4efcf57cddc6fb31a841",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\dark_up.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/dark_up.jpg",
+        "sha256": "a6441e880e0a6c63bf55678e01c3f84096116bc21337252386d11459fe44990b",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\light_down.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/light_down.jpg",
+        "sha256": "45ea6b0eacd3cf62a51993b28003f129f294aceb3031560dcd1399404ffa981a",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\light_front.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/light_front.jpg",
+        "sha256": "4bd5a55f9b2a68dc7079aed63e258241ceb3f93c2ce49f9ca081fdc90f32f631",
+        "split": "fit"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jim_Jonathan_Decripito\\light_left.jpg",
+        "relative_path": "train/Jim_Jonathan_Decripito/light_left.jpg",
+        "sha256": "975e01f0f480586f645ad5b148e1f85cd9174642495905b198b6089118a070e8",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\dark_down.jpg",
+        "relative_path": "train/John_Andrei_Gayona/dark_down.jpg",
+        "sha256": "8a0befa5cabb1823824d530481df658b74853c0fd66b2e6ebea86b7f7b78c311",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\dark_front.jpg",
+        "relative_path": "train/John_Andrei_Gayona/dark_front.jpg",
+        "sha256": "512623bf989d821c80f55db35a382645e698b7dbb0a163d69150b3b8e4ff8567",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\dark_left.jpg",
+        "relative_path": "train/John_Andrei_Gayona/dark_left.jpg",
+        "sha256": "9b73ca0f1e6ba63c3f5e3a3ecf890e892c43b056f6ff362c7043ba15fba6c581",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\dark_right.jpg",
+        "relative_path": "train/John_Andrei_Gayona/dark_right.jpg",
+        "sha256": "8b7fe3aeea0ffe5234294edf375e71a24901fcceed84ee26cf841471d59d9794",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\dark_up.jpg",
+        "relative_path": "train/John_Andrei_Gayona/dark_up.jpg",
+        "sha256": "86a5b91e17c8ce49c8a0002c4fdca7e2bc50ee1016ee5970b6e792b84b5e35c4",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\light_down.jpg",
+        "relative_path": "train/John_Andrei_Gayona/light_down.jpg",
+        "sha256": "d155b7a5186f3165cf63ad13df125c9647a1543e0df4185c67b7179d8b83aca4",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\light_front.jpg",
+        "relative_path": "train/John_Andrei_Gayona/light_front.jpg",
+        "sha256": "15a71a04be634ff52aaeac971a3b8de30b050148f5f39f6fcbafe983ed616852",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Andrei_Gayona\\light_left.jpg",
+        "relative_path": "train/John_Andrei_Gayona/light_left.jpg",
+        "sha256": "1385aa7c1c0e5d2a477f28f3d263251b7cb86660ae71aea539086b1bbdc4ab85",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\dark_down.jpg",
+        "relative_path": "train/John_Roland_Octavio/dark_down.jpg",
+        "sha256": "bd8d4a4d8a81a92e8e96c1e555f337c2890a63b0df6e2d91a01ffd8e544373a0",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\dark_front.jpg",
+        "relative_path": "train/John_Roland_Octavio/dark_front.jpg",
+        "sha256": "472750c7c6167d237f91dc919d0cdde71470f184d880bbe3b9394754c657481a",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\dark_left.jpg",
+        "relative_path": "train/John_Roland_Octavio/dark_left.jpg",
+        "sha256": "d294ccf639744f64e5333e9a1c2ad148d59dbfc677d3a7a009109e4ab1928166",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\dark_right.jpg",
+        "relative_path": "train/John_Roland_Octavio/dark_right.jpg",
+        "sha256": "503855138327d0d4424b3b47a1f104b9251dec10852ee255a9c11fdf4c3737d4",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\dark_up.jpg",
+        "relative_path": "train/John_Roland_Octavio/dark_up.jpg",
+        "sha256": "7e2839fabaa65135ab26db76672b88b5f4e4dc2b9ed5bc2e5c801e3fa59ad5d4",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\light_down.jpg",
+        "relative_path": "train/John_Roland_Octavio/light_down.jpg",
+        "sha256": "5c2f1ffb6f0240b9878507cb203d766d7f3d0a0bd3be1245c9b8e6591920cded",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\light_front.jpg",
+        "relative_path": "train/John_Roland_Octavio/light_front.jpg",
+        "sha256": "6bbe21f043e2a572e164caaa7a6aea5f508f5891228bcd7c2b1db71104c6bc7c",
+        "split": "fit"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\John_Roland_Octavio\\light_left.jpg",
+        "relative_path": "train/John_Roland_Octavio/light_left.jpg",
+        "sha256": "b1777c9a5ef97061503cfbcd2fddf2529db6ab25f41111a5b115aa0c23192d70",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\dark_down.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/dark_down.jpg",
+        "sha256": "2651da3ca4f3bacd4c2b456aebdff001f43620ae337d947611cdf84fef02e9a3",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\dark_front.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/dark_front.jpg",
+        "sha256": "6b5118a1dfef4141c75a097eb969deb24287daa26c4c2e3c0b64b920fec115c4",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\dark_left.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/dark_left.jpg",
+        "sha256": "21cfc9c9d9f247e87004fa790ae558b73ba37b9463b729f890d05fe6497c06c3",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\dark_right.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/dark_right.jpg",
+        "sha256": "4e7bc09464b05605f416d1505714cba4670426aa04f4aa61e0b47549bd7436e5",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\dark_up.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/dark_up.jpg",
+        "sha256": "50380d78a7cffcb902b16d24ace5466d5babe3114aa859adee89aeae6c8e3e0e",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\light_down.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/light_down.jpg",
+        "sha256": "5398e10871394e0ad176b62656c695d0b1b2b87ab1b771ab53732c3981e218bc",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\light_front.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/light_front.jpg",
+        "sha256": "e7de7ead99bb11a69eeb0516a78fc8fb207bb0021d4a6710c832357fde399642",
+        "split": "fit"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Joseph_Andrew_Ong\\light_left.jpg",
+        "relative_path": "train/Joseph_Andrew_Ong/light_left.jpg",
+        "sha256": "3c0bd4538e65117376c60bdccfde94ff4cbba9ac5c42592e7cd276a2f92065bc",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\dark_down.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/dark_down.jpg",
+        "sha256": "4a15d1c61379b5bfbc53d4222dac6eae438a252ded1f00b2c5d21c6de3de6c5b",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\dark_front.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/dark_front.jpg",
+        "sha256": "5063883b9272a733ab8ca572e2bbaff5caf76d5b8941a9a73f16cee5ddf98f6b",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\dark_left.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/dark_left.jpg",
+        "sha256": "e964c5e3ee824a5e647ac7f1ce2e0cb800c7758997636427c8f27e45639a31ed",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\dark_right.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/dark_right.jpg",
+        "sha256": "02b7d8bc6922f18581401b8d5f84a1cc361f4e1592bf1c3f51f4788f49d45005",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\dark_up.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/dark_up.jpg",
+        "sha256": "547e1ee6ada36f00b719ee0f87672dc0d86cea3a0770269a908f966339b2b570",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\light_down.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/light_down.jpg",
+        "sha256": "539cb21c3771d5815ec53e7f1869ac82ef0e5cabfecf15e39ea91a7fda75d434",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\light_front.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/light_front.jpg",
+        "sha256": "7b0f4e22eb43974d8599bba17594cf0234e7019bbc794cca0dce8a8ca9aa0111",
+        "split": "fit"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Josh_Dane_Labistre\\light_left.jpg",
+        "relative_path": "train/Josh_Dane_Labistre/light_left.jpg",
+        "sha256": "155469ff89b89a5c4d84255fe807025cd740bf052f6c2a5bdf9b292d5da9646b",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\dark_down.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/dark_down.jpg",
+        "sha256": "3bb1bc1a2043e60591452f69d17c191ce3968364099a85b2631c7b3699bb9bc7",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\dark_front.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/dark_front.jpg",
+        "sha256": "c15bd5782e36ab85e4110f5924ef0b9597416718ea1c6f41a7caa7ed64620324",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\dark_left.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/dark_left.jpg",
+        "sha256": "698c115c39c738c65ee3ed77427e39fc1fdf7a055b9ae7ae20ef64409761b4b9",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\dark_right.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/dark_right.jpg",
+        "sha256": "3f11a6ede6a9669be8ec1a1a08f3dd7c1d858b33fa214d8b9eb9cd664b2c9d8e",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\dark_up.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/dark_up.jpg",
+        "sha256": "0657e33b0135a071dc0acf58d966c22cf1597d293d39ab5e7cb72cd6d08f470a",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\light_down.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/light_down.jpg",
+        "sha256": "f54a7d515594d64c32c9935cfdee4bcc49e4f95b8dc588fc4ea29c726c656f69",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\light_front.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/light_front.jpg",
+        "sha256": "368027d153f53b6db601511d4be67d80fc978299a37e10ce4a069176334edbb8",
+        "split": "fit"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Jul_Leo_Javellana\\light_left.jpg",
+        "relative_path": "train/Jul_Leo_Javellana/light_left.jpg",
+        "sha256": "b75dc1e73589b7ff5124a113f070bb0aae37b38cbc6a42fc02b6a2f7b22f9ed3",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\dark_down.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/dark_down.jpg",
+        "sha256": "233a7342746c7891b72b8e67ddf56c75653d8a770e0373704c9007d5a8082c18",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\dark_front.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/dark_front.jpg",
+        "sha256": "2b2fc06dc3cf5d2046503b199f90796dd8799d04ac123958b1e0814e1fc9f885",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\dark_left.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/dark_left.jpg",
+        "sha256": "c5143b2c9d7531f159063e223e65009f87f0eca42d0a8e6a27b92a785fbbd806",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\dark_right.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/dark_right.jpg",
+        "sha256": "afaf6497b03b2bc017ffae304161ba672ebb3ff8587cfd519f62f762933b1b45",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\dark_up.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/dark_up.jpg",
+        "sha256": "4c3a299b77659c6cd71ae1e4cc9654d24b9085fdf098487c77239c2ee676f0fa",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\light_down.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/light_down.jpg",
+        "sha256": "b1b5284808cafb18cbf5c3657848654f2087731ed2b69d290b0a1bea63cf868b",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\light_front.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/light_front.jpg",
+        "sha256": "8c139221552207de23db3e6d4a4a139dbd43351445c57d0dd5157ef4e8e7705f",
+        "split": "fit"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Julian_Diego_Mapa\\light_left.jpg",
+        "relative_path": "train/Julian_Diego_Mapa/light_left.jpg",
+        "sha256": "22a9d1e536a9ad49cf2c2acd5ec138937b55252c39dcea2ed0e6b935c57de02d",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\dark_down.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/dark_down.jpg",
+        "sha256": "f730df511b40aec2826e8209f8713b81e601790d1915428b658a86d46ae2de95",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\dark_front.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/dark_front.jpg",
+        "sha256": "369537472363d1885e8abec1edb6a8055ebd87cc7d77dc4923c6d647aa9aefaa",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\dark_left.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/dark_left.jpg",
+        "sha256": "c6fa7e0c0b9cd78146edc64d38d1c6f49e50ae858569f9ae4de939c0ae38b7a6",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\dark_right.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/dark_right.jpg",
+        "sha256": "e2def89bd6a8983eb8c08ca135b1dba901baf916439136113b6e9ef9390d8970",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\dark_up.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/dark_up.jpg",
+        "sha256": "b19c9bdfb188a0adfd25ce1f13154dc76d9d55fd930f7ebab41d5d1b1c4d7688",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\light_down.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/light_down.jpg",
+        "sha256": "b93d3b8d5d76f210a4eae20acd5abd4f507b4c6bdd1d248d3138ffe430303a24",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\light_front.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/light_front.jpg",
+        "sha256": "73de9b202a92b939fa534318a6fee0d91aa0e754d135eeee70d8a98af39994c4",
+        "split": "fit"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kenlie_John_Maghari\\light_left.jpg",
+        "relative_path": "train/Kenlie_John_Maghari/light_left.jpg",
+        "sha256": "2972a17ce8955d96f2933c3d95f94feccd7987a58856aa30dd9feb710808981f",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\dark_down.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/dark_down.jpg",
+        "sha256": "b8e13b56a208425f71051b7c6993c59ea0b2d672ea0859b471b71732574673ec",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\dark_front.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/dark_front.jpg",
+        "sha256": "eb2fd859c25950e8597960123064fd157d6e97f9385dbad97d1528ba9e41dc44",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\dark_left.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/dark_left.jpg",
+        "sha256": "36960037b7d44280b5ceed5c93266f2f8450d88d0ddcfc068ee479818649e5b0",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\dark_right.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/dark_right.jpg",
+        "sha256": "f62ff73d19150135466202c2cd32c181f363822b980ef2b8bbe62d17e67fd255",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\dark_up.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/dark_up.jpg",
+        "sha256": "48324c3fb7d52f6208500d467793535d900f15a99e3096a44d250ac98eb9dc61",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\light_down.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/light_down.jpg",
+        "sha256": "d9fa75b0c533660bacc44c920e56ed840b929b5f9ee99eb46dcab88d572f222e",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\light_front.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/light_front.jpg",
+        "sha256": "3ecf0817fc9830b67b71d27771dbb765ceb57917e6fe0996ec0631b68ea64bcd",
+        "split": "fit"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kim_Ivan_Arigorat\\light_left.jpg",
+        "relative_path": "train/Kim_Ivan_Arigorat/light_left.jpg",
+        "sha256": "76865e74f0b459bc922fc53c81849751726457974e4e617f7730573242071310",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\dark_down.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/dark_down.jpg",
+        "sha256": "8ff16ff6486deee10e5da53477ade50fd86270a7ef5f62dedf2e19da53cf3044",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\dark_front.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/dark_front.jpg",
+        "sha256": "d74d5679bd4e50ac745b37ef7d3a20050f1fa94dd56e3b87aa013e93a4234b86",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\dark_left.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/dark_left.jpg",
+        "sha256": "7509d44df7b360f2ac218ea8994461db690a0b9579651eea5fbf4fb9fdeb86cd",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\dark_right.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/dark_right.jpg",
+        "sha256": "095865df5fc7072e9f8ee6803114beed0d7fa21d29db990d68da2596e559478f",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\dark_up.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/dark_up.jpg",
+        "sha256": "d26dc4001e537306ae43321bda360ef6e35a125eac91742b234af1640bca9339",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\light_down.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/light_down.jpg",
+        "sha256": "ecdedd4f77791900799948ea12a8ebf56d8ff950ef7d8eb8028b0df80150be64",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\light_front.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/light_front.jpg",
+        "sha256": "0047a9e78bdbc53ec6c41015920014d1df7794dbd752d7cf314f1ecb899b339c",
+        "split": "fit"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Klein_Rhee_Sioson\\light_left.jpg",
+        "relative_path": "train/Klein_Rhee_Sioson/light_left.jpg",
+        "sha256": "86ed370f837962f321a35f87cf33bdfa8ae76dca056f45377638f6f63a8ad4d6",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\dark_down.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/dark_down.jpg",
+        "sha256": "98e02dc0cb44cf54dc62aff02e68a8fd5af43f3ac17270e2060eb6aa53f59a42",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\dark_front.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/dark_front.jpg",
+        "sha256": "4ddbe787c15f799c33ee6dedd2e35c04d69bed233bf431cabb96abfa86aea3af",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\dark_left.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/dark_left.jpg",
+        "sha256": "3e8bea54da02f2c4a70f4027e9630c782bc9a34224f1997c836983493cf1e350",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\dark_right.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/dark_right.jpg",
+        "sha256": "eb31d860191ffea77c81253e0523873406d377ef0771b3e717c99bbc6fb44efe",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\dark_up.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/dark_up.jpg",
+        "sha256": "fc2f9acef652b4d416c94610bb005e6913559bc4966c529412cb9d88e427146e",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\light_down.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/light_down.jpg",
+        "sha256": "cb3d9a976713b1b63369e310ae914212a3168e700aee9fdde4a0155b805ae0dc",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\light_front.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/light_front.jpg",
+        "sha256": "631b6d95c2de58d7c84482f594c625ae562fdef44068c596f605518aea183c9a",
+        "split": "fit"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Kyle_Yuan_Uy\\light_left.jpg",
+        "relative_path": "train/Kyle_Yuan_Uy/light_left.jpg",
+        "sha256": "29df5d1a5fed5ed554e5c5b07ac5b6c95f2680bd1068648d2035f2864f171608",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\dark_down.jpg",
+        "relative_path": "train/Lorenz_Ciocon/dark_down.jpg",
+        "sha256": "92f7ee3c389219b112a6a9ed99107aad126bad43561696706318839c79479cf2",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\dark_front.jpg",
+        "relative_path": "train/Lorenz_Ciocon/dark_front.jpg",
+        "sha256": "1256b4740ee2a622fbda29ddccb50032f08630c554f2bd5257ddac286a6697e7",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\dark_left.jpg",
+        "relative_path": "train/Lorenz_Ciocon/dark_left.jpg",
+        "sha256": "a900534fcbad9ae5c6a5c68f32a3f500bc56ede3dae8700bc0c36ee968f251d1",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\dark_right.jpg",
+        "relative_path": "train/Lorenz_Ciocon/dark_right.jpg",
+        "sha256": "a16b6bcdc33aec0a4c03583403a9ca00b3aca3e380e3a66cf07cb101905b635d",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\dark_up.jpg",
+        "relative_path": "train/Lorenz_Ciocon/dark_up.jpg",
+        "sha256": "e2c456fc4c53e480f0cf4294a93aa3fb5b588268285d65444d6230df791e262b",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\light_down.jpg",
+        "relative_path": "train/Lorenz_Ciocon/light_down.jpg",
+        "sha256": "274cef896bc84fca2bfa3e5c9d841c2e35fc40e961c2f12b53b1b3ed3ed1f3cc",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\light_front.jpg",
+        "relative_path": "train/Lorenz_Ciocon/light_front.jpg",
+        "sha256": "5101a1dd0c78db3c92e1241d06723d642080433964b5d816a094b976aa8bf7ee",
+        "split": "fit"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Lorenz_Ciocon\\light_left.jpg",
+        "relative_path": "train/Lorenz_Ciocon/light_left.jpg",
+        "sha256": "b2b99cacd8428ae6d7d3d6bbcac17c1d69c7a58554b06fd7a1eb46b902916e12",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\dark_down.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/dark_down.jpg",
+        "sha256": "f3196e70ea247fa2ffd475585739c995974e58f8b4aa0517559c1c50f1c79eaa",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\dark_front.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/dark_front.jpg",
+        "sha256": "6601291605ea1fcf5bd4e3cd387546dd533dfb1d2ba5c15562cf232a4eeac1eb",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\dark_left.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/dark_left.jpg",
+        "sha256": "10fbe0ce7f8575ad9d0086bf6fccc61e00fc48e4ff4ab25ee3d1bc8653dad106",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\dark_right.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/dark_right.jpg",
+        "sha256": "463cd8ccebac4b22d938e83560500be0374e661badd6e8bb469dd59a962898de",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\dark_up.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/dark_up.jpg",
+        "sha256": "ec3f2080a7f3dfc42bdb9bd33a95a3b93f2c461294b567b2cd706acbcda7b6fc",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\light_down.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/light_down.jpg",
+        "sha256": "174b735d32d4e7f3325c3897775f65e4ccd307108964cd4ff65992207e9d3360",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\light_front.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/light_front.jpg",
+        "sha256": "e03cd0dcc817a8c23953ee0e2ae5870b634a2d9cda9a1a246b24b9c3f69da901",
+        "split": "fit"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Mary_Jade_Jakosalem\\light_left.jpg",
+        "relative_path": "train/Mary_Jade_Jakosalem/light_left.jpg",
+        "sha256": "0151d3c252a06818c0e7d507683466daa51040784bdd1001973db126fe422cfc",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\dark_down.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/dark_down.jpg",
+        "sha256": "ccc6244015d9ab550dd913c1446b49dcef817f3b42a315e1dcde989dcecdf90c",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\dark_front.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/dark_front.jpg",
+        "sha256": "4072d212739bcb3bb6137258ad484ae2a424a8a4c537e542ee14d37584e102d0",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\dark_left.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/dark_left.jpg",
+        "sha256": "e74f31539686b7107f014687f65d12187a024d6f1ab5dba695ce5a21724a89d4",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\dark_right.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/dark_right.jpg",
+        "sha256": "39b4a6114c90c028512b8c4a7d6d73c5d4f2839ffed93ffcafe12883d915d0fa",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\dark_up.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/dark_up.jpg",
+        "sha256": "763b4624c485e2d4dc9be4bd3fd214cf2b8d8dd422768b346deb72f1d50f005f",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\light_down.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/light_down.jpg",
+        "sha256": "f647efedfb782b345ae96939734146a3a5bbaaa049d3cc33812b24b1c7b5afb6",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\light_front.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/light_front.jpg",
+        "sha256": "e6ab68f673f9fc076f6be3de73e16e82ac01e796e0d5310811320282ffae6e17",
+        "split": "fit"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Michael_Andrei_Jugado\\light_left.jpg",
+        "relative_path": "train/Michael_Andrei_Jugado/light_left.jpg",
+        "sha256": "89ef1c9ded2d49b557543828771c47707911bf7105d375ee50139d4ea4f943e0",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\dark_down.jpg",
+        "relative_path": "train/Norbert_Audines/dark_down.jpg",
+        "sha256": "1cfc6375b757d1456c37b8eafbe0e4db0980ed6aa5f633d061ee514441afb49c",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\dark_front.jpg",
+        "relative_path": "train/Norbert_Audines/dark_front.jpg",
+        "sha256": "64714fad13dad3c1cd2f861ad3dfe1b11dbeaf47e6d02d17c621c8d9b5f77e8b",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\dark_left.jpg",
+        "relative_path": "train/Norbert_Audines/dark_left.jpg",
+        "sha256": "6a8df85fa4055a6df5382072890ff0ac5402aae1fcec43fdef5da676c80559c3",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\dark_right.jpg",
+        "relative_path": "train/Norbert_Audines/dark_right.jpg",
+        "sha256": "bacd294a00d9df90f319f405ee9a695c3b8ee484cf6fcc176ea592a901ea4ce5",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\dark_up.jpg",
+        "relative_path": "train/Norbert_Audines/dark_up.jpg",
+        "sha256": "9aa6d9a4ae9be96f0345bf6d1216139fe8d4a48a323b237f1462f8dc3d5dd406",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\light_down.jpg",
+        "relative_path": "train/Norbert_Audines/light_down.jpg",
+        "sha256": "7e49d1eda5bdbc70d962c1ab0c43921ebab64f09f73ec4aa574e64c1c803d518",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\light_front.jpg",
+        "relative_path": "train/Norbert_Audines/light_front.jpg",
+        "sha256": "e49813470008bf6023c16419fff6bf2db638e03c805d44a2baf0fbc49f8861f4",
+        "split": "fit"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Norbert_Audines\\light_left.jpg",
+        "relative_path": "train/Norbert_Audines/light_left.jpg",
+        "sha256": "2e214ffbc05280a04579bbf732b9ae4774b1f62610f5f1dc316f0541d5b48dd5",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\dark_down.jpg",
+        "relative_path": "train/Raean_Tamayo/dark_down.jpg",
+        "sha256": "2911830d9b807558a4db10173388a87cc683ee9f5526037ca1b0338b8c57117a",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\dark_front.jpg",
+        "relative_path": "train/Raean_Tamayo/dark_front.jpg",
+        "sha256": "74f51862b05921f2cf2cd9a631c973bd686a1cc1cef95e11bdb325313cd213e6",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\dark_left.jpg",
+        "relative_path": "train/Raean_Tamayo/dark_left.jpg",
+        "sha256": "fb23523485475d56ebe8494ba159a18752efa8931eb9b14d10dfc31111d2c8e7",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\dark_right.jpg",
+        "relative_path": "train/Raean_Tamayo/dark_right.jpg",
+        "sha256": "e9d18dd408d40d55962e69580b9d41d4c7bc81c2ec96680d0cca7b4664dad8c5",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\dark_up.jpg",
+        "relative_path": "train/Raean_Tamayo/dark_up.jpg",
+        "sha256": "ce461e7f597e0204cb1b5f285783447b03eee1e754d9da3c0a0260197cf8591a",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\light_down.jpg",
+        "relative_path": "train/Raean_Tamayo/light_down.jpg",
+        "sha256": "0281c545d9b4c560bd348633289ed8a3643e6813d29ed0a0a34381c13e1ec0c3",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\light_front.jpg",
+        "relative_path": "train/Raean_Tamayo/light_front.jpg",
+        "sha256": "354390e2f1f8bf9f048f7b3143f893364623ad4a5b37486bd8851338033b726d",
+        "split": "fit"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Raean_Tamayo\\light_left.jpg",
+        "relative_path": "train/Raean_Tamayo/light_left.jpg",
+        "sha256": "9d32cb3a388ca6ceb2115d40439df27cb0f0c82e290a99bb365cf968aa489906",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\dark_down.jpg",
+        "relative_path": "train/Thea_Ganza/dark_down.jpg",
+        "sha256": "6fd171c813cbae2157321366ab50788fa979f2047c41b9fd4e16200a562f7e3a",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\dark_front.jpg",
+        "relative_path": "train/Thea_Ganza/dark_front.jpg",
+        "sha256": "dfa5536388376f0ee3814d0a8d10225aa46911a88608295b9d3c11ddb9bb690b",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\dark_left.jpg",
+        "relative_path": "train/Thea_Ganza/dark_left.jpg",
+        "sha256": "ce0a063ffe78eefb1397910aa4944758c7360f4bb790d748ec235b4d3df7511c",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\dark_right.jpg",
+        "relative_path": "train/Thea_Ganza/dark_right.jpg",
+        "sha256": "ae5a96017f4fa01b6087ebbcc9e1296173a95a500ff9e96bd92e4d2513802ff0",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\dark_up.jpg",
+        "relative_path": "train/Thea_Ganza/dark_up.jpg",
+        "sha256": "57177d91f7463919b087474191ebb7aac203b61267dab74b8d4e40f1fa737fcf",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\light_down.jpg",
+        "relative_path": "train/Thea_Ganza/light_down.jpg",
+        "sha256": "46f107d12255fe6caff3302fb256b7c0b8e6cef77778fb328b8cb6645ff9b1c2",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\light_front.jpg",
+        "relative_path": "train/Thea_Ganza/light_front.jpg",
+        "sha256": "31e71ff6d7a18d8d9eeafb4f47507a094d2bea2e517d0e00ef3a33b8afd848e7",
+        "split": "fit"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Thea_Ganza\\light_left.jpg",
+        "relative_path": "train/Thea_Ganza/light_left.jpg",
+        "sha256": "875b0582101ebfb71f61a3c4ddda65a5cbfb12f23827bfe75907843d4fb25474",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\dark_down.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/dark_down.jpg",
+        "sha256": "516393203f6cc50a00f779619f0fb14723929cce248034bdfdb9726f39b37ad6",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\dark_front.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/dark_front.jpg",
+        "sha256": "a8ba57640a68778e80c8585ad7f360e0677053d7283269faa3c9a7f506df7989",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\dark_left.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/dark_left.jpg",
+        "sha256": "37cfeeb42e8c003cf604bbdd6228a8df4ce63c7d90072d09033fadb6504a79dc",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\dark_right.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/dark_right.jpg",
+        "sha256": "97b136f209c3d25fc137785babe5ee43a3d99d1c23fefc8ac73bac4e4ba38460",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\dark_up.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/dark_up.jpg",
+        "sha256": "6ecebb8b1de5820e631cd0b1a574641c481fd2e1ed104cadda699e109f307348",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\light_down.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/light_down.jpg",
+        "sha256": "ef0c213494fb107fa33d8c008d252fad73f28311b081d30ebd78979fe870ba8e",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\light_front.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/light_front.jpg",
+        "sha256": "39e1cc67ca0221d6a82977f772f4274ea942593fdcbe7561eaee7060bc5c9620",
+        "split": "fit"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Trixia_Marie_Garcio\\light_left.jpg",
+        "relative_path": "train/Trixia_Marie_Garcio/light_left.jpg",
+        "sha256": "87d3f04eeb4be48d581f6208da4567cac777a27e213f402895acd4652d82ad9b",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\dark_down.jpg",
+        "relative_path": "train/Wilbert_Mijares/dark_down.jpg",
+        "sha256": "5d4d364e11c351fa37398c1715f4b61f5e87cb6d80189d596ffafc1dcd72dbef",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\dark_front.jpg",
+        "relative_path": "train/Wilbert_Mijares/dark_front.jpg",
+        "sha256": "480f54e5693aaa3875205d49577db77fad47faa09b34ce1c1f46400d585195b5",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\dark_left.jpg",
+        "relative_path": "train/Wilbert_Mijares/dark_left.jpg",
+        "sha256": "b9b875c5befafb8d2c3625f6702f007618cfad6878be5428fd4d369e03d98dc1",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\dark_right.jpg",
+        "relative_path": "train/Wilbert_Mijares/dark_right.jpg",
+        "sha256": "f4056c58e586d1e8a9a22e3908a01b6da1edecc701d031f86d3c98a05d116f9d",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\dark_up.jpg",
+        "relative_path": "train/Wilbert_Mijares/dark_up.jpg",
+        "sha256": "ce86963cc700a535864ff9a01e56dd86a624e0d8b2a9a14853781238648b746f",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\light_down.jpg",
+        "relative_path": "train/Wilbert_Mijares/light_down.jpg",
+        "sha256": "36903ceab7e897d3e522e9cf36ec6f6422a06f9c0f6f2de53ce91bb44c9adf18",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\light_front.jpg",
+        "relative_path": "train/Wilbert_Mijares/light_front.jpg",
+        "sha256": "11a469a64191bb9c191bb79f3296a00dff5e679ea757acd32147e86afcda0818",
+        "split": "fit"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Wilbert_Mijares\\light_left.jpg",
+        "relative_path": "train/Wilbert_Mijares/light_left.jpg",
+        "sha256": "2fa8b0bcf1049446378edf6d4d0ec98a455cd6e22d394f2fb10d7c250dc3c948",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\dark_down.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/dark_down.jpg",
+        "sha256": "07d55b1740b8f98a3702e4ee42e56dd2f8a663d363edae59e976040303d323b2",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\dark_front.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/dark_front.jpg",
+        "sha256": "e20c58784dea36d6f355fba70423737448f1825c3a695877ae8b6e9d256b4574",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\dark_left.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/dark_left.jpg",
+        "sha256": "2d56878e048ee160c60b6bf64c98f185d945bf4f5774362a6a5b3ab482aa92c3",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\dark_right.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/dark_right.jpg",
+        "sha256": "86b43bea5905ef1d467d4ad5e3e86e16d9eaf482190b89ba0668b1059da4f300",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\dark_up.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/dark_up.jpg",
+        "sha256": "b03947097dac534885dfba0576fb72efdea5fa6d4dcbe2048b323681a5ab976f",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\light_down.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/light_down.jpg",
+        "sha256": "cabce686c53d9924b8c7f5adbc90e27c93583bd3456dea824b6d56bcd4ddaaf1",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\light_front.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/light_front.jpg",
+        "sha256": "9e431beeac55fd911491f4954ed1be3acd4ad3cc8b15ffe8c4e3c624e48c9b41",
+        "split": "fit"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train\\Yuan_Paulo_Sebastian_Belen\\light_left.jpg",
+        "relative_path": "train/Yuan_Paulo_Sebastian_Belen/light_left.jpg",
+        "sha256": "ba69fc20045fd12ed04622832f4bab43af7d81e34e713804f9ec65af841ff947",
+        "split": "fit"
+      }
+    ],
+    "test": [
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Andrew_Eroyla\\dark_name.jpg",
+        "relative_path": "test/Andrew_Eroyla/dark_name.jpg",
+        "sha256": "7630a1783adcfe1962eaaecc181f7455ac4f5d6cb6bf85ce0e1650ac5ee2740c",
+        "split": "test"
+      },
+      {
+        "identity": "Andrew_Eroyla",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Andrew_Eroyla\\light_name.jpg",
+        "relative_path": "test/Andrew_Eroyla/light_name.jpg",
+        "sha256": "f04f6654f86be770bea4baff3344952e26707a111abeddf6474e544a8dbb513d",
+        "split": "test"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Charles_Saltat\\dark_name.jpg",
+        "relative_path": "test/Anthony_Charles_Saltat/dark_name.jpg",
+        "sha256": "c4ca56a8ac8364bb68b95f3091c346473b9f8e893c823e1b89ae26e593279ee5",
+        "split": "test"
+      },
+      {
+        "identity": "Anthony_Charles_Saltat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Charles_Saltat\\light_name.jpg",
+        "relative_path": "test/Anthony_Charles_Saltat/light_name.jpg",
+        "sha256": "1ed85530f43a09bab2d19daeb290c6a108c317d6646e97d1acfff4e9ca842426",
+        "split": "test"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Gallego\\dark_name.jpg",
+        "relative_path": "test/Anthony_Gallego/dark_name.jpg",
+        "sha256": "0200778ea16c43a420ec9e59b78575a544c58bb4ee4600e3f35d93c570bed690",
+        "split": "test"
+      },
+      {
+        "identity": "Anthony_Gallego",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Gallego\\light_name.jpg",
+        "relative_path": "test/Anthony_Gallego/light_name.jpg",
+        "sha256": "9b0a895b47880737fbe5e0889cbc9d24c70ef98d42f82733cde52ccc8e17213a",
+        "split": "test"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Axel_Josh_Lorayna\\dark_name.jpg",
+        "relative_path": "test/Axel_Josh_Lorayna/dark_name.jpg",
+        "sha256": "f1fbd180fcac3e98fd7a72a97aac4f8fb8986e88026b5c3413fb624b4d4a9fd0",
+        "split": "test"
+      },
+      {
+        "identity": "Axel_Josh_Lorayna",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Axel_Josh_Lorayna\\light_name.jpg",
+        "relative_path": "test/Axel_Josh_Lorayna/light_name.jpg",
+        "sha256": "304e34659074334e2391a7abd28f95c1330cf1ee364e9345d292a8a3cf546aa0",
+        "split": "test"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Daniel_Ramos\\dark_name.jpg",
+        "relative_path": "test/Daniel_Ramos/dark_name.jpg",
+        "sha256": "3f004e1d94ebace34bab57041ea62e8c6d9fe6fd43315ca2562c340e92cb62a8",
+        "split": "test"
+      },
+      {
+        "identity": "Daniel_Ramos",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Daniel_Ramos\\light_name.jpg",
+        "relative_path": "test/Daniel_Ramos/light_name.jpg",
+        "sha256": "f3bdafb199ea11b69f2219b67d04aabcaf0d720376cee065e4e1bc39ec5821ae",
+        "split": "test"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Diofel_Gwen_Haresco\\dark_name.jpg",
+        "relative_path": "test/Diofel_Gwen_Haresco/dark_name.jpg",
+        "sha256": "67c4b8bff3ea24e9df5428c53cd962ea5e47183706d727a743b8c5ddca1c97a6",
+        "split": "test"
+      },
+      {
+        "identity": "Diofel_Gwen_Haresco",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Diofel_Gwen_Haresco\\light_name.jpg",
+        "relative_path": "test/Diofel_Gwen_Haresco/light_name.jpg",
+        "sha256": "3ac82959bfe9ec4e39d18321abb4e4abf4702be2a8f22267863583ee29b418ff",
+        "split": "test"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Cromwell_Tan\\dark_name.jpg",
+        "relative_path": "test/Francis_Cromwell_Tan/dark_name.jpg",
+        "sha256": "f195a85943d1a2b53380d56646bd1650f65f67ba99dca91cc93daa91a0614466",
+        "split": "test"
+      },
+      {
+        "identity": "Francis_Cromwell_Tan",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Cromwell_Tan\\light_name.jpg",
+        "relative_path": "test/Francis_Cromwell_Tan/light_name.jpg",
+        "sha256": "1a8a32dfa4b333335f175849d67e13f15af8ae075152a0f0c3ff13777ad3098b",
+        "split": "test"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Miles_Ang\\dark_name.jpg",
+        "relative_path": "test/Francis_Miles_Ang/dark_name.jpg",
+        "sha256": "91015c1db2457228d1621ec24bc6392a334b617a6ae75512037c931843ead243",
+        "split": "test"
+      },
+      {
+        "identity": "Francis_Miles_Ang",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Miles_Ang\\light_name.jpg",
+        "relative_path": "test/Francis_Miles_Ang/light_name.jpg",
+        "sha256": "2e631739867908c919648c5387f287484dbd32dd1f53d9307ed2b676f9719728",
+        "split": "test"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jim_Jonathan_Decripito\\dark_name.jpg",
+        "relative_path": "test/Jim_Jonathan_Decripito/dark_name.jpg",
+        "sha256": "44ce7bd2e733974b47313df6ecbc49902ff2959e2566a9ba4929e23515844e31",
+        "split": "test"
+      },
+      {
+        "identity": "Jim_Jonathan_Decripito",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jim_Jonathan_Decripito\\light_name.jpg",
+        "relative_path": "test/Jim_Jonathan_Decripito/light_name.jpg",
+        "sha256": "e7013c189ed5be568ed4a2c15a689253f3e90a8eefe8613bce95b6c24d50a47c",
+        "split": "test"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\John_Andrei_Gayona\\dark_name.jpg",
+        "relative_path": "test/John_Andrei_Gayona/dark_name.jpg",
+        "sha256": "bf042b86bcb725d4f3c1cbe022b83a19c5df6570d9e0a09aabf9303f19f89cd6",
+        "split": "test"
+      },
+      {
+        "identity": "John_Andrei_Gayona",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\John_Andrei_Gayona\\light_name.jpg",
+        "relative_path": "test/John_Andrei_Gayona/light_name.jpg",
+        "sha256": "da328a419bbc0146a88ed10466678813a10f37836ed52c0abbaac0d8b1fbd3e4",
+        "split": "test"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\John_Roland_Octavio\\dark_name.jpg",
+        "relative_path": "test/John_Roland_Octavio/dark_name.jpg",
+        "sha256": "2513366d52a32809f78ff062be6e46c2f788bcb8a5b0021e50233b1b2dac8356",
+        "split": "test"
+      },
+      {
+        "identity": "John_Roland_Octavio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\John_Roland_Octavio\\light_name.jpg",
+        "relative_path": "test/John_Roland_Octavio/light_name.jpg",
+        "sha256": "7eec3f44a06f5b1a3d01c4c7b9c494e7b4138f092f59d2207c6d56af27b38277",
+        "split": "test"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Joseph_Andrew_Ong\\dark_name.jpg",
+        "relative_path": "test/Joseph_Andrew_Ong/dark_name.jpg",
+        "sha256": "221e9cd6e8c36c65978c53f9d2d52ed30250ddf095012865e7b7029c7836cbd4",
+        "split": "test"
+      },
+      {
+        "identity": "Joseph_Andrew_Ong",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Joseph_Andrew_Ong\\light_name.jpg",
+        "relative_path": "test/Joseph_Andrew_Ong/light_name.jpg",
+        "sha256": "48fd0e0ca9008d67e9e1329e582798a298f527f0adce4dd3baec402745aed42a",
+        "split": "test"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Josh_Dane_Labistre\\dark_name.jpg",
+        "relative_path": "test/Josh_Dane_Labistre/dark_name.jpg",
+        "sha256": "d000166255c11d7427946e31f6e56615a238cf02ed5c23b4472d92fe153b08d9",
+        "split": "test"
+      },
+      {
+        "identity": "Josh_Dane_Labistre",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Josh_Dane_Labistre\\light_name.jpg",
+        "relative_path": "test/Josh_Dane_Labistre/light_name.jpg",
+        "sha256": "3239eeaffdda87e7e4ada304be65075aca9ab674b60cee1f80a0a34372bf5cac",
+        "split": "test"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jul_Leo_Javellana\\dark_name.jpg",
+        "relative_path": "test/Jul_Leo_Javellana/dark_name.jpg",
+        "sha256": "ce563df0c2165cd880438e676861912564de4105ae516fa156121a8bbdb7e7fd",
+        "split": "test"
+      },
+      {
+        "identity": "Jul_Leo_Javellana",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jul_Leo_Javellana\\light_name.jpg",
+        "relative_path": "test/Jul_Leo_Javellana/light_name.jpg",
+        "sha256": "00f398ef1c91aec1a56b8983fb03a9f8111935eb1893410fd942ea4e680de603",
+        "split": "test"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Julian_Diego_Mapa\\dark_name.jpg",
+        "relative_path": "test/Julian_Diego_Mapa/dark_name.jpg",
+        "sha256": "e90100183c51cf66b95c5746b1a69ec726c25c4936220749242eb417f7c421ac",
+        "split": "test"
+      },
+      {
+        "identity": "Julian_Diego_Mapa",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Julian_Diego_Mapa\\light_name.jpg",
+        "relative_path": "test/Julian_Diego_Mapa/light_name.jpg",
+        "sha256": "c281c10f62fc258e75c3aa3fb0c1dcb2955b5ceaccd4cc7907adf793009aac72",
+        "split": "test"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kenlie_John_Maghari\\dark_name.jpg",
+        "relative_path": "test/Kenlie_John_Maghari/dark_name.jpg",
+        "sha256": "fee0dae61383cccfcaafc7eff4bb7a09c71b4691f693c9da0b40a5a41d4e90a6",
+        "split": "test"
+      },
+      {
+        "identity": "Kenlie_John_Maghari",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kenlie_John_Maghari\\light_name.jpg",
+        "relative_path": "test/Kenlie_John_Maghari/light_name.jpg",
+        "sha256": "add59b128628c692431dd30d35192874db6ee6e440725053533e0b1fdb71f352",
+        "split": "test"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kim_Ivan_Arigorat\\dark_name.jpg",
+        "relative_path": "test/Kim_Ivan_Arigorat/dark_name.jpg",
+        "sha256": "ad1fddc3e5779185888f9169256021cfc92435498e53275adafad3ae950d23b1",
+        "split": "test"
+      },
+      {
+        "identity": "Kim_Ivan_Arigorat",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kim_Ivan_Arigorat\\light_name.jpg",
+        "relative_path": "test/Kim_Ivan_Arigorat/light_name.jpg",
+        "sha256": "1a74a3a1fd7bf2ca79abbd9b627757cfb31235336f869254fea9dae4dfa75073",
+        "split": "test"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Klein_Rhee_Sioson\\dark_name.jpg",
+        "relative_path": "test/Klein_Rhee_Sioson/dark_name.jpg",
+        "sha256": "5ec14608ecbe8c162aaa2080d725799f9d80f56df03da52aed7190f8fe5b2b6d",
+        "split": "test"
+      },
+      {
+        "identity": "Klein_Rhee_Sioson",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Klein_Rhee_Sioson\\light_name.jpg",
+        "relative_path": "test/Klein_Rhee_Sioson/light_name.jpg",
+        "sha256": "80d6c75485a0de701dcce1cf810d13b562576d9a68258f3d84792a7e858aefc7",
+        "split": "test"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kyle_Yuan_Uy\\dark_name.jpg",
+        "relative_path": "test/Kyle_Yuan_Uy/dark_name.jpg",
+        "sha256": "231ffc4409f194b16e2f3a20e33b1f628dbf1695a56aa55edca2223384aa8c1e",
+        "split": "test"
+      },
+      {
+        "identity": "Kyle_Yuan_Uy",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kyle_Yuan_Uy\\light_name.jpg",
+        "relative_path": "test/Kyle_Yuan_Uy/light_name.jpg",
+        "sha256": "e9e1db61958ee0a65a0fea2166bedcd9aeffabfda957561bc464ed8b1ecab22f",
+        "split": "test"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Lorenz_Ciocon\\dark_name.jpg",
+        "relative_path": "test/Lorenz_Ciocon/dark_name.jpg",
+        "sha256": "dbc26755450ef660ca1bc188938c390665be89fe4c897e592960cc146a03e4c3",
+        "split": "test"
+      },
+      {
+        "identity": "Lorenz_Ciocon",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Lorenz_Ciocon\\light_name.jpg",
+        "relative_path": "test/Lorenz_Ciocon/light_name.jpg",
+        "sha256": "8d50608c934dc135baaf53a87e8659fe1fdc8d5186ffb48313491b17f095a8f0",
+        "split": "test"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Mary_Jade_Jakosalem\\dark_name.jpg",
+        "relative_path": "test/Mary_Jade_Jakosalem/dark_name.jpg",
+        "sha256": "92b1c92c0f55825bddf66cdc807370ab679cfc48dcca1c7c93075c0d19c05ba7",
+        "split": "test"
+      },
+      {
+        "identity": "Mary_Jade_Jakosalem",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Mary_Jade_Jakosalem\\light_name.jpg",
+        "relative_path": "test/Mary_Jade_Jakosalem/light_name.jpg",
+        "sha256": "85da22babcf1e7b1bb520d3b9ff9e841f81ee9933a8867061a50cf9d5633f60e",
+        "split": "test"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Michael_Andrei_Jugado\\dark_name.jpg",
+        "relative_path": "test/Michael_Andrei_Jugado/dark_name.jpg",
+        "sha256": "eb10618e282fbcd5e4c546302b167f76fa37c47afff6af8cd29afe429f8a40bf",
+        "split": "test"
+      },
+      {
+        "identity": "Michael_Andrei_Jugado",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Michael_Andrei_Jugado\\light_name.jpg",
+        "relative_path": "test/Michael_Andrei_Jugado/light_name.jpg",
+        "sha256": "9df0b15150137c3af8bb612bc487e824ddee010b91f869ea26b56d018c6fe71f",
+        "split": "test"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Norbert_Audines\\dark_name.jpg",
+        "relative_path": "test/Norbert_Audines/dark_name.jpg",
+        "sha256": "749013c7fbfb65c7d34c72dc5b5deae1d8d19098ec317f2aed1b7799144c8eff",
+        "split": "test"
+      },
+      {
+        "identity": "Norbert_Audines",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Norbert_Audines\\light_name.jpg",
+        "relative_path": "test/Norbert_Audines/light_name.jpg",
+        "sha256": "a449f1d1252fab3bebd09454c5eb5d31ce4a88dc4794999bf157e74a68a132e0",
+        "split": "test"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Raean_Tamayo\\dark_name.jpg",
+        "relative_path": "test/Raean_Tamayo/dark_name.jpg",
+        "sha256": "0ba3fc5118f450a1feb65af2293d5534f61157a31f6fe650a65315662ec74ca4",
+        "split": "test"
+      },
+      {
+        "identity": "Raean_Tamayo",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Raean_Tamayo\\light_name.jpg",
+        "relative_path": "test/Raean_Tamayo/light_name.jpg",
+        "sha256": "aafd4e10178db9ab087248356efd7bec6eee20efcd622e2359c39b3bf548912e",
+        "split": "test"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Thea_Ganza\\dark_name.jpg",
+        "relative_path": "test/Thea_Ganza/dark_name.jpg",
+        "sha256": "172f675a925cb5a97c4d7e98a558d526280eba29da9247fd43b7318c95ce4262",
+        "split": "test"
+      },
+      {
+        "identity": "Thea_Ganza",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Thea_Ganza\\light_name.jpg",
+        "relative_path": "test/Thea_Ganza/light_name.jpg",
+        "sha256": "c7dc8d3e5b47365bfcafd16d1e92b7c19ed66ac22b2a7f3969e1d07443342a0b",
+        "split": "test"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Trixia_Marie_Garcio\\dark_name.jpg",
+        "relative_path": "test/Trixia_Marie_Garcio/dark_name.jpg",
+        "sha256": "4d7ddba235fc85f70a73d5984d908b5c258849dade883c51730e322c34eeb04b",
+        "split": "test"
+      },
+      {
+        "identity": "Trixia_Marie_Garcio",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Trixia_Marie_Garcio\\light_name.jpg",
+        "relative_path": "test/Trixia_Marie_Garcio/light_name.jpg",
+        "sha256": "18fcebff309ca5da9d7489dbadb4be07f85961dcb6927c6e6cdeff93e9dd6a60",
+        "split": "test"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Wilbert_Mijares\\dark_name.jpg",
+        "relative_path": "test/Wilbert_Mijares/dark_name.jpg",
+        "sha256": "e9208aed02330ada2dbd1dca623f34ce7da2b414b1f7073e69ce487cf1064732",
+        "split": "test"
+      },
+      {
+        "identity": "Wilbert_Mijares",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Wilbert_Mijares\\light_name.jpg",
+        "relative_path": "test/Wilbert_Mijares/light_name.jpg",
+        "sha256": "6345b0898962528bf4de8e9da17eff74e3b16d45a34c7af45a45411953d22e1b",
+        "split": "test"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Yuan_Paulo_Sebastian_Belen\\dark_name.jpg",
+        "relative_path": "test/Yuan_Paulo_Sebastian_Belen/dark_name.jpg",
+        "sha256": "2153953c41dcc731882f3230bd777efe934a4a1a29346cd2113c52f61ef4feb8",
+        "split": "test"
+      },
+      {
+        "identity": "Yuan_Paulo_Sebastian_Belen",
+        "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Yuan_Paulo_Sebastian_Belen\\light_name.jpg",
+        "relative_path": "test/Yuan_Paulo_Sebastian_Belen/light_name.jpg",
+        "sha256": "69aad22cb8d7ca280eb595b668f232097bb84ca277f2a4481004d5877136f328",
+        "split": "test"
+      }
+    ]
+  },
+  "data_root": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split",
+  "identity_count": 28
+}

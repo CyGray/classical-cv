@@ -1,0 +1,94 @@
+{
+  "identities": 28,
+  "comparisons": 756,
+  "false_accepts": {
+    "lbph": 0,
+    "sface": 2,
+    "both": 0,
+    "union": 2,
+    "cascade": 2
+  },
+  "fp_percent": {
+    "lbph": 0.0,
+    "sface": 0.26455026455026454,
+    "both": 0.0,
+    "cascade": 0.26455026455026454
+  },
+  "fp_rates_ci95": {
+    "lbph": {
+      "count": 0,
+      "trials": 756,
+      "percent": 0.0,
+      "ci95_low_percent": 0.0,
+      "ci95_high_percent": 0.5055605713665889
+    },
+    "sface": {
+      "count": 2,
+      "trials": 756,
+      "percent": 0.26455026455026454,
+      "ci95_low_percent": 0.07257922902672073,
+      "ci95_high_percent": 0.9594069477823729
+    },
+    "both": {
+      "count": 0,
+      "trials": 756,
+      "percent": 0.0,
+      "ci95_low_percent": 0.0,
+      "ci95_high_percent": 0.5055605713665889
+    },
+    "cascade": {
+      "count": 2,
+      "trials": 756,
+      "percent": 0.26455026455026454,
+      "ci95_low_percent": 0.07257922902672073,
+      "ci95_high_percent": 0.9594069477823729
+    }
+  },
+  "error_overlap": {
+    "observed_joint_fp": 0,
+    "expected_joint_fp_if_independent": 0.0,
+    "observed_over_expected": null,
+    "p_sface_fp_given_lbph_fp": null,
+    "p_lbph_fp_given_sface_fp": 0.0
+  },
+  "diversity": {
+    "table": {
+      "both": 0,
+      "only_a": 0,
+      "only_b": 2,
+      "neither": 754,
+      "n": 756
+    },
+    "q_statistic": null,
+    "phi": null,
+    "disagreement": 0.0026455026455026454,
+    "double_fault": 0.0,
+    "expected_both_if_independent": 0.0,
+    "observed_over_expected": null,
+    "fisher": {
+      "p_positive": 1.0,
+      "p_negative": 1.0,
+      "p_two_sided": 1.0,
+      "degenerate": true
+    }
+  },
+  "gate": {
+    "escalated_probes": 28,
+    "escalation_percent": 100.0,
+    "reasons": {
+      "ambiguous_band": 23,
+      "quality": 5
+    }
+  },
+  "thresholds": {
+    "lbph_tau_accept": 67.03325520645528,
+    "lbph_tau_reject": 140.13,
+    "margin_min": 0.05,
+    "sface_cosine_genuine": 0.363,
+    "sface_l2_genuine": 1.0313
+  },
+  "dataset_dir": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lasalle_db1_processed",
+  "max_identities": 0,
+  "random_seed": 42,
+  "thresholds_json": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\src\\hybrid\\thresholds.json"
+}

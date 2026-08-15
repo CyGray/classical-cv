@@ -1,0 +1,484 @@
+{
+  "originals_dir": "..\\data\\lsdb\\split\\test",
+  "seed": 42,
+  "mod_set": "dl41",
+  "no_face_policy": "strict",
+  "frozen_gate": {
+    "tau_accept": 67.03325520645528,
+    "tau_reject": 140.13,
+    "margin_min": 0.05
+  },
+  "margins": [
+    0.0,
+    0.025,
+    0.05,
+    0.1,
+    0.2
+  ],
+  "tau_shifts": [
+    -8.0,
+    -4.0,
+    0.0,
+    4.0,
+    8.0
+  ],
+  "deployed": {
+    "tau_accept": 67.03325520645528,
+    "tau_reject": 140.13,
+    "margin_min": 0.05,
+    "overall_ar_percent": 87.23867595818815,
+    "clean_acceptance_percent": 100.0,
+    "mean_latency_ms": 11.958513196863056,
+    "escalation_percent": 71.51567944250871
+  },
+  "anchors": {
+    "cv_only": {
+      "overall_ar_percent": 30.79268292682927,
+      "mean_latency_ms": 5.2494007404174265
+    },
+    "dl_only": {
+      "overall_ar_percent": 87.23867595818815,
+      "mean_latency_ms": 8.325309277002928
+    }
+  },
+  "settings": [
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 132.13,
+      "margin_min": 0.0,
+      "overall_ar_percent": 87.1951219512195,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.928179790939621,
+      "escalation_percent": 71.16724738675958
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 136.13,
+      "margin_min": 0.0,
+      "overall_ar_percent": 87.1951219512195,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.928179790939621,
+      "escalation_percent": 71.16724738675958
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 140.13,
+      "margin_min": 0.0,
+      "overall_ar_percent": 87.1951219512195,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.928179790939621,
+      "escalation_percent": 71.16724738675958
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 144.13,
+      "margin_min": 0.0,
+      "overall_ar_percent": 87.1951219512195,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.928179790939621,
+      "escalation_percent": 71.16724738675958
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 148.13,
+      "margin_min": 0.0,
+      "overall_ar_percent": 87.1951219512195,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.928179790939621,
+      "escalation_percent": 71.16724738675958
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 132.13,
+      "margin_min": 0.025,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.93189603658422,
+      "escalation_percent": 71.21080139372822
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 136.13,
+      "margin_min": 0.025,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.93189603658422,
+      "escalation_percent": 71.21080139372822
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 140.13,
+      "margin_min": 0.025,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.93189603658422,
+      "escalation_percent": 71.21080139372822
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 144.13,
+      "margin_min": 0.025,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.93189603658422,
+      "escalation_percent": 71.21080139372822
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 148.13,
+      "margin_min": 0.025,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.93189603658422,
+      "escalation_percent": 71.21080139372822
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 132.13,
+      "margin_min": 0.05,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.958513196863056,
+      "escalation_percent": 71.51567944250871
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 136.13,
+      "margin_min": 0.05,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.958513196863056,
+      "escalation_percent": 71.51567944250871
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 140.13,
+      "margin_min": 0.05,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.958513196863056,
+      "escalation_percent": 71.51567944250871
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 144.13,
+      "margin_min": 0.05,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.958513196863056,
+      "escalation_percent": 71.51567944250871
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 148.13,
+      "margin_min": 0.05,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 11.958513196863056,
+      "escalation_percent": 71.51567944250871
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 132.13,
+      "margin_min": 0.1,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 12.1683129355394,
+      "escalation_percent": 73.82404181184668
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 136.13,
+      "margin_min": 0.1,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 12.1683129355394,
+      "escalation_percent": 73.82404181184668
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 140.13,
+      "margin_min": 0.1,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 12.1683129355394,
+      "escalation_percent": 73.82404181184668
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 144.13,
+      "margin_min": 0.1,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 12.1683129355394,
+      "escalation_percent": 73.82404181184668
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 148.13,
+      "margin_min": 0.1,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 12.1683129355394,
+      "escalation_percent": 73.82404181184668
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 132.13,
+      "margin_min": 0.2,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 13.057439764807604,
+      "escalation_percent": 83.7979094076655
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 136.13,
+      "margin_min": 0.2,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 13.057439764807604,
+      "escalation_percent": 83.7979094076655
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 140.13,
+      "margin_min": 0.2,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 13.057439764807604,
+      "escalation_percent": 83.7979094076655
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 144.13,
+      "margin_min": 0.2,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 13.057439764807604,
+      "escalation_percent": 83.7979094076655
+    },
+    {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 148.13,
+      "margin_min": 0.2,
+      "overall_ar_percent": 87.23867595818815,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 13.057439764807604,
+      "escalation_percent": 83.7979094076655
+    }
+  ],
+  "lbph_axis": [
+    {
+      "axis": "lbph",
+      "tau_accept": 67.8965,
+      "overall_ar_percent": 35.19163763066203,
+      "clean_acceptance_percent": 71.42857142857143,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 68.4689,
+      "overall_ar_percent": 38.066202090592334,
+      "clean_acceptance_percent": 71.42857142857143,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 69.0322,
+      "overall_ar_percent": 41.02787456445993,
+      "clean_acceptance_percent": 75.0,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 69.5526,
+      "overall_ar_percent": 43.9459930313589,
+      "clean_acceptance_percent": 83.92857142857143,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 70.0315,
+      "overall_ar_percent": 46.90766550522649,
+      "clean_acceptance_percent": 87.5,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 70.6779,
+      "overall_ar_percent": 49.82578397212543,
+      "clean_acceptance_percent": 91.07142857142857,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 71.233,
+      "overall_ar_percent": 52.74390243902439,
+      "clean_acceptance_percent": 94.64285714285714,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 72.0516,
+      "overall_ar_percent": 55.66202090592334,
+      "clean_acceptance_percent": 96.42857142857143,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 72.9742,
+      "overall_ar_percent": 58.58013937282232,
+      "clean_acceptance_percent": 96.42857142857143,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 73.9487,
+      "overall_ar_percent": 61.498257839721255,
+      "clean_acceptance_percent": 98.21428571428571,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 75.2063,
+      "overall_ar_percent": 64.45993031358886,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 78.4349,
+      "overall_ar_percent": 67.37804878048779,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "lbph",
+      "tau_accept": 92.0741,
+      "overall_ar_percent": 70.29616724738678,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 5.2494007404174265,
+      "escalation_percent": 0.0
+    }
+  ],
+  "sface_axis": [
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.4791,
+      "overall_ar_percent": 87.15156794425087,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.6521,
+      "overall_ar_percent": 83.49303135888502,
+      "clean_acceptance_percent": 100.0,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.6925,
+      "overall_ar_percent": 79.87804878048784,
+      "clean_acceptance_percent": 96.42857142857143,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.7235,
+      "overall_ar_percent": 76.26306620209061,
+      "clean_acceptance_percent": 94.64285714285714,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.7479,
+      "overall_ar_percent": 72.64808362369338,
+      "clean_acceptance_percent": 94.64285714285714,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.7672,
+      "overall_ar_percent": 68.94599303135887,
+      "clean_acceptance_percent": 94.64285714285714,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.7812,
+      "overall_ar_percent": 65.3745644599303,
+      "clean_acceptance_percent": 94.64285714285714,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.7927,
+      "overall_ar_percent": 61.846689895470384,
+      "clean_acceptance_percent": 91.07142857142857,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.8024,
+      "overall_ar_percent": 58.14459930313589,
+      "clean_acceptance_percent": 89.28571428571429,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.8119,
+      "overall_ar_percent": 54.48606271777005,
+      "clean_acceptance_percent": 89.28571428571429,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.8189,
+      "overall_ar_percent": 50.69686411149826,
+      "clean_acceptance_percent": 83.92857142857143,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.8236,
+      "overall_ar_percent": 47.2560975609756,
+      "clean_acceptance_percent": 83.92857142857143,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    },
+    {
+      "axis": "sface",
+      "sface_cutoff": 0.8307,
+      "overall_ar_percent": 43.59756097560975,
+      "clean_acceptance_percent": 80.35714285714286,
+      "mean_latency_ms": 8.325309277002928,
+      "escalation_percent": 0.0
+    }
+  ],
+  "plot": "outputs\\provenance_reruns\\complementarity_finalized_2026-08-10\\gate_operating_curve.png"
+}

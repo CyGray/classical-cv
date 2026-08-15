@@ -1,0 +1,62 @@
+{
+  "legacy_filename_normalization": "remove '__orig' before matching current train identifiers; this does not establish pixel equality",
+  "models": {
+    "arcface": {
+      "archived_records": 280,
+      "embedding_dimensions": [
+        512
+      ],
+      "feature_path": "deep-learning/features/lasalledb1-arcface.npy",
+      "feature_sha256": "95b7253d2bab02c766db4f548e47e037781a37bac3303a8fff28909c3d8554e2",
+      "fit_identifier_matches_after_legacy_name_normalization": 224,
+      "fit_identifier_records_expected": 224,
+      "pixel_hash_binding_present": false,
+      "status": "archive_train_vectors_only; no_held_out_vectors_or_weights",
+      "test_identifier_matches": 0,
+      "test_identifier_records_expected": 56
+    },
+    "facenet": {
+      "archived_records": 280,
+      "embedding_dimensions": [
+        512
+      ],
+      "feature_path": "deep-learning/features/lasalledb1-facenet.npy",
+      "feature_sha256": "9323b9df98452dce5179ef248e7f7603dcff7b4a2ed7f9c2ef3691562ac0c8cb",
+      "fit_identifier_matches_after_legacy_name_normalization": 224,
+      "fit_identifier_records_expected": 224,
+      "pixel_hash_binding_present": false,
+      "status": "archive_train_vectors_only; no_held_out_vectors_or_weights",
+      "test_identifier_matches": 0,
+      "test_identifier_records_expected": 56
+    },
+    "mobilenet": {
+      "archived_records": 275,
+      "embedding_dimensions": [
+        1280
+      ],
+      "feature_path": "deep-learning/features/lasalledb1-mobilenet.npy",
+      "feature_sha256": "18018c6d67fb88116ef221642a9ac94fca7649c6ef0bae5a387d970657c5b217",
+      "fit_identifier_matches_after_legacy_name_normalization": 219,
+      "fit_identifier_records_expected": 224,
+      "pixel_hash_binding_present": false,
+      "status": "archive_train_vectors_incomplete; no_held_out_vectors_or_weights",
+      "test_identifier_matches": 0,
+      "test_identifier_records_expected": 56
+    },
+    "sface": {
+      "archived_records": 280,
+      "embedding_dimensions": [
+        128
+      ],
+      "feature_path": "deep-learning/features/lasalledb1-sface.npy",
+      "feature_sha256": "87c60a7c37af955fa9405e3b167b0c0a299c481af2402a75365283778b97ac1a",
+      "fit_identifier_matches_after_legacy_name_normalization": 224,
+      "fit_identifier_records_expected": 224,
+      "pixel_hash_binding_present": false,
+      "status": "archive_train_vectors_only; fresh_same_split_run_available",
+      "test_identifier_matches": 0,
+      "test_identifier_records_expected": 56
+    }
+  },
+  "purpose": "Audit only. Archived vectors are not used for fresh same-split metrics."
+}

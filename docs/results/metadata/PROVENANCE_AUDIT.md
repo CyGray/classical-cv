@@ -5,6 +5,7 @@
 | Status | Meaning | Citation rule |
 |---|---|---|
 | `canonical_snapshot` | Version-controlled result with no known invalidation. | Cite with manifest metadata. |
+| `canonical_descriptive_only` | Reproducible, reviewed post-hoc or diagnostic artifact whose scope is intentionally descriptive. | Cite only the exact recorded population, protocol, and limitation; do not use for deployment authorization, security/open-set claims, or general performance gains. |
 | `historical_rerun_required` | Historical result used in current manuscript. | Do not present as current; rerun/redraw before camera-ready. |
 | `rerun_required` | Known invalid method/configuration. | Preserve as audit evidence only; never cite as deployed result. |
 | `needs_provenance_review` | Artifact lacks enough per-file method metadata. | Confirm script, dataset, threshold, and commit before citation. |

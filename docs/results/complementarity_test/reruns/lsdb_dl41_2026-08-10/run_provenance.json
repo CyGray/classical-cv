@@ -1,0 +1,70 @@
+{
+  "campaign": "lsdb_dl41_2026-08-10",
+  "status": "canonical_snapshot",
+  "source_output_dir": "classical-cv/outputs/provenance_reruns/complementarity_finalized_2026-08-10",
+  "source_script": "classical-cv/src/benchmark/accuracy_ratio_hybrid.py; classical-cv/scripts/pipeline/sweep_gate_curve.py",
+  "source_git_commit": "02b19b4d2f8b5b16a1abe0ee8b1f41132b8adcce",
+  "source_git_commit_at": "2026-08-10T02:11:27+08:00",
+  "scope": "LSDB held-out split plus DL41 synthetic modifications; not LFW and not threshold calibration.",
+  "dataset": {
+    "path": "data/lsdb/split/test",
+    "identities": 28,
+    "probe_images": 56,
+    "tree_sha256": "8e5e10676be9c66464343e9e7012b2cd41477704de239b26d5b161eda9c46114"
+  },
+  "configuration": {
+    "seed": 42,
+    "modification_set": "dl41",
+    "modified_probes": 2296,
+    "no_face_policy": "strict",
+    "lbph_assume_cropped": true,
+    "runtime_thresholds": {
+      "tau_accept": 67.03325520645528,
+      "tau_reject": 140.13,
+      "margin_min": 0.05,
+      "thresholds_sha256": "C35191FD7D9207420ED8C5DAA341B19076CAE7744D1C8E23BE499147D1A57F43"
+    }
+  },
+  "commands": [
+    "python -m src.benchmark.accuracy_ratio_hybrid --originals-dir ..\\data\\lsdb\\split\\test --modes cv_only,dl_only,cascade --no-face-policy strict --lbph-assume-cropped true --seed 42 --mod-set dl41 --output-json outputs/provenance_reruns/complementarity_finalized_2026-08-10/accuracy_ratio_hybrid.json --output-md outputs/provenance_reruns/complementarity_finalized_2026-08-10/accuracy_ratio_hybrid.md --battery-csv outputs/provenance_reruns/complementarity_finalized_2026-08-10/complementarity_probes.csv",
+    "python scripts/pipeline/sweep_gate_curve.py --originals-dir ..\\data\\lsdb\\split\\test --seed 42 --mod-set dl41 --no-face-policy strict --output-json outputs/provenance_reruns/complementarity_finalized_2026-08-10/gate_operating_curve.json --output-md outputs/provenance_reruns/complementarity_finalized_2026-08-10/gate_operating_curve.md --output-png outputs/provenance_reruns/complementarity_finalized_2026-08-10/gate_operating_curve.png --output-records-csv outputs/provenance_reruns/complementarity_finalized_2026-08-10/gate_operating_curve_probes.csv --output-settings-csv outputs/provenance_reruns/complementarity_finalized_2026-08-10/gate_operating_curve_settings.csv"
+  ],
+  "source": {
+    "git_commit": "02b19b4d2f8b5b16a1abe0ee8b1f41132b8adcce",
+    "git_dirty_at_run": true,
+    "dirty_state_note": "Working tree was dirty; exact source files used are pinned by the SHA-256 hashes below.",
+    "accuracy_ratio_hybrid_sha256": "0AE61FBE469A76E9A9AC20ED0D2C238551F64DE1CB00F09063A5F7AB109D4405",
+    "sweep_gate_curve_sha256": "ACE6DCEB09FB81CB110998154DCDA5B1C514FDFC02F318DA03A46052051A6975",
+    "asset_generator_sha256": "A3C54907374B01AE3140853E6D5C63317B55E4AAF97F3ADA0E4092E18DCACC1E"
+  },
+  "resolved_models": {
+    "lbph_model": {"path": "classical-cv/models/lbph/lasalle_clean.yml", "sha256": "7076B633EDEF3237DD1C1931EF4C2A4AF341408159C6BBF2247C9CF1B0C3BB9E"},
+    "lbph_labels": {"path": "classical-cv/models/lbph/labels_lasalle_clean.json", "sha256": "914EF99A14DE94BB585F94D8D6F0F2568E6E72413A47F6A124ACC435662C6AA8"},
+    "sface_gallery": {"path": "classical-cv/models/sface/gallery.npy", "sha256": "ED04EA103918F33C78FC571DC93455F45A489003F8551C574EDF97933B4C3A11"},
+    "sface_labels": {"path": "classical-cv/models/sface/labels.json", "sha256": "914EF99A14DE94BB585F94D8D6F0F2568E6E72413A47F6A124ACC435662C6AA8"},
+    "sface_model": {"path": "classical-cv/models/sface/face_recognition_sface_2021dec.onnx", "sha256": "0BA9FBFA01B5270C96627C4EF784DA859931E02F04419C829E83484087C34E79"},
+    "yunet_detector": {"path": "classical-cv/models/yunet/face_detection_yunet_2023mar.onnx", "sha256": "8F2383E4DD3CFBB4553EA8718107FC0423210DC964F9F4280604804ED2552FA4"},
+    "sface_impostor_gallery": {"path": "classical-cv/models/sface/impostors-lfw.npy", "status": "absent; not used"}
+  },
+  "artifact_sha256": {
+    "accuracy_ratio_hybrid.json": "13DE27C4B29E59A3BF8C3049441D70CC01FE8CE8AEFBA2A89DC1C08AB39110FB",
+    "complementarity_probes.csv": "8F50F4D420AF608996ACD039FE6F48B6B580106D5ED40565D719E35434DC4EBF",
+    "gate_operating_curve.json": "786643AEDDA36D5BA8575E68ACDB3489A54DB3DC3476C7F7436AD0049957B982",
+    "gate_operating_curve_settings.csv": "A4D40ABE994D4B513BC41FDE8E7F267EB42FED13E287B3BC984EB554263B4B82"
+  },
+  "validation": [
+    "accuracy benchmark emitted 56 clean plus 2296 modified rows",
+    "curve runner emitted 2352 raw probe rows and 51 settings",
+    "deployed curve AR equals accuracy benchmark cascade AR: 87.23867595818815%",
+    "cv_only anchor uses tau_accept, not tau_reject",
+    "primary gate AUC labels threshold-free LBPH Rank-1 error; thresholded-failure routing is reported separately"
+  ],
+  "timing": {
+    "scope": "single-pass recognition-stage score timing after model initialization; excludes detector and I/O; no warm-up/repeated-latency protocol",
+    "claim_restriction": "not an end-to-end deployment or Raspberry Pi latency estimate; do not claim a speed gain",
+    "hardware": "12th Gen Intel(R) Core(TM) i5-12450H; 8 cores; 12 logical processors",
+    "python": "3.11.9",
+    "opencv": "4.13.0",
+    "numpy": "2.4.3"
+  }
+}

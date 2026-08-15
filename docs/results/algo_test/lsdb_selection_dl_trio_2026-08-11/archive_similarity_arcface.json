@@ -1,0 +1,9 @@
+{
+  "cosine_similarity_max": 0.9585242867469788,
+  "cosine_similarity_median": 0.8628780245780945,
+  "cosine_similarity_min": 0.5769741535186768,
+  "expected_fit_records": 224,
+  "identifier_overlap": 224,
+  "interpretation": "Not an equivalence check: archive inputs lack per-image pixel hashes and historical source pixels are unavailable.",
+  "status": "diagnostic_only_no_pixel_hash_binding"
+}

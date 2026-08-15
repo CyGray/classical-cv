@@ -1,0 +1,52 @@
+{
+  "status": "canonical_descriptive_only",
+  "created_at_local_date": "2026-08-13",
+  "source_git_commit": "d4cbfd1ceeb4e344f7d0cbb278f74b51afe2a66a",
+  "source_git_branch": "master",
+  "source_git_dirty": true,
+  "source_output_dir": "docs/experiments/complementarity_test/gate_accept_protection_smoke_2026-08-13",
+  "source_script": "docs/experiments/complementarity_test/gate_accept_protection_smoke_2026-08-13/smoke_gate_policies.py",
+  "command": "C:\\Users\\acer\\AppData\\Local\\Programs\\Python\\Python311\\python.exe C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\complementarity_test\\gate_accept_protection_smoke_2026-08-13\\smoke_gate_policies.py",
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.22631-SP0",
+  "inputs": {
+    "docs\\results\\complementarity_test\\reruns\\lsdb_dl41_2026-08-10\\gate_operating_curve_probes.csv": "B07938184C9FDCDD0BABFFEB62E1CECE2662BD2E30B0FDB76C718126046B10F8",
+    "classical-cv\\src\\hybrid\\thresholds.json": "C35191FD7D9207420ED8C5DAA341B19076CAE7744D1C8E23BE499147D1A57F43",
+    "docs\\results\\complementarity_test\\reruns\\lsdb_dl41_2026-08-10\\gate_operating_curve.json": "786643AEDDA36D5BA8575E68ACDB3489A54DB3DC3476C7F7436AD0049957B982"
+  },
+  "script_sha256": "3F9E7A03B36C9A677C785FEFF6CB34E51AB29CD1878A348FBDC7619B5F1BE325",
+  "source_outputs": {
+    "results.json": "4437006D003B240AF53316F52F9EE9ECDB4FA247AC051849CE582AAF537CB4D5",
+    "policy_summary.csv": "F01B50F7123140D21E12D6E00E6605F049730F88AAAE0A06D78BB99807E4A0E7",
+    "accept_margin_sweep.csv": "6961214CCF6094B6E0F951145BD569FE7FD1DB3454E770A3EFF9C7FF609828CC",
+    "quality_flag_ablation.csv": "509CC3108259358D3AE0B23DEB1251AA7660B48E9C91B6E42C88A317CC148054",
+    "primary_candidate_changed_rows.csv": "779A3F196A7DCB303C3665911D58F50AE1A611ACC50E2DD4998BC2F6BD06EC3F",
+    "README.md": "5F18900757B4B2A9F23D2384A6F7B99D19D53B7250817F9C9549053CE4B09D72"
+  },
+  "promotion": {
+    "promoted_at_local_date": "2026-08-13",
+    "canonical_path": "docs/results/complementarity_test/reruns/gate_accept_protection_descriptive_2026-08-13",
+    "owner_scope_decision": "Promote using existing repository evidence only; target-device testing explicitly out of scope.",
+    "runtime_gate_changed": false
+  },
+  "canonical_only_artifacts": [
+    "README.md",
+    "PROMOTION_AUDIT.md"
+  ],
+  "canonicalized_artifacts": {
+    "results.json": {
+      "source_sha256": "4437006D003B240AF53316F52F9EE9ECDB4FA247AC051849CE582AAF537CB4D5",
+      "changes": "Promotion status, policy-label wording, and claim limitations only; recorded numeric payload unchanged."
+    },
+    "policy_summary.csv": {
+      "source_sha256": "F01B50F7123140D21E12D6E00E6605F049730F88AAAE0A06D78BB99807E4A0E7",
+      "changes": "Changed the 0.025 row label from recommended to exploratory sensitivity only; all numeric fields unchanged."
+    }
+  },
+  "scientific_status": {
+    "canonical_storage": true,
+    "validation_level": "descriptive_posthoc",
+    "paper_citation_allowed": true,
+    "restriction": "Cite only as a same-data, known-genuine, correlated-transform routing replay. Do not claim independent validation, open-set FPIR, a runtime policy change, target-device performance, or a speed win over direct SFace."
+  }
+}

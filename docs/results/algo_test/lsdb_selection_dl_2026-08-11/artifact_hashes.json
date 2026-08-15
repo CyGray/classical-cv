@@ -1,0 +1,15 @@
+{
+  "artifacts": {
+    "archived_candidate_inventory.json": "4161f3425759ad9b2484ea731f4f235cc3aaacf8937f1f53f7f908ebcf223304",
+    "calibration_scores.csv": "33a6f18663387de5cc3e7dbc46ad1aa4a1639539568bfb4cfbdbba4066b83fe0",
+    "embedding_records.jsonl": "cf342a1047e412f1c7df7c8cccd5b7a7c6c16362be2937e399a8b2266c948314",
+    "embeddings.npz": "604e3fffc00c35b692d11e89b84ec3a7d06ddc3b80ecda8ad2733d34f7ededa1",
+    "gallery_manifest.json": "75980bd04a7bbf5c2abe590889d5a454472195879ac6724a4b4a95f25c43cb4a",
+    "gallery_templates.npz": "64830b12eaa2077cd51cc84b425db23c3b96312c393b2f4f5a847be741b113b7",
+    "run_provenance.json": "86acc59bf0c7c7800a6967f49dcef33c20ed21741685d522b944d553d4561e67",
+    "split_manifest.json": "5a03fe8d868cc3258b6f6792bfb76f696cee2760a916b0ed3ea67f4e2714f482",
+    "summary.json": "9042f452895bb43c1b30cd2d80dca5b947ce96cc24345f44a3768b7a366ca1e4",
+    "test_decisions.csv": "36f3128c3b05b0b0a138ac5d396957366516c81e697a339c90d885b07b1fc309",
+    "test_scores.csv": "57418d2b5aed60ef7a428df76e3926467266550fc9436b158f3993b3dd381aad"
+  }
+}

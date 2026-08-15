@@ -1,0 +1,398 @@
+{
+  "dataset": {
+    "path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lasalle_db1_processed",
+    "identities": 28
+  },
+  "iterations": 1,
+  "comparisons_per_iteration": 756,
+  "comparison": {
+    "expected_comparisons": 756,
+    "actual_comparisons": 756
+  },
+  "mean_fp_percent": {
+    "lbph": 0.0,
+    "sface": 0.26455026455026454,
+    "both": 0.0,
+    "cascade": 0.26455026455026454
+  },
+  "mean_escalation_percent": 100.0,
+  "error_overlap_observed_over_expected_mean": null,
+  "pooled": {
+    "comparisons": 756,
+    "note": "pairs pooled over iterations reuse identities; see per_iteration for the conservative per-sweep view",
+    "fp_rates_ci95": {
+      "lbph": {
+        "count": 0,
+        "trials": 756,
+        "percent": 0.0,
+        "ci95_low_percent": 0.0,
+        "ci95_high_percent": 0.5055605713665889
+      },
+      "sface": {
+        "count": 2,
+        "trials": 756,
+        "percent": 0.26455026455026454,
+        "ci95_low_percent": 0.07257922902672073,
+        "ci95_high_percent": 0.9594069477823729
+      },
+      "both": {
+        "count": 0,
+        "trials": 756,
+        "percent": 0.0,
+        "ci95_low_percent": 0.0,
+        "ci95_high_percent": 0.5055605713665889
+      },
+      "cascade": {
+        "count": 2,
+        "trials": 756,
+        "percent": 0.26455026455026454,
+        "ci95_low_percent": 0.07257922902672073,
+        "ci95_high_percent": 0.9594069477823729
+      }
+    },
+    "diversity": {
+      "table": {
+        "both": 0,
+        "only_a": 0,
+        "only_b": 2,
+        "neither": 754,
+        "n": 756
+      },
+      "q_statistic": null,
+      "phi": null,
+      "disagreement": 0.0026455026455026454,
+      "double_fault": 0.0,
+      "expected_both_if_independent": 0.0,
+      "observed_over_expected": null,
+      "fisher": {
+        "p_positive": 1.0,
+        "p_negative": 1.0,
+        "p_two_sided": 1.0,
+        "degenerate": true
+      }
+    }
+  },
+  "thresholds": {
+    "lbph_tau_accept": 67.03325520645528,
+    "lbph_tau_reject": 140.13,
+    "margin_min": 0.05,
+    "sface_cosine_genuine": 0.363,
+    "sface_l2_genuine": 1.0313
+  },
+  "lbph_rank_thresholds": {
+    "comparisons": 378,
+    "spec": {
+      "error_pair_rank": 4,
+      "comparisons": 378,
+      "raw_threshold": 70.60890197753906,
+      "normalized_threshold": 0.0,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "Julian_Diego_Mapa",
+      "candidate_identity": "Trixia_Marie_Garcio",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 378,
+        "raw_threshold": 67.5250015258789,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Mary_Jade_Jakosalem",
+        "candidate_identity": "Thea_Ganza"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 378,
+        "raw_threshold": 69.43350982666016,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Anthony_Charles_Saltat",
+        "candidate_identity": "Francis_Cromwell_Tan"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 378,
+        "raw_threshold": 70.60890197753906,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "Julian_Diego_Mapa",
+        "candidate_identity": "Trixia_Marie_Garcio"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 378,
+        "raw_threshold": 71.60238647460938,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "Andrew_Eroyla",
+        "candidate_identity": "John_Roland_Octavio"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 378,
+        "raw_threshold": 72.37601470947266,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Kenlie_John_Maghari",
+        "candidate_identity": "Yuan_Paulo_Sebastian_Belen"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 378,
+        "raw_threshold": 74.42378997802734,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Axel_Josh_Lorayna",
+        "candidate_identity": "Kenlie_John_Maghari"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 378,
+        "raw_threshold": 76.70193481445312,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Daniel_Ramos",
+        "candidate_identity": "Raean_Tamayo"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 378,
+        "raw_threshold": 80.15518188476562,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "John_Andrei_Gayona",
+        "candidate_identity": "Lorenz_Ciocon"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 378,
+        "raw_threshold": 83.76220703125,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Jul_Leo_Javellana",
+        "candidate_identity": "Klein_Rhee_Sioson"
+      }
+    ]
+  },
+  "sface_rank_thresholds": {
+    "comparisons": 378,
+    "spec": {
+      "error_pair_rank": 4,
+      "comparisons": 378,
+      "raw_threshold": 0.5920126736164093,
+      "normalized_threshold": 0.0,
+      "realized_far_ppm": 10582.010582010582,
+      "realized_far_percent": 1.0582010582010581,
+      "query_identity": "John_Andrei_Gayona",
+      "candidate_identity": "Michael_Andrei_Jugado",
+      "target_far_ppm": 10000.0
+    },
+    "curve": [
+      {
+        "error_pair_rank": 1,
+        "comparisons": 378,
+        "raw_threshold": 0.5233674347400665,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 2645.5026455026455,
+        "realized_far_percent": 0.26455026455026454,
+        "query_identity": "Francis_Miles_Ang",
+        "candidate_identity": "Josh_Dane_Labistre"
+      },
+      {
+        "error_pair_rank": 2,
+        "comparisons": 378,
+        "raw_threshold": 0.5632736682891846,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 5291.005291005291,
+        "realized_far_percent": 0.5291005291005291,
+        "query_identity": "Kim_Ivan_Arigorat",
+        "candidate_identity": "Kyle_Yuan_Uy"
+      },
+      {
+        "error_pair_rank": 4,
+        "comparisons": 378,
+        "raw_threshold": 0.5920126736164093,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 10582.010582010582,
+        "realized_far_percent": 1.0582010582010581,
+        "query_identity": "John_Andrei_Gayona",
+        "candidate_identity": "Michael_Andrei_Jugado"
+      },
+      {
+        "error_pair_rank": 8,
+        "comparisons": 378,
+        "raw_threshold": 0.6421200633049011,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 21164.021164021164,
+        "realized_far_percent": 2.1164021164021163,
+        "query_identity": "John_Andrei_Gayona",
+        "candidate_identity": "John_Roland_Octavio"
+      },
+      {
+        "error_pair_rank": 16,
+        "comparisons": 378,
+        "raw_threshold": 0.6667922735214233,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 42328.04232804233,
+        "realized_far_percent": 4.232804232804233,
+        "query_identity": "Anthony_Charles_Saltat",
+        "candidate_identity": "Kim_Ivan_Arigorat"
+      },
+      {
+        "error_pair_rank": 32,
+        "comparisons": 378,
+        "raw_threshold": 0.7076325416564941,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 84656.08465608465,
+        "realized_far_percent": 8.465608465608465,
+        "query_identity": "Josh_Dane_Labistre",
+        "candidate_identity": "Klein_Rhee_Sioson"
+      },
+      {
+        "error_pair_rank": 64,
+        "comparisons": 378,
+        "raw_threshold": 0.7630884647369385,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 169312.1693121693,
+        "realized_far_percent": 16.93121693121693,
+        "query_identity": "Jim_Jonathan_Decripito",
+        "candidate_identity": "Jul_Leo_Javellana"
+      },
+      {
+        "error_pair_rank": 128,
+        "comparisons": 378,
+        "raw_threshold": 0.8296825587749481,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 338624.3386243386,
+        "realized_far_percent": 33.86243386243386,
+        "query_identity": "Francis_Cromwell_Tan",
+        "candidate_identity": "Kyle_Yuan_Uy"
+      },
+      {
+        "error_pair_rank": 256,
+        "comparisons": 378,
+        "raw_threshold": 0.9241421297192574,
+        "normalized_threshold": 0.0,
+        "realized_far_ppm": 677248.6772486772,
+        "realized_far_percent": 67.72486772486772,
+        "query_identity": "Diofel_Gwen_Haresco",
+        "candidate_identity": "John_Andrei_Gayona"
+      }
+    ]
+  },
+  "per_iteration": [
+    {
+      "identities": 28,
+      "comparisons": 756,
+      "false_accepts": {
+        "lbph": 0,
+        "sface": 2,
+        "both": 0,
+        "union": 2,
+        "cascade": 2
+      },
+      "fp_percent": {
+        "lbph": 0.0,
+        "sface": 0.26455026455026454,
+        "both": 0.0,
+        "cascade": 0.26455026455026454
+      },
+      "fp_rates_ci95": {
+        "lbph": {
+          "count": 0,
+          "trials": 756,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 0.5055605713665889
+        },
+        "sface": {
+          "count": 2,
+          "trials": 756,
+          "percent": 0.26455026455026454,
+          "ci95_low_percent": 0.07257922902672073,
+          "ci95_high_percent": 0.9594069477823729
+        },
+        "both": {
+          "count": 0,
+          "trials": 756,
+          "percent": 0.0,
+          "ci95_low_percent": 0.0,
+          "ci95_high_percent": 0.5055605713665889
+        },
+        "cascade": {
+          "count": 2,
+          "trials": 756,
+          "percent": 0.26455026455026454,
+          "ci95_low_percent": 0.07257922902672073,
+          "ci95_high_percent": 0.9594069477823729
+        }
+      },
+      "error_overlap": {
+        "observed_joint_fp": 0,
+        "expected_joint_fp_if_independent": 0.0,
+        "observed_over_expected": null,
+        "p_sface_fp_given_lbph_fp": null,
+        "p_lbph_fp_given_sface_fp": 0.0
+      },
+      "diversity": {
+        "table": {
+          "both": 0,
+          "only_a": 0,
+          "only_b": 2,
+          "neither": 754,
+          "n": 756
+        },
+        "q_statistic": null,
+        "phi": null,
+        "disagreement": 0.0026455026455026454,
+        "double_fault": 0.0,
+        "expected_both_if_independent": 0.0,
+        "observed_over_expected": null,
+        "fisher": {
+          "p_positive": 1.0,
+          "p_negative": 1.0,
+          "p_two_sided": 1.0,
+          "degenerate": true
+        }
+      },
+      "gate": {
+        "escalated_probes": 28,
+        "escalation_percent": 100.0,
+        "reasons": {
+          "ambiguous_band": 23,
+          "quality": 5
+        }
+      },
+      "thresholds": {
+        "lbph_tau_accept": 67.03325520645528,
+        "lbph_tau_reject": 140.13,
+        "margin_min": 0.05,
+        "sface_cosine_genuine": 0.363,
+        "sface_l2_genuine": 1.0313
+      },
+      "dataset_dir": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lasalle_db1_processed",
+      "max_identities": 0,
+      "random_seed": 42,
+      "thresholds_json": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\src\\hybrid\\thresholds.json"
+    }
+  ],
+  "plots": {
+    "lbph_histogram": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\lbph\\hybrid_lasalle_processed_lbph_distance_histogram.png",
+    "lbph_curve": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\lbph\\hybrid_lasalle_processed_lbph_distance_curve_plot.png",
+    "lbph_far": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\lbph\\hybrid_lasalle_processed_lbph_far_curve.png",
+    "sface_histogram": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\sface\\hybrid_lasalle_processed_sface_distance_histogram.png",
+    "sface_curve": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\sface\\hybrid_lasalle_processed_sface_distance_curve_plot.png",
+    "sface_far": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\sface\\hybrid_lasalle_processed_sface_far_curve.png"
+  }
+}
