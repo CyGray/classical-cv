@@ -2,11 +2,43 @@
 
 ## Historical backfill (2026-08-02 to 2026-08-10) — generated from git diff history
 
+## August 16, 2026
+- What changed (batch commit of the 2026-08-11 → 2026-08-16 working tree, split into revertable area chunks; rollback tag `pre-chunk-push-2026-08-16` = `d4cbfd1`):
+  - Workspace agent infrastructure: AGENT_START_HERE router, root README, refreshed AGENTS/GEMINI guidance, versioned `springer-docm-targeted-edit` skill (`.claude` + `.agents`), gitignore whitelist.
+  - Classical-cv descriptor work: configurable LBPH descriptor (`r1_n8_g8x8` deployed, pinned in `thresholds.json` with provenance), new HOG/LPQ/LTP benchmark descriptors, unit tests, updated pipeline/diagnostic scripts and repo docs.
+  - Evidence: superseded hybrid independence plots archived under `hybrid/OLD/`; new dated 2026-08 experiment runs (hybrid thresholds 08-14, gate-accept-protection smoke, classical descriptor smoke, LBPH TAR/FAR operating point); canonical results updated (DL-trio selection campaigns, complementarity/independence reruns, robustness provenance and summary tables).
+  - Manuscript: `lsface.docm` advanced through v014 with archived versions 006–012 + pairwise set, working copies, figures, and claim-evidence-register updates.
+  - Production/porting: document-production macros (v007–v014), reporting/visualization generators with regenerated cascade diagrams; cascade-porting synced to the descriptor configuration.
+- Commit sequence:
+  - de05e43 — chore(agents): add workspace router, README, and versioned targeted-edit skill
+  - a4989ae — feat(classical-cv): configurable LBPH descriptor plus HOG/LPQ/LTP benchmark descriptors
+  - c861647 — chore(classical-cv): update pipeline scripts and repo docs for descriptor work
+  - 1f6777c — docs(experiments): archive superseded independence outputs, add dated 2026-08 runs
+  - d7b1794 — docs(results): update canonical evidence for DL-trio selection, reruns, and robustness provenance
+  - 5e2f52a — docs(manuscript): advance lsface.docm through v014; archive versions and figures
+  - 9d08aaa — chore(scripts): add document-production macros, reporting generators, and visualization assets
+  - 745de02 — feat(porting): sync cascade-porting with LBPH descriptor configuration
+
 ## August 11, 2026
 - Changelog consolidation and migration:
   - Moved changelog artifacts from `classical-cv/docs/changelogs` into `docs/changelogs`.
   - Kept all reconstructed per-day files and updated this index to their canonical path.
   - Canonically renamed old `0407`/`0421` files to `APRIL_07.md` and `APRIL_21.md`.
+- DL LSDB trio selection:
+  - Recovered canonical SFace, ArcFace, and FaceNet package-defined models; MobileNetV2 is not selection candidate.
+  - Ran fresh same-split enrolment, calibration, and held-out testing for all three at 0.9921% realized calibration FAR.
+  - Result: SFace 100.00% TAR / 100.00% Rank-1, FaceNet 100.00% / 100.00%, ArcFace 96.43% / 100.00%.
+  - SFace selected over tied FaceNet by 512 B versus 2,048 B embedding footprint; ArcFace ranks third.
+  - Added 30 canonical evidence/provenance artifacts; old SFace-only run retained as superseded precursor.
+- Manuscript Section 4.1 integration (19:07 +08:00):
+  - Added the separate DL-only SFace/ArcFace/FaceNet selection table and
+    provenance-scoped text to `lsface.docm`; retained the classical selection
+    table as a separate ranking.
+  - Updated the claim-evidence register, archived before/final DOCM versions,
+    and verified the rendered manuscript, caption styles, table widths, and
+    macro preservation.
+- Detailed session log: [./AUG_11.md](AUG_11.md)
+- Commit status: committed 2026-08-16 as part of the batched area chunks (see August 16 sequence above).
 
 ## August 10, 2026
 - What changed:
