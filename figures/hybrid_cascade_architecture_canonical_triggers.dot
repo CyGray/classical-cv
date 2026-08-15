@@ -1,0 +1,32 @@
+digraph HybridCascadeCanonical {
+  rankdir=TB;
+  splines=polyline;
+  fontsize=11;
+  fontname="Helvetica";
+  nodesep=0.42;
+  ranksep=0.65;
+  margin=0.18;
+
+  node [fontname="Helvetica", fontsize=10, shape=box, style="rounded,filled", color="#334E68", fillcolor="#ECF4FB", width=2.35, margin="0.12,0.08"];
+  edge [fontname="Helvetica", fontsize=8, color="#3A3A3A", arrowsize=0.75];
+
+  Input      [label="Input image"];
+  Preprocess [label="Preprocessing"];
+  LBPH       [label="LBPH Inference"];
+  Gate       [label="Gate", shape=diamond, fillcolor="#EEF1F5", color="#5B5B5B"];
+  LBPHOut    [label="LBPH Output"];
+  Escalate   [label="Escalation"];
+  SFace      [label="SFace Inference"];
+  Final      [label="Final Decision", shape=parallelogram, fillcolor="#F4F6F8", color="#4A4A4A"];
+
+  Input -> Preprocess -> LBPH -> Gate;
+  Gate -> LBPHOut [label="if clear or confident reject\n(no escalation criteria)" , fontsize=8];
+  Gate -> Escalate [label="if any trigger true" , fontsize=8];
+  Escalate -> SFace [label="quality flag\nor ambiguity\nor weak margin" , fontsize=8];
+  SFace -> Final;
+  LBPHOut -> Final;
+
+  // Explicit trigger text kept compact, not technical-heavy
+  TriggerText [label="Escalation triggers:\n1) quality issue\n2) mid-band distance\n3) weak top-1/top-2 separation", shape=note, fillcolor="#FCFCFC", color="#777777", fontsize=8, width=2.0];
+  Gate -> TriggerText [style=dotted, arrowhead=none, color="#9a9a9a", minlen=2];
+}

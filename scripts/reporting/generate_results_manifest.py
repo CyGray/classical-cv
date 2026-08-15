@@ -12,6 +12,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / "docs" / "results"
 MANIFEST = RESULTS / "RESULTS_MANIFEST.json"
+CANONICAL_DESCRIPTIVE_CAMPAIGNS = {
+    "complementarity_test/reruns/gate_accept_protection_descriptive_2026-08-13/": (
+        "Post-hoc same-data known-genuine routing replay; cite only with its "
+        "recorded descriptive limitations."
+    ),
+}
 
 
 def sha256(path: Path) -> str:
@@ -24,12 +30,17 @@ def sha256(path: Path) -> str:
 
 def rerun_provenance(path: Path) -> dict | None:
     """Load a rerun's recorded inputs when the artifact has one."""
-    reruns_root = RESULTS / "independence_test" / "reruns"
     for parent in (path.parent, *path.parents):
         candidate = parent / "run_provenance.json"
         if candidate.is_file():
-            return json.loads(candidate.read_text(encoding="utf-8"))
-        if parent == reruns_root:
+            provenance = json.loads(candidate.read_text(encoding="utf-8"))
+            # A documented rerun may live in any result category, not only
+            # independence_test/reruns.  Keep its canonical directory in-memory
+            # so source_path() can recover the matching raw-artifact suffix.
+            if "source_output_dir" in provenance:
+                provenance["_results_run_dir"] = parent.relative_to(RESULTS).as_posix()
+                return provenance
+        if parent == RESULTS:
             break
     return None
 
@@ -38,8 +49,18 @@ def source_path(rel: str, provenance: dict | None = None) -> str:
     if provenance and rel.endswith("run_provenance.json"):
         return "docs/results/" + rel
     if provenance:
-        rerun_artifact = Path(*rel.split("/")[4:]).as_posix()
-        return f"{provenance['source_output_dir']}/{rerun_artifact}"
+        run_dir = Path(provenance["_results_run_dir"])
+        rerun_artifact = Path(rel).relative_to(run_dir).as_posix()
+        canonical_derivatives = set(provenance.get("canonical_only_artifacts", []))
+        canonical_derivatives.update(provenance.get("canonicalized_artifacts", {}))
+        if rerun_artifact in canonical_derivatives:
+            return "docs/results/" + rel
+        raw_path = ROOT / provenance["source_output_dir"] / rerun_artifact
+        if raw_path.is_file():
+            return f"{provenance['source_output_dir']}/{rerun_artifact}"
+        # Method notes added while promoting a raw rerun are canonical-only
+        # documentation, not files that existed in its source output.
+        return "docs/results/" + rel
     if rel.startswith("independence_test/independence/"):
         return "classical-cv/reports/independence/" + rel.split("/independence/", 1)[1]
     if rel.startswith("robustness_test/benchmark/"):
@@ -77,6 +98,21 @@ def git_last_change(path: str) -> tuple[str | None, str | None]:
 
 
 def classification(rel: str, provenance: dict | None = None) -> tuple[str, bool, str | None]:
+    for prefix, reason in CANONICAL_DESCRIPTIVE_CAMPAIGNS.items():
+        if rel.startswith(prefix):
+            if provenance is None:
+                return (
+                    "needs_provenance_review",
+                    False,
+                    "Descriptive campaign artifact lacks run_provenance.json.",
+                )
+            if provenance.get("status") != "canonical_descriptive_only":
+                return (
+                    "needs_provenance_review",
+                    False,
+                    "Descriptive campaign provenance status does not match its allowlist.",
+                )
+            return "canonical_descriptive_only", False, reason
     if rel.startswith("independence_test/reruns/"):
         if provenance:
             return "canonical_snapshot", False, None
@@ -104,6 +140,15 @@ def classification(rel: str, provenance: dict | None = None) -> tuple[str, bool,
 
 def source_script(rel: str, provenance: dict | None = None) -> str:
     if provenance:
+        run_dir = Path(provenance["_results_run_dir"])
+        rerun_artifact = Path(rel).relative_to(run_dir).as_posix()
+        canonical_derivatives = set(provenance.get("canonical_only_artifacts", []))
+        canonical_derivatives.update(provenance.get("canonicalized_artifacts", {}))
+        if rerun_artifact in canonical_derivatives:
+            return "not recorded"
+        if not rel.endswith("run_provenance.json"):
+            if not (ROOT / provenance["source_output_dir"] / rerun_artifact).is_file():
+                return "not recorded"
         return provenance["source_script"]
     if rel.endswith("native_predict_scale_yunet.json"):
         return "classical-cv/scripts/archive/run_lfw_lbph_native_predict_independence.py"
@@ -130,8 +175,8 @@ def main() -> None:
         status, rerun_required, reason = classification(rel, provenance)
         origin = source_path(rel, provenance)
         if provenance:
-            commit = provenance["source_git_commit"]
-            committed_at = provenance["source_git_commit_at"]
+            commit = provenance.get("source_git_commit")
+            committed_at = provenance.get("source_git_commit_at")
         else:
             commit, committed_at = git_last_change(origin)
         artifacts.append(

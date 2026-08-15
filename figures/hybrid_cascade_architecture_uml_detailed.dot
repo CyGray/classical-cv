@@ -1,0 +1,293 @@
+digraph HybridCascadeDetailedUML {
+  graph [
+    rankdir=TB,
+    bgcolor="white",
+    margin=0,
+    pad=0.14,
+    nodesep=0.34,
+    ranksep=0.64,
+    splines=polyline,
+    outputorder=edgesfirst,
+    newrank=true,
+    fontname="Arial",
+    size="6.00,4.55",
+    ratio=compress
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    margin="0.12,0.09",
+    color="#3F515C",
+    fillcolor="#F6F8F9",
+    fontcolor="#202C33",
+    fontname="Arial",
+    fontsize=10,
+    penwidth=1.35
+  ];
+
+  edge [
+    color="#3F515C",
+    fontcolor="#3F515C",
+    fontname="Arial",
+    fontsize=8.7,
+    penwidth=1.30,
+    arrowsize=0.70
+  ];
+
+  Start [
+    shape=circle,
+    label="",
+    xlabel=<<FONT POINT-SIZE="9"><B>Input image</B></FONT>>,
+    width=0.18,
+    height=0.18,
+    fixedsize=true,
+    style=filled,
+    color="#202C33",
+    fillcolor="#202C33",
+    penwidth=1.0
+  ];
+
+  Preprocess [
+    color="#3B8448",
+    fillcolor="#F0F8EF",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+        <TR><TD><FONT POINT-SIZE="11"><B>Preprocessing</B></FONT></TD></TR>
+        <TR><TD><FONT POINT-SIZE="8.5">Face detection and alignment</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  LBPH [
+    color="#B67D12",
+    fillcolor="#FFF7E5",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+        <TR><TD><FONT POINT-SIZE="11"><B>LBPH Inference</B></FONT></TD></TR>
+        <TR><TD><FONT POINT-SIZE="8.5">Distance and match separation</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  Gate [
+    shape=diamond,
+    style=filled,
+    label=<
+      <FONT POINT-SIZE="10"><B>Gate</B></FONT><BR/>
+      <FONT POINT-SIZE="8.5">Any trigger?</FONT>
+    >,
+    width=1.48,
+    height=1.00,
+    fixedsize=true,
+    margin=0,
+    color="#75479A",
+    fillcolor="#F7F0FC",
+    penwidth=1.55
+  ];
+
+  TriggerNote [
+    shape=note,
+    style="filled",
+    margin="0.10,0.08",
+    color="#8A739D",
+    fillcolor="#FCF9FE",
+    penwidth=1.0,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9"><B>Escalation triggers</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">&#8226; Quality issue</FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">&#8226; Mid-band distance</FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">&#8226; Weak top-1/top-2 separation</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  LBPHCheck [
+    shape=diamond,
+    style=filled,
+    label=<
+      <FONT POINT-SIZE="9.5"><B>LBPH</B></FONT><BR/>
+      <FONT POINT-SIZE="8.5">score?</FONT>
+    >,
+    width=1.26,
+    height=0.88,
+    fixedsize=true,
+    margin=0,
+    color="#B67D12",
+    fillcolor="#FFF7E5",
+    penwidth=1.45
+  ];
+
+  SFace [
+    color="#2D6FA6",
+    fillcolor="#EAF4FC",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+        <TR><TD><FONT POINT-SIZE="11"><B>SFace Inference</B></FONT></TD></TR>
+        <TR><TD><FONT POINT-SIZE="8.5">Escalated identity check</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  SFaceCheck [
+    shape=diamond,
+    style=filled,
+    label=<
+      <FONT POINT-SIZE="9.5"><B>SFace</B></FONT><BR/>
+      <FONT POINT-SIZE="8.5">match?</FONT>
+    >,
+    width=1.30,
+    height=0.90,
+    fixedsize=true,
+    margin=0,
+    color="#2D6FA6",
+    fillcolor="#EAF4FC",
+    penwidth=1.45
+  ];
+
+  LBPHAccept [
+    shape=doublecircle,
+    label="",
+    xlabel=<
+      <FONT POINT-SIZE="9"><B>LBPH accept</B></FONT><BR/>
+      <FONT POINT-SIZE="8">Recognized identity</FONT>
+    >,
+    width=0.25,
+    height=0.25,
+    fixedsize=true,
+    style=filled,
+    color="#2F8541",
+    fillcolor="#202C33",
+    penwidth=1.35
+  ];
+
+  ConfidentReject [
+    shape=doublecircle,
+    label="",
+    xlabel=<
+      <FONT POINT-SIZE="9"><B>Confident reject</B></FONT><BR/>
+      <FONT POINT-SIZE="8">Unknown identity</FONT>
+    >,
+    width=0.25,
+    height=0.25,
+    fixedsize=true,
+    style=filled,
+    color="#A24C48",
+    fillcolor="#202C33",
+    penwidth=1.35
+  ];
+
+  SFaceAccept [
+    shape=doublecircle,
+    label="",
+    xlabel=<
+      <FONT POINT-SIZE="9"><B>SFace accept</B></FONT><BR/>
+      <FONT POINT-SIZE="8">Verified identity</FONT>
+    >,
+    width=0.25,
+    height=0.25,
+    fixedsize=true,
+    style=filled,
+    color="#2F8541",
+    fillcolor="#202C33",
+    penwidth=1.35
+  ];
+
+  SFaceReject [
+    shape=doublecircle,
+    label="",
+    xlabel=<
+      <FONT POINT-SIZE="9"><B>SFace reject</B></FONT><BR/>
+      <FONT POINT-SIZE="8">Unverified identity</FONT>
+    >,
+    width=0.25,
+    height=0.25,
+    fixedsize=true,
+    style=filled,
+    color="#A24C48",
+    fillcolor="#202C33",
+    penwidth=1.35
+  ];
+
+  BottomSpacer [
+    shape=point,
+    label="",
+    width=0.58,
+    height=0.01,
+    fixedsize=true,
+    style=invis
+  ];
+
+  { rank=same; Start; Preprocess; LBPH; Gate; LBPHCheck; }
+  { rank=same; TriggerNote; SFace; ConfidentReject; }
+  { rank=same; SFaceAccept; BottomSpacer; SFaceReject; }
+
+  Start -> Preprocess [weight=24];
+  Preprocess -> LBPH [weight=24];
+  LBPH -> Gate [weight=24];
+
+  Gate -> LBPHCheck [
+    label=<<FONT POINT-SIZE="9"><B>[no trigger]</B></FONT>>,
+    color="#82611F",
+    fontcolor="#72551C",
+    penwidth=1.40,
+    weight=20
+  ];
+
+  Gate -> SFace [
+    label=<<FONT POINT-SIZE="9"><B>[any trigger]</B></FONT>>,
+    color="#2D6FA6",
+    fontcolor="#2D6FA6",
+    penwidth=1.55,
+    weight=18
+  ];
+
+  Gate -> TriggerNote [
+    style=dashed,
+    arrowhead=none,
+    color="#8A739D",
+    constraint=false,
+    penwidth=0.9
+  ];
+
+  LBPHCheck -> LBPHAccept [
+    label=<<FONT POINT-SIZE="8.5">[<I>d</I> &#8804; &#964;<SUB>accept</SUB>]</FONT>>,
+    color="#2F8541",
+    fontcolor="#2F8541",
+    constraint=false,
+    penwidth=1.45
+  ];
+
+  LBPHCheck -> ConfidentReject [
+    label=<<FONT POINT-SIZE="8.5">[<I>d</I> &#8805; &#964;<SUB>reject</SUB>]</FONT>>,
+    color="#A24C48",
+    fontcolor="#8E423F",
+    penwidth=1.45
+  ];
+
+  SFace -> SFaceCheck [
+    color="#2D6FA6",
+    penwidth=1.50,
+    weight=18
+  ];
+
+  SFaceCheck -> SFaceAccept [
+    label=<<FONT POINT-SIZE="9"><B>[match]</B></FONT>>,
+    color="#2F8541",
+    fontcolor="#2F8541",
+    penwidth=1.45
+  ];
+
+  SFaceCheck -> SFaceReject [
+    label=<<FONT POINT-SIZE="9"><B>[no match]</B></FONT>>,
+    color="#A24C48",
+    fontcolor="#8E423F",
+    penwidth=1.45
+  ];
+
+  LBPHAccept -> LBPHCheck [style=invis, weight=20];
+  TriggerNote -> SFace [style=invis, weight=8];
+  SFaceAccept -> BottomSpacer [style=invis, weight=10];
+  BottomSpacer -> SFaceReject [style=invis, weight=10];
+}

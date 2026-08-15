@@ -1,0 +1,39 @@
+digraph HybridCascadeSimple {
+  rankdir=TB;
+  splines=polyline;
+  fontsize=12;
+  fontname="Helvetica";
+  labelloc="t";
+  label="Hybrid Face Recognition Flow (Simplified)";
+  nodesep=0.5;
+  ranksep=0.6;
+  margin=0.2;
+
+  node [fontname="Helvetica", fontsize=10, shape=box, style="rounded,filled", color="#345c72", fillcolor="#eef6fb", width=2.4, margin="0.12,0.08"];
+  edge [fontname="Helvetica", fontsize=8, color="#3b3b3b", arrowsize=0.7];
+
+  Input [label="Camera image"];
+  Detect [label="Find the face"];
+  Prepare [label="Prepare one shared face sample"];
+  Gate [label="Is result clearly trusted by fast engine?"];
+  FastPath [label="Fast pass: quick identity (LBPH)"];
+  Escalate [label="Unclear / low quality"];
+  DeepPath [label="Deep pass: careful identity (SFace)"];
+  Output [label="Final output\n(engine and identity)", shape=parallelogram, fillcolor="#f3f6f8", color="#5a5a5a"];
+  legend [label="If not clear, the system asks the second engine to verify", shape=note, fillcolor="#f8f8f8", color="#7a7a7a", fontsize=8, width=2.6];
+
+  {rank=same; Input;}
+  {rank=same; Detect;}
+  {rank=same; Prepare;}
+  {rank=same; Gate;}
+  {rank=same; FastPath; Escalate;}
+  {rank=same; DeepPath;}
+
+  Input -> Detect -> Prepare -> Gate;
+  Gate -> FastPath;
+  Gate -> Escalate;
+  Escalate -> DeepPath;
+  FastPath -> Output;
+  DeepPath -> Output;
+  Gate -> legend [style=dotted, arrowhead=none, color="#9b9b9b", minlen=2];
+}

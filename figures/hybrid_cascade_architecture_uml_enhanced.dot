@@ -1,0 +1,240 @@
+digraph HybridCascadeEnhancedUML {
+  graph [
+    rankdir=TB,
+    bgcolor="white",
+    margin=0,
+    pad=0.12,
+    nodesep=0.34,
+    ranksep=0.50,
+    splines=polyline,
+    outputorder=edgesfirst,
+    newrank=true,
+    fontname="Arial",
+    size="5.55,4.10",
+    ratio=compress
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    margin="0.07,0.06",
+    color="#405563",
+    fillcolor="#F4F7F9",
+    fontcolor="#1F2D35",
+    fontname="Arial",
+    fontsize=10,
+    penwidth=1.45
+  ];
+
+  edge [
+    color="#405563",
+    fontcolor="#405563",
+    fontname="Arial",
+    fontsize=9,
+    penwidth=1.45,
+    arrowsize=0.74
+  ];
+
+  Start [
+    shape=circle,
+    label="",
+    width=0.17,
+    height=0.17,
+    fixedsize=true,
+    style=filled,
+    color="#1F2D35",
+    fillcolor="#1F2D35",
+    penwidth=1.0
+  ];
+
+  Input [
+    color="#2F78C4",
+    fillcolor="#EFF6FF",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="2" WIDTH="34" HEIGHT="34" BGCOLOR="#2F78C4">
+            <FONT COLOR="white" POINT-SIZE="10"><B>IN</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>Input image</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">Camera frame</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  Preprocess [
+    color="#3D8B4E",
+    fillcolor="#EFF8EE",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="2" WIDTH="38" HEIGHT="34" BGCOLOR="#3D8B4E">
+            <FONT COLOR="white" POINT-SIZE="9"><B>PRE</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>Preprocessing</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">Face detection and alignment</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  LBPH [
+    color="#C78B16",
+    fillcolor="#FFF7E5",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="2" WIDTH="34" HEIGHT="34" BGCOLOR="#C78B16">
+            <FONT COLOR="white" POINT-SIZE="10"><B>CV</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>LBPH Inference</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">Fast first-pass match</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  GateCard [
+    color="#7A4BA4",
+    fillcolor="#F7F0FC",
+    penwidth=1.60,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="3" WIDTH="47" HEIGHT="42" BGCOLOR="#7A4BA4">
+            <FONT COLOR="white" POINT-SIZE="9"><B>GATE</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>Gate</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9"><B>Escalate on any trigger</B></FONT></TD></TR>
+        <TR>
+          <TD ALIGN="LEFT">
+            <FONT POINT-SIZE="8.5">Quality issue &#183; Mid-band distance<BR/>Weak top-1/top-2 separation</FONT>
+          </TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  Decision [
+    label="Escalate?",
+    shape=diamond,
+    style=filled,
+    width=1.08,
+    height=0.82,
+    fixedsize=true,
+    margin=0,
+    color="#7A4BA4",
+    fillcolor="#F7F0FC",
+    fontname="Arial Bold",
+    fontsize=10,
+    penwidth=1.65
+  ];
+
+  LBPHResult [
+    color="#2F8F46",
+    fillcolor="#EEF8F0",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="2" WIDTH="34" HEIGHT="34" BGCOLOR="#2F8F46">
+            <FONT COLOR="white" POINT-SIZE="10"><B>CV</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>Use LBPH result</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">No escalation</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  SFace [
+    color="#246FB5",
+    fillcolor="#EAF4FC",
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="2" WIDTH="34" HEIGHT="34" BGCOLOR="#246FB5">
+            <FONT COLOR="white" POINT-SIZE="10"><B>DL</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>SFace Inference</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">Escalated match</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  Merge [
+    shape=diamond,
+    style=filled,
+    label="",
+    width=0.27,
+    height=0.27,
+    fixedsize=true,
+    margin=0,
+    color="#405563",
+    fillcolor="#E5ECEF",
+    penwidth=1.30
+  ];
+
+  Final [
+    color="#405563",
+    fillcolor="#EAF0F3",
+    penwidth=1.60,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="4">
+        <TR>
+          <TD ROWSPAN="2" WIDTH="38" HEIGHT="34" BGCOLOR="#405563">
+            <FONT COLOR="white" POINT-SIZE="9"><B>OUT</B></FONT>
+          </TD>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="11"><B>Final Decision</B></FONT></TD>
+        </TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">Identity or reject</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  End [
+    shape=doublecircle,
+    label="",
+    width=0.21,
+    height=0.21,
+    fixedsize=true,
+    style=filled,
+    color="#1F2D35",
+    fillcolor="#1F2D35",
+    penwidth=1.0
+  ];
+
+  { rank=same; Start; Input; Preprocess; LBPH; }
+  { rank=same; GateCard; Decision; }
+  { rank=same; LBPHResult; SFace; }
+  { rank=same; Merge; Final; End; }
+
+  Start -> Input [weight=24];
+  Input -> Preprocess [weight=24];
+  Preprocess -> LBPH [weight=24];
+  LBPH -> GateCard [weight=18];
+  GateCard -> Decision [color="#7A4BA4", penwidth=1.65, weight=18];
+
+  Decision -> LBPHResult [
+    label=<<FONT POINT-SIZE="10"><B>[NO]</B></FONT>>,
+    color="#2F8F46",
+    fontcolor="#2F8F46",
+    penwidth=1.75
+  ];
+
+  Decision -> SFace [
+    label=<<FONT POINT-SIZE="10"><B>[YES]</B></FONT>>,
+    color="#246FB5",
+    fontcolor="#246FB5",
+    penwidth=1.75
+  ];
+
+  LBPHResult -> Merge [color="#2F8F46", penwidth=1.65];
+  SFace -> Merge [color="#246FB5", penwidth=1.65];
+  Merge -> Final [weight=18];
+  Final -> End [weight=18];
+
+  LBPHResult -> SFace [style=invis, weight=10];
+}

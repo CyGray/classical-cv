@@ -1,0 +1,128 @@
+digraph HybridCascadeManuscript {
+  graph [
+    rankdir=TB,
+    bgcolor="white",
+    margin=0,
+    pad=0.08,
+    nodesep=0.22,
+    ranksep=0.48,
+    splines=polyline,
+    outputorder=edgesfirst,
+    fontname="Arial",
+    size="3.25,6.20"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    width=2.20,
+    height=0.46,
+    margin="0.14,0.08",
+    color="#465A68",
+    fillcolor="#EAF1F5",
+    fontcolor="#263238",
+    fontname="Arial",
+    fontsize=10,
+    penwidth=1.15
+  ];
+
+  edge [
+    color="#465A68",
+    fontcolor="#465A68",
+    fontname="Arial",
+    fontsize=8.5,
+    penwidth=1.15,
+    arrowsize=0.68
+  ];
+
+  Input [
+    label="Input image",
+    width=1.85,
+    height=0.42,
+    fillcolor="#F7F9FA"
+  ];
+
+  Preprocess [label="Preprocessing"];
+  LBPH [label="LBPH Inference"];
+
+  Gate [
+    width=2.45,
+    margin="0.13,0.10",
+    fillcolor="#F4F4F1",
+    penwidth=1.30,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="2">
+        <TR>
+          <TD><FONT POINT-SIZE="11"><B>Gate</B></FONT></TD>
+        </TR>
+        <HR/>
+        <TR>
+          <TD ALIGN="LEFT" CELLPADDING="4">
+            <FONT POINT-SIZE="9"><B>Escalate if any condition holds:</B></FONT>
+          </TD>
+        </TR>
+        <TR>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="9">&#8226;  Quality issue</FONT></TD>
+        </TR>
+        <TR>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="9">&#8226;  Mid-band distance</FONT></TD>
+        </TR>
+        <TR>
+          <TD ALIGN="LEFT"><FONT POINT-SIZE="9">&#8226;  Weak top-1/top-2 separation</FONT></TD>
+        </TR>
+      </TABLE>
+    >
+  ];
+
+  SFace [
+    label="SFace Inference",
+    width=1.62,
+    fillcolor="#DDEBF1",
+    color="#3F7087"
+  ];
+
+  LBPHResult [
+    label="Use LBPH result",
+    width=1.35,
+    fillcolor="#EEF2F4",
+    color="#6B747A"
+  ];
+
+  Final [
+    label="Final Decision",
+    fillcolor="#E3EAEE",
+    penwidth=1.45
+  ];
+
+  Input -> Preprocess;
+  Preprocess -> LBPH;
+  LBPH -> Gate;
+
+  { rank=same; LBPHResult; SFace; }
+
+  Gate -> LBPHResult [
+    label="No trigger",
+    color="#6B747A",
+    fontcolor="#525B60",
+    penwidth=1.10
+  ];
+
+  Gate -> SFace [
+    label="Escalate",
+    color="#3F7087",
+    fontcolor="#3F7087",
+    penwidth=1.35
+  ];
+
+  LBPHResult -> Final [
+    color="#6B747A",
+    penwidth=1.10
+  ];
+
+  SFace -> Final [
+    color="#3F7087",
+    penwidth=1.35
+  ];
+
+  LBPHResult -> SFace [style=invis, weight=8];
+}

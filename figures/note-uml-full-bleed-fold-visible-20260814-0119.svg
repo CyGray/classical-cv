@@ -1,0 +1,17 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" role="img" aria-labelledby="title">
+  <title id="title">Monochrome UML note node (full bleed, thick body border, visible thin crease)</title>
+
+  <rect x="0" y="0" width="1600" height="700" fill="#fff"/>
+
+  <!-- Note body with thick border -->
+  <path d="M 0 0 L 1290 0 L 1600 220 L 1600 700 L 0 700 Z"
+        fill="white" stroke="black" stroke-width="16" stroke-linejoin="miter"/>
+
+  <!-- Fold patch (white top-right corner) -->
+  <polygon points="1290,0 1600,0 1600,220" fill="white"/>
+
+  <!-- Thin fold fold-lines -->
+  <line x1="1290" y1="0" x2="1600" y2="220" stroke="black" stroke-width="2" stroke-linecap="square"/>
+  <line x1="1290" y1="0" x2="1290" y2="220" stroke="black" stroke-width="2" stroke-linecap="square"/>
+  <line x1="1290" y1="220" x2="1600" y2="220" stroke="black" stroke-width="2" stroke-linecap="square"/>
+</svg>

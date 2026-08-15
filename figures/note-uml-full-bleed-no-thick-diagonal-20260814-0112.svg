@@ -1,0 +1,15 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" role="img" aria-labelledby="title">
+  <title id="title">Monochrome UML note node (full bleed, thick body border, thin crease)</title>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1600" height="700" fill="#fff"/>
+
+  <!-- Note body with thick border -->
+  <rect x="0" y="0" width="1600" height="700" fill="white" stroke="black" stroke-width="16"/>
+
+  <!-- Folded corner overlay (separates folded area) -->
+  <polygon points="1300,0 1600,0 1600,230" fill="white" />
+
+  <!-- Thin crease -->
+  <line x1="1300" y1="0" x2="1600" y2="230" stroke="black" stroke-width="0.8" stroke-linecap="square"/>
+</svg>

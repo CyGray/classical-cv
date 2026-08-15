@@ -14,10 +14,10 @@ the LFW-derived frozen deployment thresholds.
    modification suite. Do not tune on either set.
 5. Select the classical fast-path candidate using the recorded rule and state
    any engineering exception explicitly.
-6. Select the deep candidate from the external team's LSDB SFace, ArcFace, and
-   FaceNet artifacts under an explicitly documented footprint/deployment rule.
-   Do not call it a same-harness accuracy comparison until the external team
-   supplies reproducible run metadata.
+6. Select the deep candidate from a fresh, same-split SFace, ArcFace, and
+   FaceNet campaign. Enrol, calibrate, and test every candidate on the same
+   LSDB cohorts; retain archived external-team vectors only as provenance
+   diagnostics, never as held-out metrics.
 7. Only after selection, report LFW-derived LBPH/SFace thresholds as frozen
    deployment calibration. They are not inputs to steps 1--6.
 

@@ -1,0 +1,17 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" role="img" aria-labelledby="title" shape-rendering="crispEdges">
+  <title id="title">Clean UML note node</title>
+
+  <rect x="0" y="0" width="1600" height="700" fill="#ffffff"/>
+
+  <!-- Outer note body -->
+  <path d="M 0 0 L 1320 0 L 1600 220 L 1600 700 L 0 700 Z"
+        fill="#ffffff" stroke="#000000" stroke-width="18" stroke-linejoin="miter"/>
+
+  <!-- Folded corner patch -->
+  <path d="M 1320 0 L 1600 0 L 1600 220 Z"
+        fill="#ffffff"/>
+
+  <!-- Thin crease line -->
+  <path d="M 1315 0 L 1600 230"
+        stroke="#000000" stroke-width="2" fill="none" stroke-linecap="square"/>
+</svg>

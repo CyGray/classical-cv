@@ -1,0 +1,16 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="700" viewBox="0 0 1600 700" role="img" aria-labelledby="title">
+  <title id="title">Monochrome UML note node with thick outer border and visible thin crease</title>
+
+  <rect x="0" y="0" width="1600" height="700" fill="#ffffff"/>
+
+  <!-- Thick outer note border -->
+  <rect x="0" y="0" width="1600" height="700"
+        fill="none" stroke="black" stroke-width="16"/>
+
+  <!-- Fold area (keeps the note shape full bleed while showing a folded corner) -->
+  <polygon points="1300,0 1600,0 1600,220" fill="#ffffff"/>
+
+  <!-- Thin visible crease (inset away from edge so it does not get lost in border anti-aliasing) -->
+  <line x1="1294" y1="8" x2="1592" y2="216"
+        stroke="black" stroke-width="1.4" stroke-linecap="round"/>
+</svg>

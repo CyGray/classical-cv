@@ -1,0 +1,191 @@
+digraph HybridCascadeUML {
+  graph [
+    rankdir=TB,
+    bgcolor="white",
+    margin=0,
+    pad=0.10,
+    nodesep=0.30,
+    ranksep=0.62,
+    splines=polyline,
+    outputorder=edgesfirst,
+    newrank=true,
+    fontname="Arial",
+    size="5.35,3.75",
+    ratio=compress
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    height=0.46,
+    margin="0.13,0.08",
+    color="#425563",
+    fillcolor="#F3F6F8",
+    fontcolor="#263238",
+    fontname="Arial",
+    fontsize=9.5,
+    penwidth=1.15
+  ];
+
+  edge [
+    color="#425563",
+    fontcolor="#425563",
+    fontname="Arial",
+    fontsize=8.5,
+    penwidth=1.10,
+    arrowsize=0.66
+  ];
+
+  Start [
+    shape=circle,
+    label="",
+    width=0.16,
+    height=0.16,
+    fixedsize=true,
+    style=filled,
+    color="#263238",
+    fillcolor="#263238",
+    penwidth=1.0
+  ];
+
+  Input [
+    label="Input image",
+    shape=box,
+    style=filled,
+    width=1.00,
+    fillcolor="#FFFFFF"
+  ];
+
+  Preprocess [
+    label="Preprocessing",
+    width=1.15
+  ];
+
+  LBPH [
+    label="LBPH Inference",
+    width=1.27,
+    fillcolor="#E8F0F5"
+  ];
+
+  Gate [
+    label="Gate",
+    shape=diamond,
+    style=filled,
+    width=0.82,
+    height=0.64,
+    fixedsize=true,
+    margin=0,
+    fillcolor="#F7F1E3",
+    color="#6B6253",
+    penwidth=1.25
+  ];
+
+  LBPHResult [
+    label="Use LBPH result",
+    width=1.32,
+    fillcolor="#F0F2F3",
+    color="#65717A"
+  ];
+
+  SFace [
+    label="SFace Inference",
+    width=1.30,
+    fillcolor="#DCECF2",
+    color="#2F6F8A"
+  ];
+
+  TriggerNote [
+    shape=note,
+    style="filled",
+    margin="0.11,0.08",
+    color="#8A8172",
+    fillcolor="#FFFDF7",
+    penwidth=1.0,
+    label=<
+      <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="9"><B>Gate triggers</B></FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">&#8226; Quality issue</FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">&#8226; Mid-band distance</FONT></TD></TR>
+        <TR><TD ALIGN="LEFT"><FONT POINT-SIZE="8.5">&#8226; Weak top-1/top-2 separation</FONT></TD></TR>
+      </TABLE>
+    >
+  ];
+
+  Merge [
+    shape=diamond,
+    style=filled,
+    label="",
+    width=0.25,
+    height=0.25,
+    fixedsize=true,
+    margin=0,
+    fillcolor="#E7ECEF",
+    penwidth=1.15
+  ];
+
+  Final [
+    label="Final Decision",
+    width=1.24,
+    fillcolor="#E4EBEF",
+    penwidth=1.35
+  ];
+
+  End [
+    shape=doublecircle,
+    label="",
+    width=0.20,
+    height=0.20,
+    fixedsize=true,
+    style=filled,
+    color="#263238",
+    fillcolor="#263238",
+    penwidth=1.0
+  ];
+
+  { rank=same; Start; Input; Preprocess; LBPH; Gate; }
+  { rank=same; LBPHResult; SFace; TriggerNote; }
+  { rank=same; Merge; Final; End; }
+
+  Start -> Input [weight=20];
+  Input -> Preprocess [weight=20];
+  Preprocess -> LBPH [weight=20];
+  LBPH -> Gate [weight=20];
+
+  Gate -> LBPHResult [
+    label="[no trigger]",
+    color="#65717A",
+    fontcolor="#59646C",
+    penwidth=1.05
+  ];
+
+  Gate -> SFace [
+    label="[any trigger]",
+    color="#2F6F8A",
+    fontcolor="#2F6F8A",
+    penwidth=1.30
+  ];
+
+  Gate -> TriggerNote [
+    style=dashed,
+    arrowhead=none,
+    color="#8A8172",
+    constraint=false,
+    penwidth=0.9
+  ];
+
+  LBPHResult -> Merge [
+    color="#65717A",
+    penwidth=1.05
+  ];
+
+  SFace -> Merge [
+    color="#2F6F8A",
+    penwidth=1.30
+  ];
+
+  Merge -> Final [weight=16];
+  Final -> End [weight=16];
+
+  LBPHResult -> SFace [style=invis, weight=10];
+  SFace -> TriggerNote [style=invis, weight=10];
+}
