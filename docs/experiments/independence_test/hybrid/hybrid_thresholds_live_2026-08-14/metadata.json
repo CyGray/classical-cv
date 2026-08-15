@@ -1,0 +1,25 @@
+{
+  "schema": "hybrid-threshold-hist-kde-v1",
+  "input_csv": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\results\\independence_test\\reruns\\finalized_2026-08-10\\hybrid_lasalle_processed\\comparisons.csv",
+  "input_csv_sha256": "c39c163c9db84083158e45942926b90fca7dde5d11c78d255674755391b9ee94",
+  "thresholds_json": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\src\\hybrid\\thresholds.json",
+  "thresholds_json_sha256": "1893c75b58d2529a17f492805d96054f49dcd4f03835f2eb2564ce838f6d4fce",
+  "sface_source": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\src\\sface\\recognizer.py",
+  "sface_source_sha256": "32f9a24745f35140ac9f69a884a817ccbf844a17296e82ccba1a036372f72924",
+  "sample_counts": {
+    "lbph": 756,
+    "sface_l2": 756
+  },
+  "thresholds": {
+    "lbph_tau_accept": 67.03325520645528,
+    "lbph_tau_reject": 140.13,
+    "sface_l2_genuine": 1.0313
+  },
+  "scope": "Frozen LFW-derived thresholds evaluated on LSDB pre-cropped hybrid-cascade comparisons; not recalibration.",
+  "outputs": {
+    "lbph_png": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_live_2026-08-14\\hybrid_cascade_lbph_threshold_hist_kde.png",
+    "lbph_svg": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_live_2026-08-14\\hybrid_cascade_lbph_threshold_hist_kde.svg",
+    "sface_png": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_live_2026-08-14\\hybrid_cascade_sface_threshold_hist_kde.png",
+    "sface_svg": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_live_2026-08-14\\hybrid_cascade_sface_threshold_hist_kde.svg"
+  }
+}

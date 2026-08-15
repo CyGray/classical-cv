@@ -1,0 +1,11 @@
+candidate,scope,both_correct,lbph_correct_candidate_wrong,lbph_wrong_candidate_correct,both_wrong,candidate_only_recoveries,lbph_only_losses,net_difference,total
+ltp,strict_all41,58,96,33,961,33,96,-63,1148
+ltp,matcher_only,58,96,33,902,33,96,-63,1089
+tan_triggs_ltp,strict_all41,135,19,54,940,54,19,35,1148
+tan_triggs_ltp,matcher_only,135,19,54,881,54,19,35,1089
+lpq_w7,strict_all41,103,51,87,907,87,51,36,1148
+lpq_w7,matcher_only,103,51,87,848,87,51,36,1089
+lpq_multiscale_w3_5_7,strict_all41,104,50,86,908,86,50,36,1148
+lpq_multiscale_w3_5_7,matcher_only,104,50,86,849,86,50,36,1089
+hog,strict_all41,87,67,41,953,41,67,-26,1148
+hog,matcher_only,87,67,41,894,41,67,-26,1089

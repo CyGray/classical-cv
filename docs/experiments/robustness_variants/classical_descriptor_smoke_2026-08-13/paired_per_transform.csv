@@ -1,0 +1,206 @@
+candidate,transform,category,severity,both_correct,lbph_correct_candidate_wrong,lbph_wrong_candidate_correct,both_wrong,candidate_only_recoveries,lbph_only_losses,net_difference,total
+ltp,aspect_16_9,Aspect ratio change,light,1,5,0,22,0,5,-5,28
+ltp,aspect_6_3,Aspect ratio change,medium,1,3,0,24,0,3,-3,28
+ltp,autolevel,Auto-levels,light,2,4,2,20,2,4,-2,28
+ltp,blur_3,Blur,light,1,4,0,23,0,4,-4,28
+ltp,blur_5,Blur,medium,1,2,0,25,0,2,-2,28
+ltp,blur_7,Blur,heavy,1,2,0,25,0,2,-2,28
+ltp,brightness_p10,Brightness change,light,3,3,1,21,1,3,-2,28
+ltp,brightness_p20,Brightness change,medium,4,2,1,21,1,2,-1,28
+ltp,brightness_p25,Brightness change,heavy,5,1,1,21,1,1,0,28
+ltp,color_8bit,Colour reduction,medium,0,3,1,24,1,3,-2,28
+ltp,crop_60,Crop,heavy,0,2,1,25,1,2,-1,28
+ltp,crop_70,Crop,medium,0,2,1,25,1,2,-1,28
+ltp,crop_90,Crop,light,2,5,0,21,0,5,-5,28
+ltp,flip_lr,Flip,light,0,2,1,25,1,2,-1,28
+ltp,gaussnoise_12,Gaussian noise,heavy,0,4,1,23,1,4,-3,28
+ltp,gaussnoise_4,Gaussian noise,light,4,1,2,21,2,1,1,28
+ltp,gaussnoise_8,Gaussian noise,medium,2,2,1,23,1,2,-1,28
+ltp,histeq,Histogram equalization,light,3,3,2,20,2,3,-1,28
+ltp,jpeg_q30,JPEG compression,heavy,1,2,1,24,1,2,-1,28
+ltp,jpeg_q60,JPEG compression,medium,1,4,1,22,1,4,-3,28
+ltp,jpeg_q80,JPEG compression,light,2,4,0,22,0,4,-4,28
+ltp,monochrome,Colour to monochrome,light,3,3,0,22,0,3,-3,28
+ltp,persp_10,Perspective,heavy,0,2,1,25,1,2,-1,28
+ltp,persp_4,Perspective,light,2,3,0,23,0,3,-3,28
+ltp,persp_6,Perspective,medium,1,3,1,23,1,3,-2,28
+ltp,rgb565,Colour reduction,light,2,3,2,21,2,3,-1,28
+ltp,rot_10,Simple rotation,light,0,1,3,24,3,1,2,28
+ltp,rot_180,Rotation,medium,0,1,1,26,1,1,0,28
+ltp,rot_25,Simple rotation,medium,0,0,1,27,1,0,1,28
+ltp,rot_270,Rotation,heavy,0,0,1,27,1,0,1,28
+ltp,rot_45,Simple rotation,heavy,1,1,0,26,0,1,-1,28
+ltp,rot_90,Rotation,light,0,0,1,27,1,0,1,28
+ltp,scale_50,Scaling,heavy,0,0,1,27,1,0,1,28
+ltp,scale_70,Scaling,medium,0,4,1,23,1,4,-3,28
+ltp,scale_90,Scaling,light,2,4,0,22,0,4,-4,28
+ltp,skew_10,Skew,heavy,3,3,0,22,0,3,-3,28
+ltp,skew_4,Skew,light,3,3,0,22,0,3,-3,28
+ltp,skew_6,Skew,medium,3,3,0,22,0,3,-3,28
+ltp,trans_10,Translation,light,2,1,2,23,2,1,1,28
+ltp,trans_20,Translation,medium,1,0,0,27,0,0,0,28
+ltp,trans_30,Translation,heavy,1,1,1,25,1,1,0,28
+tan_triggs_ltp,aspect_16_9,Aspect ratio change,light,6,0,1,21,1,0,1,28
+tan_triggs_ltp,aspect_6_3,Aspect ratio change,medium,4,0,3,21,3,0,3,28
+tan_triggs_ltp,autolevel,Auto-levels,light,5,1,1,21,1,1,0,28
+tan_triggs_ltp,blur_3,Blur,light,4,1,2,21,2,1,1,28
+tan_triggs_ltp,blur_5,Blur,medium,3,0,3,22,3,0,3,28
+tan_triggs_ltp,blur_7,Blur,heavy,3,0,2,23,2,0,2,28
+tan_triggs_ltp,brightness_p10,Brightness change,light,6,0,1,21,1,0,1,28
+tan_triggs_ltp,brightness_p20,Brightness change,medium,6,0,1,21,1,0,1,28
+tan_triggs_ltp,brightness_p25,Brightness change,heavy,6,0,1,21,1,0,1,28
+tan_triggs_ltp,color_8bit,Colour reduction,medium,3,0,0,25,0,0,0,28
+tan_triggs_ltp,crop_60,Crop,heavy,2,0,1,25,1,0,1,28
+tan_triggs_ltp,crop_70,Crop,medium,2,0,2,24,2,0,2,28
+tan_triggs_ltp,crop_90,Crop,light,5,2,0,21,0,2,-2,28
+tan_triggs_ltp,flip_lr,Flip,light,2,0,1,25,1,0,1,28
+tan_triggs_ltp,gaussnoise_12,Gaussian noise,heavy,2,2,0,24,0,2,-2,28
+tan_triggs_ltp,gaussnoise_4,Gaussian noise,light,5,0,1,22,1,0,1,28
+tan_triggs_ltp,gaussnoise_8,Gaussian noise,medium,4,0,0,24,0,0,0,28
+tan_triggs_ltp,histeq,Histogram equalization,light,5,1,0,22,0,1,-1,28
+tan_triggs_ltp,jpeg_q30,JPEG compression,heavy,2,1,3,22,3,1,2,28
+tan_triggs_ltp,jpeg_q60,JPEG compression,medium,5,0,1,22,1,0,1,28
+tan_triggs_ltp,jpeg_q80,JPEG compression,light,6,0,1,21,1,0,1,28
+tan_triggs_ltp,monochrome,Colour to monochrome,light,6,0,1,21,1,0,1,28
+tan_triggs_ltp,persp_10,Perspective,heavy,1,1,3,23,3,1,2,28
+tan_triggs_ltp,persp_4,Perspective,light,4,1,1,22,1,1,0,28
+tan_triggs_ltp,persp_6,Perspective,medium,4,0,1,23,1,0,1,28
+tan_triggs_ltp,rgb565,Colour reduction,light,4,1,1,22,1,1,0,28
+tan_triggs_ltp,rot_10,Simple rotation,light,1,0,3,24,3,0,3,28
+tan_triggs_ltp,rot_180,Rotation,medium,0,1,2,25,2,1,1,28
+tan_triggs_ltp,rot_25,Simple rotation,medium,0,0,2,26,2,0,2,28
+tan_triggs_ltp,rot_270,Rotation,heavy,0,0,2,26,2,0,2,28
+tan_triggs_ltp,rot_45,Simple rotation,heavy,1,1,0,26,0,1,-1,28
+tan_triggs_ltp,rot_90,Rotation,light,0,0,1,27,1,0,1,28
+tan_triggs_ltp,scale_50,Scaling,heavy,0,0,0,28,0,0,0,28
+tan_triggs_ltp,scale_70,Scaling,medium,2,2,5,19,5,2,3,28
+tan_triggs_ltp,scale_90,Scaling,light,5,1,1,21,1,1,0,28
+tan_triggs_ltp,skew_10,Skew,heavy,6,0,1,21,1,0,1,28
+tan_triggs_ltp,skew_4,Skew,light,6,0,1,21,1,0,1,28
+tan_triggs_ltp,skew_6,Skew,medium,6,0,1,21,1,0,1,28
+tan_triggs_ltp,trans_10,Translation,light,2,1,1,24,1,1,0,28
+tan_triggs_ltp,trans_20,Translation,medium,0,1,2,25,2,1,1,28
+tan_triggs_ltp,trans_30,Translation,heavy,1,1,0,26,0,1,-1,28
+lpq_w7,aspect_16_9,Aspect ratio change,light,4,2,2,20,2,2,0,28
+lpq_w7,aspect_6_3,Aspect ratio change,medium,3,1,3,21,3,1,2,28
+lpq_w7,autolevel,Auto-levels,light,4,2,2,20,2,2,0,28
+lpq_w7,blur_3,Blur,light,4,1,2,21,2,1,1,28
+lpq_w7,blur_5,Blur,medium,3,0,3,22,3,0,3,28
+lpq_w7,blur_7,Blur,heavy,3,0,4,21,4,0,4,28
+lpq_w7,brightness_p10,Brightness change,light,4,2,2,20,2,2,0,28
+lpq_w7,brightness_p20,Brightness change,medium,4,2,2,20,2,2,0,28
+lpq_w7,brightness_p25,Brightness change,heavy,4,2,2,20,2,2,0,28
+lpq_w7,color_8bit,Colour reduction,medium,2,1,2,23,2,1,1,28
+lpq_w7,crop_60,Crop,heavy,1,1,2,24,2,1,1,28
+lpq_w7,crop_70,Crop,medium,2,0,2,24,2,0,2,28
+lpq_w7,crop_90,Crop,light,6,1,0,21,0,1,-1,28
+lpq_w7,flip_lr,Flip,light,1,1,2,24,2,1,1,28
+lpq_w7,gaussnoise_12,Gaussian noise,heavy,3,1,1,23,1,1,0,28
+lpq_w7,gaussnoise_4,Gaussian noise,light,3,2,3,20,3,2,1,28
+lpq_w7,gaussnoise_8,Gaussian noise,medium,3,1,2,22,2,1,1,28
+lpq_w7,histeq,Histogram equalization,light,4,2,1,21,1,2,-1,28
+lpq_w7,jpeg_q30,JPEG compression,heavy,2,1,4,21,4,1,3,28
+lpq_w7,jpeg_q60,JPEG compression,medium,3,2,3,20,3,2,1,28
+lpq_w7,jpeg_q80,JPEG compression,light,4,2,2,20,2,2,0,28
+lpq_w7,monochrome,Colour to monochrome,light,4,2,1,21,1,2,-1,28
+lpq_w7,persp_10,Perspective,heavy,1,1,5,21,5,1,4,28
+lpq_w7,persp_4,Perspective,light,3,2,3,20,3,2,1,28
+lpq_w7,persp_6,Perspective,medium,3,1,3,21,3,1,2,28
+lpq_w7,rgb565,Colour reduction,light,3,2,3,20,3,2,1,28
+lpq_w7,rot_10,Simple rotation,light,1,0,6,21,6,0,6,28
+lpq_w7,rot_180,Rotation,medium,0,1,0,27,0,1,-1,28
+lpq_w7,rot_25,Simple rotation,medium,0,0,4,24,4,0,4,28
+lpq_w7,rot_270,Rotation,heavy,0,0,0,28,0,0,0,28
+lpq_w7,rot_45,Simple rotation,heavy,0,2,0,26,0,2,-2,28
+lpq_w7,rot_90,Rotation,light,0,0,0,28,0,0,0,28
+lpq_w7,scale_50,Scaling,heavy,0,0,1,27,1,0,1,28
+lpq_w7,scale_70,Scaling,medium,3,1,3,21,3,1,2,28
+lpq_w7,scale_90,Scaling,light,4,2,2,20,2,2,0,28
+lpq_w7,skew_10,Skew,heavy,5,1,3,19,3,1,2,28
+lpq_w7,skew_4,Skew,light,4,2,2,20,2,2,0,28
+lpq_w7,skew_6,Skew,medium,4,2,3,19,3,2,1,28
+lpq_w7,trans_10,Translation,light,0,3,1,24,1,3,-2,28
+lpq_w7,trans_20,Translation,medium,1,0,1,26,1,0,1,28
+lpq_w7,trans_30,Translation,heavy,0,2,0,26,0,2,-2,28
+lpq_multiscale_w3_5_7,aspect_16_9,Aspect ratio change,light,5,1,2,20,2,1,1,28
+lpq_multiscale_w3_5_7,aspect_6_3,Aspect ratio change,medium,3,1,3,21,3,1,2,28
+lpq_multiscale_w3_5_7,autolevel,Auto-levels,light,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,blur_3,Blur,light,4,1,2,21,2,1,1,28
+lpq_multiscale_w3_5_7,blur_5,Blur,medium,3,0,4,21,4,0,4,28
+lpq_multiscale_w3_5_7,blur_7,Blur,heavy,3,0,3,22,3,0,3,28
+lpq_multiscale_w3_5_7,brightness_p10,Brightness change,light,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,brightness_p20,Brightness change,medium,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,brightness_p25,Brightness change,heavy,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,color_8bit,Colour reduction,medium,2,1,3,22,3,1,2,28
+lpq_multiscale_w3_5_7,crop_60,Crop,heavy,1,1,3,23,3,1,2,28
+lpq_multiscale_w3_5_7,crop_70,Crop,medium,2,0,2,24,2,0,2,28
+lpq_multiscale_w3_5_7,crop_90,Crop,light,6,1,0,21,0,1,-1,28
+lpq_multiscale_w3_5_7,flip_lr,Flip,light,1,1,1,25,1,1,0,28
+lpq_multiscale_w3_5_7,gaussnoise_12,Gaussian noise,heavy,3,1,1,23,1,1,0,28
+lpq_multiscale_w3_5_7,gaussnoise_4,Gaussian noise,light,4,1,3,20,3,1,2,28
+lpq_multiscale_w3_5_7,gaussnoise_8,Gaussian noise,medium,3,1,1,23,1,1,0,28
+lpq_multiscale_w3_5_7,histeq,Histogram equalization,light,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,jpeg_q30,JPEG compression,heavy,2,1,5,20,5,1,4,28
+lpq_multiscale_w3_5_7,jpeg_q60,JPEG compression,medium,3,2,3,20,3,2,1,28
+lpq_multiscale_w3_5_7,jpeg_q80,JPEG compression,light,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,monochrome,Colour to monochrome,light,4,2,1,21,1,2,-1,28
+lpq_multiscale_w3_5_7,persp_10,Perspective,heavy,1,1,6,20,6,1,5,28
+lpq_multiscale_w3_5_7,persp_4,Perspective,light,3,2,3,20,3,2,1,28
+lpq_multiscale_w3_5_7,persp_6,Perspective,medium,3,1,3,21,3,1,2,28
+lpq_multiscale_w3_5_7,rgb565,Colour reduction,light,3,2,3,20,3,2,1,28
+lpq_multiscale_w3_5_7,rot_10,Simple rotation,light,1,0,6,21,6,0,6,28
+lpq_multiscale_w3_5_7,rot_180,Rotation,medium,0,1,0,27,0,1,-1,28
+lpq_multiscale_w3_5_7,rot_25,Simple rotation,medium,0,0,5,23,5,0,5,28
+lpq_multiscale_w3_5_7,rot_270,Rotation,heavy,0,0,0,28,0,0,0,28
+lpq_multiscale_w3_5_7,rot_45,Simple rotation,heavy,1,1,0,26,0,1,-1,28
+lpq_multiscale_w3_5_7,rot_90,Rotation,light,0,0,0,28,0,0,0,28
+lpq_multiscale_w3_5_7,scale_50,Scaling,heavy,0,0,0,28,0,0,0,28
+lpq_multiscale_w3_5_7,scale_70,Scaling,medium,2,2,2,22,2,2,0,28
+lpq_multiscale_w3_5_7,scale_90,Scaling,light,4,2,1,21,1,2,-1,28
+lpq_multiscale_w3_5_7,skew_10,Skew,heavy,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,skew_4,Skew,light,4,2,2,20,2,2,0,28
+lpq_multiscale_w3_5_7,skew_6,Skew,medium,4,2,3,19,3,2,1,28
+lpq_multiscale_w3_5_7,trans_10,Translation,light,0,3,0,25,0,3,-3,28
+lpq_multiscale_w3_5_7,trans_20,Translation,medium,1,0,0,27,0,0,0,28
+lpq_multiscale_w3_5_7,trans_30,Translation,heavy,0,2,1,25,1,2,-1,28
+hog,aspect_16_9,Aspect ratio change,light,4,2,0,22,0,2,-2,28
+hog,aspect_6_3,Aspect ratio change,medium,2,2,1,23,1,2,-1,28
+hog,autolevel,Auto-levels,light,4,2,1,21,1,2,-1,28
+hog,blur_3,Blur,light,3,2,0,23,0,2,-2,28
+hog,blur_5,Blur,medium,3,0,0,25,0,0,0,28
+hog,blur_7,Blur,heavy,3,0,1,24,1,0,1,28
+hog,brightness_p10,Brightness change,light,4,2,1,21,1,2,-1,28
+hog,brightness_p20,Brightness change,medium,4,2,1,21,1,2,-1,28
+hog,brightness_p25,Brightness change,heavy,4,2,1,21,1,2,-1,28
+hog,color_8bit,Colour reduction,medium,1,2,0,25,0,2,-2,28
+hog,crop_60,Crop,heavy,1,1,2,24,2,1,1,28
+hog,crop_70,Crop,medium,2,0,3,23,3,0,3,28
+hog,crop_90,Crop,light,5,2,0,21,0,2,-2,28
+hog,flip_lr,Flip,light,1,1,1,25,1,1,0,28
+hog,gaussnoise_12,Gaussian noise,heavy,1,3,0,24,0,3,-3,28
+hog,gaussnoise_4,Gaussian noise,light,2,3,1,22,1,3,-2,28
+hog,gaussnoise_8,Gaussian noise,medium,2,2,1,23,1,2,-1,28
+hog,histeq,Histogram equalization,light,2,4,1,21,1,4,-3,28
+hog,jpeg_q30,JPEG compression,heavy,1,2,4,21,4,2,2,28
+hog,jpeg_q60,JPEG compression,medium,4,1,2,21,2,1,1,28
+hog,jpeg_q80,JPEG compression,light,5,1,1,21,1,1,0,28
+hog,monochrome,Colour to monochrome,light,4,2,0,22,0,2,-2,28
+hog,persp_10,Perspective,heavy,0,2,2,24,2,2,0,28
+hog,persp_4,Perspective,light,3,2,1,22,1,2,-1,28
+hog,persp_6,Perspective,medium,2,2,1,23,1,2,-1,28
+hog,rgb565,Colour reduction,light,2,3,2,21,2,3,-1,28
+hog,rot_10,Simple rotation,light,1,0,4,23,4,0,4,28
+hog,rot_180,Rotation,medium,0,1,1,26,1,1,0,28
+hog,rot_25,Simple rotation,medium,0,0,0,28,0,0,0,28
+hog,rot_270,Rotation,heavy,0,0,1,27,1,0,1,28
+hog,rot_45,Simple rotation,heavy,0,2,0,26,0,2,-2,28
+hog,rot_90,Rotation,light,0,0,0,28,0,0,0,28
+hog,scale_50,Scaling,heavy,0,0,1,27,1,0,1,28
+hog,scale_70,Scaling,medium,1,3,2,22,2,3,-1,28
+hog,scale_90,Scaling,light,1,5,0,22,0,5,-5,28
+hog,skew_10,Skew,heavy,5,1,1,21,1,1,0,28
+hog,skew_4,Skew,light,4,2,1,21,1,2,-1,28
+hog,skew_6,Skew,medium,6,0,1,21,1,0,1,28
+hog,trans_10,Translation,light,0,3,0,25,0,3,-3,28
+hog,trans_20,Translation,medium,0,1,1,26,1,1,0,28
+hog,trans_30,Translation,heavy,0,2,0,26,0,2,-2,28

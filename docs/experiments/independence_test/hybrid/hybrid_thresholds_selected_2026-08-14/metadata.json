@@ -1,0 +1,28 @@
+{
+  "schema": "hybrid-threshold-hist-kde-v1",
+  "input_csv": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\lbph_descriptor_rollout_2026-08-14\\lsdb_independence\\selected_hybrid\\comparisons.csv",
+  "input_csv_sha256": "977df6c3fe33c083379fe89712aabf810355d27961ac9d83606274b0353106c6",
+  "thresholds_json": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\outputs\\provenance_reruns\\lbph_descriptor_rollout_2026-08-14\\lfw_gate_calibration\\candidate_thresholds_stage2.json",
+  "thresholds_json_sha256": "af215cb5e2d5c86cc1d899786b4314066dd1a61f0ec1271ace61f4d8c21de953",
+  "sface_source": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\src\\sface\\recognizer.py",
+  "sface_source_sha256": "32f9a24745f35140ac9f69a884a817ccbf844a17296e82ccba1a036372f72924",
+  "lbph_descriptor_id": "r3_n8_g6x6",
+  "candidate_only": true,
+  "threshold_status": "stage_2_candidate_not_deployable",
+  "sample_counts": {
+    "lbph": 756,
+    "sface_l2": 756
+  },
+  "thresholds": {
+    "lbph_tau_accept": 52.42347265823041,
+    "lbph_tau_reject": 84.94195915359919,
+    "sface_l2_genuine": 1.0313
+  },
+  "scope": "Candidate-only LBPH r3_n8_g6x6 gate thresholds evaluated on LSDB pre-cropped hybrid-cascade comparisons; not recalibration.",
+  "outputs": {
+    "lbph_png": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_selected_2026-08-14\\hybrid_cascade_lbph_threshold_hist_kde.png",
+    "lbph_svg": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_selected_2026-08-14\\hybrid_cascade_lbph_threshold_hist_kde.svg",
+    "sface_png": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_selected_2026-08-14\\hybrid_cascade_sface_threshold_hist_kde.png",
+    "sface_svg": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\docs\\experiments\\independence_test\\hybrid_thresholds_selected_2026-08-14\\hybrid_cascade_sface_threshold_hist_kde.svg"
+  }
+}

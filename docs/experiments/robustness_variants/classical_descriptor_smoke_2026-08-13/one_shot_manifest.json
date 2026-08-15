@@ -1,0 +1,187 @@
+{
+  "schema": "lsface-lsdb-one-shot-smoke-v1",
+  "status": "exploratory_diagnostic_non_canonical",
+  "source_manifest": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\splits\\lasalle_db1_ident_split_seed42.json",
+  "source_manifest_sha256": "731bcf52fec2046689442f7edb26e6b28d1b99d1fbee053402eb9de3715c47dc",
+  "source_manifest_dataset_root_stale": "C:\\Users\\acer\\Downloads\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lasalle_db1_processed",
+  "source_manifest_triples_sha256": "b43ef2d0bbb8c72266b33041ca22c19a30de2897cb71bbee84f204a86b6a3f72",
+  "rebased_dataset_root": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lasalle_db1_processed",
+  "derivation": "sorted identities; existing singular gallery field + existing singular probe field (the first already-used disjoint probe)",
+  "selection_sha256": "b58c4ec07070745e1a7c6e57036cd33722eb6576d78b3bbcbd5cd01c61e794b5",
+  "selected_files_binding_sha256": "dda5f11a3b74fb4607d75736ff957074ee7639939301bf164886929b2059ae03",
+  "counts": {
+    "identities": 28,
+    "gallery_images": 28,
+    "probe_images": 28
+  },
+  "identities": {
+    "Andrew_Eroyla": {
+      "gallery": "Andrew_Eroyla/light_right.jpg",
+      "gallery_sha256": "33cc3605fab3d85e2d1b772fa8b4340c8335cf0135489240536eeec4ec04f1bf",
+      "probe": "Andrew_Eroyla/dark_down.jpg",
+      "probe_sha256": "1c7fc8f71879626fcdf9926143b73100e6de9ac7b4cd5b03ad37a22eb39f13c1"
+    },
+    "Anthony_Charles_Saltat": {
+      "gallery": "Anthony_Charles_Saltat/dark_front.jpg",
+      "gallery_sha256": "014b036f1daa10716913386afa1ca561d0cbea4796f5e83b25e1e615c0efc5de",
+      "probe": "Anthony_Charles_Saltat/dark_down.jpg",
+      "probe_sha256": "f2f1e92866cdf4a1c3d0d24a5c936b0386377c0b36fa9903297359a606b6be0b"
+    },
+    "Anthony_Gallego": {
+      "gallery": "Anthony_Gallego/dark_down.jpg",
+      "gallery_sha256": "87f22c4592a38b9f6f01c656889d83a276b466b1dea3496d5f04b2c7704b93ef",
+      "probe": "Anthony_Gallego/dark_front.jpg",
+      "probe_sha256": "1cda79b501f8beabe6d61ad5957280754d6149117a841c684b2656fd0250cc86"
+    },
+    "Axel_Josh_Lorayna": {
+      "gallery": "Axel_Josh_Lorayna/light_up.jpg",
+      "gallery_sha256": "ecff62a6eb9828294bdb87ca9dce3154b03c1d57bb38f4362c33abb3d4919ee7",
+      "probe": "Axel_Josh_Lorayna/dark_down.jpg",
+      "probe_sha256": "ea874c3ae8855cad69538535b7bd7ed04d1d29ef75347bbd7e061a5d88e04298"
+    },
+    "Daniel_Ramos": {
+      "gallery": "Daniel_Ramos/dark_right.jpg",
+      "gallery_sha256": "8da0298222c7ca8d62c3647538a01d0a81fa13a6f325f42944bc5b2c750beff6",
+      "probe": "Daniel_Ramos/dark_down.jpg",
+      "probe_sha256": "67ecb3a811f50007a931604d897c3c1046c5d56c4c2b3fab1c1fd99b99aafa35"
+    },
+    "Diofel_Gwen_Haresco": {
+      "gallery": "Diofel_Gwen_Haresco/dark_name.jpg",
+      "gallery_sha256": "67c4b8bff3ea24e9df5428c53cd962ea5e47183706d727a743b8c5ddca1c97a6",
+      "probe": "Diofel_Gwen_Haresco/dark_down.jpg",
+      "probe_sha256": "17c935a9e1e6ceace8e42b819b9d07fa167ee1c4f20f924d23cc03d835d2576a"
+    },
+    "Francis_Cromwell_Tan": {
+      "gallery": "Francis_Cromwell_Tan/dark_name.jpg",
+      "gallery_sha256": "f195a85943d1a2b53380d56646bd1650f65f67ba99dca91cc93daa91a0614466",
+      "probe": "Francis_Cromwell_Tan/dark_down.jpg",
+      "probe_sha256": "caddbd8391df9037b72528f645d68eb869c6ad027bf167fc2f57511b9ca24c6d"
+    },
+    "Francis_Miles_Ang": {
+      "gallery": "Francis_Miles_Ang/dark_left.jpg",
+      "gallery_sha256": "fe915977b1d0fbeda82376bd4bd21ba808730fe5316b6ba4a835bd845edbf245",
+      "probe": "Francis_Miles_Ang/dark_down.jpg",
+      "probe_sha256": "860857a208f505ebf8effb4b5e803278b3c3161ae70e9480b28ad04866f34ba7"
+    },
+    "Jim_Jonathan_Decripito": {
+      "gallery": "Jim_Jonathan_Decripito/light_up.jpg",
+      "gallery_sha256": "cf2327bb3dbe0f1775da4f7f3149f3df7da00505f8ad39c75f8ee240870b5895",
+      "probe": "Jim_Jonathan_Decripito/dark_down.jpg",
+      "probe_sha256": "8e8d31f03a22f1ebdd49df0ccf80af072e44e88bed0d93ea65832e399d6114e6"
+    },
+    "John_Andrei_Gayona": {
+      "gallery": "John_Andrei_Gayona/dark_front.jpg",
+      "gallery_sha256": "512623bf989d821c80f55db35a382645e698b7dbb0a163d69150b3b8e4ff8567",
+      "probe": "John_Andrei_Gayona/dark_down.jpg",
+      "probe_sha256": "8a0befa5cabb1823824d530481df658b74853c0fd66b2e6ebea86b7f7b78c311"
+    },
+    "John_Roland_Octavio": {
+      "gallery": "John_Roland_Octavio/light_right.jpg",
+      "gallery_sha256": "b8a5615e63972e64be196a3b8fc77e739c4f2c01e07cc3a97d1a9250de4b0ae2",
+      "probe": "John_Roland_Octavio/dark_down.jpg",
+      "probe_sha256": "bd8d4a4d8a81a92e8e96c1e555f337c2890a63b0df6e2d91a01ffd8e544373a0"
+    },
+    "Joseph_Andrew_Ong": {
+      "gallery": "Joseph_Andrew_Ong/light_up.jpg",
+      "gallery_sha256": "064b6b61d7c03ec804434fbf260edaad768d637ef15b53174b899191af339712",
+      "probe": "Joseph_Andrew_Ong/dark_down.jpg",
+      "probe_sha256": "2651da3ca4f3bacd4c2b456aebdff001f43620ae337d947611cdf84fef02e9a3"
+    },
+    "Josh_Dane_Labistre": {
+      "gallery": "Josh_Dane_Labistre/light_left.jpg",
+      "gallery_sha256": "155469ff89b89a5c4d84255fe807025cd740bf052f6c2a5bdf9b292d5da9646b",
+      "probe": "Josh_Dane_Labistre/dark_down.jpg",
+      "probe_sha256": "4a15d1c61379b5bfbc53d4222dac6eae438a252ded1f00b2c5d21c6de3de6c5b"
+    },
+    "Jul_Leo_Javellana": {
+      "gallery": "Jul_Leo_Javellana/dark_front.jpg",
+      "gallery_sha256": "c15bd5782e36ab85e4110f5924ef0b9597416718ea1c6f41a7caa7ed64620324",
+      "probe": "Jul_Leo_Javellana/dark_down.jpg",
+      "probe_sha256": "3bb1bc1a2043e60591452f69d17c191ce3968364099a85b2631c7b3699bb9bc7"
+    },
+    "Julian_Diego_Mapa": {
+      "gallery": "Julian_Diego_Mapa/light_name.jpg",
+      "gallery_sha256": "c281c10f62fc258e75c3aa3fb0c1dcb2955b5ceaccd4cc7907adf793009aac72",
+      "probe": "Julian_Diego_Mapa/dark_down.jpg",
+      "probe_sha256": "233a7342746c7891b72b8e67ddf56c75653d8a770e0373704c9007d5a8082c18"
+    },
+    "Kenlie_John_Maghari": {
+      "gallery": "Kenlie_John_Maghari/light_down.jpg",
+      "gallery_sha256": "b93d3b8d5d76f210a4eae20acd5abd4f507b4c6bdd1d248d3138ffe430303a24",
+      "probe": "Kenlie_John_Maghari/dark_down.jpg",
+      "probe_sha256": "f730df511b40aec2826e8209f8713b81e601790d1915428b658a86d46ae2de95"
+    },
+    "Kim_Ivan_Arigorat": {
+      "gallery": "Kim_Ivan_Arigorat/dark_down.jpg",
+      "gallery_sha256": "b8e13b56a208425f71051b7c6993c59ea0b2d672ea0859b471b71732574673ec",
+      "probe": "Kim_Ivan_Arigorat/dark_front.jpg",
+      "probe_sha256": "eb2fd859c25950e8597960123064fd157d6e97f9385dbad97d1528ba9e41dc44"
+    },
+    "Klein_Rhee_Sioson": {
+      "gallery": "Klein_Rhee_Sioson/dark_down.jpg",
+      "gallery_sha256": "8ff16ff6486deee10e5da53477ade50fd86270a7ef5f62dedf2e19da53cf3044",
+      "probe": "Klein_Rhee_Sioson/dark_front.jpg",
+      "probe_sha256": "d74d5679bd4e50ac745b37ef7d3a20050f1fa94dd56e3b87aa013e93a4234b86"
+    },
+    "Kyle_Yuan_Uy": {
+      "gallery": "Kyle_Yuan_Uy/dark_front.jpg",
+      "gallery_sha256": "4ddbe787c15f799c33ee6dedd2e35c04d69bed233bf431cabb96abfa86aea3af",
+      "probe": "Kyle_Yuan_Uy/dark_down.jpg",
+      "probe_sha256": "98e02dc0cb44cf54dc62aff02e68a8fd5af43f3ac17270e2060eb6aa53f59a42"
+    },
+    "Lorenz_Ciocon": {
+      "gallery": "Lorenz_Ciocon/dark_name.jpg",
+      "gallery_sha256": "dbc26755450ef660ca1bc188938c390665be89fe4c897e592960cc146a03e4c3",
+      "probe": "Lorenz_Ciocon/dark_down.jpg",
+      "probe_sha256": "92f7ee3c389219b112a6a9ed99107aad126bad43561696706318839c79479cf2"
+    },
+    "Mary_Jade_Jakosalem": {
+      "gallery": "Mary_Jade_Jakosalem/dark_name.jpg",
+      "gallery_sha256": "92b1c92c0f55825bddf66cdc807370ab679cfc48dcca1c7c93075c0d19c05ba7",
+      "probe": "Mary_Jade_Jakosalem/dark_down.jpg",
+      "probe_sha256": "f3196e70ea247fa2ffd475585739c995974e58f8b4aa0517559c1c50f1c79eaa"
+    },
+    "Michael_Andrei_Jugado": {
+      "gallery": "Michael_Andrei_Jugado/light_left.jpg",
+      "gallery_sha256": "89ef1c9ded2d49b557543828771c47707911bf7105d375ee50139d4ea4f943e0",
+      "probe": "Michael_Andrei_Jugado/dark_down.jpg",
+      "probe_sha256": "ccc6244015d9ab550dd913c1446b49dcef817f3b42a315e1dcde989dcecdf90c"
+    },
+    "Norbert_Audines": {
+      "gallery": "Norbert_Audines/light_name.jpg",
+      "gallery_sha256": "a449f1d1252fab3bebd09454c5eb5d31ce4a88dc4794999bf157e74a68a132e0",
+      "probe": "Norbert_Audines/dark_down.jpg",
+      "probe_sha256": "1cfc6375b757d1456c37b8eafbe0e4db0980ed6aa5f633d061ee514441afb49c"
+    },
+    "Raean_Tamayo": {
+      "gallery": "Raean_Tamayo/dark_down.jpg",
+      "gallery_sha256": "2911830d9b807558a4db10173388a87cc683ee9f5526037ca1b0338b8c57117a",
+      "probe": "Raean_Tamayo/dark_front.jpg",
+      "probe_sha256": "74f51862b05921f2cf2cd9a631c973bd686a1cc1cef95e11bdb325313cd213e6"
+    },
+    "Thea_Ganza": {
+      "gallery": "Thea_Ganza/light_left.jpg",
+      "gallery_sha256": "875b0582101ebfb71f61a3c4ddda65a5cbfb12f23827bfe75907843d4fb25474",
+      "probe": "Thea_Ganza/dark_down.jpg",
+      "probe_sha256": "6fd171c813cbae2157321366ab50788fa979f2047c41b9fd4e16200a562f7e3a"
+    },
+    "Trixia_Marie_Garcio": {
+      "gallery": "Trixia_Marie_Garcio/dark_name.jpg",
+      "gallery_sha256": "4d7ddba235fc85f70a73d5984d908b5c258849dade883c51730e322c34eeb04b",
+      "probe": "Trixia_Marie_Garcio/dark_down.jpg",
+      "probe_sha256": "516393203f6cc50a00f779619f0fb14723929cce248034bdfdb9726f39b37ad6"
+    },
+    "Wilbert_Mijares": {
+      "gallery": "Wilbert_Mijares/light_up.jpg",
+      "gallery_sha256": "a849f79c416e76968c3ade680cf160b2073f80d6f41ae67aefa7df6a17d12a12",
+      "probe": "Wilbert_Mijares/dark_down.jpg",
+      "probe_sha256": "5d4d364e11c351fa37398c1715f4b61f5e87cb6d80189d596ffafc1dcd72dbef"
+    },
+    "Yuan_Paulo_Sebastian_Belen": {
+      "gallery": "Yuan_Paulo_Sebastian_Belen/light_right.jpg",
+      "gallery_sha256": "381b445440a59b03e01d19bb350a0654382e0ea98a5b3376b8550fd397ad737a",
+      "probe": "Yuan_Paulo_Sebastian_Belen/dark_down.jpg",
+      "probe_sha256": "07d55b1740b8f98a3702e4ee42e56dd2f8a663d363edae59e976040303d323b2"
+    }
+  }
+}
