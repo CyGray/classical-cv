@@ -1,0 +1,90 @@
+digraph complementarity_evaluation_uml_hierarchy {
+  graph [
+    bgcolor="#FFFFFF",
+    margin=0,
+    pad=0.08,
+    rankdir=TB,
+    ranksep=0.42,
+    nodesep=0.38,
+    splines=ortho,
+    fontname="Arial"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fillcolor="#FFFFFF",
+    color="#000000",
+    penwidth=2,
+    fontname="Arial",
+    margin="0.16,0.10"
+  ];
+
+  edge [
+    color="#000000",
+    penwidth=2,
+    arrowsize=0.75,
+    arrowhead=normal
+  ];
+
+  cohort [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="8" COLOR="#333333">COHORT</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="16"><B>LSDB-DL41</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">56 image-disjoint probes x 41 transforms</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">Frozen thresholds + routing; failures retained</FONT></TD></TR>
+    </TABLE>
+  >];
+
+  records [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="8" COLOR="#333333">RECORDS</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="15"><B>Per-condition records</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">LBPH / SFace outcomes</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">d1; top-two margin; stage and time</FONT></TD></TR>
+    </TABLE>
+  >];
+
+  fallback [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="8" COLOR="#333333">ANALYSIS 01</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="14"><B>Fallback value</B></FONT></TD></TR>
+      <TR><TD BORDER="1" SIDES="T" COLOR="#000000" HEIGHT="7"></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10"><I>Can SFace rescue LBPH failures?</I></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">paired outcomes</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10"><B>RECOVERY</B></FONT></TD></TR>
+    </TABLE>
+  >];
+
+  routability [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="8" COLOR="#333333">ANALYSIS 02</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="14"><B>Routability</B></FONT></TD></TR>
+      <TR><TD BORDER="1" SIDES="T" COLOR="#000000" HEIGHT="7"></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10"><I>Can LBPH flag risky cases?</I></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">d1; top-two margin</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10"><B>AUC; ROUTING RECALL</B></FONT></TD></TR>
+    </TABLE>
+  >];
+
+  utility [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="8" COLOR="#333333">ANALYSIS 03</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="14"><B>Selective utility</B></FONT></TD></TR>
+      <TR><TD BORDER="1" SIDES="T" COLOR="#000000" HEIGHT="7"></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10"><I>Does escalation earn its cost?</I></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9">cascade vs LBPH vs SFace</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10"><B>ACCURACY; TIME</B></FONT></TD></TR>
+    </TABLE>
+  >];
+
+  splitter [shape=point, width=0.08, height=0.08, label="", color="#000000", fillcolor="#000000"];
+
+  cohort -> records;
+  records -> splitter;
+  splitter -> fallback;
+  splitter -> routability;
+  splitter -> utility;
+
+  { rank=same; fallback; routability; utility; }
+}

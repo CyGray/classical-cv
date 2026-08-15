@@ -1,0 +1,76 @@
+digraph complementarity_evaluation_map {
+  graph [
+    bgcolor="#FFFFFF",
+    margin=0,
+    pad=0,
+    rankdir=TB,
+    nodesep=0.18,
+    ranksep=0.22,
+    fontname="Arial"
+  ];
+
+  node [shape=plain, fontname="Arial"];
+  edge [style=invis, weight=10];
+
+  title [label=<
+    <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="18" COLOR="#1F2937"><B>COMPLEMENTARITY EVALUATION</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10" COLOR="#64748B">Three questions  &#183;  one frozen cohort</FONT></TD></TR>
+    </TABLE>
+  >];
+
+  cohort [label=<
+    <TABLE BORDER="1" COLOR="#CFE3DF" CELLBORDER="0" CELLSPACING="0" CELLPADDING="8" BGCOLOR="#EDF7F5">
+      <TR>
+        <TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="11" COLOR="#0F766E"><B>LSDB-DL41</B></FONT></TD>
+        <TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10" COLOR="#475569">same cohort  &#183;  thresholds + routing fixed</FONT></TD>
+      </TR>
+    </TABLE>
+  >];
+
+  fallback [label=<
+    <TABLE BORDER="1" COLOR="#D8DEE6" CELLBORDER="0" CELLSPACING="0" CELLPADDING="10" BGCOLOR="#FFFFFF">
+      <TR><TD HEIGHT="2" CELLPADDING="0" BGCOLOR="#0F766E"></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9" COLOR="#0F766E"><B>01  FALLBACK</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="12" COLOR="#1F2937"><B>Can SFace rescue<br/>LBPH failures?</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9" COLOR="#64748B">paired outcomes</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10" COLOR="#1F2937"><B>RECOVERY</B></FONT></TD></TR>
+    </TABLE>
+  >];
+
+  routability [label=<
+    <TABLE BORDER="1" COLOR="#D8DEE6" CELLBORDER="0" CELLSPACING="0" CELLPADDING="10" BGCOLOR="#FFFFFF">
+      <TR><TD HEIGHT="2" CELLPADDING="0" BGCOLOR="#2F6F9F"></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9" COLOR="#2F6F9F"><B>02  ROUTABILITY</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="12" COLOR="#1F2937"><B>Can LBPH flag<br/>risky cases?</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9" COLOR="#64748B">d1  &#183;  top-two margin</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10" COLOR="#1F2937"><B>AUC  &#183;  RECALL</B></FONT></TD></TR>
+    </TABLE>
+  >];
+
+  utility [label=<
+    <TABLE BORDER="1" COLOR="#D8DEE6" CELLBORDER="0" CELLSPACING="0" CELLPADDING="10" BGCOLOR="#FFFFFF">
+      <TR><TD HEIGHT="2" CELLPADDING="0" BGCOLOR="#C56A2C"></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9" COLOR="#C56A2C"><B>03  UTILITY</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="12" COLOR="#1F2937"><B>Does escalation<br/>earn its cost?</B></FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="9" COLOR="#64748B">cascade vs LBPH vs SFace</FONT></TD></TR>
+      <TR><TD ALIGN="LEFT"><FONT FACE="Arial" POINT-SIZE="10" COLOR="#1F2937"><B>ACCURACY  &#183;  TIME</B></FONT></TD></TR>
+    </TABLE>
+  >];
+
+  note [label=<
+    <FONT FACE="Arial" POINT-SIZE="9" COLOR="#64748B">same conditions  &#183;  parallel analyses</FONT>
+  >];
+
+  title -> cohort;
+  cohort -> fallback;
+  cohort -> routability;
+  cohort -> utility;
+  fallback -> routability;
+  routability -> utility;
+  fallback -> note;
+  routability -> note;
+  utility -> note;
+
+  { rank=same; fallback; routability; utility; }
+}

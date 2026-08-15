@@ -1,0 +1,48 @@
+digraph complementarity_evaluation_uml {
+  graph [
+    bgcolor="#FFFFFF",
+    margin=0,
+    pad=0.08,
+    rankdir=TB,
+    ranksep=0.42,
+    nodesep=0.38,
+    splines=ortho,
+    fontname="Arial"
+  ];
+
+  node [
+    shape=Mrecord,
+    style="rounded,filled",
+    fillcolor="#FFFFFF",
+    color="#000000",
+    penwidth=2,
+    fontname="Arial",
+    fontsize=10,
+    margin="0.12,0.08"
+  ];
+
+  edge [
+    color="#000000",
+    penwidth=2,
+    arrowsize=0.75,
+    arrowhead=normal,
+    fontname="Arial",
+    fontsize=9
+  ];
+
+  cohort [label="{cohort\nLSDB-DL41|56 image-disjoint probes x 41 transforms\lFrozen thresholds + routing\lDetector failures retained\l}"];
+  records [label="{record\nPer-condition records|LBPH / SFace outcomes\ld1; top-two margin; stage/time\l}"];
+
+  fallback [label="{analysis\nFallback value|paired outcomes\lSFace recovery of LBPH failures\l}"];
+  routability [label="{analysis\nRoutability|d1; top-two margin\lAUC; routing recall; over-escalation\l}"];
+  utility [label="{analysis\nSelective utility|cascade vs LBPH vs SFace\lacceptance; escalation; recognition time\l}"];
+  splitter [shape=point, width=0.08, height=0.08, label="", color="#000000", fillcolor="#000000"];
+
+  cohort -> records;
+  records -> splitter;
+  splitter -> fallback;
+  splitter -> routability;
+  splitter -> utility;
+
+  { rank=same; fallback; routability; utility; }
+}

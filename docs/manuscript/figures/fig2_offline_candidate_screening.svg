@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fig. 2. Offline candidate screening and component selection for the LS-Face cascade.
+  Editable SVG UML activity diagram. Designed for a 7-inch manuscript width.
+  Typography specifies Inter with a neutral sans-serif fallback.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="7in" height="5.06in" viewBox="0 0 900 650" role="img" aria-labelledby="title desc">
+  <title id="title">Offline candidate screening and component selection for the LS-Face cascade</title>
+  <desc id="desc">A UML activity diagram for offline candidate screening. La Salle DB1 development data are split into training, calibration, and held-out evaluation roles; classical and learned candidate pools are screened in parallel; neutral first-stage and second-stage selections are joined before the selected two-stage configuration is frozen and later calibrated on LFW.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#202020"/>
+    </marker>
+    <style>
+      text { font-family: Inter, Arial, Helvetica, sans-serif; fill: #171717; }
+      .lane-title { font-size: 18px; font-weight: 600; }
+      .activity { font-size: 17px; font-weight: 500; }
+      .support { font-size: 14.5px; font-weight: 400; }
+      .descriptor { font-size: 14.5px; font-style: italic; font-weight: 400; }
+      .box { fill: #ffffff; stroke: #202020; stroke-width: 1.45; }
+      .selected { fill: #efefef; stroke: #202020; stroke-width: 1.65; }
+      .lane { fill: #f8f8f8; stroke: #555555; stroke-width: 1.2; }
+      .flow { fill: none; stroke: #202020; stroke-width: 1.4; stroke-linecap: square; stroke-linejoin: miter; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="900" height="650" fill="#ffffff"/>
+
+  <!-- Flow connectors are placed behind UML nodes. -->
+  <g aria-hidden="true">
+    <path class="flow" d="M450 22 V31"/>
+    <path class="flow" d="M450 76 V87"/>
+    <path class="flow" d="M450 153 V170 H220 V207"/>
+    <path class="flow" d="M450 170 H680 V207"/>
+
+    <path class="flow" d="M220 251 V262"/>
+    <path class="flow" d="M220 306 V317"/>
+    <path class="flow" d="M220 375 V386"/>
+    <path class="flow" d="M220 430 V441"/>
+
+    <path class="flow" d="M680 251 V262"/>
+    <path class="flow" d="M680 306 V317"/>
+    <path class="flow" d="M680 375 V386"/>
+    <path class="flow" d="M680 430 V441"/>
+
+    <path class="flow" d="M220 491 V527 H420"/>
+    <path class="flow" d="M680 491 V527 H480"/>
+    <path class="flow" d="M450 532 V545"/>
+    <path class="flow" d="M590 571 H615"/>
+    <path class="flow" d="M815 565 H831"/>
+  </g>
+
+  <!-- Activity partitions / swimlanes. -->
+  <rect class="lane" x="20" y="170" width="400" height="330" rx="10" ry="10"/>
+  <rect class="lane" x="480" y="170" width="400" height="330" rx="10" ry="10"/>
+  <text class="lane-title" x="40" y="194">Classical recognizers</text>
+  <text class="lane-title" x="500" y="194">Learned models</text>
+
+  <!-- UML initial node and offline data preparation. -->
+  <circle cx="450" cy="16" r="6" fill="#151515"/>
+  <rect class="box" x="315" y="31" width="270" height="45" rx="11" ry="11"/>
+  <text class="activity" x="450" y="52" text-anchor="middle">La Salle DB1</text>
+  <text class="support" x="450" y="70" text-anchor="middle">offline development data</text>
+
+  <rect class="box" x="170" y="87" width="560" height="66" rx="11" ry="11" fill="#f7f7f7"/>
+  <text class="activity" x="450" y="111" text-anchor="middle">Prepare fixed training, disjoint calibration,</text>
+  <text class="activity" x="450" y="131" text-anchor="middle">and held-out evaluation splits</text>
+  <text class="descriptor" x="450" y="147" text-anchor="middle">fixed training | disjoint calibration | held-out evaluation + 41 modifications</text>
+
+  <!-- Classical-recognizer activity flow. -->
+  <rect class="box" x="70" y="207" width="300" height="44" rx="10" ry="10"/>
+  <text class="activity" x="220" y="226" text-anchor="middle">Candidate pool</text>
+  <text class="support" x="220" y="244" text-anchor="middle">LBPH | Eigenfaces | Fisherfaces</text>
+
+  <rect class="box" x="70" y="262" width="300" height="44" rx="10" ry="10"/>
+  <text class="activity" x="220" y="290" text-anchor="middle">Train and calibrate candidates</text>
+
+  <rect class="box" x="70" y="317" width="300" height="58" rx="10" ry="10"/>
+  <text class="activity" x="220" y="339" text-anchor="middle">Evaluate using native scores</text>
+  <text class="support" x="220" y="357" text-anchor="middle">impostor | genuine | robustness</text>
+  <text class="support" x="220" y="371" text-anchor="middle">runtime | size</text>
+
+  <rect class="box" x="70" y="386" width="300" height="44" rx="10" ry="10"/>
+  <text class="activity" x="220" y="414" text-anchor="middle">Apply classical selection criteria</text>
+
+  <rect class="selected" x="70" y="441" width="300" height="50" rx="10" ry="10"/>
+  <text class="activity" x="220" y="461" text-anchor="middle">Select first-stage</text>
+  <text class="activity" x="220" y="480" text-anchor="middle">classical recognizer</text>
+
+  <!-- Learned-model activity flow. -->
+  <rect class="box" x="530" y="207" width="300" height="44" rx="10" ry="10"/>
+  <text class="activity" x="680" y="226" text-anchor="middle">Candidate pool</text>
+  <text class="support" x="680" y="244" text-anchor="middle">SFace | FaceNet | ArcFace</text>
+
+  <rect class="box" x="530" y="262" width="300" height="44" rx="10" ry="10"/>
+  <text class="activity" x="680" y="281" text-anchor="middle">Common YuNet alignment</text>
+  <text class="support" x="680" y="299" text-anchor="middle">and brightness normalization</text>
+
+  <rect class="box" x="530" y="317" width="300" height="58" rx="10" ry="10"/>
+  <text class="activity" x="680" y="339" text-anchor="middle">Evaluate using native scores</text>
+  <text class="support" x="680" y="357" text-anchor="middle">impostor | genuine | robustness</text>
+  <text class="support" x="680" y="371" text-anchor="middle">runtime | size</text>
+
+  <rect class="box" x="530" y="386" width="300" height="44" rx="10" ry="10"/>
+  <text class="activity" x="680" y="414" text-anchor="middle">Apply learned-model selection criteria</text>
+
+  <rect class="selected" x="530" y="441" width="300" height="50" rx="10" ry="10"/>
+  <text class="activity" x="680" y="461" text-anchor="middle">Select second-stage</text>
+  <text class="activity" x="680" y="480" text-anchor="middle">learned model</text>
+
+  <!-- UML join bar and downstream, explicitly post-selection work. -->
+  <rect x="420" y="527" width="60" height="5" fill="#202020"/>
+  <rect class="selected" x="310" y="545" width="280" height="52" rx="10" ry="10"/>
+  <text class="activity" x="450" y="566" text-anchor="middle">Freeze selected</text>
+  <text class="activity" x="450" y="585" text-anchor="middle">two-stage configuration</text>
+
+  <rect class="box" x="615" y="537" width="200" height="56" rx="10" ry="10" fill="#f7f7f7"/>
+  <text class="activity" x="715" y="557" text-anchor="middle">Subsequent LFW-based</text>
+  <text class="support" x="715" y="575" text-anchor="middle">threshold calibration</text>
+  <text class="support" x="715" y="589" text-anchor="middle">and cascade evaluation</text>
+
+  <circle cx="850" cy="565" r="14" fill="#ffffff" stroke="#151515" stroke-width="1.7"/>
+  <circle cx="850" cy="565" r="8" fill="#ffffff" stroke="#151515" stroke-width="1.3"/>
+  <circle cx="850" cy="565" r="3.5" fill="#151515"/>
+</svg>

@@ -1,0 +1,310 @@
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+Kyle Yuan L. Uy*, Andrew P. Eroyla*, John Roland L. Octavio*, Jim Jonathan C. Decripito*, Loreto B. Damasco*, and Weon Geon Oh*+
+*Computer Science Department, College of Computing Studies, University of St. La Salle Bacolod, Bacolod City, Philippines +THINKforBL, Korea
+Abstract. Face recognition for access-control systems must remain reliable under changing image conditions without using more computation than necessary. This study presents LS-Face, a two-stage recognizer that uses LBPH first and sends uncertain or poor-quality cases to SFace. The experiments were divided into four parts: recognizer selection, threshold setting, controlled robustness testing, and held-out cascade testing. LBPH and SFace were chosen from three classical and three deep-learning candidates using La Salle DB1. The acceptance thresholds were then set using cross-identity comparisons on LFW. For LBPH, 16,522,626 impostor comparisons produced a calibration false-accept rate of 9.986 ppm at the selected threshold. In the controlled self-match robustness test, augmented versions of the enrolled images were matched back to their source identities. Across 41 transformations, LBPH, SFace, and the cascade retained an accuracy of 86.66%, 98.22%, and 94.69%, respectively, with 46.39% of cases escalated to SFace. In a separate held-out LSDB-DL41 test using different enrollment and probe photographs, SFace recovered 81.56% of thresholded LBPH failures. LBPH distance and the separation between its top two matches were also strong indicators of LBPH failure, with AUCs of 0.95019 and 0.95319. Using the same stored results, a simplified routing rule reduced escalation from 71.52% to 59.23% while preserving the same 87.24% rate of correct accepted identifications. However, the cascade still required 10.81 ms on average compared with 8.33 ms for direct SFace. These results show that SFace provides an effective fallback for difficult LBPH cases and that LBPH scores can help decide when fallback is needed, but the current cascade does not provide a runtime advantage over direct SFace under the tested stress conditions. Open-set identification and end-to-end target-device performance were not evaluated.
+Keywords: Home Security, Facial Recognition, Hybrid Technology, Combination of Computer Vision and Deep Learning, Independence Testing
+1 Introduction
+Based on the advancement of artificial intelligence (AI) and deep learning, the latest facial recognition technology is maximizing accuracy and convenience through
+
+2
+
+K.Y. Uy et al.
+
+features such as remote detection, real-time processing, and contactless authentication. It is rapidly expanding into various industries, including security, financial digital identity verification, and smart access control.
+Facial recognition technology used in home security identifies individuals using biometric (face) data. It captures photo images in real time to extract unique facial features into a digital facial fingerprint, which is then compared to a trusted database. The primary purpose is to automate access control, reduce false alarms, and immediately notify the homeowner in the presence of unfamiliar visitors or potential intruders.
+In home security, facial recognition technology is being utilized as a key means to accurately identify residents and outsiders without the risk of losing keys or passwords, thereby blocking unauthorized intrusions in real time. It is producing significant ripple effects, such as improved ease of use, enhanced security accuracy, and increased connectivity with smart homes.
+However, facial recognition technology in home security still has many factors that limit stable recognition results. These can be broadly divided into two categories: 1) bio-mechanical diversity of facial images and 2) physical changes due to environmental changes.
+Examples of the first factor include structural differences in facial features between Eastern and Western people, diversity in facial expressions and behaviors, and diversity in style and adornment.
+Furthermore, examples of the second factor include changes in lighting and light sources, changes in camera angles and poses, and changes in background and context.
+Various technologies have been developed to address these problems, including hybrid systems that combine classical computer vision with deep neural networks, and empirical independence testing procedures designed to evaluate cross-identity score separation and establish operating thresholds for the selected recognizers.
+The purpose of this study is to develop stable and robust facial recognition technology by resolving the aforementioned challenges. To this end, we propose a two-stage hybrid recognition methodology combining classical computer vision and deep neural networks with empirical threshold calibration, evaluating its components across LFW threshold calibration, controlled robustness analysis, and held-out cascade evaluations.
+
+2 Related Work
+2.1 Face Recognition Models
+Classical face recognition methods provide computationally simple baselines for identity representation. Eigenfaces [1] projects facial appearance into a PCA subspace, Fisherfaces [2] combines dimensionality reduction with LDA for class separation, and LBPH [3] represents local texture through spatial histograms of binary patterns. These methods serve as the classical candidates evaluated in this study.
+Deep face recognition instead learns discriminative embedding spaces. FaceNet [6] introduced triplet-loss training, ArcFace [11] improved angular class separation, and SFace [4] uses a sigmoid-constrained hypersphere loss. These embedding-based approaches form the learned-model candidates considered for the deep stage.
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+3
+
+2.2 Face Detection and Alignment
+Recognition also depends on reliable localization and alignment. Viola-Jones [5] established the classical boosted-cascade detector, while YuNet [7] provides lightweight CNN-based detection together with five facial landmarks. In this study, YuNet supplies both face localization and the landmarks used for SFace alignment.
+
+2.3 Selective and Edge Recognition
+Efficient face recognition can be addressed through compact learned models or selective computation. Lightweight architectures such as EdgeFace [12] demonstrate deep recognition under edge constraints, while SelectiveNet [13] formalizes the tradeoff between prediction risk and coverage. Face-quality approaches such as SER-FIQ [14] similarly estimate when a recognition input may be unreliable.
+LS-Face follows this selective-computation principle. LBPH handles first-stage recognition, while its score, candidate separation, and image-quality indicators determine whether SFace is invoked. The resulting accuracy-cost trade-off is therefore compared with always-LBPH and always-SFace operation.
+
+2.4 Evaluation and Robustness
+Biometric evaluation requires the recognition task and error unit to be stated explicitly. ISO/IEC 19795-1 [9] defines general biometric performance-testing principles. LFW [8] is primarily a pairwise verification benchmark, whereas IJB-A [15] extends evaluation to unconstrained 1:1 verification and open-set 1:N identification. NIST 1:N evaluation [16] further distinguishes identification measures such as FPIR and FNIR from pairwise verification errors.
+Accordingly, this study treats exhaustive cross-identity impostor-score enumeration as an empirical threshold-calibration procedure rather than evidence of statistical independence. The held-out LSDB-DL41 experiment evaluates complementarity and routing behavior through paired recognizer outcomes, recovery of LBPH failures, routing discrimination, escalation, and timing. Because multiple transformations originate from the same source images, they are treated as correlated conditions rather than independent trials.
+
+4
+
+K.Y. Uy et al.
+
+3 Method
+
+3.1 System Overview and Escalation Logic
+
+Fig. 1. Overview of the LS-Face recognition and escalation pipeline
+LS-Face processes each input image through the two-stage recognition pipeline shown in Fig. 1. YuNet first detects the face and provides the detection confidence and facial landmarks. If no valid face is detected, recognition stops and the sample is treated as a detection failure.
+Stage 1 recognition. For a detected face, LBPH ranks the enrolled identities according to their matching distances. Let d and d denote the best and second-best LBPH distances, respectively, where a smaller distance indicates a closer match. These scores, together with image-quality indicators computed from the detected face crop, are evaluated by the escalation rule.
+Escalation logic. Let accept denote the frozen LBPH acceptance threshold, reject the frozen rejection threshold, where reject > accept, and mmin the minimum permitted relative separation between the two highest-ranked identity candidates. An input is escalated to Stage 2 when at least one of the following conditions is satisfied:
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+5
+
+(i) an image-quality flag is raised because of blur, low illumination, sensor noise, off-pose presentation, or insufficient face size;
+(ii) the best LBPH distance lies within the ambiguous region, accept < d < reject; (iii) the relative top-two margin is below mmin:
+
+(d2-d1) d1
+
+<
+
+
+
+(1)
+
+The margin is expressed relative to d because LBPH distances on enrolled training images can approach zero through memorization. An absolute margin based on these training distances therefore does not transfer reliably to held-out inputs. The quality condition is evaluated independently of the LBPH score, allowing visibly degraded inputs to be escalated even when the first-stage distance appears confident.
+
+If no escalation condition is triggered, the result is resolved by LBPH. The bestranked identity is accepted when d  accept and rejected when d  reject. Scores between the two thresholds cannot terminate at Stage 1 because they satisfy the ambiguous-score condition and are therefore escalated.
+
+Stage 2 recognition and final decision. For an escalated input, SFace uses the facial landmarks returned by YuNet to align the detected face, extracts its embedding, and compares it with the enrolled identity representations. The predicted identity is accepted only when it satisfies the frozen SFace acceptance criterion; otherwise, the prediction is rejected. Thus, each successfully detected input terminates either with an LBPH decision at Stage 1 or, when escalation is triggered, with an SFace decision at Stage 2.
+
+The recognition thresholds and escalation parameters are fixed before evaluation and are not adjusted in response to individual test samples.
+
+3.2 Offline Recognizer Selection
+Recognizer selection was conducted offline and independently of the frame-level escalation process summarized in Section 3.1. As shown in Fig. 2, La Salle DB1 was divided into fixed training, calibration, and held-out evaluation subsets. Three classical recognizers (LBPH, Eigenfaces, and Fisherfaces) and three learned models (SFace, FaceNet, and ArcFace) were evaluated as separate candidate groups.
+Classical candidates were fitted and calibrated using the designated development subsets, while the learned candidates were evaluated using a common YuNet alignment and brightness-normalization front end. Because the candidate models produce different score types and scales, each was evaluated using its native scoring method. Evaluation considered cross-identity impostor scores, held-out genuine recognition, robustness under the 41 image modifications, runtime, and representation size. Selection was performed separately for the classical first stage and learned second stage using these evaluation criteria and deployment considerations. The resulting two-stage configuration was then frozen before subsequent threshold calibration and cascade evaluation.
+
+6
+
+K.Y. Uy et al.
+
+Fig. 2. Offline recognizer selection procedure for the LS-Face cascade.
+
+3.3 Independence Testing and Threshold Freezing
+
+Independence-test construction. In this study, the independence test examines crossidentity separation by comparing facial representations belonging to different identities. Given (N) identities represented by one designated image each, every unordered pair of different identities is compared once, yielding
+
+C = N(N - 1) / 2
+
+(2)
+
+unique comparisons. Because every pair contains two different identities, all (C) comparisons are impostor comparisons by construction.
+For each recognizer, the resulting native scores are ordered from the most likely to be accepted to the least likely. For distance-based scores such as LBPH and SFace L2, this corresponds to sorting the distances in ascending order. For a target false-accept rate (FAR^*), the maximum permitted number of accepted impostor comparisons is
+
+k = FAR* · C
+
+(3)
+
+The operating threshold is selected at the corresponding lower tail of the impostorscore distribution. Because the deployed acceptance rule includes scores equal to the threshold, the realized FAR is recomputed after threshold selection, including any ties at the boundary.
+LFW DB1 is used for the primary low-FAR independence test because its 5,749 identities yield 16,522,626 unique cross-identity comparisons. In comparison, the 28 identities of La Salle DB1 yield only 378 unique pairs and therefore cannot resolve an operating point on the order of 10 ppm.
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+7
+
+Threshold freezing. The operating points obtained from the independence-test procedure are fixed before the subsequent cascade evaluations. The LBPH acceptance threshold is combined with the separately determined LBPH rejection boundary, relative-margin requirement, and deployed SFace acceptance criterion to form one frozen cascade configuration. The evaluation harness records the threshold-file SHA-256, and the configuration is not re-tuned using the outcomes of the held-out LSDB experiments. The final numerical operating points are reported in Section 4.2.
+
+3.4 Complementarity Evaluation
+
+Fig. 3. Three-link complementarity evaluation design for LS-Face.
+
+The same frozen held-out LSDB-DL41 cohort feeds parallel analyses of fallback value, routability, and selective utility. Transformed probe conditions are correlated observations, not independent trials.
+
+Complementarity Evaluation. Figure 3 summarizes three analyses performed on one held-out LSDB-DL41 cohort. The cohort contains 56 image-disjoint probes--two for each of 28 identities--and 41 deterministic transformations per probe, yielding 2,296 probe conditions. Thresholds and routing rules are frozen before scoring, and detector failures are retained as failures.
+
+Fallback value. Thresholded LBPH and SFace outcomes are paired as both correct, LBPH-only correct, SFace-only correct, or neither correct. A recognizer is correct only when it returns the target identity and satisfies its deployed acceptance criterion. SFace recovery of LBPH failures is measured as
+
+Recovery
+
+=
+
+(SFace correctLBPH failure) (LBPH failure)
+
+(4)
+
+8
+
+K.Y. Uy et al.
+
+Routability. LBPH distance 1 and negative relative top-two margin are evaluated using ROC AUC to separate threshold-free LBPH Rank-1 errors. The deployed rule is then measured using failure-routing recall and unnecessary escalation. Signal-based metrics use only conditions with the required LBPH signals; detector failures remain retained elsewhere.
+Measured utility. The cascade is compared with always-LBPH and always-SFace using thresholded acceptance, escalation rate, and recognition-stage time. The post-hoc accept-protection replay treats quality flags as telemetry for already accepted LBPH decisions, without recalibrating scores or thresholds. It is therefore a descriptive ablation, not independent validation. Timing excludes face detection and external I/O and does not represent end-to-end latency.
+
+4 Experiments and Results
+
+The experimental program consists of four evidence legs summarized in Table 1. Each leg has a distinct role in the study: recognizer selection, independence testing and operating-point determination, controlled self-match robustness analysis, or held-out cascade evaluation. Results from one leg are not interpreted as measurements of outcomes that its protocol does not directly evaluate.
+
+Table 1. Experiments and their roles in the study.
+
+Experiment LSDB recognizer selection LFW 1 independence test (Sec. 4.2) Controlled self-match robustness test (Sec. 4.3) LSDB-DL41 held-out evaluation (Sec. 4.4)
+
+Role in the Study Select the classical and learned recognizers using fixed LSDB subsets. Determine low-tail impostor operating points and freeze the deployed thresholds. Measure within-image degradation retention under controlled transformations; no cross-photo or FAR claim. Evaluate SFace recovery, routability, escalation, and recognition-stage cost.
+
+The LSDB held-out evaluation uses clean enrollment images and image-disjoint probes from the same 28 enrolled identities; it therefore measures recognition of enrolled subjects rather than open-set identification. The Paper 1 robustness experiment follows the controlled self-match protocol and is interpreted only within the limitations stated in Section 4.3.
+
+4.1 Algorithm Selection on La Salle DB1
+Classical candidates were fitted on 224 images, calibrated on 56 disjoint images, and evaluated once on 56 untouched LSDB test images. The calibration set supplied 1,512 cross-identity scores; the 15th error score yielded a realized FAR of 0.992%. LBPH achieved the highest test TAR (96.43%) and Rank-1 accuracy (100.00%) and was
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+9
+
+selected as the classical fast path. Its 64 KB representation remains an explicit engineering exception.
+
+Table 2. Classical candidate selection on LSDB.
+
+Recognizer LBPH Eigenfaces Fisherfaces
+
+TAR (%) 96.43% 41.07% 51.79%
+
+Rank-1 (%) 100.00% 75.00% 58.93%
+
+Feature size 64 KB 896 B 108 B
+
+The learned candidates were evaluated on the same deterministic 224/56/56 LSDB cohort. Each model's rank-15 acceptance edge was derived from the 1,512 calibration cross-identity scores, yielding a realized FAR of 0.992%.
+
+Table 3. DL candidate selection on LSDB.
+
+Candidate SFace ArcFace FaceNet
+
+TAR (%) 100.00% 96.43% 100.00%
+
+Rank-1 (%) 100.00% 100.00% 100.00%
+
+Feature 512 B 2,048 B 2,048 B
+
+SFace and FaceNet tied at 100.00% held-out TAR and Rank-1; SFace won the recorded feature-size tie-break (512 B versus 2,048 B). ArcFace retained 100.00% Rank1 but reached 96.43% TAR. Thus, SFace was selected as the learned tier, while LBPH remained the separately selected classical fast path.
+
+4.2 Independence Test: Frozen Operating Points
+The LFW DB1 independence test produced the frozen operating points summarized in Table 4. The LBPH acceptance boundary corresponded to rank 165 of 16,522,626 impostor comparisons, yielding a realized FAR of 9.986 ppm.
+
+Table 4. Final frozen operating points.
+
+Boundary
+LBPH accept SFace accept LBPH reject
+
+Frozen value
+67.0333 L2  1.0313; cosine  0.363
+140.13
+
+Role
+Accept Escalated accept
+Reject
+
+Figure 4 places these frozen operating points against the fresh LSDB clean-impostor score distributions. The LSDB scores are shown only to visualize cross-database transfer and were not used to recalibrate the thresholds.
+
+10
+
+K.Y. Uy et al.
+
+Fig. 4. Histograms and KDE curves of fresh LSDB clean-impostor scores with frozen LFW operating points overlaid.
+
+4.3 Controlled Self-Match Robustness Test
+Table 5 reports the controlled self-match robustness test selected for Paper 1. One selected original per identity was enrolled, and that same original supplied each clean and augmented probe, so the scores quantify within-image degradation retention. Across the 41 controlled variants, the recorded results show 86.66% LBPH retention, 98.22% SFace retention, and 94.69% cascade retention. The FAR entries are thresholdbasis values from separate impostor calibrations; no impostor pairs were evaluated in this experiment.
+
+Table 5. Controlled Self-Match Robustness Test on LFW
+
+Mode
+Classical CV (LBPH) Deep Learning (SFace) Hybrid Cascade
+
+Clean selfmatch (%)
+100.00
+99.67
+99.93
+
+41-mod retention Threshold- Escalation (%)
+
+(%)
+
+basis FAR*
+
+86.66
+
+~1%
+
+N/A
+
+98.22
+
+~10 ppm
+
+N/A
+
+94.69
+
+N/A
+
+46.39
+
+Each row uses one enrolled source image for each of 5,749 LFW identities and 41 controlled modification variants. The source image is reused to make its own clean and modified probes. The experiment used the following fixed recognition configuration: the LBPH-only branch used tau_r = 76.85, the cascade used tau_a = 67.0084 and tau_r = 76.85, and SFace used L2 = 1.018 with cosine >= 0.363. *Threshold-basis FAR values come from separate LFW impostor calibrations: tau_r = 76.85 is approximately 1% FAR, and the SFace rule is approximately 10 ppm. They are not FAR values measured by this self-match experiment, and a cascade FAR cannot be inferred from the separate per-leg values. These values describe the selected Paper 1 self-match experiment under its recorded configuration; they are not results of the Table 4 operating points.
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+11
+
+4.4 Complementarity on Held-Out LSDB-DL41 Probes
+The evaluation follows the three-link argument described above. It uses 56 imagedisjoint held-out LSDB source probes, two for each of 28 enrolled identities, and 41 deterministic transformations per source, yielding 2,296 correlated probe conditions. The LFW-derived thresholds and routing rule were frozen before scoring, and detector failures were handled strictly. Figures 5 and 6 summarize the two main complementarity findings: whether SFace can recover LBPH failures and whether the routing rule can distinguish cases that should be escalated.
+
+Fig. 5. SFace Recovery of Thresholded LBPH Failures in the Hybrid Cascade
+First, the fallback value is strongly asymmetric. As shown in Fig. 5, SFace recovered 1,296 of the 1,589 thresholded LBPH failures, corresponding to a recovery rate of 81.56%. The remaining 293 cases, or 18.44%, were not recovered by either final decision. Conversely, LBPH supplied no thresholded success that SFace lacked. The observed complementarity is therefore one-way: SFace provides substantial rescue for LBPH failures, rather than the two recognizers mutually recovering each other's errors. Because the 41 transformations are repeated conditions derived from the same source images, these counts are interpreted descriptively rather than as 2,296 independent observations.
+
+12
+
+K.Y. Uy et al.
+
+Fig. 6. Gate Competence Escalation
+Second, the routing rule exposes a useful LBPH risk signal, although it also produces unnecessary escalation among LBPH-correct cases. Among the 2,060 probes with available routing signals, LBPH distance and negative margin separated 444 thresholdfree Rank-1 errors with AUCs of 0.95019 and 0.95319, respectively. As shown in Fig. 6, the deployed rule escalated all 1,353 thresholded LBPH failures, giving 100% failure-routing recall. However, it also escalated 289 of the 707 LBPH-correct cases, or 40.9%, while the remaining 59.1% were correctly retained at the LBPH stage. Thus, the rule successfully identifies risky cases but sacrifices routing efficiency through substantial over-escalation.
+A post-hoc accept-protection replay examined whether this redundant routing could be reduced. The replay preserved the deployed low-margin trigger and all conditions above tau_accept, while treating accept-side quality flags as telemetry rather than escalation triggers. Under this replay, unnecessary escalations among LBPH-correct cases fell from 289 to 7 of 707. Because the same transformed probes motivated and evaluated this candidate policy, however, the result is treated only as a descriptive ablation and not as independent validation of an improved routing rule.
+Third, reducing redundant escalation improves the deployed route but does not establish a speed advantage over direct SFace. The candidate replay preserved the same 87.24% thresholded correct-identity acceptance while reducing escalation from 71.52% to 59.23% and lowering the stored recognition-stage arithmetic mean from 11.96 ms to 10.81 ms. Direct SFace nevertheless achieved the same 87.24% acceptance at 8.33 ms, while LBPH-only reached 30.79% at 5.25 ms. These timings represent single-pass stored recognition-stage measurements and exclude detection and I/O. The result therefore supports simplifying the routing logic and reducing redundant escalation, but it does not demonstrate a Pareto or runtime advantage over direct SFace.
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+13
+
+5 Discussion
+Dual-role behavior of the proposed cascade. The experiments reveal two distinct roles for the proposed LBPH-to-SFace cascade. First, the controlled LFW self-match experiment isolates sensitivity to known image modifications by holding the enrolled source image constant. Under this deliberately constrained protocol, LBPH retained 86.66% of recognition outcomes across the 41 modifications, SFace retained 98.22%, and the cascade retained 94.69% while escalating 46.39% of cases. The single-image design is therefore useful as a controlled robustness simulation: it measures how each recognizer responds to image degradation without introducing variation between enrollment and probe photographs. The result shows that SFace is substantially more stable under the tested transformations, while the cascade preserves much of this robustness without invoking SFace for every probe. Because the experiment reuses the enrolled image to generate its transformed probes, however, these results should not be interpreted as image-disjoint identification accuracy or as measured FAR. They are also specific to the recorded Table 5 configuration and are not combined numerically with the frozen operating points used in the held-out cascade evaluation.
+Image-disjoint fallback behavior in LSDB-DL41. The held-out LSDB-DL41 experiment provides separate evidence for fallback behavior on image-disjoint probes. SFace recovered 1,296 of the 1,589 thresholded LBPH failures, corresponding to an 81.56% recovery rate, while LBPH contributed no thresholded success that SFace lacked. The observed complementarity is therefore strongly one-way: SFace acts as an effective recovery stage for difficult LBPH cases rather than the two recognizers mutually correcting one another. LBPH distance and relative top-two margin nevertheless provide strong indicators of recognition risk, with AUCs of 0.95019 and 0.95319. This distinction is important. A strong risk signal does not by itself guarantee an efficient cascade; the routing policy must also avoid escalating too many cases that LBPH would already resolve correctly.
+Routing behavior and efficiency trade-offs. The deployed routing rule achieved 100% routing recall for thresholded LBPH failures, but also escalated 40.9% of LBPHcorrect cases. A post-hoc replay that prevented accept-side quality flags from overriding an already accepted LBPH result reduced this redundancy while preserving the same 87.24% thresholded correct-identity acceptance. Escalation decreased from 71.52% to 59.23%, and the stored recognition-stage arithmetic mean decreased from 11.96 ms to 10.81 ms. Direct SFace nevertheless achieved the same 87.24% acceptance at 8.33 ms. Thus, the experiments identify a clear boundary of the present architecture: LBPH uncertainty is predictable and SFace provides substantial fallback value, but the first-stage overhead and remaining escalation rate prevent the tested cascade from establishing a runtime or Pareto advantage over direct SFace on this stress workload.
+Experimental scope and validity constraints. These findings remain bounded by the experimental protocols. The self-match test contains no independent gallery/probe photographs, impostor trials, or unknown identities. The LSDB-DL41 evaluation consists of correlated transformations derived from 56 known-genuine source probes, and
+
+14
+
+K.Y. Uy et al.
+
+236 conditions without available routing signals are outside the routing-score analysis. The stored timing values also measure the recognition stage rather than complete detector-to-decision latency. Accordingly, the present study does not claim open-set identification performance or target-device efficiency. Such measurements require independent unknown queries and end-to-end evaluation on the intended deployment hardware.
+
+6 Conclusion
+Summary of the LS-Face cascade framework. This paper presented LS-Face, a twostage LBPH-to-SFace face-recognition cascade evaluated through separate recognizerselection, threshold-calibration, controlled-robustness, and held-out fallback experiments. In the controlled LFW self-match robustness simulation, retention across 41 image modifications was 86.66% for LBPH, 98.22% for SFace, and 94.69% for the cascade, with 46.39% escalation. This experiment isolates transformation sensitivity under a single-image enrollment protocol and shows the greater robustness of the learned recognizer under the tested degradations.
+Fallback effectiveness and risk signal utility. On image-disjoint LSDB-DL41 probes, SFace recovered 81.56% of thresholded LBPH failures, while LBPH distance and relative margin ranked LBPH recognition risk with AUCs near 0.95. A descriptive samedata routing replay reduced escalation from 71.52% to 59.23% while preserving 87.24% thresholded correct-identity acceptance, but direct SFace remained faster than the cascade. The evidence therefore supports SFace as an effective fallback for LBPH and shows that first-stage recognition scores can identify cases requiring escalation, while also defining an important efficiency boundary: under the tested stress workload, the current cascade does not outperform direct SFace in both recognition performance and runtime. Open-set identification and end-to-end target-device measurements remain outside the scope of the present study.
+
+Acknowledgments. The authors gratefully acknowledge the Department of Computer Science, University of St. La Salle­Bacolod, for its institutional support throughout this research. The authors also thank the 10 additional group members who contributed to the study and the 28 student volunteers whose participation made the construction of the LaSalle DB1 dataset possible.
+
+Disclosure of Interests. The authors have no competing interests to declare.
+
+Facial Recognition Using Hybrid Technologies Based on Independence Testing
+
+15
+
+7 References
+1. M. Turk and A. Pentland, "Eigenfaces for recognition," J. Cogn. Neurosci., vol. 3, no. 1, pp. 71­86, 1991.
+2. P. N. Belhumeur, J. P. Hespanha, and D. J. Kriegman, "Eigenfaces vs. Fisherfaces: Recognition using class specific linear projection," IEEE Trans. Pattern Anal. Mach. Intell., vol. 19, no. 7, pp. 711­720, Jul. 1997.
+3. T. Ahonen, A. Hadid, and M. Pietikäinen, "Face description with local binary patterns: Application to face recognition," IEEE Trans. Pattern Anal. Mach. Intell., vol. 28, no. 12, pp. 2037­2041, Dec. 2006.
+4. Y. Zhong, W. Deng, J. Hu, D. Zhao, X. Li, and D. Wen, "SFace: Sigmoid-constrained hypersphere loss for robust face recognition," IEEE Trans. Image Process., vol. 30, pp. 2587­ 2598, 2021.
+5. P. Viola and M. Jones, "Rapid object detection using a boosted cascade of simple features," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), 2001, vol. 1, pp. I-511­I-518.
+6. F. Schroff, D. Kalenichenko, and J. Philbin, "FaceNet: A unified embedding for face recognition and clustering," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), 2015, pp. 815­823.
+7. W. Wu, H. Peng, and S. Yu, "YuNet: A tiny millisecond-level face detector," Mach. Intell. Res., vol. 20, no. 5, pp. 656­665, 2023.
+8. G. B. Huang, M. Ramesh, T. Berg, and E. Learned-Miller, "Labeled faces in the wild: A database for studying face recognition in unconstrained environments," Univ. Massachusetts, Amherst, Tech. Rep. 07-49, Oct. 2007.
+9. ISO/IEC 19795-1:2021, Information Technology--Biometric Performance Testing and Reporting--Part 1: Principles and Framework. Geneva, Switzerland: ISO, 2021.
+10. G. Bradski, "The OpenCV library," Dr. Dobb's J. Softw. Tools, vol. 25, no. 11, pp. 120­ 125, Nov. 2000.
+11. J. Deng, J. Guo, N. Xue, and S. Zafeiriou, "ArcFace: Additive angular margin loss for deep face recognition," in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), 2019, pp. 4690­4699.
+12. A. George, C. Ecabert, H. O. Shahreza, K. Kotwal, and S. Marcel, "EdgeFace: Efficient face recognition model for edge devices," IEEE Trans. Biometrics, Behav., Identity Sci., vol. 6, no. 2, pp. 158­168, Apr. 2024.
+13. Y. Geifman and R. El-Yaniv, "SelectiveNet: A deep neural network with an integrated reject option," in Proc. 36th Int. Conf. Mach. Learn. (ICML), vol. 97, 2019, pp. 2151­2159.
+14. P. Terhörst, J. N. Kolf, N. Damer, F. Kirchbuchner, and A. Kuijper, "SER-FIQ: Unsupervised estimation of face image quality based on stochastic embedding robustness," in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), 2020, pp. 5651­5660.
+15. B. F. Klare et al., "Pushing the frontiers of unconstrained face detection and recognition: IARPA Janus Benchmark A," in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), 2015, pp. 1931­1939.
+16. P. Grother, M. Ngan, and K. Hanaoka, Face Recognition Vendor Test (FRVT) Part 2: Identification, NIST Interagency/Internal Rep. 8271, National Institute of Standards and Technology, Gaithersburg, MD, USA, 2019.
+
+

@@ -1,0 +1,172 @@
+// Fig. 2. Offline candidate screening and component selection for the LS-Face cascade.
+//
+// Editable Graphviz UML activity-diagram source. The companion SVG is the
+// hand-balanced manuscript layout, using the same neutral selection logic.
+
+digraph OfflineCandidateScreening {
+  graph [
+    rankdir=TB,
+    bgcolor="white",
+    pad="0.10",
+    nodesep="0.45",
+    ranksep="0.50",
+    splines=ortho,
+    compound=true,
+    newrank=true,
+    outputorder="edgesfirst",
+    fontname="Inter"
+  ];
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    color="#202020",
+    fillcolor="white",
+    fontcolor="#171717",
+    fontname="Inter",
+    fontsize=12,
+    penwidth=1.1,
+    margin="0.10,0.07"
+  ];
+
+  edge [
+    color="#252525",
+    penwidth=1.0,
+    arrowsize=0.7
+  ];
+
+  start [
+    shape=circle,
+    label="",
+    width=0.16,
+    height=0.16,
+    fixedsize=true,
+    style=filled,
+    fillcolor="#151515"
+  ];
+
+  end [
+    shape=doublecircle,
+    label="",
+    width=0.22,
+    height=0.22,
+    fixedsize=true,
+    style=filled,
+    fillcolor="white",
+    color="#151515",
+    penwidth=1.2
+  ];
+
+  join [
+    shape=box,
+    label="",
+    width=0.80,
+    height=0.06,
+    fixedsize=true,
+    style=filled,
+    fillcolor="#202020",
+    color="#202020"
+  ];
+
+  data [label="La Salle DB1\noffline development data"];
+  splits [
+    label="Prepare fixed training, disjoint calibration,\nand held-out evaluation splits\n\nfixed training | disjoint calibration | held-out evaluation + 41 modifications",
+    fillcolor="#F7F7F7"
+  ];
+
+  freeze [
+    label="Freeze selected\ntwo-stage configuration",
+    fillcolor="#EFEFEF",
+    penwidth=1.3
+  ];
+
+  later [
+    label="Subsequent LFW-based threshold calibration\nand cascade evaluation"
+  ];
+
+  subgraph cluster_classical {
+    label=<<B>Classical recognizers</B>>;
+    labelloc="t";
+    labeljust="l";
+    fontsize=14;
+    fontname="Inter";
+    color="#555555";
+    fillcolor="#F8F8F8";
+    style="rounded,filled";
+
+    c_pool [
+      label="Candidate pool\nLBPH | Eigenfaces | Fisherfaces",
+      width=2.7
+    ];
+    c_prepare [
+      label="Train and calibrate candidates",
+      width=2.7
+    ];
+    c_eval [
+      label="Evaluate using native scores\nimpostor | genuine | robustness | runtime | size",
+      width=2.7
+    ];
+    c_select [
+      label="Apply classical selection criteria",
+      width=2.7
+    ];
+    c_outcome [
+      label="Select first-stage\nclassical recognizer",
+      fillcolor="#EFEFEF",
+      penwidth=1.3,
+      width=2.7
+    ];
+
+    c_pool -> c_prepare -> c_eval -> c_select -> c_outcome;
+  }
+
+  subgraph cluster_learned {
+    label=<<B>Learned models</B>>;
+    labelloc="t";
+    labeljust="l";
+    fontsize=14;
+    fontname="Inter";
+    color="#555555";
+    fillcolor="#F8F8F8";
+    style="rounded,filled";
+
+    l_pool [
+      label="Candidate pool\nSFace | FaceNet | ArcFace",
+      width=2.7
+    ];
+    l_prepare [
+      label="Common YuNet alignment\nand brightness normalization",
+      width=2.7
+    ];
+    l_eval [
+      label="Evaluate using native scores\nimpostor | genuine | robustness | runtime | size",
+      width=2.7
+    ];
+    l_select [
+      label="Apply learned-model selection criteria",
+      width=2.7
+    ];
+    l_outcome [
+      label="Select second-stage\nlearned model",
+      fillcolor="#EFEFEF",
+      penwidth=1.3,
+      width=2.7
+    ];
+
+    l_pool -> l_prepare -> l_eval -> l_select -> l_outcome;
+  }
+
+  start -> data -> splits;
+  splits -> c_pool [lhead=cluster_classical];
+  splits -> l_pool [lhead=cluster_learned];
+
+  { rank=same; c_pool; l_pool; }
+  { rank=same; c_prepare; l_prepare; }
+  { rank=same; c_eval; l_eval; }
+  { rank=same; c_select; l_select; }
+  { rank=same; c_outcome; l_outcome; }
+
+  c_outcome -> join;
+  l_outcome -> join;
+  join -> freeze -> later -> end;
+}

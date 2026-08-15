@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="344.067109pt" height="192.104494pt" viewBox="0 0 344.067109 192.104494" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <title>Deployed gate routing on held-out LSDB-DL41 probes</title>
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:title>Deployed gate routing on held-out LSDB-DL41 probes</dc:title>
+    <dc:date>2026-08-10T02:11:27+08:00</dc:date>
+    <dc:description>Among 2,060 scored modified probes, the deployed gate escalated all 1,353 thresholded LBPH failures to SFace (100.0% recall). It escalated 40.88% of 707 thresholded LBPH-correct probes and retained 59.12% on the LBPH path. Escalation precision was 82.40%; 236 modified probes without the required gate signals were excluded from this routing analysis. Teal denotes a correct gate action and brick red denotes an unnecessary escalation.</dc:description>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:identifier>sha256:13de27c4b29e59a3bf8c3049441d70cc01fe8ce8aefba2a89dc1c08ab39110fb</dc:identifier>
+    <dc:source>complementarity_test/reruns/lsdb_dl41_2026-08-10/accuracy_ratio_hybrid.json</dc:source>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>LS-Face manuscript SVG exporter</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 192.104494 
+L 344.067109 192.104494 
+L 344.067109 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 43.062 160.469016 
+L 200.202 160.469016 
+L 200.202 7.541016 
+L 43.062 7.541016 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 84.217714 160.469016 
+L 84.217714 7.541016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="m001b5347e6" d="M 0 0 
+L 0 4 
+" style="stroke: #1b2326; stroke-width: 0.9"/>
+      </defs>
+      <g>
+       <use xlink:href="#m001b5347e6" x="84.217714" y="160.469016" style="fill: #1b2326; stroke: #1b2326; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <text style="font-weight: 700; font-size: 9.3px; font-family: 'Arial', 'DejaVu Sans'; fill: #1b2326" transform="translate(53.728246 176.125781)">LBPH failures</text>
+      <!-- $n$ = 1,353 -->
+      <g style="fill: #1b2326" transform="translate(64.315714 185.949197)">
+       <text>
+        <tspan x="0" y="-0.53125" style="font-style: oblique; font-size: 9.3px; font-family: 'DejaVu Sans'; fill: #1b2326">n</tspan>
+        <tspan x="5.862549" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326"> </tspan>
+        <tspan x="8.432495" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">=</tspan>
+        <tspan x="13.834351" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326"> </tspan>
+        <tspan x="16.404297" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">1</tspan>
+        <tspan x="21.548706" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">,</tspan>
+        <tspan x="24.118652" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">3</tspan>
+        <tspan x="29.263062" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">5</tspan>
+        <tspan x="34.407471" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">3</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 159.046286 160.469016 
+L 159.046286 7.541016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#m001b5347e6" x="159.046286" y="160.469016" style="fill: #1b2326; stroke: #1b2326; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <text style="font-weight: 700; font-size: 9.3px; font-family: 'Arial', 'DejaVu Sans'; fill: #1b2326" transform="translate(129.074129 176.125781)">LBPH-correct</text>
+      <!-- $n$ = 707 -->
+      <g style="fill: #1b2326" transform="translate(143.003786 185.949197)">
+       <text>
+        <tspan x="0" y="-0.53125" style="font-style: oblique; font-size: 9.3px; font-family: 'DejaVu Sans'; fill: #1b2326">n</tspan>
+        <tspan x="5.862549" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326"> </tspan>
+        <tspan x="8.432495" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">=</tspan>
+        <tspan x="13.834351" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326"> </tspan>
+        <tspan x="16.404297" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">7</tspan>
+        <tspan x="21.548706" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">0</tspan>
+        <tspan x="26.693115" y="-0.53125" style="font-weight: 700; font-size: 9.3px; font-family: 'Arial'; fill: #1b2326">7</tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_5">
+      <path d="M 43.062 160.469016 
+L 200.202 160.469016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <defs>
+       <path id="mfdc20d6898" d="M 0 0 
+L -4 0 
+" style="stroke: #4d575b; stroke-width: 0.9"/>
+      </defs>
+      <g>
+       <use xlink:href="#mfdc20d6898" x="43.062" y="160.469016" style="fill: #4d575b; stroke: #4d575b; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <text style="font-size: 9px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #4d575b" x="35.062" y="163.690031" transform="rotate(-0 35.062 163.690031)">0</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7">
+      <path d="M 43.062 122.237016 
+L 200.202 122.237016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#mfdc20d6898" x="43.062" y="122.237016" style="fill: #4d575b; stroke: #4d575b; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <text style="font-size: 9px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #4d575b" x="35.062" y="125.458031" transform="rotate(-0 35.062 125.458031)">25</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9">
+      <path d="M 43.062 84.005016 
+L 200.202 84.005016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#mfdc20d6898" x="43.062" y="84.005016" style="fill: #4d575b; stroke: #4d575b; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #4d575b" x="35.062" y="87.226031" transform="rotate(-0 35.062 87.226031)">50</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_11">
+      <path d="M 43.062 45.773016 
+L 200.202 45.773016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#mfdc20d6898" x="43.062" y="45.773016" style="fill: #4d575b; stroke: #4d575b; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #4d575b" x="35.062" y="48.994031" transform="rotate(-0 35.062 48.994031)">75</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_13">
+      <path d="M 43.062 7.541016 
+L 200.202 7.541016 
+" clip-path="url(#pace4272a40)" style="fill: none; stroke: #d9e0e2; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#mfdc20d6898" x="43.062" y="7.541016" style="fill: #4d575b; stroke: #4d575b; stroke-width: 0.9"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <text style="font-size: 9px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: end; fill: #4d575b" x="35.062" y="10.762031" transform="rotate(-0 35.062 10.762031)">100</text>
+     </g>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 9.3px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #4d575b" x="11.090109" y="93.180696" transform="rotate(-90 11.090109 93.180696)">Share within thresholded LBPH outcome (%)</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 43.062 160.469016 
+L 43.062 7.541016 
+" style="fill: none; stroke: #7c898e; stroke-width: 0.95; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 43.062 160.469016 
+L 200.202 160.469016 
+" style="fill: none; stroke: #7c898e; stroke-width: 0.95; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 61.020857 160.469016 
+L 107.414571 160.469016 
+L 107.414571 7.541016 
+L 61.020857 7.541016 
+z
+" clip-path="url(#pace4272a40)" style="fill: #007a78; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 135.849429 160.469016 
+L 182.243143 160.469016 
+L 182.243143 97.956721 
+L 135.849429 97.956721 
+z
+" clip-path="url(#pace4272a40)" style="fill: #b74742; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 135.849429 97.956721 
+L 182.243143 97.956721 
+L 182.243143 7.541016 
+L 135.849429 7.541016 
+z
+" clip-path="url(#pace4272a40)" style="fill: #007a78; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 11.5px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="84.217714" y="86.986031" transform="rotate(-0 84.217714 86.986031)">100.0%</text>
+   </g>
+   <g id="text_10">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="159.046286" y="131.805056" transform="rotate(-0 159.046286 131.805056)">40.9%</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="159.046286" y="55.341056" transform="rotate(-0 159.046286 55.341056)">59.1%</text>
+   </g>
+  </g>
+  <g id="legend_1">
+   <g id="patch_8">
+    <path d="M 215.916 82.875578 
+L 228.041 82.875578 
+L 228.041 76.085578 
+L 215.916 76.085578 
+z
+" style="fill: #007a78"/>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 9.7px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start" x="232.891" y="82.875578" transform="rotate(-0 232.891 82.875578)">Correct gate action</text>
+   </g>
+   <g id="patch_9">
+    <path d="M 215.916 98.650203 
+L 228.041 98.650203 
+L 228.041 91.860203 
+L 215.916 91.860203 
+z
+" style="fill: #b74742"/>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 9.7px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start" x="232.891" y="98.650203" transform="rotate(-0 232.891 98.650203)">Unnecessary escalation</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pace4272a40">
+   <rect x="43.062" y="7.541016" width="157.14" height="152.928"/>
+  </clipPath>
+ </defs>
+</svg>
