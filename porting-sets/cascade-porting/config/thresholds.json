@@ -1,5 +1,15 @@
 {
   "_note": "Deployed hybrid config derived by src/hybrid/calibrate.py. Values are measured-now or carried-with-provenance; see 'provenance'. gate.tau_accept and sface.l2_genuine are FROZEN, see docs/READ_THIS.md.",
+  "lbph_descriptor": {
+    "id": "r1_n8_g8x8",
+    "radius": 1,
+    "neighbors": 8,
+    "grid_x": 8,
+    "grid_y": 8,
+    "status": "deployed",
+    "selected_candidate_id": "r3_n8_g6x6",
+    "thresholds_compatible_with": "r1_n8_g8x8"
+  },
   "gate": {
     "tau_accept": 77.5943,
     "tau_reject": 140.13,

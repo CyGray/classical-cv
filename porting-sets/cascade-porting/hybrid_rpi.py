@@ -4,6 +4,13 @@ from pathlib import Path
 import numpy as np
 import cv2 as cv
 
+from lbph_config import (
+    descriptor_from_mapping,
+    make_lbph,
+    release_descriptor_from_manifest,
+    validate_loaded_lbph,
+)
+
 class HybridCascade:
     def __init__(self, models_dir="."):
         self.models_dir = Path(models_dir)
@@ -15,6 +22,15 @@ class HybridCascade:
             thresh_path = self.models_dir / "thresholds.json"
         with open(thresh_path, "r") as f:
             cfg = json.load(f)
+            try:
+                self.threshold_descriptor = descriptor_from_mapping(
+                    cfg.get("lbph_descriptor"), source=str(thresh_path)
+                )
+            except ValueError as error:
+                raise RuntimeError(
+                    f"Threshold file {thresh_path} has no valid LBPH descriptor "
+                    "compatibility metadata. Refusing to start."
+                ) from error
             self.tau_accept = cfg["gate"]["tau_accept"]
             self.tau_reject = cfg["gate"]["tau_reject"]
             self.sface_l2_genuine = cfg["sface"]["l2_genuine"]
@@ -33,9 +49,15 @@ class HybridCascade:
         )
 
         # 2. Initialize LBPH
-        self.lbph = cv.face.LBPHFaceRecognizer_create()
+        # The constructor is only a default. OpenCV read() replaces these
+        # values with the serialized model parameters, so validate after read.
+        self.lbph = make_lbph(self.threshold_descriptor)
         lbph_model = self.artifacts_dir / "lbph.yml"
         lbph_labels = self.artifacts_dir / "labels.json"
+        release_manifest_path = self.artifacts_dir / "manifest.json"
+        release_manifest = None
+        release_descriptor = self.threshold_descriptor
+        legacy_manifest = False
         if not lbph_model.exists():  # Original porting bundle compatibility.
             lbph_model = self.models_dir / "artifacts" / "lbph_seed42_manifest731bcf52fec2_cropped.yml"
             if not lbph_model.exists():
@@ -43,7 +65,49 @@ class HybridCascade:
             lbph_labels = self.models_dir / "artifacts" / "lbph_labels_seed42_manifest731bcf52fec2_cropped.json"
             if not lbph_labels.exists():
                 lbph_labels = self.models_dir / "lbph_labels_seed42_manifest731bcf52fec2_cropped.json"
+            # Legacy bundles have no release manifest; their serialized model
+            # is checked directly against thresholds.json below.
+            release_manifest_path = None
+            print(
+                f"[WARN] Using legacy bundled LBPH model {lbph_model}; "
+                f"validating it against thresholds descriptor "
+                f"{self.threshold_descriptor.descriptor_id}."
+            )
+        else:
+            if not release_manifest_path.exists():
+                raise RuntimeError(f"Active enrollment release {self.artifacts_dir} is missing manifest.json.")
+            with release_manifest_path.open("r", encoding="utf-8") as f:
+                release_manifest = json.load(f)
+            try:
+                release_descriptor, legacy_manifest = release_descriptor_from_manifest(
+                    release_manifest,
+                    self.threshold_descriptor,
+                    source=str(release_manifest_path),
+                )
+            except ValueError as error:
+                raise RuntimeError(
+                    f"Active enrollment release {release_manifest_path} has invalid "
+                    "LBPH descriptor compatibility metadata. Refusing to start."
+                ) from error
+            if legacy_manifest:
+                print(
+                    f"[WARN] Active release {self.artifacts_dir} has no LBPH descriptor "
+                    f"metadata; treating thresholds.json descriptor "
+                    f"{self.threshold_descriptor.descriptor_id} as the expected legacy profile."
+                )
         self.lbph.read(str(lbph_model))
+        loaded_descriptor = validate_loaded_lbph(
+            self.lbph,
+            self.threshold_descriptor,
+            context=f"serialized model {lbph_model}",
+        )
+        if release_manifest is not None and not legacy_manifest:
+            if loaded_descriptor != release_descriptor:
+                raise RuntimeError(
+                    f"LBPH descriptor mismatch for release/model pair {self.artifacts_dir}: "
+                    f"release expects {release_descriptor.descriptor_id}, "
+                    f"loaded model is {loaded_descriptor.descriptor_id}."
+                )
         with open(lbph_labels, "r") as f:
             self.lbph_labels = {int(v): k for k, v in json.load(f).items()}
 

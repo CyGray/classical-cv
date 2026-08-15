@@ -1,5 +1,28 @@
 This folder contains the scripts and fully-trained models for the LBPH + SFace hybrid cascade (trained on LSDB 1, all identities) meant for porting to the Raspberry Pi environment.
 
+### Staged LBPH descriptor rollout
+
+The currently deployed profile is `r1_n8_g8x8` (radius 1, neighbors 8, 8x8
+grid). `config/thresholds.json` records that compatibility explicitly, and
+all numeric thresholds remain unchanged. The ablation-selected candidate is
+`r3_n8_g6x6` (radius 3, neighbors 8, 6x6 grid), but it is not calibrated for
+this bundle yet.
+
+Enrollment makes the choice explicit:
+
+```bash
+python enroll.py --rebuild-only --descriptor-profile deployed
+python enroll.py --rebuild-only --descriptor-profile selected
+```
+
+The default is `deployed`. Do not publish or select a `selected` release for
+an active Pi deployment until matching LFW and hardware thresholds have been
+installed in `config/thresholds.json`. The runtime reads the serialized model
+parameters after `LBPHFaceRecognizer.read()` and refuses to start when the
+model and threshold metadata disagree. Older active manifests without
+descriptor metadata remain runnable with a clear legacy warning when their
+serialized model matches the threshold profile.
+
 ### Folder Structure:
 
 - **`models/`**:
@@ -21,6 +44,11 @@ This folder contains the scripts and fully-trained models for the LBPH + SFace h
 - `hybrid_rpi.py` - A lightweight, zero-dependency (other than OpenCV) standalone script that executes the full hybrid cascade logic (detector -> LBPH fast-path -> Gate -> SFace escalation) directly on the Pi.
 - `cascade.py` - Contains the `PiCamera` wrapper class, similar to what was previously used in `sface.py`.
 - `enroll.py` - Hardware enrollment. Accepts one image, one person's folder, or `captures/<identity>/` folders. It writes pickle-free `enrollment/enrollment.npz`, rebuilds both runtime artifacts, and publishes the active release used automatically by `hybrid_rpi.py`.
+
+Each new enrollment release contains a stable `descriptor_id` and the full
+`lbph_descriptor` parameter block in `manifest.json`. A release built with the
+selected candidate is therefore safe to test separately, but remains blocked
+from active use until its thresholds are calibrated and installed.
 
 ### Hardware enrollment
 

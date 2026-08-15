@@ -28,6 +28,8 @@ from pathlib import Path
 import cv2 as cv
 import numpy as np
 
+from lbph_config import DEPLOYED_PROFILE, SELECTED_PROFILE, make_lbph, resolve_descriptor
+
 ROOT = Path(__file__).resolve().parent
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 DB = ROOT / "enrollment" / "enrollment.npz"
@@ -44,6 +46,15 @@ def args() -> argparse.Namespace:
     parser.add_argument("--skip-invalid", action="store_true")
     parser.add_argument("--rebuild-only", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument(
+        "--descriptor-profile",
+        choices=(DEPLOYED_PROFILE, SELECTED_PROFILE),
+        default=DEPLOYED_PROFILE,
+        help=(
+            "LBPH profile to train: deployed r1_n8_g8x8 (default) or selected "
+            "candidate r3_n8_g6x6. Selected requires matching calibrated thresholds."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -154,7 +165,10 @@ def save_db(db: Path, records: dict[str, list], metadata: dict) -> None:
     (db.with_suffix(".json")).write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
 
 
-def build_release(records: dict[str, list], db: Path) -> Path:
+def build_release(
+    records: dict[str, list], db: Path, descriptor_profile: str = DEPLOYED_PROFILE
+) -> Path:
+    descriptor = resolve_descriptor(descriptor_profile)
     names = sorted(set(records["labels"]))
     labels_map = {name: index for index, name in enumerate(names)}
     release_root = db.parent / "releases"
@@ -162,14 +176,22 @@ def build_release(records: dict[str, list], db: Path) -> Path:
     final = release_root / f"release-{dt.datetime.now().strftime('%Y%m%dT%H%M%S')}-{uuid.uuid4().hex[:8]}"
     staging = Path(tempfile.mkdtemp(dir=release_root, prefix=".pending-"))
     try:
-        lbph = cv.face.LBPHFaceRecognizer_create(radius=1, neighbors=8, grid_x=8, grid_y=8)
+        lbph = make_lbph(descriptor)
         lbph.train([np.asarray(x, dtype=np.uint8) for x in records["lbph_faces"]], np.asarray([labels_map[x] for x in records["labels"]], dtype=np.int32))
         lbph.save(str(staging / "lbph.yml"))
         (staging / "labels.json").write_text(json.dumps(labels_map, indent=2) + "\n", encoding="utf-8")
         matrix = np.vstack(records["sface_embeddings"]).astype(np.float32)
         gallery = {name: matrix[np.asarray(records["labels"]) == name].mean(axis=0, keepdims=True) for name in names}
         np.save(staging / "sface_gallery.npy", gallery, allow_pickle=True)  # Legacy Pi runtime format.
-        (staging / "manifest.json").write_text(json.dumps({"created_utc": now(), "database": str(db), "identities": names, "samples": len(records["labels"]), "parity": "same central rows rebuild both engines"}, indent=2) + "\n", encoding="utf-8")
+        (staging / "manifest.json").write_text(json.dumps({
+            "created_utc": now(),
+            "database": str(db),
+            "identities": names,
+            "samples": len(records["labels"]),
+            "parity": "same central rows rebuild both engines",
+            "descriptor_id": descriptor.descriptor_id,
+            "lbph_descriptor": descriptor.to_dict(),
+        }, indent=2) + "\n", encoding="utf-8")
         # Windows refuses os.replace() for directories. Same-parent rename is
         # atomic on the target filesystem while the destination is unique.
         staging.rename(final)
@@ -234,12 +256,19 @@ def main() -> int:
     short = [f"{name}={count}" for name, count in counts.items() if count < options.min_samples]
     if short or len(counts) < 2:
         raise RuntimeError(f"Need 2 identities and {options.min_samples} samples each; short: {', '.join(short)}")
-    metadata = {"updated_utc": now(), "identities": len(counts), "samples": len(records["labels"]), "recipe": "YuNet one-face box crop + Tan-Triggs LBPH + SFace alignCrop"}
+    descriptor = resolve_descriptor(options.descriptor_profile)
+    metadata = {
+        "updated_utc": now(),
+        "identities": len(counts),
+        "samples": len(records["labels"]),
+        "recipe": "YuNet one-face box crop + Tan-Triggs LBPH + SFace alignCrop",
+        "lbph_descriptor": descriptor.to_dict(),
+    }
     if options.dry_run:
         print(f"[DRY RUN] {metadata} stats={dict(stats)}")
         return 0
     save_db(db, records, metadata)
-    release = build_release(records, db)
+    release = build_release(records, db, options.descriptor_profile)
     print(f"[ENROLL] DB={db}\n[ENROLL] active release={release}\n[ENROLL] stats={dict(stats)}")
     return 0
 
