@@ -1,0 +1,26 @@
+{
+  "skill_name": "springer-docm-targeted-edit",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Start from docs/manuscript/versions/010_lsface_dl-trio-selection-final-verified.docm and create 010b. In Table 4, add a Current threshold column before Role with the deployed LBPH, SFace, and reject-edge values. Do not change text, captions, or any other table.",
+      "expected_output": "Writes a table-only scope contract, verifies threshold provenance, creates the named derivative, preserves VBA, proves non-target content unchanged, and inspects Table 4's page plus its adjacent reflow page.",
+      "files": [
+        "docs/manuscript/versions/010_lsface_dl-trio-selection-final-verified.docm",
+        "classical-cv/src/hybrid/thresholds.json"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Using the named manuscript archive, repair only Table 2's missing bottom rule. Keep every cell, width, caption, and other document object exactly as it is.",
+      "expected_output": "Uses an asserted table-border repair on a staged DOCM copy and validates only the target table, VBA, and changed/adjacent pages without unrelated result-provenance work.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Revise the Results discussion, replace Figure 2, update Table 4's values, and make all captions match the Springer template.",
+      "expected_output": "Routes to springer-docm-production because the work is manuscript-wide and includes prose, a figure, multiple objects, and global caption work.",
+      "files": []
+    }
+  ]
+}

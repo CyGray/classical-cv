@@ -1,26 +1,12 @@
 ---
 name: cv-workspace-map
 description: >
-  Navigation map for the "Computer Vision" workspace root (USLS CV Group 3,
-  LS-Face / Smart Gate). Covers what this directory actually is (as of
-  2026-08-09, a single git repo holding two functionally-unrelated
-  subprojects — see §1 for the restructuring history), which sibling project is
-  runnable on this machine and which is not, where the ONE runtime source of
-  truth for hybrid thresholds lives versus the five prose documents that
-  currently disagree with it, and the cross-repo traps that have already
-  produced wrong numbers: two non-comparable LBPH distance scales, cropped vs
-  full-frame LBPH tiles, and same-filename/different-pixel LFW copies. Use this
-  BEFORE reading root AGENTS.md as fact, before quoting or writing any
-  threshold value, before running anything under deep-learning/, before
-  comparing an independence-test number against another one, and whenever a
-  path, report, or doc exists at both the workspace root and inside
-  classical-cv/ under a similar name. For classical-cv internals (which
-  independence script to run, data/ folder contents) defer to the cv-repo-map
-  skill inside that repo. For the LFW2 41-modification robustness benchmark's
-  PROTOCOL axis (1-to-N identification vs 1:1 pairwise verification vs
-  transform-sensitivity, AR/GAR/TPIR/Rank-1/EER numbers, the tau_accept vs
-  EER-swept operating points) defer to the robustness-protocol-map skill
-  (also workspace root).
+  Navigation map for the Computer Vision workspace (LS-Face / Smart Gate).
+  Use before cross-project work, root-vs-classical-cv path/result confusion,
+  threshold or deep-learning work, independence-result comparisons, or
+  creating/regenerating manuscript figures and diagrams. Route classical-CV
+  internals to cv-repo-map and LFW2 protocol questions to
+  robustness-protocol-map; use the shared SVG visual-export guide for assets.
 ---
 
 # Workspace map: Computer Vision root
@@ -114,6 +100,16 @@ in `classical-cv/src/hybrid/thresholds.json`. In prose, name the two questions
 separately: LSDB selects algorithms; LFW establishes the deployed operating
 point.
 
+## Manuscript visual-export route
+
+Before creating or regenerating any figure, chart, graph, or diagram, read
+`scripts/visualization/README.md` at the workspace root. It is the shared
+export policy: use Matplotlib for data-driven charts/graphs, Graphviz for
+structural diagrams, and SVG as the manuscript output. For result figures,
+first check the applicable `docs/results/` README, manifest, and provenance
+audit; regenerate from recorded data rather than converting or overwriting an
+existing PNG run artifact.
+
 ## 1. What is actually here
 
 **Correction, 2026-08-02:** the root *is now* a git repository — a single repo
@@ -134,7 +130,8 @@ doubt, don't trust a date-stamped claim in prose.
 | `classical-cv/` | Subdirectory of the single root repo (§1 correction) — no longer its own `.git`. Its pre-2026-08-02 history is preserved (`fa80995` snapshot + merges). The live project: LBPH / Eigenfaces / Fisherfaces and the hybrid LBPH+SFace cascade (`src/hybrid/`). Has its own `AGENTS.md` + `.claude/skills/cv-repo-map`. | **Yes** — this is where work happens. |
 | `deep-learning/` | Subdirectory of the single root repo (§1 correction) — no longer its own `.git`; `archive/` is untracked. Its pre-2026-08-02 history is not reachable from current refs (added fresh, no separate remote found). SFace / ArcFace / FaceNet feature extraction and threshold scripts. | **No.** `loader.py:10-12` hardcodes `D:/FILES/PROGRAMMING/...` dataset roots and there is no `D:` drive on this machine. Treat DL work as plan-only; write plans into `classical-cv/docs/`. |
 | `face-detection-g3/` | **Empty.** Contains only `.codegraph/` — no source, no data. Root `AGENTS.md` describes it as "auxiliary face detection and evaluation modules"; that is false as of 2026-08-01. | No — nothing to run. |
-| `docs/`, `reports/`, `scripts/`, `archive/` | Small root-level output/aggregation dirs. Not the project's main docs or reports — those live inside `classical-cv/` (§4). | — |
+| `docs/` | Workspace-level manuscript, experiment, and canonical evidence material; `docs/results/` is the canonical result store. | — |
+| `reports/`, `scripts/`, `archive/` | Root-level working/aggregation and historical material; the active source/report tree remains under `classical-cv/`. | — |
 | `.codegraph/` | Codegraph index for the workspace. The `codegraph_*` MCP tools are not always connected in a given session; if they aren't, fall back to `rg`/`fd`. | — |
 
 Root `AGENTS.md` also lists a `preprocess/` directory at root. **It does not
@@ -318,8 +315,8 @@ one you mean, and prefer the `classical-cv/` one for anything current.
 | Root | classical-cv | Note |
 |---|---|---|
 | `reports/independence/` — a small hand-assembled summary + PNGs | `reports/independence/` — the actual per-run artifact tree (`lbph_lfw1/`, `hybrid/`, ...) | Different content, same relative path. |
-| `AGENTS.md` — 32 lines, workspace-level, contains stale claims (§1, §2) | `AGENTS.md` — the real engineering standards | When they conflict, classical-cv wins on project matters. |
-| `docs/`, `scripts/` | `docs/`, `scripts/` | Root versions are aggregation/reporting only. |
+| `AGENTS.md` — workspace-level rules plus the shared fast router | `AGENTS.md` — project-specific engineering standards | The nearest applicable guide governs; use the workspace map for cross-project facts. |
+| `docs/` — workspace manuscript, experiment, and canonical-result material; `scripts/` — root orchestration | `docs/`, `scripts/` — project docs and source tooling | Similar names have different scopes; `docs/results/` is the canonical evidence store. |
 
 ## 5. Environment
 
@@ -364,6 +361,10 @@ without stating all five differences; a reader (or a thesis committee) will
 otherwise assume they measure the same thing.
 
 ## 6. Where to go next
+
+- **New or regenerated visual asset**: read `scripts/visualization/README.md`
+  first, then apply this map's canonical-result rules and the relevant
+  repository/protocol map before using experimental data.
 
 - **classical-cv internals** — which independence script for which dataset, what
   each `data/` folder holds, ordered vs unidirectional pair counts, plotting

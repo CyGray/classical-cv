@@ -5,6 +5,22 @@
 !.gitignore
 !.gitattributes
 
+# Versioned workspace-agent skills. Keep all other local agent configuration
+# ignored while allowing the shared targeted DOCM workflow to travel with the
+# repository.
+!.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/springer-docm-targeted-edit/
+!.claude/skills/springer-docm-targeted-edit/**
+!.agents/
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/springer-docm-targeted-edit/
+!.agents/skills/springer-docm-targeted-edit/**
+
 # ===================================
 # Archive Directories
 # ===================================

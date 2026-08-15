@@ -1,5 +1,11 @@
 # Workspace Agent Guidelines & Memory (Computer Vision Root)
 
+## Fast entrypoint for all agents
+
+Read [`AGENT_START_HERE.md`](AGENT_START_HERE.md) first. It is the short
+workspace router for Codex, Agy/Gemini, Cmdc, and human contributors; this
+file retains the detailed safety, provenance, and collaboration rules.
+
 ## Primary Directive: Code Intelligence & Exploration
 
 - **ALWAYS use Codegraph first for codebase exploration**: Before performing any text search (`grep`) or raw file reads, ALWAYS use Codegraph (`codegraph_explore` / `codegraph_context` MCP tools, or the `codegraph` CLI) for symbol discovery, architecture exploration, call graph analysis, and evaluating change blast-radius.
@@ -22,8 +28,9 @@
    41-modification robustness suite.
 3. `classical-cv/.claude/skills/cv-repo-map/SKILL.md` — independence-test
    script selection, LBPH distance scales, `data/` folder contents.
-4. Not using Claude Code (no Skill tool available)? Read `GEMINI.md`
-   (workspace root) — a self-contained mirror of all three skills above.
+4. Not using Claude Code (no Skill tool available)? Read `GEMINI.md` and
+   `AGENT_START_HERE.md`; they are the cross-agent routing adapters for the
+   detailed maps above.
 
 Also check `classical-cv/docs/READ THIS/` before editing files that touch
 threshold provenance.
@@ -75,30 +82,50 @@ question. State that separation whenever both appear in the manuscript.
   new or changed table/figure before handoff. Keep captions with their object,
   clear inherited list numbering from table cells, and check wrapping, rules,
   column widths, and figure scale.
+- A caption is a layout-bearing semantic object, not merely text with the
+  right style name. Table titles must be separate above-table `tablecaption`
+  paragraphs; figure names must be separate below-figure `figurecaption`
+  paragraphs. Match the macro reference's style definition and clear any
+  direct font/paragraph overrides before applying it. Enumerate every caption,
+  its effective formatting, and its relative object position before handoff.
+- A render is evidence only when it depicts the requested output. When Word
+  opens a reference document as well as the target, reactivate the target and
+  assert `ActiveDocument` before every capture. If PDF export is unreliable,
+  use the verified Word PrintWindow capture fallback; visually inspect the
+  changed pages and adjacent reflow pages, not a stale or reference window.
 - If an independent advisor is requested, use a different model tier from the
   executor. A Terra-led task consults Sol only when the decision warrants it;
   never dispatch Terra as its own advisor.
 
 ## Springer manuscript production
 
-For any request to create, revise, format, or export a Springer/LNCS paper,
-DOCX, or DOCM, read `.claude/skills/springer-docm-production/SKILL.md` before
-editing. It covers the official template, `header.png`, current claim
+For a one-object DOCM micro-edit with an exact named baseline and derivative,
+an explicit target, exact replacement content, and a no-change boundary, read
+`.claude/skills/springer-docm-targeted-edit/SKILL.md` first. It is the fast,
+macro-safe route for a single table, caption, or inline object. Use
+`.claude/skills/springer-docm-production/SKILL.md` for all other Springer/LNCS
+paper, DOCX, or DOCM work. It covers the official template, `header.png`, current claim
 provenance, Word automation, and macro preservation. If macros must survive,
 create a new `.docm` copy and verify its `word/vbaProject.bin` hash matches
-`docs/splnproc2510.docm`; never overwrite or convert the original template.
+the named DOCM baseline (or `docs/manuscript/sample/sample.docm` when starting
+from the macro specimen); never overwrite or convert the original template.
 For every edit to `docs/manuscript/lsface.docm`, archive both the before copy
 and final after copy in `docs/manuscript/versions/` using the exact sequential
 format `[index]_lsface_[version_name].docm`; read that directory's README and
-never substitute timestamped or suffix-index names.
+never substitute timestamped or suffix-index names. If the user explicitly
+names a derivative (for example, `009b` from `009`), start from that exact
+archive and create exactly that requested derivative—do not advance to a new
+number or write the personal-access `docs/manuscript/copy/` source.
 Keep generators and helper scripts under `scripts/document-production/`; keep
 `docs/` limited to manuscript sources, final office files, templates, visual
 references, and evidence documents.
 
-For manuscript figures, use native Word tables for tabular results. Do not
-auto-trace a PNG into a fake vector figure. Regenerate a verified figure from
-recorded data as SVG/PDF (or EMF on Windows) only after its manifest status is
-clear; validate the exported PDF.
+For every new or regenerated manuscript visual, first read
+`scripts/visualization/README.md`: use Matplotlib for data-driven charts and
+graphs, Graphviz for structural diagrams, and SVG as the primary export. Use
+native Word tables for tabular results. Do not auto-trace a PNG into a fake
+vector figure. Regenerate a verified SVG from recorded data only after its
+manifest status is clear; validate the rendered manuscript output.
 
 ---
 

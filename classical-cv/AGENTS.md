@@ -1,5 +1,10 @@
 # LS-Face / Smart Gate — Agent Guide
 
+> **Fast path:** from this subproject, read [`../AGENT_START_HERE.md`](../AGENT_START_HERE.md)
+> first, then use the repo-specific map at
+> `.claude/skills/cv-repo-map/SKILL.md`. The root guide handles cross-project
+> paths and canonical result provenance; this file handles project internals.
+
 Face recognition research project (USLS Computer Vision, Group 3). Classical CV
 recognizers (LBPH, Eigenfaces, Fisherfaces) plus a hybrid LBPH→SFace cascade,
 selected via independence testing. Deliverable: the IW-FCV 2026 paper at
@@ -35,6 +40,12 @@ selected via independence testing. Deliverable: the IW-FCV 2026 paper at
 - `docs/` — `PAPER.md`, `READ THIS/` (briefing, audit, paper instructions,
   CFP), `reports/` (finished write-ups), `figures/`, `changelogs/`,
   `archive/` (superseded plans and prior report drafts).
+
+For every new or regenerated manuscript visual, first read
+`../scripts/visualization/README.md`: use Matplotlib for data-driven charts,
+Graphviz for structural diagrams, and SVG as the primary export. Do not rename
+or convert historical result rasters in place; regenerate an SVG from recorded
+data only after the applicable provenance checks pass.
 
 ## Engineering Standards
 
