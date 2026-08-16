@@ -42,16 +42,15 @@ DEFAULT_OUTPUT = (
     / "fig_gate_competence_stacked_bars.svg"
 )
 
-# Outcome-based, print-safe palette. Teal consistently means the gate made
-# the right routing choice; brick red flags a needless escalation.
-GOOD = "#007A78"
-NOT_GOOD = "#B74742"
+# Routing action palette: neutral descriptive actions rather than evaluative judgments.
+ESCALATED = "#007A78"
+RETAINED = "#4D575B"
 TEXT = "#1B2326"
 MUTED = "#4D575B"
 GRID = "#D9E0E2"
 REQUIRED_SVG_TEXT = (
-    "Correct gate action",
-    "Unnecessary escalation",
+    "Escalated",
+    "Retained at LBPH",
     "LBPH failures",
     "LBPH-correct",
     "100.0%",
@@ -155,14 +154,14 @@ def build_figure(routing: GateRouting) -> plt.Figure:
         failure_x,
         routing.failure_recall_percent,
         width=width,
-        color=GOOD,
+        color=ESCALATED,
         **bar_style,
     )
     axis.bar(
         correct_x,
         routing.correct_escalation_percent,
         width=width,
-        color=NOT_GOOD,
+        color=ESCALATED,
         **bar_style,
     )
     axis.bar(
@@ -170,7 +169,7 @@ def build_figure(routing: GateRouting) -> plt.Figure:
         routing.correct_retained_percent,
         bottom=routing.correct_escalation_percent,
         width=width,
-        color=GOOD,
+        color=RETAINED,
         **bar_style,
     )
 
@@ -242,8 +241,8 @@ def build_figure(routing: GateRouting) -> plt.Figure:
 
     figure.legend(
         handles=(
-            Patch(facecolor=GOOD, edgecolor="none", label="Correct gate action"),
-            Patch(facecolor=NOT_GOOD, edgecolor="none", label="Unnecessary escalation"),
+            Patch(facecolor=ESCALATED, edgecolor="none", label="Escalated"),
+            Patch(facecolor=RETAINED, edgecolor="none", label="Retained at LBPH"),
         ),
         loc="center left",
         bbox_to_anchor=(0.62, 0.56),
@@ -286,8 +285,8 @@ def render_figure(source: Path = DEFAULT_INPUT, output: Path = DEFAULT_OUTPUT) -
                     f"{routing.correct_escalation_percent:.2f}% of {routing.lbph_correct:,} thresholded LBPH-correct "
                     f"probes and retained {routing.correct_retained_percent:.2f}% on the LBPH path. Escalation precision "
                     f"was {routing.escalation_precision_percent:.2f}%; {routing.excluded_no_signal:,} modified probes "
-                    "without the required gate signals were excluded from this routing analysis. Teal denotes a correct "
-                    "gate action and brick red denotes an unnecessary escalation."
+                    "without the required gate signals were excluded from this routing analysis. Teal denotes escalated "
+                    "probes and slate gray denotes probes retained on the LBPH path."
                 ),
             ),
         )

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="344.067109pt" height="192.104494pt" viewBox="0 0 344.067109 192.104494" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="318.734953pt" height="192.104494pt" viewBox="0 0 318.734953 192.104494" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <title>Deployed gate routing on held-out LSDB-DL41 probes</title>
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
@@ -9,7 +9,7 @@
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
     <dc:title>Deployed gate routing on held-out LSDB-DL41 probes</dc:title>
     <dc:date>2026-08-10T02:11:27+08:00</dc:date>
-    <dc:description>Among 2,060 scored modified probes, the deployed gate escalated all 1,353 thresholded LBPH failures to SFace (100.0% recall). It escalated 40.88% of 707 thresholded LBPH-correct probes and retained 59.12% on the LBPH path. Escalation precision was 82.40%; 236 modified probes without the required gate signals were excluded from this routing analysis. Teal denotes a correct gate action and brick red denotes an unnecessary escalation.</dc:description>
+    <dc:description>Among 2,060 scored modified probes, the deployed gate escalated all 1,353 thresholded LBPH failures to SFace (100.0% recall). It escalated 40.88% of 707 thresholded LBPH-correct probes and retained 59.12% on the LBPH path. Escalation precision was 82.40%; 236 modified probes without the required gate signals were excluded from this routing analysis. Teal denotes escalated probes and slate gray denotes probes retained on the LBPH path.</dc:description>
     <dc:format>image/svg+xml</dc:format>
     <dc:identifier>sha256:13de27c4b29e59a3bf8c3049441d70cc01fe8ce8aefba2a89dc1c08ab39110fb</dc:identifier>
     <dc:source>complementarity_test/reruns/lsdb_dl41_2026-08-10/accuracy_ratio_hybrid.json</dc:source>
@@ -27,8 +27,8 @@
  <g id="figure_1">
   <g id="patch_1">
    <path d="M 0 192.104494 
-L 344.067109 192.104494 
-L 344.067109 0 
+L 318.734953 192.104494 
+L 318.734953 0 
 L 0 0 
 z
 " style="fill: #ffffff"/>
@@ -214,7 +214,7 @@ L 182.243143 160.469016
 L 182.243143 97.956721 
 L 135.849429 97.956721 
 z
-" clip-path="url(#pace4272a40)" style="fill: #b74742; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
+" clip-path="url(#pace4272a40)" style="fill: #007a78; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
    </g>
    <g id="patch_7">
     <path d="M 135.849429 97.956721 
@@ -222,7 +222,7 @@ L 182.243143 97.956721
 L 182.243143 7.541016 
 L 135.849429 7.541016 
 z
-" clip-path="url(#pace4272a40)" style="fill: #007a78; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
+" clip-path="url(#pace4272a40)" style="fill: #4d575b; stroke: #ffffff; stroke-width: 1.05; stroke-linejoin: miter"/>
    </g>
    <g id="text_9">
     <text style="font-weight: 700; font-size: 11.5px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="84.217714" y="86.986031" transform="rotate(-0 84.217714 86.986031)">100.0%</text>
@@ -236,26 +236,26 @@ z
   </g>
   <g id="legend_1">
    <g id="patch_8">
-    <path d="M 215.916 82.875578 
-L 228.041 82.875578 
-L 228.041 76.085578 
-L 215.916 76.085578 
+    <path d="M 215.916 82.930141 
+L 228.041 82.930141 
+L 228.041 76.140141 
+L 215.916 76.140141 
 z
 " style="fill: #007a78"/>
    </g>
    <g id="text_12">
-    <text style="font-size: 9.7px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start" x="232.891" y="82.875578" transform="rotate(-0 232.891 82.875578)">Correct gate action</text>
+    <text style="font-size: 9.7px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start" x="232.891" y="82.930141" transform="rotate(-0 232.891 82.930141)">Escalated</text>
    </g>
    <g id="patch_9">
-    <path d="M 215.916 98.650203 
-L 228.041 98.650203 
-L 228.041 91.860203 
-L 215.916 91.860203 
+    <path d="M 215.916 98.591094 
+L 228.041 98.591094 
+L 228.041 91.801094 
+L 215.916 91.801094 
 z
-" style="fill: #b74742"/>
+" style="fill: #4d575b"/>
    </g>
    <g id="text_13">
-    <text style="font-size: 9.7px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start" x="232.891" y="98.650203" transform="rotate(-0 232.891 98.650203)">Unnecessary escalation</text>
+    <text style="font-size: 9.7px; font-family: 'Arial', 'DejaVu Sans'; text-anchor: start" x="232.891" y="98.591094" transform="rotate(-0 232.891 98.591094)">Retained at LBPH</text>
    </g>
   </g>
  </g>

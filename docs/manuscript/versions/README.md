@@ -1,26 +1,25 @@
+# Manuscript Versions & Lineage
+
 Archive every edited main-manuscript DOCM here. Start from the exact named
 baseline, and put the final editable output here—not in
 `docs/manuscript/copy/`, which is personal-access source material. Name a
 normal successor `[i+1]_lsface_[version_name].docm`.
 
 If the user explicitly asks for a derivative from a named version (for example
-`009b` from `009`), create that exact derivative name from the named baseline;
-do not advance to a new number or silently substitute a fuller draft.
+`009b` from `009`, or `020b` from `020p`), create that exact derivative name from
+the named baseline; do not advance to a new number or silently substitute a fuller draft.
 
-## Current approved baseline
+## Current Approved Baseline
 
-Until the actual successor is created, use
-`pairwise/014p_finalizations.docm` as the exact formatting and content
-baseline for the next main-line canonical self-match robustness manuscript
-successor, unless the user explicitly names another baseline. The final
-advisor decision promotes this endpoint of the experimental fork as the
-approved main-line source; `014p_finalizations.docm` itself remains untouched
-in `pairwise/`, and this approval does not mean that its successor already
-exists.
+The current approved main-line baseline is:
+- **`020b_lsface_canonical-selfmatch-promoted.docm`** (with accompanying `020b_lsface_canonical-selfmatch-promoted.pdf` and `_page_renders_020b/`)
+- Parent canonical baseline: **`020p_lsface_canonical-selfmatch-promoted.docm`** (with accompanying `020p_lsface_canonical-selfmatch-promoted.pdf` and `_page_renders_020p/`)
 
-The robustness material in this baseline is same-source transform
-sensitivity, not image-disjoint recognition, pairwise verification, or a FAR
-measurement by that experiment. The earlier `012p` and `013p` artifacts
-remain unchanged as historical lineage records.
+These versions incorporate canonical self-match robustness results (77.02% LBPH, 88.90% SFace, 88.91% cascade retention, 92.45% pooled escalation, 6.40% strict detector failure handling), complete terminology reconciliation (within-image transformation retention vs image-disjoint evaluation), precise mathematical typography ($m_{\text{min}}$, $\tau_{\text{reject}}$, $\tau_{\text{accept}}$, $p_5$), calibrated figure dimensions, verified 16-page budget, and bit-for-bit VBA macro preservation.
 
-E.g., 001_lsface_model-selection.docm
+## Directory Structure
+
+- `archive/` — Historical early main-line versions (`001` through `010`).
+- `pairwise/` — Archived experimental fork (`012p` through `019p`) that developed and refined the canonical self-match robustness integration before the promotion of `020p`/`020b`.
+- `_table_capture/` — Visual inspection renders of manuscript tables.
+- `_page_renders_020p/` & `_page_renders_020b/` — Visual inspection page renders for promoted versions.
