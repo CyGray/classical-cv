@@ -1,0 +1,160 @@
+{
+  "schema": "lsface-lbph-descriptor-ablation-v1",
+  "status": "complete",
+  "created_utc": "2026-08-14T10:19:51.347375+00:00",
+  "command": [
+    "C:\\Users\\acer\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "scripts\\pipeline\\run_lbph_descriptor_ablation.py",
+    "--progress-every",
+    "250"
+  ],
+  "script": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\scripts\\pipeline\\run_lbph_descriptor_ablation.py",
+  "script_sha256": "45d45e38d5c3b51265c0621ed9e6dc914bbf4d2e91eb2ced476a0e15757b1c2b",
+  "git": {
+    "commit": "d4cbfd1ceeb4e344f7d0cbb278f74b51afe2a66a",
+    "branch": "master",
+    "status_porcelain": "M ../.claude/skills/cv-workspace-map/SKILL.md\n M ../.claude/skills/springer-docm-production/SKILL.md\n M ../.gitignore\n M ../AGENTS.md\n M ../GEMINI.md\n M AGENTS.md\n M docs/PAPER.md\n M requirements.txt\n M scripts/far_sweep_tar_report.py\n M scripts/pipeline/sweep_gate_curve.py\n M scripts/reporting/make_hybrid_design_diagrams.py\n M ../docs/changelogs/CHANGELOG.md\n M ../docs/manuscript/claim-evidence-register.md\n D ../docs/manuscript/copy/005_lsface_lsdb-model-selection.docm\n M ../docs/manuscript/lsface.docm\n D ../docs/manuscript/versions/001_lsface_model-selection.docm\n D ../docs/manuscript/versions/002_lsface_before-robustness-terminology.docm\n D ../docs/manuscript/versions/003_lsface_robustness-terminology-intermediate.docm\n D ../docs/manuscript/versions/004_lsface_robustness-terminology.docm\n D ../docs/manuscript/versions/004b_lsface_chapter_3_draft.docm\n D ../docs/manuscript/versions/004c_lsface_chapter_3_draft.docm\n D ../docs/manuscript/versions/004d_lsface_chapter_3_draft.docm\n D ../docs/manuscript/versions/005_lsface_lsdb-model-selection.docm\n M ../docs/manuscript/versions/README.md\n M ../docs/results/RESULTS_MANIFEST.json\n M ../docs/results/algo_test/README.md\n M ../docs/results/algo_test/lsdb_selection_2026-08-10/README.md\n M ../docs/results/algo_test/lsdb_selection_2026-08-10/cv_selection_tar.svg\n M ../docs/results/complementarity_test/README.md\n M ../docs/results/metadata/PROVENANCE_AUDIT.md\n M ../scripts/pipeline/README_lsdb_model_selection.md\n M ../scripts/reporting/generate_results_manifest.py\n?? ../.agents/\n?? ../.claude/skills/springer-docm-targeted-edit/\n?? ../AGENT_START_HERE.md\n?? ../README.md\n?? scripts/diagnostics/\n?? scripts/pipeline/run_lbph_descriptor_ablation.py\n?? scripts/pipeline/score_lsdb_dl_selection.py\n?? src/benchmark/hog_descriptor.py\n?? src/benchmark/lpq_descriptor.py\n?? src/benchmark/ltp_descriptor.py\n?? tests/\n?? ../docs/RESEARCH_STRENGTHENING_ROADMAP_2026-08-13.md\n?? ../docs/changelogs/AUG_11.md\n?? ../docs/experiments/complementarity_test/gate_accept_protection_smoke_2026-08-13/\n?? ../docs/experiments/manuscript-renders/\n?? ../docs/experiments/robustness_variants/classical_descriptor_smoke_2026-08-13/\n?? ../docs/experiments/thresholds/lbph_tar_far_operating_point_2026-08-11/\n?? ../docs/manuscript/copy/009b_lsface_caption-style-reflow.docm\n?? ../docs/manuscript/copy/010b_lsface_dl-trio-selection-final-verified.docm\n?? ../docs/manuscript/copy/011_lsface_complementarity-logic-data.docm\n?? ../docs/manuscript/copy/014_lsface_dl-trio-selection-final-verified.docm\n?? ../docs/manuscript/figures/\n?? ../docs/manuscript/versions/006_lsface_independence-finalization.docm\n?? ../docs/manuscript/versions/010b_lsface_dl-trio-selection-final-verified.docm\n?? ../docs/manuscript/versions/011_lsface_complementarity-logic-data.docm\n?? ../docs/manuscript/versions/012_lsface_gate-accept-protection-descriptive.docm\n?? ../docs/manuscript/versions/pairwise/\n?? ../docs/results/algo_test/lsdb_selection_dl_2026-08-11/\n?? ../docs/results/algo_test/lsdb_selection_dl_trio_2026-08-11/\n?? ../docs/results/complementarity_test/reruns/\n?? ../docs/results/independence_test/reruns/finalized_2026-08-10/\n?? ../docs/results/robustness_test/RESULTS_SUMMARY.png\n?? ../docs/results/robustness_test/ROBUSTNESS_RESULT_PROVENANCE.md\n?? ../docs/results/robustness_test/THRESHOLD_SWEEP.png\n?? ../docs/results/robustness_test/per_modification_identification_table.png\n?? ../docs/results/robustness_test/robustness_summary_full_bleed.md\n?? ../docs/results/robustness_test/robustness_summary_full_bleed.png\n?? ../docs/results/robustness_test/summary_identification_table.png\n?? ../hybrid_cascade_architecture.dot\n?? ../hybrid_cascade_architecture.svg\n?? ../hybrid_cascade_architecture_canonical.dot\n?? ../hybrid_cascade_architecture_canonical.svg\n?? ../hybrid_cascade_architecture_canonical_min.dot\n?? ../hybrid_cascade_architecture_canonical_min.svg\n?? ../hybrid_cascade_architecture_canonical_triggers.dot\n?? ../hybrid_cascade_architecture_canonical_triggers.svg\n?? ../hybrid_cascade_architecture_manuscript.dot\n?? ../hybrid_cascade_architecture_manuscript.png\n?? ../hybrid_cascade_architecture_manuscript.svg\n?? ../hybrid_cascade_architecture_simplified.dot\n?? ../hybrid_cascade_architecture_simplified.svg\n?? ../hybrid_cascade_architecture_uml.dot\n?? ../hybrid_cascade_architecture_uml.png\n?? ../hybrid_cascade_architecture_uml.svg\n?? ../hybrid_cascade_architecture_uml_clean.dot\n?? ../hybrid_cascade_architecture_uml_clean.png\n?? ../hybrid_cascade_architecture_uml_clean.svg\n?? ../hybrid_cascade_architecture_uml_detailed.dot\n?? ../hybrid_cascade_architecture_uml_detailed.png\n?? ../hybrid_cascade_architecture_uml_detailed.svg\n?? ../hybrid_cascade_architecture_uml_enhanced.dot\n?? ../hybrid_cascade_architecture_uml_enhanced.png\n?? ../hybrid_cascade_architecture_uml_enhanced.svg\n?? ../hybrid_cascade_architecture_uml_sketch.dot\n?? ../hybrid_cascade_architecture_uml_sketch.png\n?? ../hybrid_cascade_architecture_uml_sketch.svg\n?? ../note-uml-clean-20260814.svg\n?? ../note-uml-full-bleed-20260814-010404.svg\n?? ../note-uml-full-bleed-20260814-010421062.svg\n?? ../note-uml-full-bleed-fixed-20260814-0130.svg\n?? ../note-uml-full-bleed-fold-visible-20260814-0119.svg\n?? ../note-uml-full-bleed-no-thick-diagonal-20260814-0112.svg\n?? ../scripts/document-production/add-dl-trio-selection-v011.ps1\n?? ../scripts/document-production/add-robustness-table-v007.ps1\n?? ../scripts/document-production/add-table4-threshold-value-column-v010b.ps1\n?? ../scripts/document-production/build-v008-complementarity-discussion.ps1\n?? ../scripts/document-production/compact-complementarity-v011.ps1\n?? ../scripts/document-production/create-pairwise-legacy-selfmatch-v012.ps1\n?? ../scripts/document-production/finalize-dl-trio-manuscript-v014.ps1\n?? ../scripts/document-production/inspect-word-layout.ps1\n?? ../scripts/document-production/promote-gate-accept-protection-v012.ps1\n?? ../scripts/document-production/repair-section-four-table-layout-v012.ps1\n?? ../scripts/document-production/restore-section-four-captions-v013.ps1\n?? ../scripts/generate_complementarity_figures.py\n?? ../scripts/reporting/generate_complementarity_assets.py\n?? ../scripts/reporting/generate_independence_finalization_assets.py\n?? ../scripts/test_complementarity_figure_generators.py\n?? ../scripts/visualization/"
+  },
+  "environment": {
+    "python": "3.11.9",
+    "opencv": "4.13.0",
+    "numpy": "2.4.3",
+    "platform": "Windows-10-10.0.22631-SP0"
+  },
+  "configs": [
+    {
+      "config_id": "r1_n8_g4x4",
+      "radius": 1,
+      "neighbors": 8,
+      "grid_x": 4,
+      "grid_y": 4,
+      "feature_bytes_per_template": 16384
+    },
+    {
+      "config_id": "r1_n8_g6x6",
+      "radius": 1,
+      "neighbors": 8,
+      "grid_x": 6,
+      "grid_y": 6,
+      "feature_bytes_per_template": 36864
+    },
+    {
+      "config_id": "r1_n8_g8x8",
+      "radius": 1,
+      "neighbors": 8,
+      "grid_x": 8,
+      "grid_y": 8,
+      "feature_bytes_per_template": 65536
+    },
+    {
+      "config_id": "r1_n8_g10x10",
+      "radius": 1,
+      "neighbors": 8,
+      "grid_x": 10,
+      "grid_y": 10,
+      "feature_bytes_per_template": 102400
+    },
+    {
+      "config_id": "r2_n8_g4x4",
+      "radius": 2,
+      "neighbors": 8,
+      "grid_x": 4,
+      "grid_y": 4,
+      "feature_bytes_per_template": 16384
+    },
+    {
+      "config_id": "r2_n8_g6x6",
+      "radius": 2,
+      "neighbors": 8,
+      "grid_x": 6,
+      "grid_y": 6,
+      "feature_bytes_per_template": 36864
+    },
+    {
+      "config_id": "r2_n8_g8x8",
+      "radius": 2,
+      "neighbors": 8,
+      "grid_x": 8,
+      "grid_y": 8,
+      "feature_bytes_per_template": 65536
+    },
+    {
+      "config_id": "r2_n8_g10x10",
+      "radius": 2,
+      "neighbors": 8,
+      "grid_x": 10,
+      "grid_y": 10,
+      "feature_bytes_per_template": 102400
+    },
+    {
+      "config_id": "r3_n8_g4x4",
+      "radius": 3,
+      "neighbors": 8,
+      "grid_x": 4,
+      "grid_y": 4,
+      "feature_bytes_per_template": 16384
+    },
+    {
+      "config_id": "r3_n8_g6x6",
+      "radius": 3,
+      "neighbors": 8,
+      "grid_x": 6,
+      "grid_y": 6,
+      "feature_bytes_per_template": 36864
+    },
+    {
+      "config_id": "r3_n8_g8x8",
+      "radius": 3,
+      "neighbors": 8,
+      "grid_x": 8,
+      "grid_y": 8,
+      "feature_bytes_per_template": 65536
+    },
+    {
+      "config_id": "r3_n8_g10x10",
+      "radius": 3,
+      "neighbors": 8,
+      "grid_x": 10,
+      "grid_y": 10,
+      "feature_bytes_per_template": 102400
+    }
+  ],
+  "fixed_contract": {
+    "preprocessing": "tan-triggs",
+    "image_size": [
+      100,
+      100
+    ],
+    "neighbors": 8,
+    "distance": "native OpenCV LBPH predict_collect",
+    "deployment_files_modified": false
+  },
+  "datasets": {
+    "lsdb_train_root": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\train",
+    "lsdb_test_root": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test",
+    "lsdb_tree_sha256": "140445407e5ed1b84d173ee7a78f9dbd937ac096197c9b8978999b71650d1419:aacba8f22f5078af8be99a2cb04e9a3483e1455a4d1537baa68582f7485d59ea",
+    "lfw_root": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\lfw-dataset",
+    "lfw_manifest": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\classical-cv\\data\\splits\\lfw_ident_split_seed42.json",
+    "lfw_manifest_sha256": "2ef84e16799204d8b2d499f6c33a950360863c72763f747959ad54da260802b1",
+    "lfw_archive_sha256_from_manifest": "055f7d9c632d7370e6fb4afc7468d40f970c34a80d4c6f50ffec63f5a8d536c0",
+    "lfw_development_identities": 2875,
+    "lfw_locked_identities": 2874,
+    "lfw_development_identities_sha256": "6db9da2906fc266da102dbb3ec041dc10be9aa4f485b93a3422ed9e1ea85a435",
+    "lfw_locked_identities_sha256": "2c24e9b0573117813d24d90ced9ad220cb0a2d84f4832295797e5f57abdac29c"
+  },
+  "protocol": {
+    "lsdb_development": "Ten paired-view folds over train only; per-fold calibration",
+    "lsdb_locked": "Name views from test; baseline and dev-selected finalists only",
+    "lsdb_target_far": 0.01058,
+    "lfw_development": "Identity-disjoint stratified half; gallery-pair calibration and probes",
+    "lfw_locked": "Disjoint identity half; threshold frozen from development",
+    "lfw_target_far": 1e-05,
+    "selection": "Separate LSDB and LFW development rankings; locked finalists are baseline plus each development winner"
+  },
+  "completed_utc": "2026-08-14T10:49:43.059251+00:00",
+  "elapsed_seconds": 1791.7114654000034,
+  "selected_for_locked_evaluation": [
+    "r1_n8_g8x8",
+    "r3_n8_g6x6"
+  ]
+}

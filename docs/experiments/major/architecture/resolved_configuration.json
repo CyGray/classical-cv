@@ -1,0 +1,29 @@
+{
+  "gate_tau_accept": 67.03325520645528,
+  "gate_tau_reject": 140.13,
+  "gate_margin_min": 0.05,
+  "quality_tau_blur": 587.83,
+  "quality_luma_lo": 52.88,
+  "quality_luma_hi": 137.71,
+  "quality_tau_noise": 8.206,
+  "quality_tau_pose": 63.74,
+  "quality_px_min": 61,
+  "sface_l2_genuine": 1.0313,
+  "sface_cosine_genuine": 0.363,
+  "model_hashes": {
+    "thresholds_json": "1893c75b58d2529a17f492805d96054f49dcd4f03835f2eb2564ce838f6d4fce",
+    "lbph_model": "7076b633edef3237dd1c1931ef4c2a4af341408159c6bbf2247c9cf1b0c3bb9e",
+    "lbph_labels": "914ef99a14de94bb585f94d8d6f0f2568e6e72413a47f6a124acc435662c6aa8",
+    "sface_model": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79",
+    "sface_gallery": "ed04ea103918f33c78fc571dc93455f45a489003f8551c574edf97933b4c3a11",
+    "sface_labels": "914ef99a14de94bb585f94d8d6f0f2568e6e72413a47f6a124acc435662c6aa8",
+    "yunet_detector": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+  },
+  "git": {
+    "commit": "1f9e5edff9b71eada8932434e5a09d8278be9170",
+    "dirty": true,
+    "status_summary": "M ../docs/manuscript/figures/fig_gate_competence_stacked_bars.svg\n M ../docs/manuscript/versions/README.md\n D ../docs/manuscript/versions/pairwise/017p.txt\n D ../docs/manuscript/versions/pairwise/017p_utf8.txt\n M ../docs/manuscript/versions/pairwise/018p_polish_run.docm\n M ../docs/manuscript/versions/pairwise/README.md\n M ../scripts/visualization/generate_gate_competence_stacked_bars.py\n?? bash.exe.stackdump\n?? scripts/experiments/\n?? ../docs/manuscript/figures/fig3_frozen_threshold_overlay.png\n"
+  },
+  "scope": "Full La Salle DB1-DL41 held-out test evaluation (56 source test images x 41 DL41 transforms = 2,296 conditions)",
+  "status": "full_evaluation_run"
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "lsface-lbph-locked-paired-analysis-v1",
+  "status": "supplementary_post_run_analysis",
+  "dataset": "LFW locked identity cohort",
+  "probe_count": 840,
+  "baseline_config_id": "r1_n8_g8x8",
+  "challenger_config_id": "r3_n8_g6x6",
+  "thresholds_frozen_from_development": {
+    "r1_n8_g8x8": 67.0132357790767,
+    "r3_n8_g6x6": 52.372394898355424
+  },
+  "rank1": {
+    "both_success": 49,
+    "baseline_only": 1,
+    "challenger_only": 35,
+    "neither": 755,
+    "discordant": 36,
+    "mcnemar_exact_two_sided_p": 1.076841726899147e-09
+  },
+  "tpir": {
+    "both_success": 11,
+    "baseline_only": 1,
+    "challenger_only": 21,
+    "neither": 807,
+    "discordant": 22,
+    "mcnemar_exact_two_sided_p": 1.0967254638671875e-05
+  },
+  "method": "Re-score the same 840 locked probes with both models and their development-frozen thresholds; apply the exact two-sided McNemar/binomial test to discordant outcomes.",
+  "deployment_config_changed": false
+}

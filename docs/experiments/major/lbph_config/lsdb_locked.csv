@@ -1,0 +1,3 @@
+config_id,radius,neighbors,grid_x,grid_y,feature_bytes_per_template,threshold,calibration_far_percent,rank1_percent,tpir_percent,verification_tpr_percent,mean_score_ms
+r1_n8_g8x8,1,8,8,8,65536,73.46248085762213,0.992063492063492,100.0,96.42857142857143,96.42857142857143,3.469508931240333
+r3_n8_g6x6,3,8,6,6,36864,54.94626598249853,0.992063492063492,100.0,100.0,100.0,2.072464291164319

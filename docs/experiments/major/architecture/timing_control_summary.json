@@ -1,0 +1,36 @@
+{
+  "num_repetitions": 10,
+  "direct_sface": {
+    "mean_ms": 9.502,
+    "p50_ms": 9.415,
+    "p95_ms": 10.684
+  },
+  "sequential_cascade": {
+    "mean_ms": 14.205,
+    "p50_ms": 14.571,
+    "p95_ms": 16.998
+  },
+  "early_bypass_cascade": {
+    "mean_ms": 11.593,
+    "p50_ms": 10.343,
+    "p95_ms": 16.141
+  },
+  "paired_analysis_121_quality_flagged": {
+    "direct_sface_mean_ms": 9.436,
+    "quality_sface_mean_ms": 9.641,
+    "paired_difference_mean_ms": 0.205,
+    "paired_difference_median_ms": 0.148,
+    "quality_alone_mean_ms": 0.22
+  },
+  "paired_analysis_100_dual_inference": {
+    "sequential_mean_ms": 15.0,
+    "early_bypass_mean_ms": 14.946,
+    "paired_difference_mean_ms": -0.053,
+    "paired_difference_median_ms": -0.119,
+    "paired_difference_std_ms": 1.128
+  },
+  "overall_reduction": {
+    "mean_diff_ms": 2.612,
+    "percent_reduction": 18.39
+  }
+}

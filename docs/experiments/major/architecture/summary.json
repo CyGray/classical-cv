@@ -1,0 +1,131 @@
+{
+  "status": "full_evaluation_run",
+  "total_transformed_conditions": 2296,
+  "detector_failures": 107,
+  "detector_failure_rate_pct": 4.66,
+  "modes": {
+    "always_lbph": {
+      "correct_acceptance_count": 704,
+      "correct_acceptance_rate_pct": 30.66,
+      "accepted_wrong_identity_count": 1,
+      "rejected_count": 1591,
+      "lbph_invocations": 2189,
+      "lbph_invocation_rate_pct": 95.34,
+      "sface_invocations": 0,
+      "sface_invocation_rate_pct": 0.0,
+      "dual_inferences": 0,
+      "dual_inference_rate_pct": 0.0,
+      "latency_mean_ms": 4.733,
+      "latency_p50_ms": 4.632,
+      "latency_p95_ms": 5.49
+    },
+    "direct_sface": {
+      "correct_acceptance_count": 2030,
+      "correct_acceptance_rate_pct": 88.41,
+      "accepted_wrong_identity_count": 0,
+      "rejected_count": 266,
+      "lbph_invocations": 0,
+      "lbph_invocation_rate_pct": 0.0,
+      "sface_invocations": 2189,
+      "sface_invocation_rate_pct": 95.34,
+      "dual_inferences": 0,
+      "dual_inference_rate_pct": 0.0,
+      "latency_mean_ms": 8.623,
+      "latency_p50_ms": 8.444,
+      "latency_p95_ms": 9.952
+    },
+    "seq_cascade": {
+      "correct_acceptance_count": 2030,
+      "correct_acceptance_rate_pct": 88.41,
+      "accepted_wrong_identity_count": 0,
+      "rejected_count": 266,
+      "lbph_invocations": 2189,
+      "lbph_invocation_rate_pct": 95.34,
+      "sface_invocations": 1782,
+      "sface_invocation_rate_pct": 77.61,
+      "dual_inferences": 1782,
+      "dual_inference_rate_pct": 77.61,
+      "latency_mean_ms": 11.955,
+      "latency_p50_ms": 13.113,
+      "latency_p95_ms": 15.298
+    },
+    "quality_only": {
+      "correct_acceptance_count": 1355,
+      "correct_acceptance_rate_pct": 59.02,
+      "accepted_wrong_identity_count": 1,
+      "rejected_count": 940,
+      "lbph_invocations": 1195,
+      "lbph_invocation_rate_pct": 52.05,
+      "sface_invocations": 994,
+      "sface_invocation_rate_pct": 43.29,
+      "dual_inferences": 0,
+      "dual_inference_rate_pct": 0.0,
+      "latency_mean_ms": 6.684,
+      "latency_p50_ms": 5.398,
+      "latency_p95_ms": 9.715
+    },
+    "early_bypass": {
+      "correct_acceptance_count": 2030,
+      "correct_acceptance_rate_pct": 88.41,
+      "accepted_wrong_identity_count": 0,
+      "rejected_count": 266,
+      "lbph_invocations": 1195,
+      "lbph_invocation_rate_pct": 52.05,
+      "sface_invocations": 1782,
+      "sface_invocation_rate_pct": 77.61,
+      "dual_inferences": 788,
+      "dual_inference_rate_pct": 34.32,
+      "latency_mean_ms": 9.771,
+      "latency_p50_ms": 9.041,
+      "latency_p95_ms": 14.269
+    }
+  },
+  "early_bypass_equivalence": {
+    "final_decision_mismatches": 0,
+    "sface_routing_mismatches": 0,
+    "lbph_calls_seq_cascade": 2189,
+    "lbph_calls_early_bypass": 1195,
+    "lbph_calls_avoided": 994,
+    "lbph_calls_avoided_pct_of_all_inputs": 43.29,
+    "latency_reduction_ms": 2.184,
+    "latency_reduction_pct": 18.27,
+    "routing_breakdown": {
+      "quality_triggered_sface": 994,
+      "quality_clear_lbph_terminal": 407,
+      "quality_clear_dual_sface": 788,
+      "detector_failure": 107
+    }
+  },
+  "quality_diagnostic": {
+    "contingency_table": {
+      "quality_clear_lbph_correct": 415,
+      "quality_clear_lbph_failure": 780,
+      "quality_flagged_lbph_correct": 289,
+      "quality_flagged_lbph_failure": 705
+    },
+    "total_lbph_failures": 1485,
+    "total_lbph_correct": 704,
+    "recall_of_lbph_failures_by_quality_flags_pct": 47.47,
+    "unnecessary_quality_flags_on_lbph_correct_pct": 41.05
+  },
+  "branch_latency_breakdown": {
+    "branch_1_quality_triggered_sface": {
+      "count": 994,
+      "mean_ms": 8.869,
+      "p50_ms": 8.69,
+      "p95_ms": 10.235
+    },
+    "branch_2_quality_clear_lbph_terminal": {
+      "count": 407,
+      "mean_ms": 4.811,
+      "p50_ms": 4.68,
+      "p95_ms": 5.577
+    },
+    "branch_3_quality_clear_dual_sface": {
+      "count": 788,
+      "mean_ms": 13.469,
+      "p50_ms": 13.189,
+      "p95_ms": 15.219
+    }
+  }
+}
