@@ -12,13 +12,15 @@ from lbph_config import (
 )
 
 class HybridCascade:
-    def __init__(self, models_dir="."):
-        self.models_dir = Path(models_dir)
-        self.artifacts_dir = self._active_artifacts_dir()
+    def __init__(self, base_dir=".", *, models_dir=None, config_path=None, artifacts_dir=None):
+        # ``base_dir`` matches the upstream hardware constructor. Keep the
+        # previous ``models_dir=`` spelling as an additive rollback alias.
+        self.models_dir = Path(models_dir if models_dir is not None else base_dir)
+        self.artifacts_dir = Path(artifacts_dir) if artifacts_dir else self._active_artifacts_dir()
         
         # Load Thresholds
-        thresh_path = self.models_dir / "config" / "thresholds.json"
-        if not thresh_path.exists():
+        thresh_path = Path(config_path) if config_path else self.models_dir / "config" / "thresholds.json"
+        if config_path is None and not thresh_path.exists():
             thresh_path = self.models_dir / "thresholds.json"
         with open(thresh_path, "r") as f:
             cfg = json.load(f)
@@ -110,6 +112,7 @@ class HybridCascade:
                 )
         with open(lbph_labels, "r") as f:
             self.lbph_labels = {int(v): k for k, v in json.load(f).items()}
+        self.labels = dict(self.lbph_labels)
 
         # 3. Initialize SFace
         sface_onnx_path = self.models_dir / "models" / "face_recognition_sface_2021dec.onnx"
@@ -203,12 +206,12 @@ class HybridCascade:
             if lbph_dist <= self.tau_accept:
                 return {
                     "status": "accepted", "engine": "lbph", "name": lbph_name,
-                    "distance": lbph_dist
+                    "distance": lbph_dist, "bbox": (x, y, bw, bh)
                 }
             else:
                 return {
                     "status": "rejected", "engine": "lbph", "reason": "confident_reject",
-                    "name": lbph_name, "distance": lbph_dist
+                    "name": lbph_name, "distance": lbph_dist, "bbox": (x, y, bw, bh)
                 }
             
         # Step 2: SFace Escalation (runs if escalated)
@@ -228,12 +231,14 @@ class HybridCascade:
         if best_l2 <= self.sface_l2_genuine:
             return {
                 "status": "accepted", "engine": "sface", "name": sface_name,
-                "l2": best_l2, "lbph_distance": lbph_dist, "gate_reason": reason
+                "l2": best_l2, "lbph_distance": lbph_dist, "gate_reason": reason,
+                "bbox": (x, y, bw, bh)
             }
             
         return {
             "status": "rejected", "engine": "sface", "reason": "impostor",
-            "name": sface_name, "l2": best_l2, "lbph_distance": lbph_dist, "gate_reason": reason
+            "name": sface_name, "l2": best_l2, "lbph_distance": lbph_dist, "gate_reason": reason,
+            "bbox": (x, y, bw, bh)
         }
 
 if __name__ == "__main__":

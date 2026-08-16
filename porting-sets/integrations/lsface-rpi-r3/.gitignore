@@ -1,0 +1,20 @@
+# Local runtime output.
+logs/
+__pycache__/
+test/__pycache__/
+*.py[cod]
+
+# Temporary directories created before an atomic release rename.
+enrollment/**/.pending-*/
+
+# Keep only the two reviewed, active releases in the push set. Other release
+# directories are rebuildable experiment output and must stay local.
+enrollment/releases/*
+!enrollment/releases/release-r3_n8_g6x6/
+!enrollment/releases/release-r3_n8_g6x6/**
+!enrollment/releases/release-r3_n8_g6x6/sface_gallery.npy
+
+enrollment/baseline-r1/releases/*
+!enrollment/baseline-r1/releases/release-r1_n8_g8x8/
+!enrollment/baseline-r1/releases/release-r1_n8_g8x8/**
+!enrollment/baseline-r1/releases/release-r1_n8_g8x8/sface_gallery.npy

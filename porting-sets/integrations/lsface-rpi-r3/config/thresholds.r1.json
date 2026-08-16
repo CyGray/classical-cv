@@ -1,0 +1,38 @@
+{
+  "status": "paired_baseline",
+  "_note": "Old r1 baseline using exact upstream 36-identity x 10-row enrollment cohort.",
+  "lbph_descriptor": {
+    "id": "r1_n8_g8x8",
+    "radius": 1,
+    "neighbors": 8,
+    "grid_x": 8,
+    "grid_y": 8,
+    "profile": "upstream_paired_baseline"
+  },
+  "gate": {
+    "tau_accept": 77.5943,
+    "tau_reject": 140.13,
+    "margin_min": 0.05
+  },
+  "quality": {
+    "tau_blur": 587.83,
+    "luma_lo": 52.88,
+    "luma_hi": 137.71,
+    "tau_noise": 8.206,
+    "tau_pose": 63.74,
+    "px_min": 61
+  },
+  "sface": {
+    "cosine_genuine": 0.363,
+    "l2_genuine": 1.0313
+  },
+  "provenance": {
+    "lbph_yaml": "Matches upstream db/lasalledb_lbph.yml cohort: 36 identities, 10 rows each.",
+    "selection": "numpy.default_rng(42).choice(per identity, 10, replace=False), identity IDs ascending.",
+    "sface_gallery": "Same selected 360 rows as paired LBPH baseline; gallery mean per identity.",
+    "gate.tau_accept": "Upstream deployment threshold 77.5943.",
+    "gate.tau_reject": "Inherited upstream permissive policy value 140.13.",
+    "quality.*": "Inherited upstream measured quality thresholds.",
+    "sface.*": "Inherited upstream deployed SFace thresholds."
+  }
+}
