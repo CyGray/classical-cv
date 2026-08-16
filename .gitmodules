@@ -1,0 +1,4 @@
+[submodule "porting-sets/upstream/lsface-raspberry-pi"]
+	path = porting-sets/upstream/lsface-raspberry-pi
+	url = https://github.com/ChocoCodes/lsface-raspberry-pi.git
+	branch = master
