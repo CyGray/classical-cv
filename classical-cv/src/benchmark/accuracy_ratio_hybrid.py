@@ -214,13 +214,13 @@ def select_originals(base_dir: str, select_one_per_person: bool = False, seed: i
 
 
 def load_originals(base_dir: str, select_one_per_person: bool = False, seed: int = 42) -> list[tuple[str, str, np.ndarray]]:
-    """(person, filename, gray_tile) for every original image."""
+    """(person, filename, bgr_tile) for every original image."""
     out: list[tuple[str, str, np.ndarray]] = []
     for person, path in select_originals(base_dir, select_one_per_person, seed):
         img = cv.imread(path)
         if img is None:
             continue
-        out.append((person, os.path.basename(path), cv.cvtColor(img, cv.COLOR_BGR2GRAY)))
+        out.append((person, os.path.basename(path), img))
     return out
 
 
