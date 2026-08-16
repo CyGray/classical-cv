@@ -1,0 +1,71 @@
+{
+  "light": {
+    "total_conditions": 748,
+    "combined_cascade": {
+      "correct_count": 704,
+      "correct_pct": 94.11764705882354,
+      "sface_invocation_rate_pct": 46.657754010695186,
+      "lbph_terminal_rate_pct": 49.598930481283425,
+      "mean_latency_ms": 6.176157278726653,
+      "p95_latency_ms": 11.601130020571873
+    },
+    "direct_sface": {
+      "correct_count": 704,
+      "correct_pct": 94.11764705882354,
+      "mean_latency_ms": 8.299540083745443,
+      "p95_latency_ms": 9.175473992945626
+    },
+    "challenger_lbph": {
+      "correct_count": 599,
+      "correct_pct": 80.08021390374331,
+      "mean_latency_ms": 3.0442264154165364,
+      "p95_latency_ms": 3.4643169911578284
+    }
+  },
+  "medium": {
+    "total_conditions": 572,
+    "combined_cascade": {
+      "correct_count": 519,
+      "correct_pct": 90.73426573426573,
+      "sface_invocation_rate_pct": 67.83216783216783,
+      "lbph_terminal_rate_pct": 30.76923076923077,
+      "mean_latency_ms": 7.550470567480099,
+      "p95_latency_ms": 11.916802042396741
+    },
+    "direct_sface": {
+      "correct_count": 519,
+      "correct_pct": 90.73426573426573,
+      "mean_latency_ms": 8.298648580378714,
+      "p95_latency_ms": 9.122693958925083
+    },
+    "challenger_lbph": {
+      "correct_count": 331,
+      "correct_pct": 57.86713286713287,
+      "mean_latency_ms": 3.0781764182483395,
+      "p95_latency_ms": 3.4508400491904467
+    }
+  },
+  "heavy": {
+    "total_conditions": 484,
+    "combined_cascade": {
+      "correct_count": 371,
+      "correct_pct": 76.65289256198348,
+      "sface_invocation_rate_pct": 65.49586776859505,
+      "lbph_terminal_rate_pct": 22.727272727272727,
+      "mean_latency_ms": 7.72187779875651,
+      "p95_latency_ms": 11.67213398963213
+    },
+    "direct_sface": {
+      "correct_count": 371,
+      "correct_pct": 76.65289256198348,
+      "mean_latency_ms": 8.301633349794292,
+      "p95_latency_ms": 9.263549994211644
+    },
+    "challenger_lbph": {
+      "correct_count": 226,
+      "correct_pct": 46.69421487603306,
+      "mean_latency_ms": 3.0654221523413545,
+      "p95_latency_ms": 3.4415919962339103
+    }
+  }
+}

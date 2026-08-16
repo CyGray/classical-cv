@@ -1,0 +1,25 @@
+{
+  "baseline_r1_n8_g8x8": {
+    "descriptor_bytes_per_template": 65536,
+    "templates_per_identity_in_gallery": 10,
+    "total_enrolled_templates": 280,
+    "total_feature_bytes_in_gallery": 18350080,
+    "total_feature_kib_in_gallery": 17920.0,
+    "serialized_model_file_bytes": 33252866,
+    "serialized_model_file_mib": 31.712404251098633,
+    "extrapolated_ram_10k_single_template_mib": 625.0,
+    "extrapolated_ram_10k_10_templates_mib": 6250.0
+  },
+  "challenger_r3_n8_g6x6": {
+    "descriptor_bytes_per_template": 36864,
+    "templates_per_identity_in_gallery": 10,
+    "total_enrolled_templates": 280,
+    "total_feature_bytes_in_gallery": 10321920,
+    "total_feature_kib_in_gallery": 10080.0,
+    "serialized_model_file_bytes": 23387891,
+    "serialized_model_file_mib": 22.304430961608887,
+    "extrapolated_ram_10k_single_template_mib": 351.5625,
+    "extrapolated_ram_10k_10_templates_mib": 3515.625
+  },
+  "delta_reduction_pct": 43.75
+}

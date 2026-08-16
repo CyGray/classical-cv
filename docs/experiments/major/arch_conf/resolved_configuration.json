@@ -1,0 +1,57 @@
+{
+  "status": "locked_confirmation_candidate",
+  "created_utc": "2026-08-16T07:37:51.896150+00:00",
+  "baseline_descriptor": {
+    "id": "r1_n8_g8x8",
+    "radius": 1,
+    "neighbors": 8,
+    "grid_x": 8,
+    "grid_y": 8,
+    "descriptor_bytes": 65536,
+    "tau_accept": 67.03325520645528,
+    "tau_reject": 140.13,
+    "margin_min": 0.05
+  },
+  "challenger_descriptor": {
+    "id": "r3_n8_g6x6",
+    "radius": 3,
+    "neighbors": 8,
+    "grid_x": 6,
+    "grid_y": 6,
+    "descriptor_bytes": 36864,
+    "tau_accept": 52.372394898355424,
+    "tau_reject": 140.13,
+    "margin_min": 0.05,
+    "tau_accept_provenance": "LFW development split (2,875 identities, 4,131,375 pairs, 10 ppm target FAR, realized FAR 9.924 ppm)",
+    "tau_reject_provenance": "Permissive reject policy (inherited 140.13 > genuine range; ensures SFace escalation on difficult genuine probes)",
+    "margin_min_provenance": "Scale-free relative top1-top2 distance gap 0.05"
+  },
+  "quality_thresholds": {
+    "tau_blur": 587.83,
+    "luma_lo": 52.88,
+    "luma_hi": 137.71,
+    "tau_noise": 8.206,
+    "tau_pose": 63.74,
+    "px_min": 61
+  },
+  "sface": {
+    "l2_genuine": 1.0313,
+    "cosine_genuine": 0.363
+  },
+  "model_hashes": {
+    "thresholds_json": "a5ed43ad05e79c83b3f1925837e85a83c3badbe9bd7c2e5206f5a8fab751d499",
+    "lbph_baseline_model": "7076b633edef3237dd1c1931ef4c2a4af341408159c6bbf2247c9cf1b0c3bb9e",
+    "lbph_labels": "914ef99a14de94bb585f94d8d6f0f2568e6e72413a47f6a124acc435662c6aa8",
+    "sface_model": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79",
+    "sface_gallery": "ed04ea103918f33c78fc571dc93455f45a489003f8551c574edf97933b4c3a11",
+    "sface_labels": "914ef99a14de94bb585f94d8d6f0f2568e6e72413a47f6a124acc435662c6aa8",
+    "yunet_detector": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4"
+  },
+  "git": {
+    "commit": "651040f7bc024f2e7c670dcd5057e30119fb11f6",
+    "dirty": true,
+    "status_summary": "M ../docs/manuscript/versions/020b_lsface_canonical-selfmatch-promoted.docm\n?? scripts/render_full_bleed_table.py\n?? scripts/run_combined_major_smoke.py\n?? scripts/run_locked_confirmation_evaluation.py\n?? ../reports/"
+  },
+  "preprocessing_contract": "100x100 grayscale Tan-Triggs (gamma=0.2, sigma0=1.0, sigma1=2.0, alpha=0.1, tau=10.0)",
+  "modifications_contract": "DL41 41-transformation set, corrected BGR-first generation"
+}

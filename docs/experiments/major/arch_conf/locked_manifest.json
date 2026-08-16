@@ -1,0 +1,296 @@
+{
+  "seed": 20260816,
+  "confirmation_identities_count": 22,
+  "confirmation_identities": [
+    "Andrew_Eroyla",
+    "Anthony_Charles_Saltat",
+    "Anthony_Gallego",
+    "Axel_Josh_Lorayna",
+    "Daniel_Ramos",
+    "Diofel_Gwen_Haresco",
+    "Francis_Cromwell_Tan",
+    "Francis_Miles_Ang",
+    "Jim_Jonathan_Decripito",
+    "John_Roland_Octavio",
+    "Josh_Dane_Labistre",
+    "Jul_Leo_Javellana",
+    "Kim_Ivan_Arigorat",
+    "Klein_Rhee_Sioson",
+    "Lorenz_Ciocon",
+    "Mary_Jade_Jakosalem",
+    "Michael_Andrei_Jugado",
+    "Norbert_Audines",
+    "Raean_Tamayo",
+    "Thea_Ganza",
+    "Trixia_Marie_Garcio",
+    "Wilbert_Mijares"
+  ],
+  "source_images_count": 44,
+  "total_probe_conditions": 1804,
+  "source_manifest": [
+    {
+      "identity": "Andrew_Eroyla",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Andrew_Eroyla\\dark_name.jpg",
+      "sha256": "7630a1783adcfe1962eaaecc181f7455ac4f5d6cb6bf85ce0e1650ac5ee2740c"
+    },
+    {
+      "identity": "Andrew_Eroyla",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Andrew_Eroyla\\light_name.jpg",
+      "sha256": "f04f6654f86be770bea4baff3344952e26707a111abeddf6474e544a8dbb513d"
+    },
+    {
+      "identity": "Anthony_Charles_Saltat",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Charles_Saltat\\dark_name.jpg",
+      "sha256": "c4ca56a8ac8364bb68b95f3091c346473b9f8e893c823e1b89ae26e593279ee5"
+    },
+    {
+      "identity": "Anthony_Charles_Saltat",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Charles_Saltat\\light_name.jpg",
+      "sha256": "1ed85530f43a09bab2d19daeb290c6a108c317d6646e97d1acfff4e9ca842426"
+    },
+    {
+      "identity": "Anthony_Gallego",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Gallego\\dark_name.jpg",
+      "sha256": "0200778ea16c43a420ec9e59b78575a544c58bb4ee4600e3f35d93c570bed690"
+    },
+    {
+      "identity": "Anthony_Gallego",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Anthony_Gallego\\light_name.jpg",
+      "sha256": "9b0a895b47880737fbe5e0889cbc9d24c70ef98d42f82733cde52ccc8e17213a"
+    },
+    {
+      "identity": "Axel_Josh_Lorayna",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Axel_Josh_Lorayna\\dark_name.jpg",
+      "sha256": "f1fbd180fcac3e98fd7a72a97aac4f8fb8986e88026b5c3413fb624b4d4a9fd0"
+    },
+    {
+      "identity": "Axel_Josh_Lorayna",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Axel_Josh_Lorayna\\light_name.jpg",
+      "sha256": "304e34659074334e2391a7abd28f95c1330cf1ee364e9345d292a8a3cf546aa0"
+    },
+    {
+      "identity": "Daniel_Ramos",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Daniel_Ramos\\dark_name.jpg",
+      "sha256": "3f004e1d94ebace34bab57041ea62e8c6d9fe6fd43315ca2562c340e92cb62a8"
+    },
+    {
+      "identity": "Daniel_Ramos",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Daniel_Ramos\\light_name.jpg",
+      "sha256": "f3bdafb199ea11b69f2219b67d04aabcaf0d720376cee065e4e1bc39ec5821ae"
+    },
+    {
+      "identity": "Diofel_Gwen_Haresco",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Diofel_Gwen_Haresco\\dark_name.jpg",
+      "sha256": "67c4b8bff3ea24e9df5428c53cd962ea5e47183706d727a743b8c5ddca1c97a6"
+    },
+    {
+      "identity": "Diofel_Gwen_Haresco",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Diofel_Gwen_Haresco\\light_name.jpg",
+      "sha256": "3ac82959bfe9ec4e39d18321abb4e4abf4702be2a8f22267863583ee29b418ff"
+    },
+    {
+      "identity": "Francis_Cromwell_Tan",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Cromwell_Tan\\dark_name.jpg",
+      "sha256": "f195a85943d1a2b53380d56646bd1650f65f67ba99dca91cc93daa91a0614466"
+    },
+    {
+      "identity": "Francis_Cromwell_Tan",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Cromwell_Tan\\light_name.jpg",
+      "sha256": "1a8a32dfa4b333335f175849d67e13f15af8ae075152a0f0c3ff13777ad3098b"
+    },
+    {
+      "identity": "Francis_Miles_Ang",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Miles_Ang\\dark_name.jpg",
+      "sha256": "91015c1db2457228d1621ec24bc6392a334b617a6ae75512037c931843ead243"
+    },
+    {
+      "identity": "Francis_Miles_Ang",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Francis_Miles_Ang\\light_name.jpg",
+      "sha256": "2e631739867908c919648c5387f287484dbd32dd1f53d9307ed2b676f9719728"
+    },
+    {
+      "identity": "Jim_Jonathan_Decripito",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jim_Jonathan_Decripito\\dark_name.jpg",
+      "sha256": "44ce7bd2e733974b47313df6ecbc49902ff2959e2566a9ba4929e23515844e31"
+    },
+    {
+      "identity": "Jim_Jonathan_Decripito",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jim_Jonathan_Decripito\\light_name.jpg",
+      "sha256": "e7013c189ed5be568ed4a2c15a689253f3e90a8eefe8613bce95b6c24d50a47c"
+    },
+    {
+      "identity": "John_Roland_Octavio",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\John_Roland_Octavio\\dark_name.jpg",
+      "sha256": "2513366d52a32809f78ff062be6e46c2f788bcb8a5b0021e50233b1b2dac8356"
+    },
+    {
+      "identity": "John_Roland_Octavio",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\John_Roland_Octavio\\light_name.jpg",
+      "sha256": "7eec3f44a06f5b1a3d01c4c7b9c494e7b4138f092f59d2207c6d56af27b38277"
+    },
+    {
+      "identity": "Josh_Dane_Labistre",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Josh_Dane_Labistre\\dark_name.jpg",
+      "sha256": "d000166255c11d7427946e31f6e56615a238cf02ed5c23b4472d92fe153b08d9"
+    },
+    {
+      "identity": "Josh_Dane_Labistre",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Josh_Dane_Labistre\\light_name.jpg",
+      "sha256": "3239eeaffdda87e7e4ada304be65075aca9ab674b60cee1f80a0a34372bf5cac"
+    },
+    {
+      "identity": "Jul_Leo_Javellana",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jul_Leo_Javellana\\dark_name.jpg",
+      "sha256": "ce563df0c2165cd880438e676861912564de4105ae516fa156121a8bbdb7e7fd"
+    },
+    {
+      "identity": "Jul_Leo_Javellana",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Jul_Leo_Javellana\\light_name.jpg",
+      "sha256": "00f398ef1c91aec1a56b8983fb03a9f8111935eb1893410fd942ea4e680de603"
+    },
+    {
+      "identity": "Kim_Ivan_Arigorat",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kim_Ivan_Arigorat\\dark_name.jpg",
+      "sha256": "ad1fddc3e5779185888f9169256021cfc92435498e53275adafad3ae950d23b1"
+    },
+    {
+      "identity": "Kim_Ivan_Arigorat",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Kim_Ivan_Arigorat\\light_name.jpg",
+      "sha256": "1a74a3a1fd7bf2ca79abbd9b627757cfb31235336f869254fea9dae4dfa75073"
+    },
+    {
+      "identity": "Klein_Rhee_Sioson",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Klein_Rhee_Sioson\\dark_name.jpg",
+      "sha256": "5ec14608ecbe8c162aaa2080d725799f9d80f56df03da52aed7190f8fe5b2b6d"
+    },
+    {
+      "identity": "Klein_Rhee_Sioson",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Klein_Rhee_Sioson\\light_name.jpg",
+      "sha256": "80d6c75485a0de701dcce1cf810d13b562576d9a68258f3d84792a7e858aefc7"
+    },
+    {
+      "identity": "Lorenz_Ciocon",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Lorenz_Ciocon\\dark_name.jpg",
+      "sha256": "dbc26755450ef660ca1bc188938c390665be89fe4c897e592960cc146a03e4c3"
+    },
+    {
+      "identity": "Lorenz_Ciocon",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Lorenz_Ciocon\\light_name.jpg",
+      "sha256": "8d50608c934dc135baaf53a87e8659fe1fdc8d5186ffb48313491b17f095a8f0"
+    },
+    {
+      "identity": "Mary_Jade_Jakosalem",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Mary_Jade_Jakosalem\\dark_name.jpg",
+      "sha256": "92b1c92c0f55825bddf66cdc807370ab679cfc48dcca1c7c93075c0d19c05ba7"
+    },
+    {
+      "identity": "Mary_Jade_Jakosalem",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Mary_Jade_Jakosalem\\light_name.jpg",
+      "sha256": "85da22babcf1e7b1bb520d3b9ff9e841f81ee9933a8867061a50cf9d5633f60e"
+    },
+    {
+      "identity": "Michael_Andrei_Jugado",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Michael_Andrei_Jugado\\dark_name.jpg",
+      "sha256": "eb10618e282fbcd5e4c546302b167f76fa37c47afff6af8cd29afe429f8a40bf"
+    },
+    {
+      "identity": "Michael_Andrei_Jugado",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Michael_Andrei_Jugado\\light_name.jpg",
+      "sha256": "9df0b15150137c3af8bb612bc487e824ddee010b91f869ea26b56d018c6fe71f"
+    },
+    {
+      "identity": "Norbert_Audines",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Norbert_Audines\\dark_name.jpg",
+      "sha256": "749013c7fbfb65c7d34c72dc5b5deae1d8d19098ec317f2aed1b7799144c8eff"
+    },
+    {
+      "identity": "Norbert_Audines",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Norbert_Audines\\light_name.jpg",
+      "sha256": "a449f1d1252fab3bebd09454c5eb5d31ce4a88dc4794999bf157e74a68a132e0"
+    },
+    {
+      "identity": "Raean_Tamayo",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Raean_Tamayo\\dark_name.jpg",
+      "sha256": "0ba3fc5118f450a1feb65af2293d5534f61157a31f6fe650a65315662ec74ca4"
+    },
+    {
+      "identity": "Raean_Tamayo",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Raean_Tamayo\\light_name.jpg",
+      "sha256": "aafd4e10178db9ab087248356efd7bec6eee20efcd622e2359c39b3bf548912e"
+    },
+    {
+      "identity": "Thea_Ganza",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Thea_Ganza\\dark_name.jpg",
+      "sha256": "172f675a925cb5a97c4d7e98a558d526280eba29da9247fd43b7318c95ce4262"
+    },
+    {
+      "identity": "Thea_Ganza",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Thea_Ganza\\light_name.jpg",
+      "sha256": "c7dc8d3e5b47365bfcafd16d1e92b7c19ed66ac22b2a7f3969e1d07443342a0b"
+    },
+    {
+      "identity": "Trixia_Marie_Garcio",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Trixia_Marie_Garcio\\dark_name.jpg",
+      "sha256": "4d7ddba235fc85f70a73d5984d908b5c258849dade883c51730e322c34eeb04b"
+    },
+    {
+      "identity": "Trixia_Marie_Garcio",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Trixia_Marie_Garcio\\light_name.jpg",
+      "sha256": "18fcebff309ca5da9d7489dbadb4be07f85961dcb6927c6e6cdeff93e9dd6a60"
+    },
+    {
+      "identity": "Wilbert_Mijares",
+      "filename": "dark_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Wilbert_Mijares\\dark_name.jpg",
+      "sha256": "e9208aed02330ada2dbd1dca623f34ce7da2b414b1f7073e69ce487cf1064732"
+    },
+    {
+      "identity": "Wilbert_Mijares",
+      "filename": "light_name.jpg",
+      "abs_path": "C:\\Users\\acer\\Documents\\USLS 4th Year\\Computer Vision\\data\\lsdb\\split\\test\\Wilbert_Mijares\\light_name.jpg",
+      "sha256": "6345b0898962528bf4de8e9da17eff74e3b16d45a34c7af45a45411953d22e1b"
+    }
+  ]
+}
