@@ -1,5 +1,11 @@
 # Workspace Agent Guidelines & Memory (Computer Vision Root)
 
+## Fast entrypoint for all agents
+
+Read [`AGENT_START_HERE.md`](AGENT_START_HERE.md) first. It is the short
+workspace router for Codex, Agy/Gemini, Cmdc, and human contributors; this
+file retains the detailed safety, provenance, and collaboration rules.
+
 ## Primary Directive: Code Intelligence & Exploration
 
 - **ALWAYS use Codegraph first for codebase exploration**: Before performing any text search (`grep`) or raw file reads, ALWAYS use Codegraph (`codegraph_explore` / `codegraph_context` MCP tools, or the `codegraph` CLI) for symbol discovery, architecture exploration, call graph analysis, and evaluating change blast-radius.
@@ -22,23 +28,110 @@
    41-modification robustness suite.
 3. `classical-cv/.claude/skills/cv-repo-map/SKILL.md` — independence-test
    script selection, LBPH distance scales, `data/` folder contents.
-4. Not using Claude Code (no Skill tool available)? Read `GEMINI.md`
-   (workspace root) — a self-contained mirror of all three skills above.
+4. Not using Claude Code (no Skill tool available)? Read `GEMINI.md` and
+   `AGENT_START_HERE.md`; they are the cross-agent routing adapters for the
+   detailed maps above.
 
 Also check `classical-cv/docs/READ THIS/` before editing files that touch
 threshold provenance.
 
+## Canonical result governance
+
+`docs/results/` is the only canonical, version-controlled result store.
+Its four subdirectories separate algorithm selection, complementarity,
+independence, and robustness evidence. Read the applicable subdirectory
+`README.md`, then `docs/results/RESULTS_MANIFEST.json` and
+`docs/results/metadata/PROVENANCE_AUDIT.md` before citing or inserting a
+result. Every artifact needs manifest metadata; do not infer provenance from a
+filename.
+
+### Candidate Improvements & Major Experiments
+
+When asked for performance optimizations, latency/throughput speedups, or candidate algorithmic improvements, consult [`docs/experiments/major/`](docs/experiments/major/README.md):
+1. **[`docs/experiments/major/architecture/`](docs/experiments/major/architecture/README.md)**: **Quality-First Early-Bypass Routing** (evaluates quality checks before LBPH, eliminates 43.29% of LBPH calls, cuts dual inference from 77.61% to 34.32%, reduces cascade recognition latency by 18.27% while preserving 100% bit-for-bit decision equivalence across all 2,296 DL41 conditions).
+2. **[`docs/experiments/major/lbph_config/`](docs/experiments/major/lbph_config/README.md)**: **Multi-Scale `r3_n8_g6x6` LBPH Descriptor** (improves LSDB CV Rank-1 by +11.07 pp, reduces template memory by 43.75% from 64 KB to 36 KB, and reduces Chi-Square prediction latency by ~42%).
+
+`classical-cv/reports/` and `classical-cv/outputs/` are working/raw output
+locations, not citation sources. Robustness tables belong only under
+`docs/results/robustness_test/`; never place them in, or use them as evidence
+for, `complementarity_test/`. Files marked `illustrative_stand_in`,
+`needs_provenance_review`, `historical_rerun_required`, or `rerun_required`
+have the citation restrictions defined in the audit.
+
+### Selection results are not deployment calibration
+
+For the initial algorithm-selection Results subsection, use the reviewed LSDB
+selection campaign in `docs/results/algo_test/lsdb_selection_2026-08-10/`.
+It evaluates the classical candidates on the deterministic La Salle DB1 split:
+224 fit images, 56 calibration images, and 56 held-out test images. This
+selection evidence determines the best classical candidate (LBPH) and the
+deployment-compatible learned candidate (external-team SFace artifact).
+
+Do not use its LSDB operating point to alter, justify, or silently replace the
+frozen LFW thresholds. LFW independence evidence calibrates the later deployed
+verification/cascade operating point; LSDB selection answers a different
+question. State that separation whenever both appear in the manuscript.
+
+## Collaboration memory: this workspace owner
+
+- Prefer decisive execution. When the user says "go", "do it", or "stop
+  asking", make safe, scope-preserving assumptions, run the work end-to-end,
+  and ask only for a genuinely material missing choice or authority.
+- Use short, concrete progress updates while work runs; report completed
+  artifacts, numbers, and checks rather than speculative status. Do not claim
+  a job is running unless a process or tool invocation is actually active.
+- For a requested manuscript version, start from exactly the named baseline
+  and include only the explicitly finalized sections. Do not silently merge
+  material from a fuller current draft.
+- Treat Word layout as an output to verify, not an implementation detail:
+  render the edited DOCM to PDF and visually inspect every page containing a
+  new or changed table/figure before handoff. Keep captions with their object,
+  clear inherited list numbering from table cells, and check wrapping, rules,
+  column widths, and figure scale.
+- A caption is a layout-bearing semantic object, not merely text with the
+  right style name. Table titles must be separate above-table `tablecaption`
+  paragraphs; figure names must be separate below-figure `figurecaption`
+  paragraphs. Match the macro reference's style definition and clear any
+  direct font/paragraph overrides before applying it. Enumerate every caption,
+  its effective formatting, and its relative object position before handoff.
+- A render is evidence only when it depicts the requested output. When Word
+  opens a reference document as well as the target, reactivate the target and
+  assert `ActiveDocument` before every capture. If PDF export is unreliable,
+  use the verified Word PrintWindow capture fallback; visually inspect the
+  changed pages and adjacent reflow pages, not a stale or reference window.
+- If an independent advisor is requested, use a different model tier from the
+  executor. A Terra-led task consults Sol only when the decision warrants it;
+  never dispatch Terra as its own advisor.
+
 ## Springer manuscript production
 
-For any request to create, revise, format, or export a Springer/LNCS paper,
-DOCX, or DOCM, read `.claude/skills/springer-docm-production/SKILL.md` before
-editing. It covers the official template, `header.png`, current claim
+For a one-object DOCM micro-edit with an exact named baseline and derivative,
+an explicit target, exact replacement content, and a no-change boundary, read
+`.claude/skills/springer-docm-targeted-edit/SKILL.md` first. It is the fast,
+macro-safe route for a single table, caption, or inline object. Use
+`.claude/skills/springer-docm-production/SKILL.md` for all other Springer/LNCS
+paper, DOCX, or DOCM work. It covers the official template, `header.png`, current claim
 provenance, Word automation, and macro preservation. If macros must survive,
 create a new `.docm` copy and verify its `word/vbaProject.bin` hash matches
-`docs/splnproc2510.docm`; never overwrite or convert the original template.
+the named DOCM baseline (or `docs/manuscript/sample/sample.docm` when starting
+from the macro specimen); never overwrite or convert the original template.
+For every edit to `docs/manuscript/lsface.docm`, archive both the before copy
+and final after copy in `docs/manuscript/versions/` using the exact sequential
+format `[index]_lsface_[version_name].docm`; read that directory's README and
+never substitute timestamped or suffix-index names. If the user explicitly
+names a derivative (for example, `009b` from `009`), start from that exact
+archive and create exactly that requested derivative—do not advance to a new
+number or write the personal-access `docs/manuscript/copy/` source.
 Keep generators and helper scripts under `scripts/document-production/`; keep
 `docs/` limited to manuscript sources, final office files, templates, visual
 references, and evidence documents.
+
+For every new or regenerated manuscript visual, first read
+`scripts/visualization/README.md`: use Matplotlib for data-driven charts and
+graphs, Graphviz for structural diagrams, and SVG as the primary export. Use
+native Word tables for tabular results. Do not auto-trace a PNG into a fake
+vector figure. Regenerate a verified SVG from recorded data only after its
+manifest status is clear; validate the rendered manuscript output.
 
 ---
 
@@ -64,7 +157,7 @@ references, and evidence documents.
 
 - **Canonical LBPH `tau_accept` — UNIFIED 2026-08-02 (standalone and hybrid cascade now share one value)**:
   - **`tau_accept` (both `cv_only` and `gate.tau_accept`)**: **`67.03325520645528`**
-    - Provenance: LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR, native `predict_collect` scale), **box-cropped** YuNet standalone sweep — `reports/independence/lbph_lfw1/native_predict_scale_yunet.json`.
+    - Provenance: LFW1 rank-165 unidirectional unique-pair impostor distance (9.986 ppm FAR, native `predict_collect` scale), **box-cropped** YuNet standalone sweep — `docs/results/independence_test/independence/lbph_lfw1/native_predict_scale_yunet.json`.
     - **Why unified:** `cv_only`'s accept rule and the cascade's outright-accept rule are the same test (`distance <= tau_accept`, SFace never runs before this gate either way) — a single-engine LBPH question, not something the joint pipeline should be recalibrating. The previous split (67.0084 standalone / 77.7693 hybrid) was traced to a **box-crop-vs-full-frame harness bug** in `src/hybrid/independence_test.py`, not a real detector- or pipeline-driven difference — confirmed by re-running the standalone script with the joint test's own YuNet detector: box-cropped YuNet lands at 67.033, next to the old Haar-standalone 67.0084, nowhere near 77.7693. Full trail: `docs/independence/MASTER_FILE.md`, `classical-cv/docs/audits/STATE-08-02.md`.
     - **Rule:** Do not diverge `cv_only` and `gate.tau_accept` again without re-establishing a principled reason (e.g. a real whole-system FAR-budget constraint — checked and ruled out 2026-08-02, see `docs/PAPER.md`'s cascade-undercuts-either-engine-alone finding).
     - **Domain Shift Note:** On unconstrained, in-the-wild LFW2 images, clean AR at this threshold is **`~1.74%`** (median clean distance $\sim 72.82$). This low AR is expected and serves as empirical proof of why classical LBPH requires the hybrid cascade (`SFace`) on wild images.

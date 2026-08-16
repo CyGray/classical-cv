@@ -1,36 +1,25 @@
 ---
 name: cv-workspace-map
 description: >
-  Navigation map for the "Computer Vision" workspace root (USLS CV Group 3,
-  LS-Face / Smart Gate). Covers what this directory actually is (a folder
-  holding two independent git repos, not a repo itself), which sibling repo is
-  runnable on this machine and which is not, where the ONE runtime source of
-  truth for hybrid thresholds lives versus the five prose documents that
-  currently disagree with it, and the cross-repo traps that have already
-  produced wrong numbers: two non-comparable LBPH distance scales, cropped vs
-  full-frame LBPH tiles, and same-filename/different-pixel LFW copies. Use this
-  BEFORE reading root AGENTS.md as fact, before quoting or writing any
-  threshold value, before running anything under deep-learning/, before
-  comparing an independence-test number against another one, and whenever a
-  path, report, or doc exists at both the workspace root and inside
-  classical-cv/ under a similar name. For classical-cv internals (which
-  independence script to run, data/ folder contents) defer to the cv-repo-map
-  skill inside that repo. For the LFW2 41-modification robustness benchmark's
-  PROTOCOL axis (1-to-N identification vs 1:1 pairwise verification vs
-  transform-sensitivity, AR/GAR/TPIR/Rank-1/EER numbers, the tau_accept vs
-  EER-swept operating points) defer to the robustness-protocol-map skill
-  (also workspace root).
+  Navigation map for the Computer Vision workspace (LS-Face / Smart Gate).
+  Use before cross-project work, root-vs-classical-cv path/result confusion,
+  threshold or deep-learning work, independence-result comparisons, or
+  creating/regenerating manuscript figures and diagrams. Route classical-CV
+  internals to cv-repo-map and LFW2 protocol questions to
+  robustness-protocol-map; use the shared SVG visual-export guide for assets.
 ---
 
 # Workspace map: Computer Vision root
 
-This is the **workspace root**, not a project. It holds two unrelated git repos
+This is the **workspace root**. As of 2026-08-02 it is itself a single git
+repo (see §1's correction) holding two functionally-unrelated subprojects
 plus some inert directories. `classical-cv/` has its own, deeper navigation
 skill (`cv-repo-map`) — this file covers only what spans repos or what the root
 gets wrong. Read this first, then hand off.
 
-*Facts below verified 2026-08-01. Anything marked **verify** changes over time —
-check it, don't quote it.*
+*Facts below verified 2026-08-01, with a correction to §2 verified 2026-08-02
+(see that section). Anything marked **verify** changes over time — check it,
+don't quote it.*
 
 ## 0. The two mistakes this workspace causes most
 
@@ -39,22 +28,116 @@ check it, don't quote it.*
    runtime. Copying a number out of a doc into config, or into a paper, without
    checking the runtime file has already happened.
 2. **Comparing two independence-test numbers that measure different things.**
-   The same nominal quantity (`tau_accept`) is produced by pipelines that differ
-   in distance scale, in whether the face is cropped, and in which copy of LFW
-   they read (§3). Two such numbers being far apart is usually a pipeline
-   difference, not a finding.
+   The same nominal quantity (`tau_accept`, `l2_genuine`) is produced by
+   pipelines that differ in distance scale, in whether the face is cropped,
+   and in which copy of LFW they read (§3). Two such numbers being far apart
+   is usually a pipeline difference, not a finding — LBPH `tau_accept`'s old
+   ~10-unit "joint vs standalone" gap turned out to be exactly this (a
+   box-crop-vs-full-frame bug), resolved 2026-08-02 by unifying the two
+   families into one value. §3.4.
+
+## Result evidence governance (2026-08-09)
+
+`docs/results/` is canonical, version-controlled evidence. Current manifest:
+**62 `canonical_snapshot` artifacts and one `reference_specification`**.
+Before citing or comparing, read its category README,
+`docs/results/RESULTS_MANIFEST.json`, and
+`docs/results/metadata/PROVENANCE_AUDIT.md`. `classical-cv/reports/` and
+`classical-cv/outputs/` are raw/working locations, not citation sources.
+
+### Retention: merged results, not worker noise
+
+Keep merged reports and merged supporting data in `docs/results/`. Archive
+per-worker/per-segment artifacts under the identical relative path in
+`docs/experiments/`; never move a mixed directory wholesale. As of 2026-08-09,
+all 64 canonical `*_segNof16` robustness artifacts are archived. The retained
+robustness set is three merged reports, the standalone merged probes CSV, the
+evidence note, README/reference files, and `TODO.md`.
+
+`docs/experiments/RESULTS_MANIFEST_PRE_PROVENANCE_SORT.json` preserves the
+pre-cleanup registry. `RESULTS_MANIFEST_PRE_SEGMENT_ARCHIVE.json` preserves
+the pre-segment-archive registry. Artifacts there are not canonical merely
+because their filenames match a result.
+
+Artifacts flagged `illustrative_stand_in`, `needs_provenance_review`,
+`historical_rerun_required`, or `rerun_required` stay quarantined in
+`docs/experiments/`. Do not auto-trace PNGs for Springer: regenerate from
+recorded data to SVG/PDF (or EMF on Windows) after provenance clears.
+
+### Candidate Improvements & Major Experiments
+
+When asked for performance optimizations, latency speedups, or candidate algorithmic improvements, consult [`docs/experiments/major/`](docs/experiments/major/README.md):
+1. **[`docs/experiments/major/architecture/`](docs/experiments/major/architecture/README.md)**: **Quality-First Early-Bypass Routing** (evaluates quality before LBPH, eliminates 43.29% of LBPH calls, cuts dual inference from 77.61% to 34.32%, reduces cascade recognition latency by 18.27% while preserving 100% bit-for-bit decision equivalence across all 2,296 DL41 conditions).
+2. **[`docs/experiments/major/lbph_config/`](docs/experiments/major/lbph_config/README.md)**: **Multi-Scale `r3_n8_g6x6` LBPH Descriptor** (improves LSDB CV Rank-1 by +11.07 pp, reduces template memory by 43.75% from 64 KB to 36 KB, and reduces Chi-Square prediction latency by ~42%).
+
+### Canonical rerun contract
+
+Write raw rerun output to
+`classical-cv/outputs/provenance_reruns/<run-name>/`. Promote reviewed
+summary/CSV/plot snapshots only to
+`docs/results/independence_test/reruns/<campaign>/<run-name>/` with sibling
+`run_provenance.json`. Record real entrypoint, argv, source-script SHA-256,
+Git commit/dirty state, dataset tree hash, crop/preprocessing contract,
+seed/iterations, runtime versions, resolved thresholds-file hash/values when
+applicable, and comparison-count validation. Run
+`scripts/reporting/generate_results_manifest.py` after promotion; documented
+reruns (including nested plots) become canonical. A rerun without that record
+is `needs_provenance_review`.
+
+`lasalle_processed_2026-08-09` is first verified rerun campaign: LBPH,
+Eigenfaces, Fisherfaces, and hybrid clean sweeps, each 28 identities and
+756/756 ordered impostor comparisons. It uses pre-cropped La Salle tiles;
+it is not an LFW threshold recalibration.
+
+### Algorithm selection is a separate decision from threshold calibration
+
+For the paper's initial algorithm-selection result, the reviewed evidence is
+`docs/results/algo_test/lsdb_selection_2026-08-10/`, not the older partial
+LFW all-families snapshot. Its deterministic LSDB split uses 224 fit images,
+56 calibration images, and 56 held-out test images. The resulting classical
+comparison selects LBPH; the external DL artifact retains SFace on
+deployment-compatible footprint, without presenting its model-specific
+external metrics as a same-harness accuracy ranking.
+
+This campaign is deliberately **LSDB-only**: it selects candidates for the
+La Salle deployment domain. Its calibration threshold is local experimental
+scaffolding and must not update the frozen LFW verification/cascade thresholds
+in `classical-cv/src/hybrid/thresholds.json`. In prose, name the two questions
+separately: LSDB selects algorithms; LFW establishes the deployed operating
+point.
+
+## Manuscript visual-export route
+
+Before creating or regenerating any figure, chart, graph, or diagram, read
+`scripts/visualization/README.md` at the workspace root. It is the shared
+export policy: use Matplotlib for data-driven charts/graphs, Graphviz for
+structural diagrams, and SVG as the manuscript output. For result figures,
+first check the applicable `docs/results/` README, manifest, and provenance
+audit; regenerate from recorded data rather than converting or overwriting an
+existing PNG run artifact.
 
 ## 1. What is actually here
 
-The root itself is **not a git repository** — `git rev-parse` fails here. Run
-git commands inside a subdirectory, never at root.
+**Correction, 2026-08-02:** the root *is now* a git repository — a single repo
+was initialized here (`0169818 feat: initialize root workspace repository
+structure`, same day) that absorbed both `classical-cv/` (history preserved
+via a `fa80995 Snapshot of classical-cv master state...` commit + merges) and
+`deep-learning/` (added fresh, no prior history carried over — its
+pre-restructuring commit history, if any existed, is not reachable from
+current refs and no separate remote for it is configured; only
+`origin` → `classical-cv.git` exists). Run git commands from the workspace
+root now; there is no longer a need to `cd` into a subdirectory first. This
+supersedes the "not a git repository" claim below and in any doc dated
+2026-08-01 or earlier — verify against `git rev-parse --show-toplevel` if in
+doubt, don't trust a date-stamped claim in prose.
 
 | Path | What it is | Runnable here? |
 |---|---|---|
-| `classical-cv/` | **Git repo.** The live project: LBPH / Eigenfaces / Fisherfaces and the hybrid LBPH+SFace cascade (`src/hybrid/`). Has its own `AGENTS.md` + `.claude/skills/cv-repo-map`. | **Yes** — this is where work happens. |
-| `deep-learning/` | **Git repo** (has commits; `archive/` is untracked). SFace / ArcFace / FaceNet feature extraction and threshold scripts. | **No.** `loader.py:10-12` hardcodes `D:/FILES/PROGRAMMING/...` dataset roots and there is no `D:` drive on this machine. Treat DL work as plan-only; write plans into `classical-cv/docs/`. |
+| `classical-cv/` | Subdirectory of the single root repo (§1 correction) — no longer its own `.git`. Its pre-2026-08-02 history is preserved (`fa80995` snapshot + merges). The live project: LBPH / Eigenfaces / Fisherfaces and the hybrid LBPH+SFace cascade (`src/hybrid/`). Has its own `AGENTS.md` + `.claude/skills/cv-repo-map`. | **Yes** — this is where work happens. |
+| `deep-learning/` | Subdirectory of the single root repo (§1 correction) — no longer its own `.git`; `archive/` is untracked. Its pre-2026-08-02 history is not reachable from current refs (added fresh, no separate remote found). SFace / ArcFace / FaceNet feature extraction and threshold scripts. | **No.** `loader.py:10-12` hardcodes `D:/FILES/PROGRAMMING/...` dataset roots and there is no `D:` drive on this machine. Treat DL work as plan-only; write plans into `classical-cv/docs/`. |
 | `face-detection-g3/` | **Empty.** Contains only `.codegraph/` — no source, no data. Root `AGENTS.md` describes it as "auxiliary face detection and evaluation modules"; that is false as of 2026-08-01. | No — nothing to run. |
-| `docs/`, `reports/`, `scripts/`, `archive/` | Small root-level output/aggregation dirs. Not the project's main docs or reports — those live inside `classical-cv/` (§4). | — |
+| `docs/` | Workspace-level manuscript, experiment, and canonical evidence material; `docs/results/` is the canonical result store. | — |
+| `reports/`, `scripts/`, `archive/` | Root-level working/aggregation and historical material; the active source/report tree remains under `classical-cv/`. | — |
 | `.codegraph/` | Codegraph index for the workspace. The `codegraph_*` MCP tools are not always connected in a given session; if they aren't, fall back to `rg`/`fd`. | — |
 
 Root `AGENTS.md` also lists a `preprocess/` directory at root. **It does not
@@ -66,31 +149,51 @@ exist.** Do not build paths from that file's structure section.
 contains.** That is the file `load_thresholds()` reads. Everything else is
 narrative and may be stale, aspirational, or describing a different run.
 
-Known state as of 2026-08-01 — **an unresolved conflict, not a resolved one**:
+**History, most recent first — 67.0084 was wrong-not-stale on 2026-08-01
+(`git log -p` showed a single commit, always 67.0084, never the 77.7693 an
+earlier version of this skill claimed was live); then on 2026-08-02 the value
+itself genuinely moved, deliberately, to 67.03325520645528** — LBPH
+`tau_accept` was **unified** with the standalone single-engine threshold by
+design decision (`docs/independence/MASTER_FILE.md`,
+`classical-cv/docs/audits/STATE-08-02.md`). The old joint-hybrid candidate
+(77.769348) was investigated and **rejected** — it measured a box-crop
+harness bug in `independence_test.py`, not a real detector- or
+pipeline-driven recalibration (§3.4).
 
 | Source | What it says about `tau_accept` | Status |
 |---|---|---|
-| `classical-cv/src/hybrid/thresholds.json` | 77.7693 | **Loaded at runtime.** |
-| root `AGENTS.md` | 77.7693, labelled "Frozen Deployed" | Matches runtime. |
-| `classical-cv/docs/READ THIS/FROZEN_THRESHOLDS.md` | 67.0084 | Contradicts runtime. |
-| `classical-cv/docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md` | 77.769348, explicitly *"candidate, not adopted — thresholds.json was NOT changed by this run"* | Self-contradicting: the value it says was not adopted **is** what runtime now loads. |
-| root `reports/independence/independence_report.md` | a mixed table (70.6089 / 67.0084 / 76.85) | Stale; also mislabels the scale (§3.1). |
-| `classical-cv/.claude/skills/cv-repo-map` | states no value — defers to the runtime file | Updated 2026-08-01. Its §3 is now the reference for the joint-vs-standalone families (§3.4 below). |
+| `classical-cv/src/hybrid/thresholds.json` | **67.03325520645528** | **Loaded at runtime**, current as of 2026-08-02. Its `provenance` note now correctly describes this as the standalone box-cropped YuNet sweep, superseding the earlier mislabeled "LFW1 YuNet joint hybrid run" description. |
+| root `AGENTS.md` | Updated 2026-08-02: **one** unified value, 67.03325520645528, for both `cv_only` and `gate.tau_accept`. | **Matches runtime.** The previous two-value split (67.0084 standalone / 77.7693 "hybrid cascade gate") is gone — corrected in place, with history retained in the doc's own provenance table. |
+| `classical-cv/docs/READ THIS/FROZEN_THRESHOLDS.md` | 67.03325520645528 | **Matches runtime.** Updated 2026-08-02 with the crop-bug finding in place of the old value. |
+| `classical-cv/docs/READ THIS/FROZEN_THRESHOLDS_HYBRID.md` | 77.769348, marked **rejected 2026-08-02** (correction appended in place; original "candidate, not adopted" framing plus the now-falsified "it's the detector" explanation both kept for the record, struck through) | Consistent — the value was never adopted and is now explicitly ruled out, not just untried. |
+| root `reports/independence/independence_report.md` | a mixed table (70.6089 / 67.0084 / 76.85) | Stale (predates even the 2026-08-01 state); also mislabels the scale (§3.1). Left alone — run record, not live config. |
+| `classical-cv/.claude/skills/cv-repo-map` | states no fixed value in prose — defers to the runtime file, updated 2026-08-02 | Its §3.1 now documents the unification and why the old family split was a harness bug, not a real distinction, for LBPH specifically (still real for SFace). |
 
 Rules that follow from this:
 
-- **Read `thresholds.json` to learn the deployed value. Always.** Never quote a
-  threshold from a doc, this skill included — which is why no "current value"
-  table appears here.
-- **A doc saying "frozen" does not mean the config matches it.** Verify both.
+- **Read `thresholds.json` to learn the deployed value. Always — including
+  from this skill.** This skill asserted a wrong value for a full day
+  (2026-08-01) before being corrected, and the true value has since moved
+  again (2026-08-02, deliberately); a memory or skill saying a threshold "is"
+  some number is a claim about when it was last checked, not a fact.
+- **A doc saying "frozen" does not mean the config matches it, and a config
+  value does not mean its own description string is accurate** — was true of
+  the pre-2026-08-02 `thresholds.json` (`provenance` note mislabeled 67.0084
+  as a YuNet joint-run output); the current provenance string was corrected
+  as part of the same change that moved the value, so check both stayed in
+  sync going forward, don't assume they always will.
 - Before changing any threshold, `FROZEN_THRESHOLDS.md`'s "Where these values
   live (keep in sync)" section lists four locations that must move together
   (`thresholds.json`, `src/hybrid/gate.py` fallback, `src/hybrid/calibrate.py`,
-  `src/sface/recognizer.py`). **verify** that list is still accurate.
-- There is an open question, as of 2026-08-01, about whether the deployed
-  77.7693 is correct at all — it was derived from full-frame (uncropped) LBPH
-  tiles (§3.2). Do not "fix" the docs to match the config, or the config to
-  match the docs, without resolving that first.
+  `src/sface/recognizer.py`). **verify** that list is still accurate —
+  `docs/audits/STATE-08-02.md` also lists the prose docs (both `AGENTS.md`
+  files, `FROZEN_THRESHOLDS*.md`) that the JSON-focused list omits but that go
+  stale just as fast.
+- **LBPH `tau_accept` is no longer split into "standalone" and "hybrid
+  cascade" values — it's one value now.** SFace `l2_genuine` is still split
+  (joint 1.0313 deployed vs standalone 1.0306278467178345, unresolved,
+  `docs/independence/MASTER_FILE.md` row 5) — don't assume the LBPH
+  resolution generalizes to SFace without separately checking.
 
 ## 3. Why two independence numbers disagree — four independent causes
 
@@ -143,23 +246,72 @@ Diagnostic value: LBPH is sensitive to this, SFace barely notices (it aligns via
 landmarks). A 4% LBPH shift alongside a 0.06% SFace shift means the image source
 changed, not the algorithm.
 
-### 3.4 Joint-hybrid vs standalone derivation
+### 3.4 Joint-hybrid vs standalone derivation — real for SFace, resolved for LBPH (2026-08-02)
 
-The same nominal `tau_accept` is produced by a **joint** sweep (LBPH + SFace +
-cascade gate scored together, `src/hybrid/independence_test.py`) and by a
-**standalone** single-engine sweep. Both target ~10 ppm FAR; for LBPH they
-differ by ~10 distance units. This partly overlaps §3.2 — the joint test is
-also the full-frame one — so the two effects compound rather than being
-alternative explanations for the same gap.
+The same nominal quantity (`tau_accept`, `l2_genuine`) used to be produced by
+a **joint** sweep (LBPH + SFace + cascade gate scored together,
+`src/hybrid/independence_test.py`) and by a **standalone** single-engine
+sweep, both targeting ~10 ppm FAR. For LBPH they differed by ~10 distance
+units — this overlapped §3.2 (the joint test is also the full-frame one).
 
-Project rule: the `cv_only` / `dl_only` benchmark modes must be scored with
-**standalone**-derived thresholds; the cascade uses the joint ones. Mixing
-them silently compares the two standalone engines at different FARs. Detail
-and the pointer to the standalone artifact: `cv-repo-map` §3.1.
+**2026-08-02: for LBPH, this was never two legitimate families — it was §3.2's
+crop bug wearing a "joint vs standalone" label.** Isolated by rerunning the
+standalone box-cropped script with the joint test's own YuNet detector (same
+detector, only crop mode differs from the joint run): landed at
+67.03325520645528, next to the old Haar-standalone number, nowhere near the
+joint run's 77.769348. Detector was never the driver (contradicting the
+original explanation in `FROZEN_THRESHOLDS_HYBRID.md`, corrected in place);
+crop mode was. `gate.tau_accept` is now unified with the standalone value —
+one number, one derivation, for both `cv_only` and the cascade's
+outright-accept. Full trail: `docs/independence/MASTER_FILE.md`,
+`classical-cv/docs/audits/STATE-08-02.md`.
 
-SFace has **no** standalone sweep in this repo at all — only an externally
-supplied value and a joint-derived one. Do not present a joint SFace number as
-a standalone one.
+**SFace `l2_genuine` is split in value but the gap is RESOLVED as immaterial
+(2026-08-02) — not unified into one number the way LBPH was, but not left
+open either.** Joint-deployed 1.0313 vs standalone 1.0306278467178345 (added
+2026-08-02) — `reports/independence/sface_lfw1/standalone_l2_yunet.json`
+(`classical-cv/scripts/archive/run_lfw_sface_standalone_independence.py`),
+rank-165, N=5,749, zero YuNet skips, reproducing the previously-unprovenanced
+externally-supplied `1.030628` to 6 dp. **Do not assume the LBPH unification
+mechanism generalizes here** — SFace's gap was never a crop-bug artifact like
+LBPH's was. Instead it was closed via a different argument: a
+band-conditioned diagnostic found that on wild LFW, ~97-99% of ALL probes
+land in LBPH's escalation band regardless of `tau_reject` candidate (see
+`tau_reject` paragraph below), so the band-conditioned SFace population is
+not meaningfully different from the marginal one either derivation measures
+— a third independent number (the band diagnostic's own zero-observed-FA
+floor, 1.0417) lands within ~1% of both, corroborating "these are the same
+number, noise aside." `L2_GENUINE_THRESHOLD` stays 1.0313. **Scoped to
+LFW** — La Salle DB1's escalation band is a real, much smaller subset
+(`docs/PAPER.md`'s ~75%-kept-cheap figure), so this argument doesn't
+transfer there without re-checking. Full comparison:
+`docs/independence/MASTER_FILE.md` row 5 (closed). Detail: `cv-repo-map`
+§3.1, `docs/experiments/hybrid_sface_threshold/ANALYSIS.md`.
+
+**`tau_reject` was suspect (88.4927, cascade-only, no standalone equivalent
+by definition, same full-frame-harness-bug taint as the rejected `tau_accept`
+candidate) — CANONIZED 2026-08-02 to 140.13, advisor sign-off.** The right
+derivation was NOT a plain box-crop rerun at a different rank (unlike
+`tau_accept`) and NOT a plain genuine percentile either — `tau_reject`'s real
+cost is asymmetric (FRR on the escalation path vs. impostor escalation into
+SFace's reach), so the canon method sweeps `tau_reject` and measures both at
+once: `docs/independence/TAU_REJECT_METHOD.md`
+(`classical-cv/scripts/pipeline/tau_reject_tradeoff_curve.py`, sweep
+70-170). **Finding: no knee** — genuine-probe and impostor-probe escalation
+rates track almost 1:1 across the entire range; LBPH does not separate
+genuine from impostor distances anywhere in this band on wild LFW (same
+conclusion as `robustness-protocol-map` §4's EER-crossover finding, now
+confirmed across the whole plausible range, not one point). Given no
+candidate trades favorably, 140.13 (heavy-tier p99 genuine LBPH distance,
+`docs/experiments/tau_reject/THRESHOLD_ANALYSIS.md`) was adopted as a
+deliberate **permissive** engineering choice, not a derived separation bound
+— makes the confident-reject branch functionally near-inert on wild LFW
+(~97-99% of ALL probes escalate regardless of the exact `tau_reject` value),
+favoring SFace escalation since LBPH can't be trusted to reject correctly
+here. **Does not generalize to La Salle DB1**, where LBPH separates
+genuine/impostor much better. `docs/NOTES.md` item 3,
+`classical-cv/docs/audits/STATE-08-02.md`,
+`docs/independence/MASTER_FILE.md` row 6.
 
 ## 4. Same name, different thing: root vs classical-cv
 
@@ -169,8 +321,8 @@ one you mean, and prefer the `classical-cv/` one for anything current.
 | Root | classical-cv | Note |
 |---|---|---|
 | `reports/independence/` — a small hand-assembled summary + PNGs | `reports/independence/` — the actual per-run artifact tree (`lbph_lfw1/`, `hybrid/`, ...) | Different content, same relative path. |
-| `AGENTS.md` — 32 lines, workspace-level, contains stale claims (§1, §2) | `AGENTS.md` — the real engineering standards | When they conflict, classical-cv wins on project matters. |
-| `docs/`, `scripts/` | `docs/`, `scripts/` | Root versions are aggregation/reporting only. |
+| `AGENTS.md` — workspace-level rules plus the shared fast router | `AGENTS.md` — project-specific engineering standards | The nearest applicable guide governs; use the workspace map for cross-project facts. |
+| `docs/` — workspace manuscript, experiment, and canonical-result material; `scripts/` — root orchestration | `docs/`, `scripts/` — project docs and source tooling | Similar names have different scopes; `docs/results/` is the canonical evidence store. |
 
 ## 5. Environment
 
@@ -180,14 +332,45 @@ one you mean, and prefer the `classical-cv/` one for anything current.
 - **Shell:** PowerShell primary; a Bash tool is also available. `rg` and `fd`
   are installed.
 - **Disk is the binding constraint** — **verify** free space before any full-LFW
-  hybrid run. `src/hybrid/independence_test.py` writes two per-pair
-  `comparisons.csv` files at ~11.5 GB each (33M rows) at full LFW1 scale. Use
-  `scripts/archive/run_hybrid_independence_no_pair_csv.py`, which suppresses
-  both and still writes `records.npz` + `summary.json` (all the rank extractor
-  needs).
+  run. Full joint LFW independence can emit roughly 23 GB of pair CSVs. The
+  historical no-pair wrapper referenced by older notes is not present in the
+  live tree. Do not recreate the invalid full-frame LFW harness merely to fill
+  a provenance gap.
+- **Dataset availability (checked 2026-08-09):**
+  `data/lasalle_db1_processed` is present (28 identities / 336 images), but
+  raw `data/lasalle_db1` is absent. `data/lfw-dataset` exists but is empty.
+  Do not launch LFW1, pairwise-verification, or LFW2 robustness reruns until
+  sanctioned raw gallery data is restored and hash-verified.
 - **No `D:` drive**, which is what makes `deep-learning/` unrunnable (§1).
 
+## 5b. DL-track robustness test is a different protocol entirely — not comparable to classical-cv AR
+
+`deep-learning/ar-table.py` (verified 2026-08-02 by direct read — the repo
+isn't runnable here per §1, but its source reads fine) is the DL team's own
+robustness-test script, parallel to classical-cv's LFW2 41-mod benchmark. It
+answers a different question and must never be tabled next to a classical-cv
+AR number without saying so:
+
+| Axis | classical-cv (`accuracy_ratio_verification.py`) | DL (`ar-table.py`) |
+|---|---|---|
+| Protocol | Genuine **and** impostor pair scored (Sec 0/1 of `robustness-protocol-map`) | **Genuine-only** — `is_match = dist <= threshold`, no impostor pair ever scored. Same trap `robustness-protocol-map` §1 warns about: an accept-rate wearing an "AR" label. |
+| Genuine pair definition | Probe vs a *different* gallery photo of the same identity (gallery/probe-disjoint split) | Modified image vs **the exact same original photo it was damaged from**, matched by filename (`dark_right__rot_90.jpg` -> `dark_right_orig.jpg`) — same pose/lighting condition, not a different photo. Even more lenient than classical-cv's genuine pair. |
+| Dataset | LFW (wild, uncontrolled) | **La Salle DB1/DB2** (`dark_right`, `dark_up`, ... pose-tagged filenames) — not LFW at all. |
+| Distance formula | LBPH native `predict_collect()`; SFace cosine+L2 dual rule | Per-model, hardcoded in-script: ArcFace = `1 - cosine_sim`; SFace = L2-normalized-then-Euclidean; FaceNet/MobileNet = **raw, unnormalized** Euclidean (embedding magnitude affects distance). |
+| Threshold | From an independence sweep, provenance-tracked (§2, `cv-repo-map` §3) | Fixed constants in the script: `{"mobilenet": 0.70, "facenet": 0.80, "arcface": 0.65, "sface": 1.128}` — no visible derivation in this file. `sface: 1.128` is a **sixth** SFace threshold value in this workspace, matching none of the ones `cv-repo-map`/memory track (1.018 / 1.0313 / 1.031255 / 1.192 / 1.030628). |
+| Aggregation | Pooled genuine+impostor pairs per tier -> GAR/FAR/Accuracy@tau | Per-category-per-tier rate, then mean-of-tiers per category, then unweighted mean-of-category-means overall. |
+
+**Rule:** a DL-track AR number and a classical-cv AR number share a label and
+nothing else — different protocol, dataset, distance formula, threshold
+family, and averaging method. Never place them in the same table or sentence
+without stating all five differences; a reader (or a thesis committee) will
+otherwise assume they measure the same thing.
+
 ## 6. Where to go next
+
+- **New or regenerated visual asset**: read `scripts/visualization/README.md`
+  first, then apply this map's canonical-result rules and the relevant
+  repository/protocol map before using experimental data.
 
 - **classical-cv internals** — which independence script for which dataset, what
   each `data/` folder holds, ordered vs unidirectional pair counts, plotting
