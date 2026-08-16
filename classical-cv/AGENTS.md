@@ -1,5 +1,10 @@
 # LS-Face / Smart Gate — Agent Guide
 
+> **Fast path:** from this subproject, read [`../AGENT_START_HERE.md`](../AGENT_START_HERE.md)
+> first, then use the repo-specific map at
+> `.claude/skills/cv-repo-map/SKILL.md`. The root guide handles cross-project
+> paths and canonical result provenance; this file handles project internals.
+
 Face recognition research project (USLS Computer Vision, Group 3). Classical CV
 recognizers (LBPH, Eigenfaces, Fisherfaces) plus a hybrid LBPH→SFace cascade,
 selected via independence testing. Deliverable: the IW-FCV 2026 paper at
@@ -36,6 +41,18 @@ selected via independence testing. Deliverable: the IW-FCV 2026 paper at
   CFP), `reports/` (finished write-ups), `figures/`, `changelogs/`,
   `archive/` (superseded plans and prior report drafts).
 
+For every new or regenerated manuscript visual, first read
+`../scripts/visualization/README.md`: use Matplotlib for data-driven charts,
+Graphviz for structural diagrams, and SVG as the primary export. Do not rename
+or convert historical result rasters in place; regenerate an SVG from recorded
+data only after the applicable provenance checks pass.
+
+## Candidate Improvements & Major Experiments
+
+When asked for performance optimizations, latency reductions, or candidate model enhancements, check [`../docs/experiments/major/`](../docs/experiments/major/README.md):
+1. **[`../docs/experiments/major/architecture/`](../docs/experiments/major/architecture/README.md)**: **Quality-First Early-Bypass Routing** (evaluates quality before LBPH; eliminates 43.29% of LBPH calls, cuts dual inference from 77.61% to 34.32%, reduces cascade latency by 18.27% from 11.96 ms to 9.77 ms with 100% bit-for-bit decision equivalence across all 2,296 DL41 conditions).
+2. **[`../docs/experiments/major/lbph_config/`](../docs/experiments/major/lbph_config/README.md)**: **Multi-Scale `r3_n8_g6x6` Descriptor** (radius=3, grid=6x6; improves Rank-1 accuracy by +11.07 pp on LSDB, cuts template memory by 43.75% from 64 KB to 36 KB, and reduces Chi-Square prediction latency by ~42%).
+
 ## Engineering Standards
 
 - **Minimal edits:** surgical updates only; do not refactor unrelated code.
@@ -66,14 +83,23 @@ selected via independence testing. Deliverable: the IW-FCV 2026 paper at
   table below is provenance, not alternatives to pick between; the current
   deployed values are the last row.
 
-  | Threshold | LS-DB1 (2026-07-20, superseded) | LFW1 partial-diagnostic (2026-07-21, superseded, `scripts/pipeline/lfw_all_families_verify.py`, 575 ids) | LFW1 full, Haar, LBPH-only (2026-07-28, superseded) | **LFW1 YuNet joint-hybrid (2026-08-01, deployed)** |
+  | Threshold | LS-DB1 (2026-07-20, superseded) | LFW1 partial-diagnostic (2026-07-21, superseded, `scripts/pipeline/lfw_all_families_verify.py`, 575 ids) | LFW1 full, Haar, LBPH-only (2026-07-28, superseded) | LFW1 YuNet joint-hybrid (2026-08-01, historical run record — **superseded, NOT deployed**, see below) |
   |---|---:|---:|---:|---:|
-  | LBPH `tau_accept` | 70.6089 | 81.04 (100 ppm FAR) / 88.40 (1% FAR) | 67.0084 (rank-165 unidirectional unique pair, ~10 ppm FAR, 5,703 ids) | **77.7693** (rank-165 unidirectional unique pair, ~10 ppm FAR, YuNet, 5,749 ids) |
-  | SFace `l2_genuine` | 1.106796 | 1.3553 (impostor-L2 mean) | 1.018 (supplied by SFace sub-team) | **1.0313** (rank-165 unidirectional unique pair, ~10 ppm FAR) |
-  | LBPH `tau_reject` | 76.85 (LFW-carried, `tar_at_far.md`) | 76.85 (unchanged) | 76.85 (unchanged) | **88.4927** (rank-165,226 unidirectional unique pair, ~1% FAR) |
+  | LBPH `tau_accept` | 70.6089 | 81.04 (100 ppm FAR) / 88.40 (1% FAR) | 67.0084 (rank-165 unidirectional unique pair, ~10 ppm FAR, 5,703 ids) | 77.7693 (rank-165 unidirectional unique pair, ~10 ppm FAR, YuNet, 5,749 ids) — **rejected 2026-08-02, box-crop harness bug** |
+  | SFace `l2_genuine` | 1.106796 | 1.3553 (impostor-L2 mean) | 1.018 (supplied by SFace sub-team) | 1.0313 (rank-165 unidirectional unique pair, ~10 ppm FAR) — **still deployed, resolved 2026-08-02 as immaterial vs. standalone** |
+  | LBPH `tau_reject` | 76.85 (LFW-carried, `tar_at_far.md`) | 76.85 (unchanged) | 76.85 (unchanged) | 88.4927 (rank-165,226 unidirectional unique pair, ~1% FAR) — **superseded 2026-08-02, canonized to 140.13 via a different method** |
   | SFace `cosine_genuine` | 0.363 | 0.363 (unchanged) | 0.363 (unchanged) | 0.363 (unchanged) |
 
-  > **CRITICAL STANDALONE LBPH RULE (`cv_only`)**: For standalone LBPH (`cv_only`) robustness and benchmark evaluations, the canonical threshold is **`tau_accept = 67.0084`** (LFW1 rank-165 unidirectional unique-pair impostor distance, native `predict_collect()` scale). Do NOT overwrite or replace `67.0084` with `77.7693` (the cascade gate accept edge) or `76.7922` (LFW 1% FAR diagnostic point). Note: on unconstrained wild LFW2 images, clean AR at `67.0084` is **`1.74%`** (clean median distance $\sim 72.82$)—this is expected and serves as empirical proof of why classical LBPH requires the hybrid cascade (`SFace`) on wild images.
+  **Currently deployed (`src/hybrid/thresholds.json`, 2026-08-02 — read that
+  file, not this table, for the live value):** `gate.tau_accept =
+  `cv_only`; not the 77.7693 shown above), `gate.tau_reject = 140.13`
+  (canonized via `docs/independence/TAU_REJECT_METHOD.md`, not shown above —
+  no historical row for it, it's a genuine-percentile/permissive-choice pick,
+  not an impostor-FAR one), `sface.l2_genuine = 1.0313` (unchanged, this
+  table's own 2026-08-01 column value). Full trail:
+  `docs/independence/MASTER_FILE.md`, `docs/audits/STATE-08-02.md`.
+
+  > **CRITICAL STANDALONE LBPH RULE (`cv_only`)**: For standalone LBPH (`cv_only`) robustness and benchmark evaluations, the canonical threshold is **`tau_accept = 67.03325520645528`** (LFW1 rank-165 unidirectional unique-pair impostor distance, native `predict_collect()` scale, **box-cropped** — supersedes the 67.0084 Haar-standalone figure this callout stated before 2026-08-02; the two are the same derivation method on a different detector and land within 0.03 of each other). As of 2026-08-02 this is now ALSO `gate.tau_accept` (unified, see `docs/independence/MASTER_FILE.md` row 4) — do not overwrite it with 77.7693 (rejected joint-hybrid candidate, box-crop harness bug) or 76.7922 (LFW 1% FAR diagnostic point). Note: on unconstrained wild LFW2 images, clean AR at this threshold is **`1.74%`** (clean median distance $\sim 72.82$)—this is expected and serves as empirical proof of why classical LBPH requires the hybrid cascade (`SFace`) on wild images.
 
 ---
 
@@ -96,9 +122,17 @@ selected via independence testing. Deliverable: the IW-FCV 2026 paper at
 
   **On the escalation band.** The 2026-07-21 audit found the LFW1-diagnostic
   accept edge (81.04) sat *above* `tau_reject` (76.85), so the band was empty
-  and the cascade collapsed to LBPH-only on LFW. Both bounds have since moved
-  together; the currently deployed band is **[77.7693, 88.4927]**, which is
-  non-empty. Re-verify
+  and the cascade collapsed to LBPH-only on LFW. As of 2026-08-02 the
+  deployed band is **[67.03325520645528, 140.13]** — wide by deliberate
+  design (see `docs/independence/TAU_REJECT_METHOD.md`): an FRR-vs-escalation
+  sweep found no LBPH-separable region between genuine and impostor on wild
+  LFW in the 70-170 range, so `tau_reject` was set permissively rather than
+  at an (nonexistent) separation point. Consequence: ~97-99% of ALL wild-LFW
+  probes, genuine and impostor alike, fall inside this band regardless of the
+  exact `tau_reject` value — LBPH's cheap fast path resolves almost nothing
+  on wild LFW; nearly everything escalates to SFace (contrast with
+  `docs/PAPER.md`'s ~75%-kept-cheap figure, which is La Salle DB1-calibrated,
+  a dataset where LBPH separates genuine/impostor much better). Re-verify
   [`docs/audits/STATE-07-21.md`](docs/audits/STATE-07-21.md) §7 and
   [`STATE-07-28.md`](docs/audits/STATE-07-28.md) against
   `thresholds.json` before citing either — both describe earlier
